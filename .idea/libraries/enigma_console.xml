@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="enigma-console">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../libraries/enigma-beta-0.2/enigma-beta-0.2/lib/enigma-console.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="file://$PROJECT_DIR$/../../libraries/enigma-beta-0.2/enigma-beta-0.2/docs/javadoc" />
+    </JAVADOC>
+    <SOURCES />
+  </library>
+</component>
