@@ -25,9 +25,9 @@ public class SM implements Commande {
         if(event.getTextChannel().getName().equals("over18"))
         {
             try {
-                event.getTextChannel().sendMessage(redirect.get("http://bonjourfetish.tumblr.com/random")).queue();
+                event.getTextChannel().sendMessage(redirect.get("https://bonjourfetish.tumblr.com/random")).queue();
             } catch (IOException e) {
-                System.out.println(entete.get("ERREUR","Pipe")+"Erreur de redirection.");
+                System.out.println(entete.get("ERREUR","SM")+"Erreur de redirection.");
             }
         }
         else

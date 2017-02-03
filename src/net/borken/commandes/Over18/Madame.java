@@ -23,13 +23,28 @@ public class Madame implements Commande{
     public void action(String[] args, MessageReceivedEvent event) {
         if(!event.getTextChannel().getName().equals("le_cours")) {
             Redirection redirect = new Redirection();
-            try {
-                event.getTextChannel().sendMessage(redirect.get("http://dites.bonjourmadame.fr/random")).queue();
-            } catch (IOException e) {
-                System.out.println(entete.get("ERREUR", "Madame") + "Erreur de redirection.");
+            boolean success=false;
+            boolean error=false;
+            int errorCp=0;
+            while(!success&&!error)
+            {
+                try {
+                    event.getTextChannel().sendMessage(redirect.get("http://dites.bonjourmadame.fr/random")).queue();
+                    success=true;
+                } catch (IOException e) {
+                    errorCp++;
+                    System.out.println(entete.get("WARN", "Madame") + "Erreur de redirection. (Essais n°"+errorCp+")");
+                    if(errorCp>5)
+                    {
+                        System.out.println(entete.get("WARN", "Madame") + "5 Erreur de redirection.");
+                        error=true;
+                        event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n:warning: **__Erreur de redirection (5 essais), Réessayez__**:warning: ").queue();
 
-                event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n:warning: **__Erreur de redirection, Réessayez__**:warning: ").queue();
+                    }
+
+                }
             }
+
         }
         else
         {
