@@ -9,6 +9,8 @@ import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.managers.GuildManager;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import static net.borken.MainBot.historique;
 
@@ -17,9 +19,8 @@ import static net.borken.MainBot.historique;
  */
 public class Moderateur {
 
-
+    Logger logger = LogManager.getLogger();
     private String[] tabMessages;
-    private Entete entete=new Entete();
 
     public Moderateur() {}
 
@@ -58,10 +59,10 @@ public class Moderateur {
             if(toi[3].equals(toi[2])&&toi[2].equals(toi[1]) && toi[1].equals(toi[0]) ){
 
                 spam = 1;
-                System.out.println(entete.get("Info","MODERATEUR")+"Detection de spam pour "+user.getEffectiveName()+"avec 3 messages identique: ");
+               logger.info("Detection de spam pour "+user.getEffectiveName()+"avec 3 messages identique: ");
                 for(int j=0;MainBot.historique.get(user).length-1>j;j++)
                 {
-                    System.out.println(entete.get("Info","MODERATEUR")+"\t"+j+". "+MainBot.historique.get(user)[j]);
+                    logger.info("\t"+j+". "+MainBot.historique.get(user)[j]);
                 }
                 toi[0] = "";
                 toi[1] = "";
@@ -101,11 +102,11 @@ public class Moderateur {
             if(cpt > 5){
                 MainBot.message_compteur.put(user,0);
                 spam = 1;
-                System.out.println(entete.get("Info","MODERATEUR")+"Detection de spam pour "+user.getEffectiveName()+"avec 5 message en 5seg: ");
+                logger.info("Detection de spam pour "+user.getEffectiveName()+"avec 5 message en 5seg: ");
                 String[] histo = MainBot.historique.get(user);
                 for (String unMessage:histo )         //=for(int i=0; i<saveRoleUser.size(); i++)
                 {
-                    System.out.println(entete.get("Info","MODERATEUR")+"\t*"+unMessage);
+                   logger.debug("\t*"+unMessage);
                 }
             }
         }else{

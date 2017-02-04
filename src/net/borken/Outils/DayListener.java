@@ -1,6 +1,7 @@
 package net.borken.Outils;
 import net.borken.commandes.Spam;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
+import org.apache.logging.log4j.LogManager;
 
 import java.util.GregorianCalendar;
 
@@ -34,7 +35,7 @@ public class DayListener extends Thread {
             try {
                 sleep(7200000);
             } catch (InterruptedException e) {
-                System.err.println(new Entete().get("ERREUR","AutoReset")+e.getCause());
+                LogManager.getLogger().catching(e);
             }
         }
     }

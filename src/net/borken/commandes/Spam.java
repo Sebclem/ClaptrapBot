@@ -3,13 +3,13 @@ package net.borken.commandes;
 import net.borken.Commande;
 import net.borken.MainBot;
 import net.borken.Outils.AntiSpam;
-import net.borken.Outils.Entete;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 import java.util.List;
@@ -20,7 +20,7 @@ import java.util.Objects;
  * Created by seb65 on 27/10/2016.
  */
 public class Spam implements Commande {
-    Entete entete =new Entete();
+    Logger logger = LogManager.getLogger();
     @Override
     public boolean called(String[] args, MessageReceivedEvent event) {
         return false;
@@ -103,18 +103,18 @@ public class Spam implements Commande {
              ****************************/
             if(userL.size()<1)
             {
-                System.out.println(entete.get("ERREUR", "CMD") + "Utilisateur introuvable.");
+                logger.error("Utilisateur introuvable.");
                 event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n:warning: **__Erreur__** :warning:\n:arrow_right: Utilisateur introuvable. ");
             }
             else {
                 Member user = serveur.getMember(userL.get(0));
-                System.out.println(entete.get("Info", "CMD") + "Tentative de pardon de " + user.getEffectiveName() + " par l'utilisateur " + event.getMember().getEffectiveName());
+                logger.info("Tentative de pardon de " + user.getEffectiveName() + " par l'utilisateur " + event.getMember().getEffectiveName());
                 /****************************
                  * c'est un big dady    *
                  ****************************/
 
                 if (event.getMember().getRoles().get(0)==serveur.getRolesByName("Big_Daddy",false).get(0)) {
-                    System.out.println(entete.get("Info", "CMD") + "Autorisation suffisante, pardon autorisé");
+                    logger.info("Autorisation suffisante, pardon autorisé");
 
                     /****************************
                      * virif si en spammer    *
@@ -123,25 +123,25 @@ public class Spam implements Commande {
                         if (MainBot.minuteurStatut.get(user)) {
                             MainBot.minuteurStatut.put(user, false);
                         } else {
-                            System.out.println(entete.get("ERREUR", "CMD") + "Utilisateur pas en spam.");
+                            logger.warn("Utilisateur pas en spam.");
                             event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n:warning: **__Erreur__** :warning:\n:arrow_right: Utilisateur non spammeur. ");
                         }
 
 
                     } else {
-                        System.out.println(entete.get("ERREUR", "CMD") + "Utilisateur pas en spam.");
+                        logger.warn("Utilisateur pas en spam.");
                         event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n:warning: **__Erreur__** :warning:\n:arrow_right: Utilisateur non spammeur. ");
                     }
 
                 } else {
-                    System.out.println(entete.get("Info", "CMD") + "Autorisation insuffisante, pardon refusé");
+                    logger.warn("Autorisation insuffisante, pardon refusé");
                     event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n:no_entry_sign: **__Vous n'avez pas l'autorisation de faire sa!__** :no_entry_sign: ");
                 }
             }
         }
         else
         {
-            System.out.println(entete.get("Info","ERREUR")+"Argument manquant.");
+            logger.warn("Argument manquant.");
             event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n:warning: **__Argument manquant__**:warning: \n:arrow_right: Utilisation: `//spam pardon <@utilisateur>`.");
         }
 
@@ -165,7 +165,7 @@ public class Spam implements Commande {
              ****************************/
             if(userL.size()<1)
             {
-                System.out.println(entete.get("ERREUR","CMD")+"Mentionnement Incorect (Spam).");
+                logger.warn("Mentionnement Incorect (Spam).");
                 event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n:warning: **__Erreur__** :warning:\n:arrow_right: Erreur, Utilisateur mal mentioner. `//help spam extermine` pour plus d'info ").queue();
             }
             else{
@@ -173,14 +173,14 @@ public class Spam implements Commande {
 
                 Guild serveur = event.getGuild();
                 Member user = serveur.getMember(userL.get(0));
-                System.out.println(entete.get("Info","CMD")+"Tentative d'extermination de "+user.getEffectiveName()+" par l'utilisateur "+event.getAuthor().getName());
+                logger.info("Tentative d'extermination de "+user.getEffectiveName()+" par l'utilisateur "+event.getAuthor().getName());
                 /****************************
                  * c'est un big dady    *
                  ****************************/
 
                 if(event.getMember().getRoles().get(0)==serveur.getRolesByName("Big_Daddy",false).get(0))
                 {
-                    System.out.println(entete.get("Info","CMD")+"Autorisation suffisante, extermination autorisé");
+                    logger.info("Autorisation suffisante, extermination autorisé");
                     String multiStr =args[2];
 
 
@@ -195,7 +195,7 @@ public class Spam implements Commande {
                         }
                         else
                         {
-                            System.out.println(entete.get("ERREUR","CMD")+"Utilisateur deja en spam.");
+                            logger.warn("Utilisateur deja en spam.");
                             event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n:warning: **__Erreur__** :warning:\n:arrow_right: Utilisateur déjà spammeur. ").queue();
                         }
 
@@ -209,7 +209,7 @@ public class Spam implements Commande {
                 }
                 else
                 {
-                    System.out.println(entete.get("Info","CMD")+"Autorisation insuffisante, extermination refusé");
+                    logger.warn("Autorisation insuffisante, extermination refusé");
                     event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n:no_entry_sign: **__Vous n'avez pas l'autorisation de faire sa!__** :no_entry_sign:  ").queue();
                 }
 
@@ -219,7 +219,7 @@ public class Spam implements Commande {
         }
         else
         {
-            System.out.println(entete.get("Info","ERREUR")+"Argument manquant.");
+            logger.warn("Argument manquant.");
             event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n:warning: **__Argument manquant__**:warning: \n:arrow_right: Utilisation: `//spam extermine <utilisateur> <multiplicateur>`.").queue();
         }
     }
@@ -242,30 +242,30 @@ public class Spam implements Commande {
                  ****************************/
                 if(userL.size()<1)
                 {
-                    System.out.println(entete.get("ERREUR", "CMD") + "Utilisateur introuvable.");
+                    logger.warn("Utilisateur introuvable.");
                     event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n:warning: **__Erreur__** :warning:\n:arrow_right: Utilisateur introuvable. ").queue();
 
                 }
                 else {
                     Member user = serveur.getMember(userL.get(0));
-                    System.out.println(entete.get("Info", "CMD") + "Tentative de reset de " + user.getEffectiveName() + " par l'utilisateur " + event.getMember().getEffectiveName());
+                    logger.info("Tentative de reset de " + user.getEffectiveName() + " par l'utilisateur " + event.getMember().getEffectiveName());
                     /****************************
                      * c'est un big dady    *
                      ****************************/
 
                     if ( event.getMember().getRoles().get(0) == serveur.getRolesByName("Big_Daddy", false).get(0)) {
-                        System.out.println(entete.get("Info", "CMD") + "Autorisation suffisante, pardon autorisé");
+                        logger.info("Autorisation suffisante, pardon autorisé");
                         /****************************
                          * verif utilisteur trouver *
                          ****************************/
                         if (MainBot.userMulti.containsKey(user)) {
-                            System.out.println(entete.get("Info", "CMD") + "Reset du multiplicateur de " + user.getEffectiveName() + " réussi");
+                            logger.info("Reset du multiplicateur de " + user.getEffectiveName() + " réussi");
                             event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n *Le multiplcicateur de " + user.getEffectiveName() + " a été remit a zéro.*").queue();
                             MainBot.userMulti.remove(user);
 
                         }
                     } else {
-                        System.out.println(entete.get("Info", "CMD") + "Autorisation insuffisante, reset refusé");
+                        logger.warn("Autorisation insuffisante, reset refusé");
                         event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n:no_entry_sign: **__Vous n'avez pas l'autorisation de faire ca!__** :no_entry_sign:  ").queue();
 
                     }
@@ -273,7 +273,7 @@ public class Spam implements Commande {
             }
             else
             {
-                System.out.println(entete.get("Info","ERREUR")+"Argument manquant.");
+                logger.warn("Argument manquant.");
                 event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n:warning: **__Argument manquant__**:warning: \n:arrow_right: Utilisation: `//spam reset <utilisateur>`.").queue();
             }
         }
@@ -281,7 +281,7 @@ public class Spam implements Commande {
         {
             if (args[0].equals("all"))
             {
-                System.out.println(entete.get("Info","AutoReset")+"Reset automatique des multiplicateur.");
+                logger.info("Reset automatique des multiplicateur.");
                 for (Member unUser: MainBot.userMulti.keySet() )         //=for(int i=0; i<saveRoleUser.size(); i++)
                 {
                     MainBot.message_compteur.remove(unUser);

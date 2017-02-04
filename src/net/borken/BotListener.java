@@ -5,9 +5,15 @@ import net.borken.Outils.Moderateur;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.core.events.DisconnectEvent;
+import net.dv8tion.jda.core.events.ReadyEvent;
+import net.dv8tion.jda.core.events.ReconnectedEvent;
+import net.dv8tion.jda.core.events.StatusChangeEvent;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import net.dv8tion.jda.core.managers.GuildManager;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 /**
@@ -17,6 +23,16 @@ import net.dv8tion.jda.core.managers.GuildManager;
 public class BotListener extends ListenerAdapter {
     AntiSpam antispam=new AntiSpam();
     Moderateur modo = new Moderateur();
+    Logger logger = LogManager.getLogger();
+
+
+    @Override
+    public void onReady(ReadyEvent event) {
+        logger.info("Connection succees");
+    }
+
+
+
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
         //                                                      ----------------------Test pour eviter eco de commande-------------------------
@@ -52,9 +68,9 @@ public class BotListener extends ListenerAdapter {
         }catch (Exception e)
         {
             if (e.getMessage()==null) {
-                System.out.println(MainBot.entete.get("ERREUR", "BotListener") +"NullPointerException");
+               logger.error("NullPointerException");
             } else {
-                System.out.println(MainBot.entete.get("ERREUR", "BotListener") + e.getMessage());
+                logger.error(e.getMessage());
             }
         }
 

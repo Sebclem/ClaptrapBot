@@ -10,7 +10,6 @@ import java.net.URLConnection;
  * Created by seb65 on 07/11/2016.
  */
 public class Redirection {
-    Entete entete=new Entete();
 
     public Redirection(){
 

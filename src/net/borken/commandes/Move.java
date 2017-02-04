@@ -1,18 +1,15 @@
 package net.borken.commandes;
 
-import com.sun.org.apache.bcel.internal.generic.GOTO;
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import net.borken.Commande;
-import net.borken.Outils.Entete;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.core.exceptions.RateLimitedException;
 import net.dv8tion.jda.core.managers.GuildController;
 import net.dv8tion.jda.core.managers.GuildManager;
-import org.apache.commons.lang3.ObjectUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 import java.util.ArrayList;
@@ -28,14 +25,13 @@ import java.util.List;
  */
 public class Move implements Commande {
 
-
+    Logger logger = LogManager.getLogger();
     private String HELP="`//move <@utilisateur> <@rôleCible>`\n:arrow_right:\t*Deplacement d'un utilisateur vers un rôle cible, attention à bien faire des montions.*";
     public List<Role> saveRoleUser;
     public Member user;
     public Guild serveur;
     public GuildManager serveurManager;
     public GuildController guildController;
-    public static Entete entete=new Entete();
 
     /**
      *
@@ -51,14 +47,14 @@ public class Move implements Commande {
         guildController = new GuildController(serveur);
         boolean erreur = false;
         List<Role> allRoll = serveur.getRoles();
-        System.out.println();
+
 
 
         //On recupere les roles de l'utilisateur
 
         List<Role> roleUserList = user.getRoles();
-        System.out.println();
-        System.out.println(entete.get("Info","MOVER")+"Roles de " + user.getEffectiveName() + ":");
+
+       logger.info("Roles de " + user.getEffectiveName() + ":");
 
         //On les save
         saveRoleUser = roleUserList;
@@ -72,7 +68,7 @@ public class Move implements Commande {
         //on fait ensuite les modif
         guildController.modifyMemberRoles(user,temp,saveRoleUser).queue();
 
-        System.out.println(entete.get("Info","MOVER")+"Role " + cible + " attribuer a " + user.getEffectiveName());
+       logger.info("Role " + cible + " attribuer a " + user.getEffectiveName());
 
         this.user=user;
         this.serveur=serveur;
@@ -101,21 +97,20 @@ public class Move implements Commande {
 
             if(userL.size()<1 ||roleL.size()<1)
             {
-                System.out.println(entete.get("ERREUR","MOVE")+"Mentionnement Incorect.");
+               logger.info("Mentionnement Incorect.");
                 event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n:warning: **__Erreur de déplacement__** :warning:\n:arrow_right: Erreur, Utilisateur ou Role mal mentioner. `//help move` pour plus d'info ").queue();
             }
             else
             {
-                System.out.println(userL.get(0));
                 user = serveur.getMember(userL.get(0));
                 Role roleCible = roleL.get(0);
                 serveur=event.getGuild();
-                System.out.println(entete.get("Info","CMD")+"Tentative de déplacement de "+user.getEffectiveName()+" vers "+roleCible.getName()+" par l'utilisateur "+event.getAuthor().getName());
+                logger.info("Tentative de déplacement de "+user.getEffectiveName()+" vers "+roleCible.getName()+" par l'utilisateur "+event.getAuthor().getName());
                 if(event.getMember().getRoles().contains(serveur.getRolesByName("Big_Daddy",false).get(0)))
                 {
 
-                    System.out.println(entete.get("Info","MOVE")+"Autorisation suffisante, deplacement autorisé");
-                    System.out.println(entete.get("Info","MOVE")+"Utilisateur trouvée");
+                    logger.info("Autorisation suffisante, deplacement autorisé");
+                    logger.info("Utilisateur trouvée");
                     boolean erreur=this.exc(user,roleCible,true,serveur,serveur.getManager());
                     if(erreur)
                     {
@@ -128,7 +123,7 @@ public class Move implements Commande {
                 }
                 else
                 {
-                    System.out.println(entete.get("Info","MOVE")+"Autorisation insuffisante, deplacement refusé");
+                    logger.info("Autorisation insuffisante, deplacement refusé");
                     event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n:warning: **__Vous n'avez pas l'autorisation de faire ca!__**:warning: ").queue();
 
                 }
@@ -137,7 +132,7 @@ public class Move implements Commande {
         }
         else
         {
-            System.out.println(entete.get("ERREUR","MOVE")+"Arguments maquant.");
+            logger.warn("Arguments maquant.");
             event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n:warning: **__Erreur de déplacement__** :warning:\n:arrow_right: Arguments manquant. `//help move` pour plus d'info ").queue();
 
         }

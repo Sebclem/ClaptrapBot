@@ -9,6 +9,8 @@ import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
 import net.dv8tion.jda.core.managers.GuildManager;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 
 import java.util.List;
@@ -21,8 +23,7 @@ import static java.lang.Thread.sleep;
  */
 public class AntiSpam {
     public Move move = new Move();
-
-    public Entete entete=new Entete();
+    Logger logger = LogManager.getLogger();
 
     public AntiSpam() {
 
@@ -59,8 +60,7 @@ public class AntiSpam {
             else
                 MainBot.userMulti.put(user,1);
 
-            System.out.println();
-            System.out.println(entete.get("Info","ANTISPAM")+"Punition de "+user.getEffectiveName()+" avec un multiplicateur de "+MainBot.userMulti.get(user));
+           logger.info("Punition de "+user.getEffectiveName()+" avec un multiplicateur de "+MainBot.userMulti.get(user));
 
             event.getTextChannel().sendMessage(user.getAsMention()+"\n```markdown\n#-----------------SPAM DETECTEUR----------------#\n#                                               #\n#    La prochaine fois tu fermeras ta gueule!   #\n#                                               #\n#       On te revoit dans "+MainBot.userMulti.get(user)+"min connard !        #\n#                                               #\n#-----------------------------------------------#```\n https://cdn.meme.am/instances/64726692.jpg ").queue();
 
@@ -104,8 +104,7 @@ public class AntiSpam {
         @Override
         public void run() {
             int cSeg=0;
-            System.out.println();
-            System.out.println(entete.get("Info","MINUTEUR")+"["+user.getEffectiveName()+"] Démarage pour "+multip+"min");
+            logger.info("["+user.getEffectiveName()+"] Démarage pour "+multip+"min");
             while (MainBot.minuteurStatut.get(user))
             {
                 try {
@@ -119,11 +118,9 @@ public class AntiSpam {
                 }
                 cSeg++;
             }
-            System.out.println();
-            System.out.println(entete.get("Info","MINUTEUR")+ "["+user.getEffectiveName()+"] Fin de spam pour "+user.getEffectiveName()+" apres "+multip+"min.");
+            logger.info("["+user.getEffectiveName()+"] Fin de spam pour "+user.getEffectiveName()+" apres "+multip+"min.");
             move.exc(user, saveRoleUser.get(0), true, serveur, serveurManager);    //aSaveroleUser=saveRoleUser.get(i)
-            System.out.println();
-            System.out.println(entete.get("Info","MINUTEUR")+"["+user.getEffectiveName()+"] Fin des "+multip+"min");
+            logger.info("["+user.getEffectiveName()+"] Fin des "+multip+"min");
             chanel.sendMessage(user.getAsMention()+"\n```markdown\n#-----------------SPAM DETECTEUR----------------#\n#                                               #\n#     Un spammeur est de retour, fais gaffe!    #\n#               Je te surveille!                #\n#                                               #\n#-----------------------------------------------#```\n http://67.media.tumblr.com/tumblr_lvrf58vBkL1qibz0jo1_r1_500.png").queue();
 
 

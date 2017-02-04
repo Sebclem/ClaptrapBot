@@ -1,9 +1,9 @@
 package net.borken.commandes;
 
 import net.borken.Commande;
-import net.borken.Outils.Entete;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.core.exceptions.RateLimitedException;
+import org.apache.logging.log4j.LogManager;
+
 
 /**
  * Created by seb65 on 19/10/2016.
@@ -21,7 +21,7 @@ public class PingCommande implements Commande {
     public void action(String[] args, MessageReceivedEvent event) {
 
         event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+" Pong!").queue();
-        System.out.println("pong");
+        LogManager.getLogger().info("pong");
     }
 
     @Override

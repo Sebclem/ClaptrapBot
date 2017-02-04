@@ -2,6 +2,8 @@ package net.borken.Outils;
 
 import net.dv8tion.jda.*;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,7 +13,7 @@ import java.util.Arrays;
  */
 
 public class CommandParser {
-    public static Entete entete=new Entete();
+    Logger logger = LogManager.getLogger();
     public CommandContainer parse(String brt, MessageReceivedEvent e)
     {
         ArrayList<String> split =new ArrayList<String>();
@@ -30,7 +32,7 @@ public class CommandParser {
 
 
         }
-        System.out.println(entete.get("Info","CMD")+"Auteur: "+e.getMember().getEffectiveName()+", Commande: "+commande+", args: "+ Arrays.toString(args));
+        logger.info("Auteur: "+e.getMember().getEffectiveName()+", Commande: "+commande+", args: "+ Arrays.toString(args));
         return new CommandContainer(brut, sansTete, splitSansTete, commande, args, e);   //On Save toute les info dans le container
 
     }

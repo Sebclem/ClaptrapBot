@@ -2,8 +2,9 @@ package net.borken.commandes;
 
 import net.borken.Commande;
 import net.borken.MainBot;
-import net.borken.Outils.Entete;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Map;
 
@@ -11,7 +12,7 @@ import java.util.Map;
  * Created by seb65 on 23/10/2016.
  */
 public class Help implements Commande {
-    public static Entete entete=new Entete();
+    Logger logger = LogManager.getLogger();
     @Override
     public boolean called(String[] args, MessageReceivedEvent event) {
         return true;
@@ -25,7 +26,7 @@ public class Help implements Commande {
             //System.out.println(argsString);
             if (MainBot.commandes.containsKey(argsString))
             {
-                System.out.println(entete.get("Info","HELP")+"Aide demmander pour la cmd "+argsString+" par "+event.getMember().getEffectiveName());
+                logger.info("Aide demmander pour la cmd "+argsString+" par "+event.getMember().getEffectiveName());
                 event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n\n"+MainBot.commandes.get(argsString).help(args)).queue();
 
 
@@ -33,7 +34,7 @@ public class Help implements Commande {
             else
             {
                 event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n:warning: **__Commande Inconue!__** :warning:").queue();
-                System.out.println(entete.get("Info","HELP")+"Commande Inconnue!");
+                logger.info("Commande Inconnue!");
             }
         }
         else

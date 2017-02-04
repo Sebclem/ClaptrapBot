@@ -4,6 +4,8 @@ import net.borken.Commande;
 import net.borken.Outils.Redirection;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
@@ -13,6 +15,7 @@ import static net.borken.MainBot.entete;
  * Created by seb65 on 11/11/2016.
  */
 public class Madame implements Commande{
+    Logger logger = LogManager.getLogger();
     public String HELP="T'es sérieux la?";
     @Override
     public boolean called(String[] args, MessageReceivedEvent event) {
@@ -33,10 +36,10 @@ public class Madame implements Commande{
                     success=true;
                 } catch (IOException e) {
                     errorCp++;
-                    System.out.println(entete.get("WARN", "Madame") + "Erreur de redirection. (Essais n°"+errorCp+")");
+                    logger.warn("Erreur de redirection. (Essais n°"+errorCp+")");
                     if(errorCp>5)
                     {
-                        System.out.println(entete.get("WARN", "Madame") + "5 Erreur de redirection.");
+                        logger.error("5 Erreur de redirection.");
                         error=true;
                         event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n:warning: **__Erreur de redirection (5 essais), Réessayez__**:warning: ").queue();
 
@@ -50,7 +53,7 @@ public class Madame implements Commande{
         {
             event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n:warning: **__Channel règlementé!__**:warning: ").queue();
 
-            System.out.println(entete.get("ERREUR","Madame")+"Erreur chanel.");
+            logger.warn("Erreur chanel.");
         }
     }
 

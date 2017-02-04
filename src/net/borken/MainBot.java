@@ -1,30 +1,31 @@
 package net.borken;
 
-import enigma.console.Console;
-import enigma.console.TextAttributes;
-import enigma.core.Enigma;
 import net.borken.Outils.CommandParser;
 import net.borken.Outils.DayListener;
-import net.borken.Outils.Entete;
 import net.borken.Outils.Redirection;
-import net.borken.commandes.*;
+import net.borken.commandes.Help;
+import net.borken.commandes.Move;
 import net.borken.commandes.Over18.*;
-
-
-import net.dv8tion.jda.core.*;
+import net.borken.commandes.PingCommande;
+import net.borken.commandes.Spam;
+import net.dv8tion.jda.core.AccountType;
+import net.dv8tion.jda.core.JDA;
+import net.dv8tion.jda.core.JDABuilder;
+import net.dv8tion.jda.core.OnlineStatus;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
 import net.dv8tion.jda.core.managers.GuildManager;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.security.auth.login.LoginException;
-import java.awt.*;
-import java.io.*;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * Created by seb65 on 19/10/2016.
@@ -35,36 +36,29 @@ public class MainBot {
     public static final CommandParser parser =new CommandParser();
     public static HashMap<String, Commande> commandes = new HashMap<>();
     public static boolean okInit=false;
-    public static Entete entete=new Entete();
     public static HashMap<Member, String[]> historique =new HashMap<>();
     public static HashMap<Member, Integer> message_compteur =new HashMap<>();
 
     public static Hashtable<Member,Integer> userMulti = new Hashtable();
     public static Hashtable<Member,Boolean> minuteurStatut = new Hashtable<>();
 
-    public static TextAttributes txtColor;
+    static Logger logger = LogManager.getLogger();
 
     public static void main(String[] args) throws IOException {
-
+        logger.trace("trace");
+        logger.debug("debug");
+        logger.info("info");
+        logger.warn("warn");
+        logger.error("error");
         Stop stopTh=new Stop();
         stopTh.start();
-        txtColor = new TextAttributes(Color.green, Color.black);
-        s_console.setTextAttributes(txtColor);
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
-        System.out.println();
         /****************************
          *      Initialisation      *
          ****************************/
-        System.out.println("-------------------INITIALISATION-------------------");
-        txtColor = new TextAttributes(Color.blue, Color.black);
-        s_console.setTextAttributes(txtColor);
+        logger.info("-------------------INITIALISATION-------------------");
         //Bot démarrer sans token
         if (args.length < 1) {
-            System.out.println();
-            System.err.println(entete.get("ERREUR","INIT")+"Veuilliez indiquer le token du bot en argument...");
+            logger.fatal("Veuilliez indiquer le token du bot en argument...");
             okInit=false;
         }
         else
@@ -72,18 +66,20 @@ public class MainBot {
             //Token présent
             try
             {
-                System.out.println();
-                System.out.println(entete.get("Info","INIT")+"Connection au serveur...");
+
+                logger.info("Connection au serveur...");
                 //connection au bot
                 jda = new JDABuilder(AccountType.BOT).addListener(new BotListener()).setToken(args[0]).setBulkDeleteSplittingEnabled(false).buildBlocking();
                 jda.setAutoReconnect(true);
+                jda.addEventListener();
+                jda.addEventListener();
+
                 okInit=true;
 
             }
             catch (LoginException | InterruptedException | RateLimitedException e)
             {
-                System.out.println();
-                System.err.println(entete.get("ERREUR","INIT")+e.getMessage());
+                logger.catching(e);
                 okInit=false;
             }
         }
@@ -112,36 +108,30 @@ public class MainBot {
 
             //on recupere les utilisateur conecter
             List<Member> utilisateurCo = serveur.getMembers();
-            System.out.println();
-            System.out.println(entete.get("Info","INIT")+"Utilisatieur connecté: ");
+
+            logger.info("Utilisatieur connecté: ");
             for (Member anUtilisateurCo : utilisateurCo)                      //= for(int i=0; i<utilisateurCo.size(); i++)
             {
                 if(anUtilisateurCo.getOnlineStatus().equals(OnlineStatus.ONLINE))
-                    System.out.println(entete.get("Info", "INIT") + "    *" + anUtilisateurCo.getEffectiveName());    //anUtilisateurCo = utilisateurCo.get(i)
+                    logger.info("\t*" + anUtilisateurCo.getEffectiveName());    //anUtilisateurCo = utilisateurCo.get(i)
             }
-            System.out.println();
-            System.out.println(entete.get("Info","INIT")+"Utilisatieur absent: ");
+            logger.info("Utilisatieur absent: ");
             for (Member anUtilisateurCo : utilisateurCo)                      //= for(int i=0; i<utilisateurCo.size(); i++)
             {
                 if(anUtilisateurCo.getOnlineStatus().equals(OnlineStatus.DO_NOT_DISTURB))
-                    System.out.println(entete.get("Info", "INIT") + "    *" + anUtilisateurCo.getEffectiveName());    //anUtilisateurCo = utilisateurCo.get(i)
+                    logger.info("\t*" + anUtilisateurCo.getEffectiveName());    //anUtilisateurCo = utilisateurCo.get(i)
             }
-            System.out.println();
-            System.out.println(entete.get("Info","INIT")+"Utilisatieur hors ligne: ");
+            logger.info("Utilisatieur hors ligne: ");
             for (Member anUtilisateurCo : utilisateurCo)                      //= for(int i=0; i<utilisateurCo.size(); i++)
             {
                 if(anUtilisateurCo.getOnlineStatus().equals(OnlineStatus.OFFLINE))
-                    System.out.println(entete.get("Info", "INIT") + "    *" + anUtilisateurCo.getEffectiveName());    //anUtilisateurCo = utilisateurCo.get(i)
+                    logger.info("\t*" + anUtilisateurCo.getEffectiveName());    //anUtilisateurCo = utilisateurCo.get(i)
             }
-            txtColor = new TextAttributes(Color.green, Color.black);
-            s_console.setTextAttributes(txtColor);
             ModoTimer modotimer = new ModoTimer();
             modotimer.start();
             DayListener dayListener =new DayListener();
             dayListener.start();
-            System.out.println("-----------------FIN INITIALISATION-----------------");
-            txtColor = new TextAttributes(Color.blue, Color.black);
-            s_console.setTextAttributes(txtColor);
+            logger.info("-----------------FIN INITIALISATION-----------------");
 
             /*List<User> userAction = serveur.getUsersByName("Broken_Fire");
             new Move().exc(userAction.get(0),"Big Daddy",true,serveur,serveur.getManager());*/
@@ -167,7 +157,7 @@ public class MainBot {
         {
             MessageReceivedEvent event = cmd.event;
             event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n:warning: **__Commande inconnue!__** :warning:\n:arrow_right: Utilisez `//help` pour voirs les commandes disponible. ").queue();
-
+            logger.info("Commande inconnue");
         }
 
     }
@@ -203,40 +193,28 @@ public class MainBot {
         }
     }
 
-    public static final Console s_console;
-    static
-    {
-        s_console = Enigma.getConsole("Bot Discord");
-    }
-
 
     public static class Stop extends Thread
     {
 
         @Override
         public void run() {
+            Scanner scanner = new Scanner(System.in);
             String txtEntré = "";
             while(!txtEntré.equals("o")&&!txtEntré.equals("O"))
             {
 
                 while (!txtEntré.equals("stop"))
                 {
-                    txtEntré = s_console.readLine();
+                    txtEntré = scanner.nextLine();
                 }
-                txtColor = new TextAttributes(Color.orange, Color.black);
-                s_console.setTextAttributes(txtColor);
-                System.out.println("Etes-vous sur de vouloir arréter le Bot? (o/n)");
-                txtColor = new TextAttributes(Color.blue, Color.black);
-                s_console.setTextAttributes(txtColor);
-                txtEntré = s_console.readLine();
+
+                logger.warn("Etes-vous sur de vouloir arréter le Bot? (o/n)");
+                txtEntré = scanner.nextLine();
 
                 if(txtEntré.equals("n")||txtEntré.equals("N"))
                 {
-                    txtColor = new TextAttributes(Color.green, Color.black);
-                    s_console.setTextAttributes(txtColor);
-                    System.out.println("Arret du Bot annulé.");
-                    txtColor = new TextAttributes(Color.blue, Color.black);
-                    s_console.setTextAttributes(txtColor);
+                    logger.info("Arret du Bot annulé.");
                 }
             }
             Runtime.getRuntime().exit(0);
