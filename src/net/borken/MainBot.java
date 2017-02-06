@@ -3,11 +3,8 @@ package net.borken;
 import net.borken.Outils.CommandParser;
 import net.borken.Outils.DayListener;
 import net.borken.Outils.Redirection;
-import net.borken.commandes.Help;
-import net.borken.commandes.Move;
+import net.borken.commandes.*;
 import net.borken.commandes.Over18.*;
-import net.borken.commandes.PingCommande;
-import net.borken.commandes.Spam;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
@@ -21,7 +18,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.security.auth.login.LoginException;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
@@ -99,6 +100,7 @@ public class MainBot {
             commandes.put("pipe",new Pipe());
             commandes.put("sm",new SM());
             commandes.put("madame",new Madame());
+            commandes.put("cat",new Cat());
 
             //On recupere le l'id serveur
             Guild serveur = jda.getGuilds().get(0);
