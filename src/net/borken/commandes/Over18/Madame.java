@@ -9,7 +9,6 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
-import static net.borken.MainBot.entete;
 
 /**
  * Created by seb65 on 11/11/2016.

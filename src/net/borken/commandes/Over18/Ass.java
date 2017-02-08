@@ -28,6 +28,7 @@ public class Ass implements Commande{
                 event.getTextChannel().sendMessage(redirect.get("http://les400culs.com/random")).queue();
             } catch (IOException e) {
                 logger.warn("Erreur de redirection.");
+                event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n:warning: **__Erreur de redirection (5 essais), Réessayez__**:warning: ").queue();
                 e.printStackTrace();
             }
         }

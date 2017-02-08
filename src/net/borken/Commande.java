@@ -1,6 +1,6 @@
 package net.borken;
 
-import net.dv8tion.jda.*;
+
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 /**
