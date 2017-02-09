@@ -25,7 +25,8 @@ public class Boobs implements Commande {
         if(event.getTextChannel().getName().equals("over18")) {
             Redirection redirect = new Redirection();
             try {
-                event.getTextChannel().sendMessage(redirect.get("http://lesaintdesseins.fr/random")).queue();
+                event.getTextChannel().sendMessage(redirect.get("http://beautifulphotosbeautifulboobs.tumblr.com/random")).queue();
+                //event.getTextChannel().sendMessage(redirect.get("http://lesaintdesseins.fr/random")).queue();
             } catch (IOException e) {
                 logger.warn("Erreur de redirection.");
                 event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n:warning: **__Erreur de redirection (5 essais), Réessayez__**:warning: ").queue();
