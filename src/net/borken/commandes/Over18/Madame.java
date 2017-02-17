@@ -23,7 +23,7 @@ public class Madame implements Commande{
 
     @Override
     public void action(String[] args, MessageReceivedEvent event) {
-        if(!event.getTextChannel().getName().equals("le_cours")) {
+        if(event.getTextChannel().getName().equals("over18")) {
             Redirection redirect = new Redirection();
             boolean success=false;
             boolean error=false;
@@ -50,7 +50,7 @@ public class Madame implements Commande{
         }
         else
         {
-            event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n:warning: **__Channel règlementé!__**:warning: ").queue();
+            event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n:warning: **__Channel règlementé! Go sur over18!__**:warning: ").queue();
 
             logger.warn("Erreur chanel.");
         }
