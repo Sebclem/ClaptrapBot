@@ -57,11 +57,14 @@ public class BotListener extends ListenerAdapter {
                 Member user = event.getMember();
 
                 // appel de la methode d'analyse de message de "Moderateur"
-                if(!event.getAuthor().getName().equals("Aethex")) {
+                if(!event.getAuthor().getName().equals("Aethex") && event.getMessage().getContent().length()>0) {
+
                     if (modo.analyse(user, serveur, guildManager, event) == 1) {
                         antispam.extermine(user, serveur, guildManager,true, event);
                     }
                 }
+                else if(event.getMessage().getContent().length() == 0)
+                    logger.error("Image detected, ignoring it.");
 
 
             }
