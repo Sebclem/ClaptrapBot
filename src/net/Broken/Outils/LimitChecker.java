@@ -31,7 +31,7 @@ public class LimitChecker {
             if(result!=404)
                 number += 500;
         }
-        number-=500;
+        number-=400;
         result = -1;
         logger.debug("First pass: "+number);
         while(result != 404 )
@@ -45,7 +45,7 @@ public class LimitChecker {
             if(result!=404)
                 number += 100;
         }
-        number-=100;
+        number-=90;
         result = -1;
         logger.debug("Second pass: "+number);
         while(result != 404 )
@@ -59,7 +59,7 @@ public class LimitChecker {
             if(result!=404)
                 number += 10;
         }
-        number-=10;
+        number-=9;
         result = -1;
         logger.debug("Third pass: "+number);
         while(result != 404 )
