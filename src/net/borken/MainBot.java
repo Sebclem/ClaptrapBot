@@ -101,7 +101,6 @@ public class MainBot {
             commandes.put("sm",new SM());
             commandes.put("madame",new Madame());
             commandes.put("cat",new Cat());
-
             //On recupere le l'id serveur
             Guild serveur = jda.getGuilds().get(0);
 
