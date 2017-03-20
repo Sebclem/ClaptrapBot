@@ -1,18 +1,13 @@
-package net.borken.Outils;
+package net.Broken.Outils;
 
-import net.borken.MainBot;
+import net.Broken.MainBot;
 
-import java.util.HashMap;
-import net.borken.Commande;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.managers.GuildManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import static net.borken.MainBot.historique;
 
 /**
  * Created by Parayre on 24/10/2016.

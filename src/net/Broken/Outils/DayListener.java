@@ -1,5 +1,5 @@
-package net.borken.Outils;
-import net.borken.commandes.Spam;
+package net.Broken.Outils;
+import net.Broken.commandes.Spam;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
 import org.apache.logging.log4j.LogManager;
 

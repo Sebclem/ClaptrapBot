@@ -1,14 +1,10 @@
-package net.borken;
+package net.Broken;
 
-import net.borken.Outils.AntiSpam;
-import net.borken.Outils.Moderateur;
+import net.Broken.Outils.AntiSpam;
+import net.Broken.Outils.Moderateur;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.User;
-import net.dv8tion.jda.core.events.DisconnectEvent;
 import net.dv8tion.jda.core.events.ReadyEvent;
-import net.dv8tion.jda.core.events.ReconnectedEvent;
-import net.dv8tion.jda.core.events.StatusChangeEvent;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import net.dv8tion.jda.core.managers.GuildManager;

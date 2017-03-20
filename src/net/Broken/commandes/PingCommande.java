@@ -1,6 +1,6 @@
-package net.borken.commandes;
+package net.Broken.commandes;
 
-import net.borken.Commande;
+import net.Broken.Commande;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.apache.logging.log4j.LogManager;
 

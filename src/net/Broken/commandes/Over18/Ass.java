@@ -1,6 +1,6 @@
-package net.borken.commandes.Over18;
+package net.Broken.commandes.Over18;
 
-import net.borken.commandes.NumberedCommande;
+import net.Broken.commandes.NumberedCommande;
 import org.apache.logging.log4j.LogManager;
 
 /**

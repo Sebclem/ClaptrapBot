@@ -1,6 +1,5 @@
-package net.borken.Outils;
+package net.Broken.Outils;
 
-import net.dv8tion.jda.*;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

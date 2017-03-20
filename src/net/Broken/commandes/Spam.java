@@ -1,8 +1,8 @@
-package net.borken.commandes;
+package net.Broken.commandes;
 
-import net.borken.Commande;
-import net.borken.MainBot;
-import net.borken.Outils.AntiSpam;
+import net.Broken.Commande;
+import net.Broken.MainBot;
+import net.Broken.Outils.AntiSpam;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.User;

@@ -1,6 +1,6 @@
-package net.borken.commandes;
+package net.Broken.commandes;
 
-import net.borken.Commande;
+import net.Broken.Commande;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Role;

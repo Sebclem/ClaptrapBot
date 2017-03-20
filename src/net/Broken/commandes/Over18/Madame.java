@@ -1,9 +1,8 @@
-package net.borken.commandes.Over18;
+package net.Broken.commandes.Over18;
 
-import net.borken.Commande;
-import net.borken.Outils.Redirection;
+import net.Broken.Commande;
+import net.Broken.Outils.Redirection;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.core.exceptions.RateLimitedException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

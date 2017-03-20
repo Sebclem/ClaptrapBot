@@ -1,7 +1,7 @@
-package net.borken.commandes;
+package net.Broken.commandes;
 
-import net.borken.Commande;
-import net.borken.Outils.Redirection;
+import net.Broken.Commande;
+import net.Broken.Outils.Redirection;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 import java.io.BufferedReader;

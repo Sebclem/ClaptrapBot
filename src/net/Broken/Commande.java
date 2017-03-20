@@ -1,4 +1,4 @@
-package net.borken;
+package net.Broken;
 
 
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;

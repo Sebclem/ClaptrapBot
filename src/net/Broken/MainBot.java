@@ -1,10 +1,10 @@
-package net.borken;
+package net.Broken;
 
-import net.borken.Outils.CommandParser;
-import net.borken.Outils.DayListener;
-import net.borken.Outils.Redirection;
-import net.borken.commandes.*;
-import net.borken.commandes.Over18.*;
+import net.Broken.Outils.CommandParser;
+import net.Broken.Outils.DayListener;
+import net.Broken.Outils.Redirection;
+import net.Broken.commandes.*;
+import net.Broken.commandes.Over18.*;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
@@ -18,11 +18,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.security.auth.login.LoginException;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;

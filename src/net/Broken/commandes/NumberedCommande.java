@@ -1,13 +1,12 @@
-package net.borken.commandes;
-import net.borken.Commande;
-import net.borken.Outils.LimitChecker;
-import net.borken.Outils.Redirection;
+package net.Broken.commandes;
+import net.Broken.Commande;
+import net.Broken.Outils.LimitChecker;
+import net.Broken.Outils.Redirection;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
-import java.util.Random;
 
 /**
  * Created by seb65 on 07/11/2016.

@@ -1,8 +1,7 @@
-package net.borken.Outils;
+package net.Broken.Outils;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
