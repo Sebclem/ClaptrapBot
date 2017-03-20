@@ -177,7 +177,7 @@ public class MainBot {
                 event.getPrivateChannel().sendMessage("\n:warning: **__Commande inconnue!__** :warning:\n:arrow_right: Utilisez `//help` pour voirs les commandes disponible. ").queue();
             else
                 event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n:warning: **__Commande inconnue!__** :warning:\n:arrow_right: Utilisez `//help` pour voirs les commandes disponible. ").queue();
-            logger.info("Commande inconnue");
+            logger.warn("Commande inconnue");
         }
 
     }
