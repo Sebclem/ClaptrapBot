@@ -141,6 +141,7 @@ public class MainBot {
             /*List<User> userAction = serveur.getUsersByName("Broken_Fire");
             new Move().exc(userAction.get(0),"Big Daddy",true,serveur,serveur.getManager());*/
             Redirection urlRedirect=new Redirection();
+            jda.getPresence().setGame(Game.of("Statut: Ok!"));
 
         }
 
