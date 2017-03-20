@@ -1,10 +1,7 @@
-package net.Broken.commandes;
+package net.Broken.Commandes;
 
 import net.Broken.Commande;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.Role;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.managers.GuildController;
 import net.dv8tion.jda.core.managers.GuildManager;
@@ -54,7 +51,7 @@ public class Move implements Commande {
 
         List<Role> roleUserList = user.getRoles();
 
-       logger.info("Roles de " + user.getEffectiveName() + ":");
+        logger.info("Roles de " + user.getEffectiveName() + ":");
 
         //On les save
         saveRoleUser = roleUserList;
@@ -68,7 +65,7 @@ public class Move implements Commande {
         //on fait ensuite les modif
         guildController.modifyMemberRoles(user,temp,saveRoleUser).queue();
 
-       logger.info("Role " + cible + " attribuer a " + user.getEffectiveName());
+        logger.info("Role " + cible + " attribuer a " + user.getEffectiveName());
 
         this.user=user;
         this.serveur=serveur;
@@ -89,58 +86,64 @@ public class Move implements Commande {
      */
     public void action(String[] args, MessageReceivedEvent event)
     {
-        if(args.length>=2)
+        if(!event.isFromType(ChannelType.PRIVATE))
         {
-            serveur=event.getGuild();
-            List<User> userL = event.getMessage().getMentionedUsers();
-            List<Role> roleL = event.getMessage().getMentionedRoles();
-
-            if(userL.size()<1 ||roleL.size()<1)
+            if(args.length>=2)
             {
-               logger.info("Mentionnement Incorect.");
-                event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n:warning: **__Erreur de déplacement__** :warning:\n:arrow_right: Erreur, Utilisateur ou Role mal mentioner. `//help move` pour plus d'info ").queue();
-            }
-            else
-            {
-                user = serveur.getMember(userL.get(0));
-                Role roleCible = roleL.get(0);
                 serveur=event.getGuild();
-                logger.info("Tentative de déplacement de "+user.getEffectiveName()+" vers "+roleCible.getName()+" par l'utilisateur "+event.getAuthor().getName());
-                if(event.getMember().getRoles().contains(serveur.getRolesByName("Big_Daddy",false).get(0)))
-                {
+                List<User> userL = event.getMessage().getMentionedUsers();
+                List<Role> roleL = event.getMessage().getMentionedRoles();
 
-                    logger.info("Autorisation suffisante, deplacement autorisé");
-                    logger.info("Utilisateur trouvée");
-                    boolean erreur=this.exc(user,roleCible,true,serveur,serveur.getManager());
-                    if(erreur)
-                    {
-                        event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n:warning: **__Erreur de déplacement.__** :warning:\n:arrow_right: Verifier le rôle cible. ").queue();
-                    }
-                    else
-                    {
-                        event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n:ok: **Déplacement de "+user.getEffectiveName()+" vers "+roleCible.getName()+" reussi.** :ok:").queue();
-                    }
+                if(userL.size()<1 ||roleL.size()<1)
+                {
+                    logger.info("Mentionnement Incorect.");
+                    event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n:warning: **__Erreur de déplacement__** :warning:\n:arrow_right: Erreur, Utilisateur ou Role mal mentioner. `//help move` pour plus d'info ").queue();
                 }
                 else
                 {
-                    logger.info("Autorisation insuffisante, deplacement refusé");
-                    event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n:warning: **__Vous n'avez pas l'autorisation de faire ca!__**:warning: ").queue();
+                    user = serveur.getMember(userL.get(0));
+                    Role roleCible = roleL.get(0);
+                    serveur=event.getGuild();
+                    logger.info("Tentative de déplacement de "+user.getEffectiveName()+" vers "+roleCible.getName()+" par l'utilisateur "+event.getAuthor().getName());
+                    if(event.getMember().getRoles().contains(serveur.getRolesByName("Big_Daddy",false).get(0)))
+                    {
 
+                        logger.info("Autorisation suffisante, deplacement autorisé");
+                        logger.info("Utilisateur trouvée");
+                        boolean erreur=this.exc(user,roleCible,true,serveur,serveur.getManager());
+                        if(erreur)
+                        {
+                            event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n:warning: **__Erreur de déplacement.__** :warning:\n:arrow_right: Verifier le rôle cible. ").queue();
+                        }
+                        else
+                        {
+                            event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n:ok: **Déplacement de "+user.getEffectiveName()+" vers "+roleCible.getName()+" reussi.** :ok:").queue();
+                        }
+                    }
+                    else
+                    {
+                        logger.info("Autorisation insuffisante, deplacement refusé");
+                        event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n:warning: **__Vous n'avez pas l'autorisation de faire ca!__**:warning: ").queue();
+
+                    }
                 }
-            }
 
+            }
+            else
+            {
+                logger.warn("Arguments maquant.");
+                event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n:warning: **__Erreur de déplacement__** :warning:\n:arrow_right: Arguments manquant. `//help move` pour plus d'info ").queue();
+
+            }
         }
         else
-        {
-            logger.warn("Arguments maquant.");
-            event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n:warning: **__Erreur de déplacement__** :warning:\n:arrow_right: Arguments manquant. `//help move` pour plus d'info ").queue();
-
-        }
-        
+            event.getPrivateChannel().sendMessage("\n:warning: **__Commande non disponible en priver!__** :warning:");
 
 
 
-            
+
+
+
 
 
     }

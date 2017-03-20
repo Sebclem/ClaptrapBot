@@ -2,6 +2,7 @@ package net.Broken;
 
 import net.Broken.Outils.AntiSpam;
 import net.Broken.Outils.Moderateur;
+import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.events.ReadyEvent;
@@ -34,6 +35,7 @@ public class BotListener extends ListenerAdapter {
         //                                                      ----------------------Test pour eviter eco de commande-------------------------
         try
         {
+
             if (event.getMessage().getContent().startsWith("//") && event.getMessage().getAuthor().getId() != event.getJDA().getSelfUser().getId()) {
                 //On a detecter que c'etait une commande
                 //System.out.println(event.getMessage().getContent());
@@ -51,22 +53,27 @@ public class BotListener extends ListenerAdapter {
                 GuildManager guildManager = serveur.getManager();
                 Member user = event.getMember();
 
-                // appel de la methode d'analyse de message de "Moderateur"
-                if(!event.getAuthor().getName().equals("Aethex") && event.getMessage().getContent().length()>0) {
+                if(!event.isFromType(ChannelType.PRIVATE))
+                {
+                    // appel de la methode d'analyse de message de "Moderateur"
+                    if(!event.getAuthor().getName().equals("Aethex") && event.getMessage().getContent().length()>0) {
 
-                    if (modo.analyse(user, serveur, guildManager, event) == 1) {
-                        antispam.extermine(user, serveur, guildManager,true, event);
+                        if (modo.analyse(user, serveur, guildManager, event) == 1) {
+                            antispam.extermine(user, serveur, guildManager,true, event);
+                        }
                     }
+                    else if(event.getMessage().getContent().length() == 0)
+                        logger.error("Image detected, ignoring it.");
                 }
-                else if(event.getMessage().getContent().length() == 0)
-                    logger.error("Image detected, ignoring it.");
+
+
 
 
             }
         }catch (Exception e)
         {
             if (e.getMessage()==null) {
-               logger.error("NullPointerException");
+                logger.error("NullPointerException");
             } else {
                 logger.error(e.getMessage());
             }

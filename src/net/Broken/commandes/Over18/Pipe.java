@@ -1,6 +1,6 @@
-package net.Broken.commandes.Over18;
+package net.Broken.Commandes.Over18;
 
-import net.Broken.commandes.NumberedCommande;
+import net.Broken.Commandes.NumberedCommande;
 import org.apache.logging.log4j.LogManager;
 
 /**
@@ -45,4 +45,8 @@ public class Pipe extends NumberedCommande {
                 in.close();
                 event.getTextChannel().sendMessage(redirect.get("http://feelation.com/random")).queue();
      */
+    @Override
+    public String toString() {
+        return "Pipe";
+    }
 }

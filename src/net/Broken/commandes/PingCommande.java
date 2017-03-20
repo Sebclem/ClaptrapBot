@@ -1,8 +1,12 @@
-package net.Broken.commandes;
+package net.Broken.Commandes;
 
 import net.Broken.Commande;
+import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.apache.logging.log4j.LogManager;
+
+import java.sql.Timestamp;
+import java.time.*;
 
 
 /**
@@ -19,8 +23,11 @@ public class PingCommande implements Commande {
 
     @Override
     public void action(String[] args, MessageReceivedEvent event) {
-
-        event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+" Pong!").queue();
+        long receivedTime = Timestamp.valueOf(LocalDateTime.ofInstant(event.getMessage().getCreationTime().toInstant(), ZoneId.systemDefault())).getTime();
+        if(event.isFromType(ChannelType.PRIVATE))
+            event.getPrivateChannel().sendMessage(":arrow_right: Pong! `"+((Timestamp.from(Instant.now()).getTime()-receivedTime))+"ms`").queue();
+        else
+            event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n:arrow_right: Pong! `"+((Timestamp.from(Instant.now()).getTime()-receivedTime))+"ms`").queue();
         LogManager.getLogger().info("pong");
     }
 

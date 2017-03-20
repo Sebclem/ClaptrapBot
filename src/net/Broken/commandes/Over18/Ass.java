@@ -1,6 +1,6 @@
-package net.Broken.commandes.Over18;
+package net.Broken.Commandes.Over18;
 
-import net.Broken.commandes.NumberedCommande;
+import net.Broken.Commandes.NumberedCommande;
 import org.apache.logging.log4j.LogManager;
 
 /**
@@ -10,5 +10,10 @@ public class Ass  extends NumberedCommande {
 
     public Ass() {
         super(LogManager.getLogger(), "http://les400culs.com/");
+    }
+
+    @Override
+    public String toString() {
+        return "Ass";
     }
 }
