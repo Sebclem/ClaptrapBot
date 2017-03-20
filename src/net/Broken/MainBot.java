@@ -3,12 +3,13 @@ package net.Broken;
 import net.Broken.Outils.CommandParser;
 import net.Broken.Outils.DayListener;
 import net.Broken.Outils.Redirection;
-import net.Broken.commandes.*;
-import net.Broken.commandes.Over18.*;
+import net.Broken.Commandes.*;
+import net.Broken.Commandes.Over18.*;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.OnlineStatus;
+import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
@@ -69,7 +70,6 @@ public class MainBot {
                 jda = new JDABuilder(AccountType.BOT).addListener(new BotListener()).setToken(args[0]).setBulkDeleteSplittingEnabled(false).buildBlocking();
                 jda.setAutoReconnect(true);
                 jda.addEventListener();
-                jda.addEventListener();
 
                 okInit=true;
 
@@ -84,6 +84,8 @@ public class MainBot {
         //Connection reussi
         if(okInit)
         {
+            jda.getPresence().setGame(Game.of("Statut: Loading..."));
+            jda.getTextChannels().forEach(textChannel -> textChannel.sendTyping().queue());
             /*************************************
              *      Definition des commande      *
              *************************************/
@@ -133,6 +135,8 @@ public class MainBot {
             /*List<User> userAction = serveur.getUsersByName("Broken_Fire");
             new Move().exc(userAction.get(0),"Big Daddy",true,serveur,serveur.getManager());*/
             Redirection urlRedirect=new Redirection();
+            jda.getPresence().setGame(Game.of("Statut: Ok"));
+
 
         }
 
@@ -153,7 +157,7 @@ public class MainBot {
         else
         {
             MessageReceivedEvent event = cmd.event;
-            event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n:warning: **__Commande inconnue!__** :warning:\n:arrow_right: Utilisez `//help` pour voirs les commandes disponible. ").queue();
+            event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n:warning: **__Commande inconnue!__** :warning:\n:arrow_right: Utilisez `//help` pour voirs les Commandes disponible. ").queue();
             logger.info("Commande inconnue");
         }
 

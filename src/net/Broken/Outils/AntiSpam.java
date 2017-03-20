@@ -1,7 +1,7 @@
 package net.Broken.Outils;
 
 import net.Broken.MainBot;
-import net.Broken.commandes.Move;
+import net.Broken.Commandes.Move;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Role;

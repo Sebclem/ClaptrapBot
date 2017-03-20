@@ -38,7 +38,6 @@ public class BotListener extends ListenerAdapter {
                 //On a detecter que c'etait une commande
                 //System.out.println(event.getMessage().getContent());
 
-
                 MainBot.handleCommand(MainBot.parser.parse(event.getMessage().getContent(), event));
 
 
