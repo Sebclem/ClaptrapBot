@@ -210,7 +210,7 @@ public class Spam implements Commande {
                 else
                 {
                     logger.warn("Autorisation insuffisante, extermination refusé");
-                    event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n:no_entry_sign: **__Vous n'avez pas l'autorisation de faire sa!__** :no_entry_sign:  ").queue();
+                    event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n:no_entry_sign: **__Vous n'avez pas l'autorisation de faire ça!__** :no_entry_sign:  ").queue();
                 }
 
             }
