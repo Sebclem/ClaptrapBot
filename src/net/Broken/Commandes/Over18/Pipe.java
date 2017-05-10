@@ -8,7 +8,7 @@ import org.apache.logging.log4j.LogManager;
  */
 public class Pipe extends NumberedCommande {
     public Pipe() {
-        super(LogManager.getLogger(), "http://feelation.com/");
+        super(LogManager.getLogger(), "http://feelation.com/","featured-img","img");
     }
 
     /*

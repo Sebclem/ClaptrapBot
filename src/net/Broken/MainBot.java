@@ -3,6 +3,7 @@ package net.Broken;
 import net.Broken.Commandes.Over18.*;
 import net.Broken.Outils.CommandParser;
 import net.Broken.Outils.DayListener;
+import net.Broken.Outils.FindContentOnWebPage;
 import net.Broken.Outils.Redirection;
 import net.Broken.Commandes.*;
 import net.dv8tion.jda.core.AccountType;
@@ -40,6 +41,7 @@ public class MainBot {
     static Logger logger = LogManager.getLogger();
 
     public static void main(String[] args) throws IOException {
+//        FindContentOnWebPage.doYourJob("http://les400culs.com/2347-2/","featured-img","img");
         logger.trace("trace");
         logger.debug("debug");
         logger.info("info");
