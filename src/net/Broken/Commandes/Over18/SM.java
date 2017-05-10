@@ -22,7 +22,7 @@ public class SM implements Commande {
     @Override
     public void action(String[] args, MessageReceivedEvent event) {
         Redirection redirect= new Redirection();
-        if(event.getTextChannel().getName().equals("over18"))
+        if(event.getTextChannel().getName().equals("nsfw-over18"))
         {
             try {
                 event.getTextChannel().sendMessage(redirect.get("https://bonjourfetish.tumblr.com/random")).queue();

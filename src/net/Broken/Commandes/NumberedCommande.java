@@ -42,7 +42,7 @@ public abstract class NumberedCommande implements Commande{
     public void action(String[] args, MessageReceivedEvent event) {
         if(args.length == 0)
         {
-            if(event.getTextChannel().getName().equals("over18")) {
+            if(event.getTextChannel().getName().equals("nsfw-over18")) {
                 Redirection redirect= new Redirection();
                 int randomResult = (int) (minNumber + (Math.random() * (maxNumber - minNumber)));
                 event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n"+baseURL+randomResult+"-2/").queue();

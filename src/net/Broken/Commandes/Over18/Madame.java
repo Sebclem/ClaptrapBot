@@ -22,7 +22,7 @@ public class Madame implements Commande{
 
     @Override
     public void action(String[] args, MessageReceivedEvent event) {
-        if(event.getTextChannel().getName().equals("over18")) {
+        if(event.getTextChannel().getName().equals("nsfw-over18")) {
             Redirection redirect = new Redirection();
             boolean success=false;
             boolean error=false;
