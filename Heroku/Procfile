@@ -1,0 +1,1 @@
+worker: java -Dlog4j.configurationFile=log4j2.xml -jar Discord_Stroumpf_Beta.jar "MjQwODA2MDk1NzcyMTg4Njc0.CvIrrg.p3lOx7oXabPWcT1oZiPKcu0uSs4"
