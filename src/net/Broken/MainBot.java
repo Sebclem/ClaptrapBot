@@ -41,14 +41,11 @@ public class MainBot {
     static Logger logger = LogManager.getLogger();
 
     public static void main(String[] args) throws IOException {
-//        FindContentOnWebPage.doYourJob("http://les400culs.com/2347-2/","featured-img","img");
         logger.trace("trace");
         logger.debug("debug");
         logger.info("info");
         logger.warn("warn");
         logger.error("error");
-        Stop stopTh=new Stop();
-        stopTh.start();
         /****************************
          *      Initialisation      *
          ****************************/
@@ -66,11 +63,9 @@ public class MainBot {
 
                 logger.info("Connection au serveur...");
                 //connection au bot
-                jda = new JDABuilder(AccountType.BOT).addListener(new BotListener()).setToken(args[0]).setBulkDeleteSplittingEnabled(false).buildBlocking();
+                jda = new JDABuilder(AccountType.BOT).addEventListener(new BotListener()).setToken(args[0]).setBulkDeleteSplittingEnabled(false).buildBlocking();
                 jda.setAutoReconnect(true);
                 jda.addEventListener();
-                jda.addEventListener();
-
                 okInit=true;
 
             }
@@ -154,10 +149,13 @@ public class MainBot {
     public static void handleCommand(CommandParser.CommandContainer cmd)
     {
         //On verifie que la commande existe
+
         if (commandes.containsKey(cmd.commande))
         {
+            logger.debug("ok");
             if(cmd.event.isFromType(ChannelType.PRIVATE) && privateUsableCommand.contains(commandes.get(cmd.commande).getClass()))
             {
+
                 commandes.get(cmd.commande).action(cmd.args, cmd.event);
                 commandes.get(cmd.commande).executed(true, cmd.event);
             }
@@ -214,33 +212,4 @@ public class MainBot {
         }
     }
 
-
-    public static class Stop extends Thread
-    {
-
-        @Override
-        public void run() {
-            Scanner scanner = new Scanner(System.in);
-            String txtEntré = "";
-            while(!txtEntré.equals("o")&&!txtEntré.equals("O"))
-            {
-
-                while (!txtEntré.equals("stop"))
-                {
-                    txtEntré = scanner.nextLine();
-                }
-
-                logger.warn("Etes-vous sur de vouloir arréter le Bot? (o/n)");
-                txtEntré = scanner.nextLine();
-
-                if(txtEntré.equals("n")||txtEntré.equals("N"))
-                {
-                    logger.info("Arret du Bot annulé.");
-                }
-            }
-            Runtime.getRuntime().exit(0);
-
-
-        }
-    }
 }

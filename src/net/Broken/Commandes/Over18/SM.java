@@ -24,12 +24,13 @@ public class SM implements Commande {
         Redirection redirect= new Redirection();
         if(event.getTextChannel().getName().equals("nsfw-over18"))
         {
-            try {
-                event.getTextChannel().sendMessage(redirect.get("https://bonjourfetish.tumblr.com/random")).queue();
-            } catch (IOException e) {
-                logger.warn("Erreur de redirection.");
-                event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n:warning: **__Erreur de redirection (5 essais), Réessayez__**:warning: ").queue();
-            }
+            event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n:warning: SM n'est plus disponible pour le moment. Pour plus d'info: https://lc.cx/cbSw :warning: ").queue();
+//            try {
+//                event.getTextChannel().sendMessage(redirect.get("https://bonjourfetish.tumblr.com/random")).queue();
+//            } catch (IOException e) {
+//                logger.warn("Erreur de redirection.");
+//                event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n:warning: **__Erreur de redirection (5 essais), Réessayez__**:warning: ").queue();
+//            }
         }
         else
         {

@@ -31,7 +31,9 @@ public class CommandParser {
 
 
         }
-        logger.info("Auteur: "+e.getMember().getEffectiveName()+", Commande: "+commande+", args: "+ Arrays.toString(args));
+
+        logger.info("Auteur: "+e.getAuthor().getName()+", Commande: "+commande+", args: "+ Arrays.toString(args));
+
         return new CommandContainer(brut, sansTete, splitSansTete, commande, args, e);   //On Save toute les info dans le container
 
     }

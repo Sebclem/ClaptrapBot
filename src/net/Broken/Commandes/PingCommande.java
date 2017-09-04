@@ -28,7 +28,7 @@ public class PingCommande implements Commande {
             event.getPrivateChannel().sendMessage(":arrow_right: Pong! `"+((Timestamp.from(Instant.now()).getTime()-receivedTime))+"ms`").queue();
         else
             event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n:arrow_right: Pong! `"+((Timestamp.from(Instant.now()).getTime()-receivedTime))+"ms`").queue();
-        LogManager.getLogger().info("pong");
+        LogManager.getLogger().debug("pong");
     }
 
     @Override

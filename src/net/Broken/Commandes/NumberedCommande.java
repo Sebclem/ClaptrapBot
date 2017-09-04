@@ -130,7 +130,7 @@ public abstract class NumberedCommande implements Commande{
 
     @Override
     public String help(String[] args) {
-        return"`//"+this.toString().toLowerCase() +"update\n:arrow_right: *Rafraichi la liste des images.*\n`//"+this.toString().toLowerCase()+" get <numero>`\n:arrow_right: *Affiche l'image portant le numero donné*";
+        return"`//"+this.toString().toLowerCase() +" update`\n:arrow_right: *Rafraichi la liste des images.*\n`//"+this.toString().toLowerCase()+" get <numero>`\n:arrow_right: *Affiche l'image portant le numero donné*";
     }
 
     @Override

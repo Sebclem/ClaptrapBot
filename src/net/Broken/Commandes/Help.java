@@ -2,7 +2,10 @@ package net.Broken.Commandes;
 
 import net.Broken.Commande;
 import net.Broken.MainBot;
+import net.Broken.Outils.PrivateMessage;
+import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.core.exceptions.RateLimitedException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -26,14 +29,22 @@ public class Help implements Commande {
             //System.out.println(argsString);
             if (MainBot.commandes.containsKey(argsString))
             {
-                logger.info("Aide demmander pour la cmd "+argsString+" par "+event.getMember().getEffectiveName());
-                event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n\n"+MainBot.commandes.get(argsString).help(args)).queue();
+                logger.info("Aide demmander pour la cmd "+argsString+" par "+event.getAuthor().getName());
+                if(!event.isFromType(ChannelType.PRIVATE))
+                    event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n\n"+MainBot.commandes.get(argsString).help(args)).queue();
+                else{
+                    PrivateMessage.send(event.getAuthor(), MainBot.commandes.get(argsString).help(args),logger);
+                }
 
 
             }
             else
             {
-                event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n:warning: **__Commande Inconue!__** :warning:").queue();
+                if(!event.isFromType(ChannelType.PRIVATE))
+                    event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n:warning: **__Commande Inconue!__** :warning:").queue();
+                else{
+                    PrivateMessage.send(event.getAuthor(),":warning: **__Commande Inconue!__** :warning:",logger);
+                }
                 logger.info("Commande Inconnue!");
             }
         }
@@ -44,8 +55,10 @@ public class Help implements Commande {
                 txt=txt+"\n//"+e.getKey();
 
             }
-            event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n:arrow_right:\t**__commandes envoyées par message privé__**").queue();
-            event.getAuthor().getPrivateChannel().sendMessage("Commandes du bot:\n\n```"+txt+"```\n\nUtilise `//help <commande>` pour plus de détails.").queue();
+            if(!event.isFromType(ChannelType.PRIVATE))
+                event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n:arrow_right:\t**__commandes envoyées par message privé__**").queue();
+            PrivateMessage.send(event.getAuthor(),"Commandes du bot:\n\n```"+txt+"```\n\nUtilise `//help <commande>` pour plus de détails.",logger);
+
 
 
 
