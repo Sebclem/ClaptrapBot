@@ -43,10 +43,6 @@ public class BotListener extends ListenerAdapter {
                 //On a detecter que c'etait une commande
                 //System.out.println(event.getMessage().getContent());
                 MainBot.handleCommand(MainBot.parser.parse(event.getMessage().getContent(), event));
-                logger.debug("ok");
-
-
-
             }
             else if (!event.getMessage().getAuthor().getId().equals(event.getJDA().getSelfUser().getId()))
             {

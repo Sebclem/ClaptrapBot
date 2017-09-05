@@ -77,4 +77,9 @@ public class Help implements Commande {
     public void executed(boolean success, MessageReceivedEvent event) {
 
     }
+
+    @Override
+    public boolean isPrivateUsable() {
+        return true;
+    }
 }

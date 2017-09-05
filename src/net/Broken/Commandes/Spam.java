@@ -3,6 +3,7 @@ package net.Broken.Commandes;
 import net.Broken.Commande;
 import net.Broken.MainBot;
 import net.Broken.Outils.AntiSpam;
+import net.Broken.Outils.UserSpamUtils;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.User;
@@ -84,6 +85,11 @@ public class Spam implements Commande {
 
     }
 
+    @Override
+    public boolean isPrivateUsable() {
+        return false;
+    }
+
     public void pardon(MessageReceivedEvent event, String[] args){
 
         Guild serveur = event.getGuild();
@@ -119,30 +125,30 @@ public class Spam implements Commande {
                     /****************************
                      * virif si en spammer    *
                      ****************************/
-                    if (MainBot.minuteurStatut.containsKey(user)) {
-                        if (MainBot.minuteurStatut.get(user)) {
-                            MainBot.minuteurStatut.put(user, false);
+                    if (MainBot.spamUtils.containsKey(user.getUser())) {
+                        if (MainBot.spamUtils.get(user.getUser()).isOnSpam()) {
+                            MainBot.spamUtils.get(user.getUser()).setOnSpam(false);
                         } else {
                             logger.warn("Utilisateur pas en spam.");
-                            event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n:warning: **__Erreur__** :warning:\n:arrow_right: Utilisateur non spammeur. ");
+                            event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n:warning: **__Erreur__** :warning:\n:arrow_right: Utilisateur non spammeur. ").queue();
                         }
 
 
                     } else {
                         logger.warn("Utilisateur pas en spam.");
-                        event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n:warning: **__Erreur__** :warning:\n:arrow_right: Utilisateur non spammeur. ");
+                        event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n:warning: **__Erreur__** :warning:\n:arrow_right: Utilisateur non spammeur. ").queue();
                     }
 
                 } else {
                     logger.warn("Autorisation insuffisante, pardon refusé");
-                    event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n:no_entry_sign: **__Vous n'avez pas l'autorisation de faire sa!__** :no_entry_sign: ");
+                    event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n:no_entry_sign: **__Vous n'avez pas l'autorisation de faire sa!__** :no_entry_sign: ").queue();
                 }
             }
         }
         else
         {
             logger.warn("Argument manquant.");
-            event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n:warning: **__Argument manquant__**:warning: \n:arrow_right: Utilisation: `//spam pardon <@utilisateur>`.");
+            event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n:warning: **__Argument manquant__**:warning: \n:arrow_right: Utilisation: `//spam pardon <@utilisateur>`.").queue();
         }
 
 
@@ -187,9 +193,9 @@ public class Spam implements Commande {
                     /****************************
                      * virif pas deja en spammer    *
                      ****************************/
-                    if(MainBot.minuteurStatut.containsKey(user))
+                    if(MainBot.spamUtils.containsKey(user.getUser()))
                     {
-                        if(!MainBot.minuteurStatut.get(user))
+                        if(!MainBot.spamUtils.get(user.getUser()).isOnSpam())
                         {
                             this.goSpam(user,multiStr,serveur,event);
                         }
@@ -258,10 +264,10 @@ public class Spam implements Commande {
                         /****************************
                          * verif utilisteur trouver *
                          ****************************/
-                        if (MainBot.userMulti.containsKey(user)) {
+                        if (MainBot.spamUtils.containsKey(user.getUser())) {
                             logger.info("Reset du multiplicateur de " + user.getEffectiveName() + " réussi");
                             event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n *Le multiplcicateur de " + user.getEffectiveName() + " a été remit a zéro.*").queue();
-                            MainBot.userMulti.remove(user);
+                            MainBot.spamUtils.remove(user.getUser());
 
                         }
                     } else {
@@ -282,7 +288,7 @@ public class Spam implements Commande {
             if (args[0].equals("all"))
             {
                 logger.info("Reset automatique des multiplicateur.");
-                for (Member unUser: MainBot.userMulti.keySet() )         //=for(int i=0; i<saveRoleUser.size(); i++)
+                for (User unUser: MainBot.spamUtils.keySet() )         //=for(int i=0; i<saveRoleUser.size(); i++)
                 {
                     MainBot.message_compteur.remove(unUser);
                 }
@@ -306,13 +312,14 @@ public class Spam implements Commande {
         else
         {
             int multi = Integer.parseInt(multiStr);
-            if(MainBot.minuteurStatut.containsKey(user))
+            if(MainBot.spamUtils.containsKey(user))
             {
-                MainBot.userMulti.replace(user,multi);
+                MainBot.spamUtils.get(user).setMultip(multi);
             }
             else
             {
-                MainBot.userMulti.put(user,multi);
+                MainBot.spamUtils.put(user.getUser(),new UserSpamUtils(user));
+                MainBot.spamUtils.get(user.getUser()).setMultip(multi);
             }
 
             new AntiSpam().extermine(user,serveur,serveur.getManager(),false,event);

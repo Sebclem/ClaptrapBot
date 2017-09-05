@@ -47,7 +47,7 @@ public class Moderateur {
              * Ajout dernier message recu + dans histo' *
              ********************************************/
             toi[0] = event.getMessage().getContent();// On stocke en position [0] le nouveau message
-            MainBot.historique.put(user, toi);// On ajoute dans l'historique TOI
+            MainBot.historique.put(user.getUser(), toi);// On ajoute dans l'historique TOI
 
             /*****************************
              * ANALYSE des messages      *
@@ -64,7 +64,7 @@ public class Moderateur {
                 toi[1] = "";
                 toi[2] = "";
                 toi[3] = "";
-                MainBot.historique.put(user, toi);
+                MainBot.historique.put(user.getUser(), toi);
             }
 
         } else {
@@ -77,7 +77,7 @@ public class Moderateur {
             toi[1] = "";
             toi[2] = "";
             toi[3] = "";
-            MainBot.historique.put(user, toi);
+            MainBot.historique.put(user.getUser(), toi);
         }
         /**********************************
          * AFFICHAGE DE HISTORIQUE        *
@@ -89,24 +89,24 @@ public class Moderateur {
         /********************************************
          *      Comptage du nombre de message       *
          ********************************************/
-        if(MainBot.message_compteur.containsKey(user))// Si le user a deja posté un message
+        if(MainBot.message_compteur.containsKey(user.getUser()))// Si le user a deja posté un message
         {
-            int cpt = MainBot.message_compteur.get(user);
+            int cpt = MainBot.message_compteur.get(user.getUser());
             cpt++;
             //System.out.println("compteur : "+cpt);
-            MainBot.message_compteur.put(user, cpt);
+            MainBot.message_compteur.put(user.getUser(), cpt);
             if(cpt > 5){
-                MainBot.message_compteur.put(user,0);
+                MainBot.message_compteur.put(user.getUser(),0);
                 spam = 1;
                 logger.info("Detection de spam pour "+user.getEffectiveName()+"avec 5 message en 5seg: ");
-                String[] histo = MainBot.historique.get(user);
+                String[] histo = MainBot.historique.get(user.getUser());
                 for (String unMessage:histo )         //=for(int i=0; i<saveRoleUser.size(); i++)
                 {
                    logger.debug("\t*"+unMessage);
                 }
             }
         }else{
-            MainBot.message_compteur.put(user, 1);
+            MainBot.message_compteur.put(user.getUser(), 1);
         }
 
         return spam;

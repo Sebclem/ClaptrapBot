@@ -1,11 +1,10 @@
 package net.Broken;
 
+import net.Broken.Commandes.*;
 import net.Broken.Commandes.Over18.*;
 import net.Broken.Outils.CommandParser;
 import net.Broken.Outils.DayListener;
-import net.Broken.Outils.FindContentOnWebPage;
-import net.Broken.Outils.Redirection;
-import net.Broken.Commandes.*;
+import net.Broken.Outils.UserSpamUtils;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
@@ -19,7 +18,10 @@ import org.apache.logging.log4j.Logger;
 
 import javax.security.auth.login.LoginException;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.List;
 
 /**
  * Created by seb65 on 19/10/2016.
@@ -30,11 +32,10 @@ public class MainBot {
     public static final CommandParser parser =new CommandParser();
     public static HashMap<String, Commande> commandes = new HashMap<>();
     public static boolean okInit=false;
-    public static HashMap<Member, String[]> historique =new HashMap<>();
-    public static HashMap<Member, Integer> message_compteur =new HashMap<>();
+    public static HashMap<User, String[]> historique =new HashMap<>();
+    public static HashMap<User, Integer> message_compteur =new HashMap<>();
 
-    public static Hashtable<Member,Integer> userMulti = new Hashtable();
-    public static Hashtable<Member,Boolean> minuteurStatut = new Hashtable<>();
+    public static HashMap<User, UserSpamUtils> spamUtils = new HashMap<>();
 
     public static ArrayList<Class<?>> privateUsableCommand = new ArrayList<>();
 
@@ -98,6 +99,7 @@ public class MainBot {
             commandes.put("sm",new SM());
             commandes.put("madame",new Madame());
             commandes.put("cat",new Cat());
+            commandes.put("spaminfo",new SpamInfo());
 
             privateUsableCommand.add(Help.class);
             privateUsableCommand.add(PingCommande.class);
@@ -135,8 +137,6 @@ public class MainBot {
             dayListener.start();
             logger.info("-----------------FIN INITIALISATION-----------------");
 
-            /*List<User> userAction = serveur.getUsersByName("Broken_Fire");
-            new Move().exc(userAction.get(0),"Big Daddy",true,serveur,serveur.getManager());*/
             jda.getPresence().setGame(Game.of("Statut: Ok!"));
 
         }
@@ -152,8 +152,7 @@ public class MainBot {
 
         if (commandes.containsKey(cmd.commande))
         {
-            logger.debug("ok");
-            if(cmd.event.isFromType(ChannelType.PRIVATE) && privateUsableCommand.contains(commandes.get(cmd.commande).getClass()))
+            if(cmd.event.isFromType(ChannelType.PRIVATE) && commandes.get(cmd.commande).isPrivateUsable())
             {
 
                 commandes.get(cmd.commande).action(cmd.args, cmd.event);
@@ -165,7 +164,7 @@ public class MainBot {
                 commandes.get(cmd.commande).executed(true, cmd.event);
             }
             else
-                cmd.event.getPrivateChannel().sendMessage("\n:warning: **__Commande non disponible en priver!__** :warning:").queue();
+                cmd.event.getPrivateChannel().sendMessage("\n:warning: **__Commande non disponible en privé!__** :warning:").queue();
 
 
         }
@@ -203,7 +202,7 @@ public class MainBot {
                     e.printStackTrace();
                 }
                 //System.out.println("\n5sec Ecoulées !");
-                for (Member unUser: message_compteur.keySet() )         //=for(int i=0; i<saveRoleUser.size(); i++)
+                for (User unUser: message_compteur.keySet() )         //=for(int i=0; i<saveRoleUser.size(); i++)
                 {
                     MainBot.message_compteur.put(unUser, 0);
                 }

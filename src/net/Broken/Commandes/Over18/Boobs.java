@@ -15,4 +15,9 @@ public class Boobs extends NumberedCommande {
     public String toString() {
         return "Boobs";
     }
+
+    @Override
+    public boolean isPrivateUsable() {
+        return false;
+    }
 }

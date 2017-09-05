@@ -11,6 +11,7 @@ public interface Commande {
     void action(String[] args, MessageReceivedEvent event);
     String help(String[] args);
     void executed(boolean success, MessageReceivedEvent event);
+    boolean isPrivateUsable();
 
 
 }

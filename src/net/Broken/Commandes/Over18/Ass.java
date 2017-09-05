@@ -16,4 +16,9 @@ public class Ass  extends NumberedCommande {
     public String toString() {
         return "Ass";
     }
+
+    @Override
+    public boolean isPrivateUsable() {
+        return false;
+    }
 }

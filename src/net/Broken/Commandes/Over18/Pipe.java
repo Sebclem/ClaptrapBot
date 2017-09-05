@@ -49,4 +49,9 @@ public class Pipe extends NumberedCommande {
     public String toString() {
         return "Pipe";
     }
+
+    @Override
+    public boolean isPrivateUsable() {
+        return false;
+    }
 }

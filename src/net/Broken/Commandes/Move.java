@@ -168,4 +168,8 @@ public class Move implements Commande {
 
     }
 
+    @Override
+    public boolean isPrivateUsable() {
+        return false;
+    }
 }

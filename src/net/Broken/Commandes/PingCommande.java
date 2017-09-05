@@ -43,4 +43,9 @@ public class PingCommande implements Commande {
         return;
 
     }
+
+    @Override
+    public boolean isPrivateUsable() {
+        return true;
+    }
 }

@@ -51,4 +51,9 @@ public class SM implements Commande {
     public void executed(boolean success, MessageReceivedEvent event) {
 
     }
+
+    @Override
+    public boolean isPrivateUsable() {
+        return false;
+    }
 }
