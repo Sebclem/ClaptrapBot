@@ -1,6 +1,7 @@
 package net.Broken.Commandes;
 
 import net.Broken.Commande;
+import net.Broken.Outils.EmbedMessageUtils;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.managers.GuildController;
@@ -97,7 +98,7 @@ public class Move implements Commande {
                 if(userL.size()<1 ||roleL.size()<1)
                 {
                     logger.info("Mentionnement Incorect.");
-                    event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n:warning: **__Erreur de déplacement__** :warning:\n:arrow_right: Erreur, Utilisateur ou Role mal mentioner. `//help move` pour plus d'info ").queue();
+                    event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError(":arrow_right: Utilisateur ou Role mal mentioner.")).queue();
                 }
                 else
                 {
@@ -113,17 +114,17 @@ public class Move implements Commande {
                         boolean erreur=this.exc(user,roleCible,true,serveur,serveur.getManager());
                         if(erreur)
                         {
-                            event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n:warning: **__Erreur de déplacement.__** :warning:\n:arrow_right: Verifier le rôle cible. ").queue();
+                            event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError(":arrow_right: Verifier le rôle cible. ")).queue();
                         }
                         else
                         {
-                            event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n:ok: **Déplacement de "+user.getEffectiveName()+" vers "+roleCible.getName()+" reussi.** :ok:").queue();
+                            event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveOk("Déplacement de "+user.getEffectiveName()+" vers "+roleCible.getName()+" reussi.")).queue();
                         }
                     }
                     else
                     {
                         logger.info("Autorisation insuffisante, deplacement refusé");
-                        event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n:warning: **__Vous n'avez pas l'autorisation de faire ca!__**:warning: ").queue();
+                        event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("Vous n'avez pas l'autorisation de faire ca!")).queue();
 
                     }
                 }
@@ -132,7 +133,7 @@ public class Move implements Commande {
             else
             {
                 logger.warn("Arguments maquant.");
-                event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n:warning: **__Erreur de déplacement__** :warning:\n:arrow_right: Arguments manquant. `//help move` pour plus d'info ").queue();
+                event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError(":arrow_right: Arguments manquant.")).queue();
 
             }
         }

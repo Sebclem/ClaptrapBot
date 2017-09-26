@@ -1,5 +1,7 @@
 package net.Broken.Outils;
 
+import net.dv8tion.jda.core.entities.Message;
+import net.dv8tion.jda.core.entities.MessageEmbed;
 import net.dv8tion.jda.core.entities.PrivateChannel;
 import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
@@ -10,13 +12,12 @@ import org.apache.logging.log4j.Logger;
  */
 public class PrivateMessage {
     public static void send(User user, String message, Logger logger){
-        if(!user.hasPrivateChannel()){
-            logger.debug("Create Private Chanel");
 
-            user.openPrivateChannel().complete();
+        user.openPrivateChannel().complete().sendMessage(message).queue();
 
-        }
-        user.getJDA().getPrivateChannels().get(0).sendMessage(message).queue();
+    }
+    public static Message send(User user, MessageEmbed message, Logger logger){
+        return user.openPrivateChannel().complete().sendMessage(message).complete();
 
     }
 }

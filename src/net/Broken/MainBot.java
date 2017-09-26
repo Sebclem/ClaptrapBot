@@ -4,11 +4,9 @@ import net.Broken.Commandes.*;
 import net.Broken.Commandes.Over18.*;
 import net.Broken.Outils.CommandParser;
 import net.Broken.Outils.DayListener;
+import net.Broken.Outils.EmbedMessageUtils;
 import net.Broken.Outils.UserSpamUtils;
-import net.dv8tion.jda.core.AccountType;
-import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.JDABuilder;
-import net.dv8tion.jda.core.OnlineStatus;
+import net.dv8tion.jda.core.*;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
@@ -20,7 +18,6 @@ import javax.security.auth.login.LoginException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.List;
 
 /**
@@ -28,18 +25,19 @@ import java.util.List;
  */
 public class MainBot {
 
+    private static boolean dev = false;
+    private static String token = null;
     private static JDA jda;
     public static final CommandParser parser =new CommandParser();
     public static HashMap<String, Commande> commandes = new HashMap<>();
     public static boolean okInit=false;
-    public static HashMap<User, String[]> historique =new HashMap<>();
+    public static HashMap<User, ArrayList<Message>> historique =new HashMap<>();
     public static HashMap<User, Integer> message_compteur =new HashMap<>();
 
     public static HashMap<User, UserSpamUtils> spamUtils = new HashMap<>();
 
-    public static ArrayList<Class<?>> privateUsableCommand = new ArrayList<>();
 
-    static Logger logger = LogManager.getLogger();
+    private static Logger logger = LogManager.getLogger();
 
     public static void main(String[] args) throws IOException {
         logger.trace("trace");
@@ -47,12 +45,28 @@ public class MainBot {
         logger.info("info");
         logger.warn("warn");
         logger.error("error");
+        int i = 0;
+        for(String aArg: args){
+            logger.debug(aArg);
+            if(aArg.startsWith("--") || aArg.startsWith("-")){
+                aArg = aArg.replaceAll("-","");
+                if(aArg.equals("token") || aArg.equals("t")){
+                    token = args[i+1];
+                }
+                else if(aArg.equals("dev") || aArg.equals("d")){
+                    dev = true;
+                }
+            }
+            i++;
+        }
+
+
         /****************************
          *      Initialisation      *
          ****************************/
         logger.info("-------------------INITIALISATION-------------------");
         //Bot démarrer sans token
-        if (args.length < 1) {
+        if (token == null) {
             logger.fatal("Veuilliez indiquer le token du bot en argument...");
             okInit=false;
         }
@@ -64,7 +78,7 @@ public class MainBot {
 
                 logger.info("Connection au serveur...");
                 //connection au bot
-                jda = new JDABuilder(AccountType.BOT).addEventListener(new BotListener()).setToken(args[0]).setBulkDeleteSplittingEnabled(false).buildBlocking();
+                jda = new JDABuilder(AccountType.BOT).addEventListener(new BotListener()).setToken(token).setBulkDeleteSplittingEnabled(false).buildBlocking();
                 jda.setAutoReconnect(true);
                 jda.addEventListener();
                 okInit=true;
@@ -84,25 +98,25 @@ public class MainBot {
              *      Definition des commande      *
              *************************************/
             jda.getPresence().setGame(Game.of("Statut: Loading..."));
-            jda.getTextChannels().forEach(MessageChannel::sendTyping);
+            jda.getTextChannels().forEach(textChannel -> textChannel.sendTyping().queue());
             commandes.put("ping", new PingCommande());
             commandes.put("help",new Help());
             commandes.put("move", new Move());
             commandes.put("spam", new Spam());
-            jda.getTextChannels().forEach(MessageChannel::sendTyping);
-            commandes.put("ass",new Ass());
-            jda.getTextChannels().forEach(MessageChannel::sendTyping);
-            commandes.put("boobs",new Boobs());
-            jda.getTextChannels().forEach(MessageChannel::sendTyping);
-            commandes.put("pipe",new Pipe());
-            jda.getTextChannels().forEach(MessageChannel::sendTyping);
-            commandes.put("sm",new SM());
-            commandes.put("madame",new Madame());
-            commandes.put("cat",new Cat());
+
+            if(!dev){
+                commandes.put("ass",new Ass());
+                jda.getTextChannels().forEach(textChannel -> textChannel.sendTyping().queue());
+                commandes.put("boobs",new Boobs());
+                jda.getTextChannels().forEach(textChannel -> textChannel.sendTyping().queue());
+                commandes.put("pipe",new Pipe());
+                jda.getTextChannels().forEach(textChannel -> textChannel.sendTyping().queue());
+                commandes.put("sm",new SM());
+                commandes.put("madame",new Madame());
+                commandes.put("cat",new Cat());
+            }
             commandes.put("spaminfo",new SpamInfo());
 
-            privateUsableCommand.add(Help.class);
-            privateUsableCommand.add(PingCommande.class);
 
             //On recupere le l'id serveur
             Guild serveur = jda.getGuilds().get(0);
@@ -138,6 +152,8 @@ public class MainBot {
             logger.info("-----------------FIN INITIALISATION-----------------");
 
             jda.getPresence().setGame(Game.of("Statut: Ok!"));
+//            MessageEmbed test = EmbedMessageUtils.getHelp("test",command)
+//            jda.getTextChannels().get(0).sendMessage(test).queue();
 
         }
 
@@ -172,9 +188,9 @@ public class MainBot {
         {
             MessageReceivedEvent event = cmd.event;
             if(event.isFromType(ChannelType.PRIVATE))
-                event.getPrivateChannel().sendMessage("\n:warning: **__Commande inconnue!__** :warning:\n:arrow_right: Utilisez `//help` pour voirs les commandes disponible. ").queue();
+                event.getPrivateChannel().sendMessage(EmbedMessageUtils.getUnknowCommand()).queue();
             else
-                event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n:warning: **__Commande inconnue!__** :warning:\n:arrow_right: Utilisez `//help` pour voirs les commandes disponible. ").queue();
+                event.getTextChannel().sendMessage(EmbedMessageUtils.getUnknowCommand()).queue();
             logger.warn("Commande inconnue");
         }
 

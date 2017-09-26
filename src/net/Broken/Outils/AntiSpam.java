@@ -61,8 +61,7 @@ public class AntiSpam {
 
            logger.info("Punition de "+user.getEffectiveName()+" avec un multiplicateur de "+MainBot.spamUtils.get(user.getUser()));
 
-            event.getTextChannel().sendMessage(user.getAsMention()+"\n```markdown\n#-----------------SPAM DETECTEUR----------------#\n#                                               #\n#    La prochaine fois tu fermeras ta gueule!   #\n#                                               #\n#            On te revoit dans "+MainBot.spamUtils.get(user.getUser()).getMultip()+"min             #\n#                                               #\n#-----------------------------------------------#```").queue();
-
+            event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamExtermine(user,MainBot.spamUtils.get(user.getUser()).getMultip())).queue();
             if(!MainBot.spamUtils.get(user.getUser()).isOnSpam())
             {
                 MainBot.spamUtils.get(user.getUser()).setOnSpam(true);
@@ -121,8 +120,7 @@ public class AntiSpam {
             logger.info("["+user.getEffectiveName()+"] Fin de spam pour "+user.getEffectiveName()+" apres "+multip+"min.");
             move.exc(user, saveRoleUser.get(0), true, serveur, serveurManager);    //aSaveroleUser=saveRoleUser.get(i)
             logger.info("["+user.getEffectiveName()+"] Fin des "+multip+"min");
-            chanel.sendMessage(user.getAsMention()+"\n```markdown\n#-----------------SPAM DETECTEUR----------------#\n#                                               #\n#     Un spammeur est de retour, fais gaffe!    #\n#               Je te surveille!                #\n#                                               #\n#-----------------------------------------------#```").queue();
-
+            chanel.sendMessage(EmbedMessageUtils.getSpamPardon(user)).queue();
 
             //                                                                                                                                                                                        #-----------------------------------------------#
 

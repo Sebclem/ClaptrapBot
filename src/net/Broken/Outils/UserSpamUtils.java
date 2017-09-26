@@ -42,7 +42,7 @@ public class UserSpamUtils {
         this.onSpam = onSpam;
     }
 
-
-
-
+    public Member getUser() {
+        return user;
+    }
 }

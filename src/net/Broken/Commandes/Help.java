@@ -2,13 +2,16 @@ package net.Broken.Commandes;
 
 import net.Broken.Commande;
 import net.Broken.MainBot;
+import net.Broken.Outils.EmbedMessageUtils;
 import net.Broken.Outils.PrivateMessage;
+import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.awt.*;
 import java.util.Map;
 
 /**
@@ -31,7 +34,7 @@ public class Help implements Commande {
             {
                 logger.info("Aide demmander pour la cmd "+argsString+" par "+event.getAuthor().getName());
                 if(!event.isFromType(ChannelType.PRIVATE))
-                    event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n\n"+MainBot.commandes.get(argsString).help(args)).queue();
+                    event.getTextChannel().sendMessage(EmbedMessageUtils.getHelp(argsString,MainBot.commandes.get(argsString).help(args))).queue();
                 else{
                     PrivateMessage.send(event.getAuthor(), MainBot.commandes.get(argsString).help(args),logger);
                 }
@@ -41,23 +44,23 @@ public class Help implements Commande {
             else
             {
                 if(!event.isFromType(ChannelType.PRIVATE))
-                    event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n:warning: **__Commande Inconue!__** :warning:").queue();
+                    event.getTextChannel().sendMessage(EmbedMessageUtils.getUnknowCommand()).queue();
                 else{
-                    PrivateMessage.send(event.getAuthor(),":warning: **__Commande Inconue!__** :warning:",logger);
+                    PrivateMessage.send(event.getAuthor(),EmbedMessageUtils.getUnknowCommand(),logger);
                 }
                 logger.info("Commande Inconnue!");
             }
         }
         else
         {
-            String txt="";
+            StringBuilder txt= new StringBuilder();
             for (Map.Entry<String, Commande> e : MainBot.commandes.entrySet()) {
-                txt=txt+"\n//"+e.getKey();
-
+                txt.append("\n- ").append(e.getKey());
             }
             if(!event.isFromType(ChannelType.PRIVATE))
-                event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n:arrow_right:\t**__commandes envoyées par message privé__**").queue();
-            PrivateMessage.send(event.getAuthor(),"Commandes du bot:\n\n```"+txt+"```\n\nUtilise `//help <commande>` pour plus de détails.",logger);
+
+                event.getTextChannel().sendMessage(new EmbedBuilder().setTitle("Commandes envoyées par message privé").setColor(Color.green).build()).queue();
+            PrivateMessage.send(event.getAuthor(),new EmbedBuilder().setTitle("Commandes du bot").setDescription(txt.toString()).setFooter("Utilise '//help <commande>' pour plus de détails.",null).setColor(Color.green).setThumbnail(event.getJDA().getSelfUser().getAvatarUrl()).build(),logger);
 
 
 

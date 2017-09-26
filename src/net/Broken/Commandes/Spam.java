@@ -3,6 +3,7 @@ package net.Broken.Commandes;
 import net.Broken.Commande;
 import net.Broken.MainBot;
 import net.Broken.Outils.AntiSpam;
+import net.Broken.Outils.EmbedMessageUtils;
 import net.Broken.Outils.UserSpamUtils;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
@@ -76,7 +77,7 @@ public class Spam implements Commande {
     @Override
     public String help(String[] args)
     {
-        return "`//spam extermine <@utilisateur> <multiplicateur>`\n:arrow_right:\t*Punir un spammeur.*\n\n`//spam pardon <@utilisateur>`\n:arrow_right:\t*Anuller la punition d'un utilisateur.*\n\n`//spam reset <@utilisateur>`\n:arrow_right:\t*RAZ du multiplicateur d'un utilisateur.*";
+        return "`//spam extermine <@utilisateur> <multiplicateur>`\n:arrow_right:\t*Punir un spammeur.*\n\n`//spam pardon <@utilisateur>`\n:arrow_right:\t*Annuler la punition d'un utilisateur.*\n\n`//spam reset <@utilisateur>`\n:arrow_right:\t*RAZ du multiplicateur d'un utilisateur.*";
     }
 
     @Override
@@ -110,7 +111,7 @@ public class Spam implements Commande {
             if(userL.size()<1)
             {
                 logger.error("Utilisateur introuvable.");
-                event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n:warning: **__Erreur__** :warning:\n:arrow_right: Utilisateur introuvable. ");
+                event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError(":arrow_right: Utilisateur introuvable. ","pardon")).queue();
             }
             else {
                 Member user = serveur.getMember(userL.get(0));
@@ -130,25 +131,25 @@ public class Spam implements Commande {
                             MainBot.spamUtils.get(user.getUser()).setOnSpam(false);
                         } else {
                             logger.warn("Utilisateur pas en spam.");
-                            event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n:warning: **__Erreur__** :warning:\n:arrow_right: Utilisateur non spammeur. ").queue();
+                            event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError(":arrow_right: Utilisateur non spammeur.","pardon")).queue();
                         }
 
 
                     } else {
                         logger.warn("Utilisateur pas en spam.");
-                        event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n:warning: **__Erreur__** :warning:\n:arrow_right: Utilisateur non spammeur. ").queue();
+                        event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError(":arrow_right: Utilisateur non spammeur.","pardon")).queue();
                     }
 
                 } else {
                     logger.warn("Autorisation insuffisante, pardon refusé");
-                    event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n:no_entry_sign: **__Vous n'avez pas l'autorisation de faire sa!__** :no_entry_sign: ").queue();
+                    event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError("Vous n'avez pas l'autorisation de faire ça!")).queue();
                 }
             }
         }
         else
         {
             logger.warn("Argument manquant.");
-            event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n:warning: **__Argument manquant__**:warning: \n:arrow_right: Utilisation: `//spam pardon <@utilisateur>`.").queue();
+            event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError("Argument manquant!","pardon")).queue();
         }
 
 
@@ -172,7 +173,7 @@ public class Spam implements Commande {
             if(userL.size()<1)
             {
                 logger.warn("Mentionnement Incorect (Spam).");
-                event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n:warning: **__Erreur__** :warning:\n:arrow_right: Erreur, Utilisateur mal mentioner. `//help spam extermine` pour plus d'info ").queue();
+                event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError("Utilisateur mal mentioner. ","extermine")).queue();
             }
             else{
 
@@ -202,7 +203,7 @@ public class Spam implements Commande {
                         else
                         {
                             logger.warn("Utilisateur deja en spam.");
-                            event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n:warning: **__Erreur__** :warning:\n:arrow_right: Utilisateur déjà spammeur. ").queue();
+                            event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError("Utilisateur déjà spammeur.","extermine")).queue();
                         }
 
 
@@ -216,7 +217,7 @@ public class Spam implements Commande {
                 else
                 {
                     logger.warn("Autorisation insuffisante, extermination refusé");
-                    event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n:no_entry_sign: **__Vous n'avez pas l'autorisation de faire ça!__** :no_entry_sign:  ").queue();
+                    event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError("Vous n'avez pas l'autorisation de faire ça!")).queue();
                 }
 
             }
@@ -226,7 +227,7 @@ public class Spam implements Commande {
         else
         {
             logger.warn("Argument manquant.");
-            event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n:warning: **__Argument manquant__**:warning: \n:arrow_right: Utilisation: `//spam extermine <utilisateur> <multiplicateur>`.").queue();
+            event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError("Argument manquant!","extermine")).queue();
         }
     }
 
@@ -249,7 +250,7 @@ public class Spam implements Commande {
                 if(userL.size()<1)
                 {
                     logger.warn("Utilisateur introuvable.");
-                    event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n:warning: **__Erreur__** :warning:\n:arrow_right: Utilisateur introuvable. ").queue();
+                    event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError("Utilisateur introuvable.","reset")).queue();
 
                 }
                 else {
@@ -272,7 +273,7 @@ public class Spam implements Commande {
                         }
                     } else {
                         logger.warn("Autorisation insuffisante, reset refusé");
-                        event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n:no_entry_sign: **__Vous n'avez pas l'autorisation de faire ca!__** :no_entry_sign:  ").queue();
+                        event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError("Vous n'avez pas l'autorisation de faire ca!")).queue();
 
                     }
                 }
@@ -280,7 +281,7 @@ public class Spam implements Commande {
             else
             {
                 logger.warn("Argument manquant.");
-                event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n:warning: **__Argument manquant__**:warning: \n:arrow_right: Utilisation: `//spam reset <utilisateur>`.").queue();
+                event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError("Argument manquant!","reset")).queue();
             }
         }
         else
