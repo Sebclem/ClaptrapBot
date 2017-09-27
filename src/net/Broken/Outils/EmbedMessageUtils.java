@@ -2,6 +2,7 @@ package net.Broken.Outils;
 
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Member;
+import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageEmbed;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
@@ -10,6 +11,11 @@ import java.awt.*;
 public class EmbedMessageUtils {
     public static MessageEmbed getUnknowCommand() {
         return new EmbedBuilder().setTitle(":warning: Commande inconnue! :warning:").setDescription(":arrow_right: Utilisez `//help` pour voirs les commandes disponible.").setColor(Color.orange).build();
+
+    }
+
+    public static MessageEmbed getNoPrivate(){
+        return new EmbedBuilder().setTitle(":warning: Commande non disponible en privé! :warning:").setDescription(":arrow_right: Utilisez `//help` pour voirs les commandes disponible.").setColor(Color.red).build();
 
     }
 
@@ -30,7 +36,7 @@ public class EmbedMessageUtils {
     }
 
     public static MessageEmbed getMoveOk(String message) {
-        return new EmbedBuilder().setTitle(":ok: Move :ok: ").setDescription(message).setColor(Color.green).setFooter("'//help move' pour plus d'info ", null).build();
+        return new EmbedBuilder().setTitle(":arrow_left: Move :arrow_right:  ").setDescription(message).setColor(Color.green).setFooter("'//help move' pour plus d'info ", null).build();
     }
 
     public static MessageEmbed getSpamError(String message) {

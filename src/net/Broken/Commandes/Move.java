@@ -1,9 +1,11 @@
 package net.Broken.Commandes;
 
 import net.Broken.Commande;
+import net.Broken.MainBot;
 import net.Broken.Outils.EmbedMessageUtils;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.core.exceptions.HierarchyException;
 import net.dv8tion.jda.core.managers.GuildController;
 import net.dv8tion.jda.core.managers.GuildManager;
 import org.apache.logging.log4j.LogManager;
@@ -40,8 +42,9 @@ public class Move implements Commande {
      * @param serveurManager
      * @return
      */
-    public boolean exc(Member user, Role cible , boolean reset, Guild serveur, GuildManager serveurManager)
+    public boolean exc(Member user, Role cible , boolean reset, Guild serveur, GuildManager serveurManager) throws HierarchyException
     {
+        MainBot.roleFlag = true;
         guildController = new GuildController(serveur);
         boolean erreur = false;
         List<Role> allRoll = serveur.getRoles();
@@ -98,7 +101,7 @@ public class Move implements Commande {
                 if(userL.size()<1 ||roleL.size()<1)
                 {
                     logger.info("Mentionnement Incorect.");
-                    event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError(":arrow_right: Utilisateur ou Role mal mentioner.")).queue();
+                    event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("Utilisateur ou Role mal mentioner.")).queue();
                 }
                 else
                 {
@@ -111,15 +114,22 @@ public class Move implements Commande {
 
                         logger.info("Autorisation suffisante, deplacement autorisé");
                         logger.info("Utilisateur trouvée");
-                        boolean erreur=this.exc(user,roleCible,true,serveur,serveur.getManager());
-                        if(erreur)
-                        {
-                            event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError(":arrow_right: Verifier le rôle cible. ")).queue();
+                        try {
+                            boolean erreur=this.exc(user,roleCible,true,serveur,serveur.getManager());
+                            if(erreur)
+                            {
+                                event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("Verifier le rôle cible. ")).queue();
+                            }
+                            else
+                            {
+                                event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveOk("Déplacement de "+user.getEffectiveName()+" vers "+roleCible.getName()+" reussi.")).queue();
+                            }
+                        }catch (HierarchyException e){
+                            event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("Impossible de déplacer un "+user.getRoles().get(0).getAsMention())).queue();
+                            logger.error("Hierarchy error");
                         }
-                        else
-                        {
-                            event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveOk("Déplacement de "+user.getEffectiveName()+" vers "+roleCible.getName()+" reussi.")).queue();
-                        }
+
+
                     }
                     else
                     {
@@ -133,12 +143,12 @@ public class Move implements Commande {
             else
             {
                 logger.warn("Arguments maquant.");
-                event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError(":arrow_right: Arguments manquant.")).queue();
+                event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("Arguments manquant.")).queue();
 
             }
         }
         else
-            event.getPrivateChannel().sendMessage("\n:warning: **__Commande non disponible en priver!__** :warning:");
+            event.getPrivateChannel().sendMessage(EmbedMessageUtils.getNoPrivate());
 
 
 

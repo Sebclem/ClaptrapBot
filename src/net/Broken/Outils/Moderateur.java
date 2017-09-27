@@ -105,7 +105,7 @@ public class Moderateur {
                 spam = 1;
                 logger.info("Detection de spam pour "+user.getEffectiveName()+"avec 5 message en 5seg: ");
                 ArrayList<Message> histo = MainBot.historique.get(user.getUser());
-                for (Message aMessage:histo )         //=for(int i=0; i<saveRoleUser.size(); i++)
+                for (Message aMessage:histo )
                 {
                    logger.debug("\t*"+aMessage.getContent());
                 }

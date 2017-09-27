@@ -7,6 +7,7 @@ import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Role;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.core.exceptions.HierarchyException;
 import net.dv8tion.jda.core.managers.GuildManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -61,14 +62,20 @@ public class AntiSpam {
 
            logger.info("Punition de "+user.getEffectiveName()+" avec un multiplicateur de "+MainBot.spamUtils.get(user.getUser()));
 
-            event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamExtermine(user,MainBot.spamUtils.get(user.getUser()).getMultip())).queue();
             if(!MainBot.spamUtils.get(user.getUser()).isOnSpam())
             {
                 MainBot.spamUtils.get(user.getUser()).setOnSpam(true);
                 List<Role> spm = serveur.getRolesByName("Spammer", false);
-                move.exc(user, spm.get(0), true, serveur, serveurManger);
-                MainBot.spamUtils.get(user.getUser()).setMinuteur(new Minuteur(MainBot.spamUtils.get(user.getUser()).getMultip(), move.user, move.saveRoleUser, move.serveur, move.serveurManager,event));
-                MainBot.spamUtils.get(user.getUser()).launchMinuteur();
+                try{
+                    move.exc(user, spm.get(0), true, serveur, serveurManger);
+                    event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamExtermine(user,MainBot.spamUtils.get(user.getUser()).getMultip())).queue();
+                    MainBot.spamUtils.get(user.getUser()).setMinuteur(new Minuteur(MainBot.spamUtils.get(user.getUser()).getMultip(), move.user, move.saveRoleUser, move.serveur, move.serveurManager,event));
+                    MainBot.spamUtils.get(user.getUser()).launchMinuteur();
+                }catch (HierarchyException e){
+                    event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("Impossible de déplacer un "+user.getRoles().get(0).getAsMention())).queue();
+                    MainBot.spamUtils.get(user.getUser()).setOnSpam(false);
+                }
+
             }
         }
 
@@ -118,7 +125,12 @@ public class AntiSpam {
                 timeLeft--;
             }
             logger.info("["+user.getEffectiveName()+"] Fin de spam pour "+user.getEffectiveName()+" apres "+multip+"min.");
-            move.exc(user, saveRoleUser.get(0), true, serveur, serveurManager);    //aSaveroleUser=saveRoleUser.get(i)
+            try {
+                move.exc(user, saveRoleUser.get(0), true, serveur, serveurManager);    //aSaveroleUser=saveRoleUser.get(i)
+            }catch (HierarchyException e){
+                event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("Impossible de déplacer un "+user.getRoles().get(0).getAsMention())).queue();
+                logger.error("Hierarchy error");
+            }
             logger.info("["+user.getEffectiveName()+"] Fin des "+multip+"min");
             chanel.sendMessage(EmbedMessageUtils.getSpamPardon(user)).queue();
 

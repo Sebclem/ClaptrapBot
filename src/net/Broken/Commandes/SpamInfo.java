@@ -153,7 +153,7 @@ public class SpamInfo implements Commande{
         public void run() {
             logger.debug("Start "+user.getName()+" theard!");
             oldValue = util.getTimeLeft();
-            while (util.getTimeLeft()!=0 && !stop){
+            while (util.getTimeLeft()!=0 && !stop && util.isOnSpam()){
                 try {
                     Thread.sleep(500);
                     if(util.getTimeLeft()%5 == 0 && oldValue - util.getTimeLeft() >= 5){

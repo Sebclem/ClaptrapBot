@@ -33,6 +33,7 @@ public class MainBot {
     public static boolean okInit=false;
     public static HashMap<User, ArrayList<Message>> historique =new HashMap<>();
     public static HashMap<User, Integer> message_compteur =new HashMap<>();
+    public static boolean roleFlag = false;
 
     public static HashMap<User, UserSpamUtils> spamUtils = new HashMap<>();
 
@@ -180,7 +181,7 @@ public class MainBot {
                 commandes.get(cmd.commande).executed(true, cmd.event);
             }
             else
-                cmd.event.getPrivateChannel().sendMessage("\n:warning: **__Commande non disponible en privé!__** :warning:").queue();
+                cmd.event.getPrivateChannel().sendMessage(EmbedMessageUtils.getNoPrivate()).queue();
 
 
         }
