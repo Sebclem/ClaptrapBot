@@ -45,7 +45,7 @@ public class SpamInfo implements Commande{
         Message message = null;
         if(!MainBot.spamUtils.containsKey(user)){
             if(!event.isFromType(ChannelType.PRIVATE))
-                event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamInfo(user.getName()+":\n\t- Multiplicateur: `1`\n\t- En spam: `Non`")).queue();
+                message = event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamInfo(user.getName()+":\n\t- Multiplicateur: `1`\n\t- En spam: `Non`")).complete();
             else
                 PrivateMessage.send(event.getAuthor(),EmbedMessageUtils.getSpamInfo(user.getName()+":\n\t- Multiplicateur: `1`\n\t- En spam: `Non`"),logger);
         }
@@ -53,7 +53,7 @@ public class SpamInfo implements Commande{
             UserSpamUtils util = MainBot.spamUtils.get(user);
             if(!util.isOnSpam()){
                 if(!event.isFromType(ChannelType.PRIVATE))
-                    event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamInfo(user.getName()+"\n\t- Multiplicateur: `"+util.getMultip()+"`\n\t- En spam: `Non`")).queue();
+                    message = event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamInfo(user.getName()+"\n\t- Multiplicateur: `"+util.getMultip()+"`\n\t- En spam: `Non`")).complete();
                 else
                     PrivateMessage.send(event.getAuthor(),EmbedMessageUtils.getSpamInfo(user.getName()+":\n\t- Multiplicateur: `"+util.getMultip()+"`\n\t- En spam: `Non`"),logger);
             }
@@ -68,21 +68,21 @@ public class SpamInfo implements Commande{
             if(threadHashMap.containsKey(user)){
                 MessageUpdater startedThread = threadHashMap.get(user);
                 if(!message.getChannelType().equals(startedThread.message.getChannelType())){
-                    MessageUpdater newThread = new MessageUpdater(message,MainBot.spamUtils.get(user),user);
+                    MessageUpdater newThread = new MessageUpdater(message,event.getMessage(),MainBot.spamUtils.get(user),user);
                     threadHashMap.put(user,newThread);
                     newThread.start();
                 }
                 else
                 {
                    threadHashMap.get(user).stop = true;
-                    MessageUpdater newThread = new MessageUpdater(message,MainBot.spamUtils.get(user),user);
+                    MessageUpdater newThread = new MessageUpdater(message,event.getMessage(),MainBot.spamUtils.get(user),user);
                     threadHashMap.replace(user, newThread);
                     newThread.start();
                 }
             }
             else
             {
-                MessageUpdater newThread = new MessageUpdater(message,MainBot.spamUtils.get(user),user);
+                MessageUpdater newThread = new MessageUpdater(message,event.getMessage(),MainBot.spamUtils.get(user),user);
                 threadHashMap.put(user, newThread);
                 newThread.start();
             }
@@ -138,39 +138,58 @@ public class SpamInfo implements Commande{
 
     private class MessageUpdater extends Thread{
         public Message message;
+        public Message command;
         public UserSpamUtils util;
         public boolean stop;
         private int oldValue;
         private User user;
 
-        public MessageUpdater(Message message, UserSpamUtils util,User user) {
+        public MessageUpdater(Message message,Message command, UserSpamUtils util,User user) {
             this.message = message;
             this.util = util;
             this.user = user;
+            this.command = command;
+
         }
 
         @Override
         public void run() {
             logger.debug("Start "+user.getName()+" theard!");
-            oldValue = util.getTimeLeft();
-            while (util.getTimeLeft()!=0 && !stop && util.isOnSpam()){
-                try {
-                    Thread.sleep(500);
-                    if(util.getTimeLeft()%5 == 0 && oldValue - util.getTimeLeft() >= 5){
-                        message.editMessage(EmbedMessageUtils.getSpamInfo(user.getName()+":\n\t- Multiplicateur: `"+util.getMultip()+"`\n\t- En spam: `Oui`\n\t- Temps restant: `"+formatSecond(util.getTimeLeft())+"`")).complete();
-                        oldValue = util.getTimeLeft();
-                    }
+            if(util != null){
+                oldValue = util.getTimeLeft();
+                while (util.getTimeLeft()!=0 && !stop && util.isOnSpam()){
+                    try {
+                        Thread.sleep(500);
+                        if(util.getTimeLeft()%5 == 0 && oldValue - util.getTimeLeft() >= 5){
+                            message.editMessage(EmbedMessageUtils.getSpamInfo(user.getName()+":\n\t- Multiplicateur: `"+util.getMultip()+"`\n\t- En spam: `Oui`\n\t- Temps restant: `"+formatSecond(util.getTimeLeft())+"`")).complete();
+                            oldValue = util.getTimeLeft();
+                        }
 
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
+                logger.debug("Kill "+user.getName()+" theard!");
+                if(stop)
+                    message.editMessage(new EmbedBuilder().setColor(Color.RED).setTitle("Aborted").build()).complete();
+                else
+                    message.editMessage(EmbedMessageUtils.getSpamInfo(user.getName()+"\n\t- Multiplicateur: `"+util.getMultip()+"`\n\t- En spam: `Non`")).complete();
+
             }
-            logger.debug("Kill "+user.getName()+" theard!");
-            if(stop)
-                message.editMessage(new EmbedBuilder().setColor(Color.RED).setTitle("Aborted").build()).complete();
-            else
-                message.editMessage(EmbedMessageUtils.getSpamInfo(user.getName()+"\n\t- Multiplicateur: `"+util.getMultip()+"`\n\t- En spam: `Non`")).complete();
+            logger.debug("Timer for message deletion of "+user.getName()+" stated...");
             threadHashMap.remove(user);
+            try {
+                Thread.sleep(15000);
+                logger.debug("Delete "+user.getName()+" messages");
+                message.delete().queue();
+                command.delete().queue();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+
+
+
         }
     }
 }
