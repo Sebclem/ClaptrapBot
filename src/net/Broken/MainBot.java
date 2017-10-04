@@ -104,6 +104,8 @@ public class MainBot {
             commandes.put("help",new Help());
             commandes.put("move", new Move());
             commandes.put("spam", new Spam());
+            commandes.put("spaminfo",new SpamInfo());
+            commandes.put("flush",new Flush());
 
             if(!dev){
                 commandes.put("ass",new Ass());
@@ -116,7 +118,7 @@ public class MainBot {
                 commandes.put("madame",new Madame());
                 commandes.put("cat",new Cat());
             }
-            commandes.put("spaminfo",new SpamInfo());
+
 
 
             //On recupere le l'id serveur

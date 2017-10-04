@@ -50,4 +50,11 @@ public class EmbedMessageUtils {
     public static MessageEmbed getSpamInfo(String message) {
         return new EmbedBuilder().setTitle(":hourglass:  Spam Info :hourglass:").setDescription(message).setColor(Color.green).setFooter("'//help spaminfo' pour plus d'info ", null).build();
     }
+
+    public static MessageEmbed getFlushError(String message) {
+        return new EmbedBuilder().setTitle(":warning: Flush Error :warning: ").setDescription(message).setColor(Color.red).setFooter("'//help flush' pour plus d'info ", null).build();
+    }
+
+
+
 }

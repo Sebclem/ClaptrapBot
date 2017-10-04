@@ -5,6 +5,7 @@ import net.Broken.MainBot;
 import net.Broken.Outils.AntiSpam;
 import net.Broken.Outils.EmbedMessageUtils;
 import net.Broken.Outils.UserSpamUtils;
+import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.User;
@@ -120,7 +121,7 @@ public class Spam implements Commande {
                  * c'est un big dady    *
                  ****************************/
 
-                if (event.getMember().getRoles().get(0)==serveur.getRolesByName("Big_Daddy",false).get(0)) {
+                if(event.getMember().hasPermission(Permission.ADMINISTRATOR)){
                     logger.info("Autorisation suffisante, pardon autorisé");
 
                     /****************************
@@ -185,7 +186,7 @@ public class Spam implements Commande {
                  * c'est un big dady    *
                  ****************************/
 
-                if(event.getMember().getRoles().get(0)==serveur.getRolesByName("Big_Daddy",false).get(0))
+                if(event.getMember().hasPermission(Permission.ADMINISTRATOR))
                 {
                     logger.info("Autorisation suffisante, extermination autorisé");
                     String multiStr =args[2];
@@ -260,7 +261,7 @@ public class Spam implements Commande {
                      * c'est un big dady    *
                      ****************************/
 
-                    if ( event.getMember().getRoles().get(0) == serveur.getRolesByName("Big_Daddy", false).get(0)) {
+                    if(event.getMember().hasPermission(Permission.ADMINISTRATOR)){
                         logger.info("Autorisation suffisante, pardon autorisé");
                         /****************************
                          * verif utilisteur trouver *
@@ -273,7 +274,7 @@ public class Spam implements Commande {
                         }
                     } else {
                         logger.warn("Autorisation insuffisante, reset refusé");
-                        event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError("Vous n'avez pas l'autorisation de faire ca!")).queue();
+                        event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError("Vous n'avez pas l'autorisation de faire ça!")).queue();
 
                     }
                 }

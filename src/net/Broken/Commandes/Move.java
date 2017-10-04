@@ -3,6 +3,7 @@ package net.Broken.Commandes;
 import net.Broken.Commande;
 import net.Broken.MainBot;
 import net.Broken.Outils.EmbedMessageUtils;
+import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.exceptions.HierarchyException;
@@ -109,7 +110,7 @@ public class Move implements Commande {
                     Role roleCible = roleL.get(0);
                     serveur=event.getGuild();
                     logger.info("Tentative de déplacement de "+user.getEffectiveName()+" vers "+roleCible.getName()+" par l'utilisateur "+event.getAuthor().getName());
-                    if(event.getMember().getRoles().contains(serveur.getRolesByName("Big_Daddy",false).get(0)))
+                    if(event.getMember().hasPermission(Permission.ADMINISTRATOR))
                     {
 
                         logger.info("Autorisation suffisante, deplacement autorisé");
@@ -134,7 +135,7 @@ public class Move implements Commande {
                     else
                     {
                         logger.info("Autorisation insuffisante, deplacement refusé");
-                        event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("Vous n'avez pas l'autorisation de faire ca!")).queue();
+                        event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("Vous n'avez pas l'autorisation de faire ça!")).queue();
 
                     }
                 }
