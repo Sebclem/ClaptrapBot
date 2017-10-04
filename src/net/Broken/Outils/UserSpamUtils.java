@@ -1,12 +1,16 @@
 package net.Broken.Outils;
 
 import net.dv8tion.jda.core.entities.Member;
+import net.dv8tion.jda.core.entities.Message;
+
+import java.util.List;
 
 public class UserSpamUtils {
     private AntiSpam.Minuteur minuteur;
     private Member user;
     private int multip = 0;
     private boolean onSpam = false;
+    private List<Message> messages;
 
     public int getTimeLeft(){
         return minuteur.timeLeft;
@@ -17,8 +21,9 @@ public class UserSpamUtils {
         return multip;
     }
 
-    public UserSpamUtils(Member user) {
+    public UserSpamUtils(Member user, List<Message> messages) {
         this.user = user;
+        this.messages = messages;
     }
 
 
@@ -44,5 +49,18 @@ public class UserSpamUtils {
 
     public Member getUser() {
         return user;
+    }
+
+    public void addMessage(Message message){
+        messages.add(message);
+    }
+
+    public List<Message> getMessages() {
+        return messages;
+    }
+
+    public void clearAndAdd(Message message){
+        messages.clear();
+        messages.add(message);
     }
 }

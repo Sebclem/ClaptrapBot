@@ -2,10 +2,7 @@ package net.Broken.Outils;
 
 import net.Broken.MainBot;
 import net.Broken.Commandes.Move;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.Role;
-import net.dv8tion.jda.core.entities.TextChannel;
+import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.exceptions.HierarchyException;
 import net.dv8tion.jda.core.managers.GuildManager;
@@ -13,6 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.Thread.sleep;
@@ -44,7 +42,9 @@ public class AntiSpam {
         // On créer un nouvelle case dans le tableau des statuts si il n'y est pas
         if(!MainBot.spamUtils.containsKey(user.getUser()))
         {
-            MainBot.spamUtils.put(user.getUser(),new UserSpamUtils(user));
+            List<Message> messages = new ArrayList<>();
+            messages.addAll(MainBot.historique.get(user.getUser()));
+            MainBot.spamUtils.put(user.getUser(),new UserSpamUtils(user,messages));
         }
         // On verrifie que l'uttilisateur n'est pas deja en spam
         if(!MainBot.spamUtils.get(user.getUser()).isOnSpam())
@@ -68,7 +68,7 @@ public class AntiSpam {
                 List<Role> spm = serveur.getRolesByName("Spammer", false);
                 try{
                     move.exc(user, spm.get(0), true, serveur, serveurManger);
-                    event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamExtermine(user,MainBot.spamUtils.get(user.getUser()).getMultip())).queue();
+                    MainBot.spamUtils.get(user.getUser()).addMessage(event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamExtermine(user,MainBot.spamUtils.get(user.getUser()).getMultip())).complete());
                     MainBot.spamUtils.get(user.getUser()).setMinuteur(new Minuteur(MainBot.spamUtils.get(user.getUser()).getMultip(), move.user, move.saveRoleUser, move.serveur, move.serveurManager,event));
                     MainBot.spamUtils.get(user.getUser()).launchMinuteur();
                 }catch (HierarchyException e){
@@ -132,7 +132,9 @@ public class AntiSpam {
                 logger.error("Hierarchy error");
             }
             logger.info("["+user.getEffectiveName()+"] Fin des "+multip+"min");
-            chanel.sendMessage(EmbedMessageUtils.getSpamPardon(user)).queue();
+            new MessageTimeOut(new ArrayList<>(MainBot.spamUtils.get(user.getUser()).getMessages()),0).start();
+            MainBot.spamUtils.get(user.getUser()).clearAndAdd(chanel.sendMessage(EmbedMessageUtils.getSpamPardon(user)).complete());
+            new MessageTimeOut(MainBot.spamUtils.get(user.getUser()).getMessages(),60).start();
 
             //                                                                                                                                                                                        #-----------------------------------------------#
 

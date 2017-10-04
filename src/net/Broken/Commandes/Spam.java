@@ -15,6 +15,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -320,7 +321,7 @@ public class Spam implements Commande {
             }
             else
             {
-                MainBot.spamUtils.put(user.getUser(),new UserSpamUtils(user));
+                MainBot.spamUtils.put(user.getUser(),new UserSpamUtils(user,new ArrayList<>()));
                 MainBot.spamUtils.get(user.getUser()).setMultip(multi);
             }
 

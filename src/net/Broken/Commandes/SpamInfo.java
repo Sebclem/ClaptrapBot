@@ -3,6 +3,7 @@ package net.Broken.Commandes;
 import net.Broken.Commande;
 import net.Broken.MainBot;
 import net.Broken.Outils.EmbedMessageUtils;
+import net.Broken.Outils.MessageTimeOut;
 import net.Broken.Outils.PrivateMessage;
 import net.Broken.Outils.UserSpamUtils;
 import net.dv8tion.jda.core.EmbedBuilder;
@@ -15,7 +16,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -178,14 +181,11 @@ public class SpamInfo implements Commande{
             }
             logger.debug("Timer for message deletion of "+user.getName()+" stated...");
             threadHashMap.remove(user);
-            try {
-                Thread.sleep(15000);
-                logger.debug("Delete "+user.getName()+" messages");
-                message.delete().queue();
-                command.delete().queue();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            List<Message> messages = new ArrayList<>();
+            messages.add(command);
+            messages.add(message);
+            new MessageTimeOut(messages,15).start();
+
 
 
 

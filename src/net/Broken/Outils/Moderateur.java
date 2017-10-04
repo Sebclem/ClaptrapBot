@@ -32,12 +32,15 @@ public class Moderateur {
         int nbMessage = 3;
         int spam = 0;
 
+        if(MainBot.spamUtils.containsKey(user.getUser()) && MainBot.spamUtils.get(user.getUser()).isOnSpam()){
+            MainBot.spamUtils.get(user.getUser()).addMessage(event.getMessage());
+        }
+
         /********************************************
          *      si l'USER a deja envoyé un message  *
          ********************************************/
         if(MainBot.historique.containsKey(user.getUser()))// Si le user a deja posté un message
         {
-            logger.debug("ok");
             /********************************************
              * COPIE des infos d"historique" vers TOI[] *
              ********************************************/
@@ -60,7 +63,6 @@ public class Moderateur {
                 if(aMessage.getContent().equals(oldMessage))
                     equalCont++;
                 oldMessage = aMessage.getContent();
-                logger.debug( "\t- "+aMessage.getContent());
 
             }
             if(equalCont >= nbMessage){
@@ -74,7 +76,6 @@ public class Moderateur {
             }
 
         } else {
-            logger.debug("ok else ");
             /********************************************
              * SI c'est le 1er message de l'USER       *
              ********************************************/
@@ -107,7 +108,7 @@ public class Moderateur {
                 ArrayList<Message> histo = MainBot.historique.get(user.getUser());
                 for (Message aMessage:histo )
                 {
-                   logger.debug("\t*"+aMessage.getContent());
+//                   logger.debug("\t*"+aMessage.getContent());
                 }
             }
         }else{
