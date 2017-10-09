@@ -43,7 +43,7 @@ public class Move implements Commande {
      * @param serveurManager
      * @return
      */
-    public boolean exc(Member user, Role cible , boolean reset, Guild serveur, GuildManager serveurManager) throws HierarchyException
+    public boolean exc(Member user, List<Role> cible , boolean reset, Guild serveur, GuildManager serveurManager) throws HierarchyException
     {
         MainBot.roleFlag = true;
         guildController = new GuildController(serveur);
@@ -64,11 +64,10 @@ public class Move implements Commande {
         //Ajout du role cible
 
         //On transforme la le role a ajouter en une liste pour pouvoir l'utiliser dans modifyMemberRoles
-        Collection<Role> temp = new ArrayList<>();
-        temp.add(cible);
+
 
         //on fait ensuite les modif
-        guildController.modifyMemberRoles(user,temp,saveRoleUser).queue();
+        guildController.modifyMemberRoles(user,cible).complete();
 
         logger.info("Role " + cible + " attribuer a " + user.getEffectiveName());
 
@@ -107,27 +106,42 @@ public class Move implements Commande {
                 else
                 {
                     user = serveur.getMember(userL.get(0));
-                    Role roleCible = roleL.get(0);
                     serveur=event.getGuild();
-                    logger.info("Tentative de déplacement de "+user.getEffectiveName()+" vers "+roleCible.getName()+" par l'utilisateur "+event.getAuthor().getName());
+                    logger.info("Tentative de déplacement de "+user.getEffectiveName()+" vers "+roleL+" par l'utilisateur "+event.getAuthor().getName());
                     if(event.getMember().hasPermission(Permission.ADMINISTRATOR))
                     {
 
                         logger.info("Autorisation suffisante, deplacement autorisé");
                         logger.info("Utilisateur trouvée");
                         try {
-                            boolean erreur=this.exc(user,roleCible,true,serveur,serveur.getManager());
+                            boolean erreur=this.exc(user,roleL,true,serveur,serveur.getManager());
                             if(erreur)
                             {
                                 event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("Verifier le rôle cible. ")).queue();
                             }
                             else
                             {
-                                event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveOk("Déplacement de "+user.getEffectiveName()+" vers "+roleCible.getName()+" reussi.")).queue();
+                                StringBuilder roleStr = new StringBuilder("");
+                                boolean first = true;
+                                for( Role role : roleL)
+                                {
+                                    if (!first) {
+                                        roleStr.append(", ");
+
+                                    }
+                                    else
+                                        first = false;
+                                    roleStr.append("__");
+                                    roleStr.append(role.getName());
+                                    roleStr.append("__");
+                                }
+
+
+                                event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveOk("Déplacement de "+user.getEffectiveName()+" vers "+roleStr.toString()+" reussi.")).queue();
                             }
                         }catch (HierarchyException e){
                             event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("Impossible de déplacer un "+user.getRoles().get(0).getAsMention())).queue();
-                            logger.error("Hierarchy error");
+                            logger.error("Hierarchy error, please move bot's role on top!");
                         }
 
 
@@ -135,7 +149,7 @@ public class Move implements Commande {
                     else
                     {
                         logger.info("Autorisation insuffisante, deplacement refusé");
-                        event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("Vous n'avez pas l'autorisation de faire ça!")).queue();
+                        event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("Vous n'avez pas l'autorisation de faicre ça!")).queue();
 
                     }
                 }

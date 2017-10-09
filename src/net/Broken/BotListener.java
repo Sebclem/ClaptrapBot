@@ -43,7 +43,7 @@ public class BotListener extends ListenerAdapter {
     @Override
     public void onGuildMemberJoin(GuildMemberJoinEvent event) {
         logger.info(event.getUser().getName()+ "join the guild, move it!");
-        new Move().exc(event.getMember(),event.getJDA().getRolesByName("Rat_d'égout",true).get(0),false,event.getJDA().getGuilds().get(0),event.getJDA().getGuilds().get(0).getManager());
+        new Move().exc(event.getMember(),event.getJDA().getRolesByName("Rat_d'égout",true),false,event.getJDA().getGuilds().get(0),event.getJDA().getGuilds().get(0).getManager());
         MainBot.roleFlag = false;
     }
 
@@ -54,7 +54,7 @@ public class BotListener extends ListenerAdapter {
 
             if(event.getMember().getRoles().size() == 0){
                 logger.info(event.getUser().getName()+ "have no roles, move it!");
-                new Move().exc(event.getMember(),event.getJDA().getRolesByName("Rat_d'égout",true).get(0),false,event.getJDA().getGuilds().get(0),event.getJDA().getGuilds().get(0).getManager());
+                new Move().exc(event.getMember(),event.getJDA().getRolesByName("Rat_d'égout",true),false,event.getJDA().getGuilds().get(0),event.getJDA().getGuilds().get(0).getManager());
                 MainBot.roleFlag = false;
             }
         }

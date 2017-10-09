@@ -67,7 +67,7 @@ public class AntiSpam {
                 MainBot.spamUtils.get(user.getUser()).setOnSpam(true);
                 List<Role> spm = serveur.getRolesByName("Spammer", false);
                 try{
-                    move.exc(user, spm.get(0), true, serveur, serveurManger);
+                    move.exc(user, spm, true, serveur, serveurManger);
                     MainBot.spamUtils.get(user.getUser()).addMessage(event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamExtermine(user,MainBot.spamUtils.get(user.getUser()).getMultip())).complete());
                     MainBot.spamUtils.get(user.getUser()).setMinuteur(new Minuteur(MainBot.spamUtils.get(user.getUser()).getMultip(), move.user, move.saveRoleUser, move.serveur, move.serveurManager,event));
                     MainBot.spamUtils.get(user.getUser()).launchMinuteur();
@@ -126,7 +126,7 @@ public class AntiSpam {
             }
             logger.info("["+user.getEffectiveName()+"] Fin de spam pour "+user.getEffectiveName()+" apres "+multip+"min.");
             try {
-                move.exc(user, saveRoleUser.get(0), true, serveur, serveurManager);    //aSaveroleUser=saveRoleUser.get(i)
+                move.exc(user, saveRoleUser, true, serveur, serveurManager);    //aSaveroleUser=saveRoleUser.get(i)
             }catch (HierarchyException e){
                 event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("Impossible de déplacer un "+user.getRoles().get(0).getAsMention())).queue();
                 logger.error("Hierarchy error");
