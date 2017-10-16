@@ -1,12 +1,17 @@
 package net.Broken.Commandes;
 
 import net.Broken.Commande;
+import net.Broken.MainBot;
+import net.Broken.Outils.MessageTimeOut;
 import net.dv8tion.jda.core.entities.ChannelType;
+import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.apache.logging.log4j.LogManager;
 
 import java.sql.Timestamp;
 import java.time.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -26,8 +31,14 @@ public class PingCommande implements Commande {
         long receivedTime = Timestamp.valueOf(LocalDateTime.ofInstant(event.getMessage().getCreationTime().toInstant(), ZoneId.systemDefault())).getTime();
         if(event.isFromType(ChannelType.PRIVATE))
             event.getPrivateChannel().sendMessage(":arrow_right: Pong! `"+((Timestamp.from(Instant.now()).getTime()-receivedTime))+"ms`").queue();
-        else
-            event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n:arrow_right: Pong! `"+((Timestamp.from(Instant.now()).getTime()-receivedTime))+"ms`").queue();
+        else {
+            Message rest = event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n:arrow_right: Pong! `"+((Timestamp.from(Instant.now()).getTime()-receivedTime))+"ms`").complete();
+            List<Message> messages = new ArrayList<Message>(){{
+                add(rest);
+                add(event.getMessage());
+            }};
+            new MessageTimeOut(messages, MainBot.messageTimeOut).start();
+        }
         LogManager.getLogger().debug("pong");
     }
 

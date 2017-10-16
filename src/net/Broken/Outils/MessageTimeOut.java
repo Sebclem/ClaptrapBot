@@ -30,7 +30,7 @@ public class MessageTimeOut extends Thread{
         {
             try {
                 logger.debug(aMessage.getContent());
-                aMessage.delete().complete();
+                aMessage.delete().queue();
             }catch (ErrorResponseException e){
                 logger.warn("Unknown Message");
             }

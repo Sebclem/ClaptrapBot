@@ -4,10 +4,12 @@ import net.Broken.Commande;
 import net.Broken.MainBot;
 import net.Broken.Outils.AntiSpam;
 import net.Broken.Outils.EmbedMessageUtils;
+import net.Broken.Outils.MessageTimeOut;
 import net.Broken.Outils.UserSpamUtils;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
+import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
@@ -113,7 +115,12 @@ public class Spam implements Commande {
             if(userL.size()<1)
             {
                 logger.error("Utilisateur introuvable.");
-                event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError(":arrow_right: Utilisateur introuvable. ","pardon")).queue();
+                Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError(":arrow_right: Utilisateur introuvable. ","pardon")).complete();
+                List<Message> messages = new ArrayList<Message>(){{
+                    add(rest);
+                    add(event.getMessage());
+                }};
+                new MessageTimeOut(messages,MainBot.messageTimeOut).start();
             }
             else {
                 Member user = serveur.getMember(userL.get(0));
@@ -133,25 +140,45 @@ public class Spam implements Commande {
                             MainBot.spamUtils.get(user.getUser()).setOnSpam(false);
                         } else {
                             logger.warn("Utilisateur pas en spam.");
-                            event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError(":arrow_right: Utilisateur non spammeur.","pardon")).queue();
+                            Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError(":arrow_right: Utilisateur non spammeur.","pardon")).complete();
+                            List<Message> messages = new ArrayList<Message>(){{
+                                add(rest);
+                                add(event.getMessage());
+                            }};
+                            new MessageTimeOut(messages,MainBot.messageTimeOut).start();
                         }
 
 
                     } else {
                         logger.warn("Utilisateur pas en spam.");
-                        event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError(":arrow_right: Utilisateur non spammeur.","pardon")).queue();
+                        Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError(":arrow_right: Utilisateur non spammeur.","pardon")).complete();
+                        List<Message> messages = new ArrayList<Message>(){{
+                            add(rest);
+                            add(event.getMessage());
+                        }};
+                        new MessageTimeOut(messages,MainBot.messageTimeOut).start();
                     }
 
                 } else {
                     logger.warn("Autorisation insuffisante, pardon refusé");
-                    event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError("Vous n'avez pas l'autorisation de faire ça!")).queue();
+                    Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError("Vous n'avez pas l'autorisation de faire ça!")).complete();
+                    List<Message> messages = new ArrayList<Message>(){{
+                        add(rest);
+                        add(event.getMessage());
+                    }};
+                    new MessageTimeOut(messages,MainBot.messageTimeOut).start();
                 }
             }
         }
         else
         {
             logger.warn("Argument manquant.");
-            event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError("Argument manquant!","pardon")).queue();
+            Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError("Argument manquant!","pardon")).complete();
+            List<Message> messages = new ArrayList<Message>(){{
+                add(rest);
+                add(event.getMessage());
+            }};
+            new MessageTimeOut(messages,MainBot.messageTimeOut).start();
         }
 
 
@@ -175,7 +202,7 @@ public class Spam implements Commande {
             if(userL.size()<1)
             {
                 logger.warn("Mentionnement Incorect (Spam).");
-                event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError("Utilisateur mal mentioner. ","extermine")).queue();
+                Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError("Utilisateur mal mentioner. ","extermine")).complete();
             }
             else{
 
@@ -205,7 +232,7 @@ public class Spam implements Commande {
                         else
                         {
                             logger.warn("Utilisateur deja en spam.");
-                            event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError("Utilisateur déjà spammeur.","extermine")).queue();
+                            Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError("Utilisateur déjà spammeur.","extermine")).complete();
                         }
 
 
@@ -219,7 +246,12 @@ public class Spam implements Commande {
                 else
                 {
                     logger.warn("Autorisation insuffisante, extermination refusé");
-                    event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError("Vous n'avez pas l'autorisation de faire ça!")).queue();
+                    Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError("Vous n'avez pas l'autorisation de faire ça!")).complete();
+                    List<Message> messages = new ArrayList<Message>(){{
+                        add(rest);
+                        add(event.getMessage());
+                    }};
+                    new MessageTimeOut(messages,MainBot.messageTimeOut).start();
                 }
 
             }
@@ -229,7 +261,12 @@ public class Spam implements Commande {
         else
         {
             logger.warn("Argument manquant.");
-            event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError("Argument manquant!","extermine")).queue();
+            Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError("Argument manquant!","extermine")).complete();
+            List<Message> messages = new ArrayList<Message>(){{
+                add(rest);
+                add(event.getMessage());
+            }};
+            new MessageTimeOut(messages,MainBot.messageTimeOut).start();
         }
     }
 
@@ -252,7 +289,12 @@ public class Spam implements Commande {
                 if(userL.size()<1)
                 {
                     logger.warn("Utilisateur introuvable.");
-                    event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError("Utilisateur introuvable.","reset")).queue();
+                    Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError("Utilisateur introuvable.","reset")).complete();
+                    List<Message> messages = new ArrayList<Message>(){{
+                        add(rest);
+                        add(event.getMessage());
+                    }};
+                    new MessageTimeOut(messages,MainBot.messageTimeOut).start();
 
                 }
                 else {
@@ -269,13 +311,23 @@ public class Spam implements Commande {
                          ****************************/
                         if (MainBot.spamUtils.containsKey(user.getUser())) {
                             logger.info("Reset du multiplicateur de " + user.getEffectiveName() + " réussi");
-                            event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n *Le multiplcicateur de " + user.getEffectiveName() + " a été remit a zéro.*").queue();
+                            Message rest = event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n *Le multiplcicateur de " + user.getEffectiveName() + " a été remit a zéro.*").complete();
+                            List<Message> messages = new ArrayList<Message>(){{
+                                add(rest);
+                                add(event.getMessage());
+                            }};
+                            new MessageTimeOut(messages,MainBot.messageTimeOut).start();
                             MainBot.spamUtils.remove(user.getUser());
 
                         }
                     } else {
                         logger.warn("Autorisation insuffisante, reset refusé");
-                        event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError("Vous n'avez pas l'autorisation de faire ça!")).queue();
+                        Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError("Vous n'avez pas l'autorisation de faire ça!")).complete();
+                        List<Message> messages = new ArrayList<Message>(){{
+                            add(rest);
+                            add(event.getMessage());
+                        }};
+                        new MessageTimeOut(messages,MainBot.messageTimeOut).start();
 
                     }
                 }
@@ -283,7 +335,12 @@ public class Spam implements Commande {
             else
             {
                 logger.warn("Argument manquant.");
-                event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError("Argument manquant!","reset")).queue();
+                Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError("Argument manquant!","reset")).complete();
+                List<Message> messages = new ArrayList<Message>(){{
+                    add(rest);
+                    add(event.getMessage());
+                }};
+                new MessageTimeOut(messages,MainBot.messageTimeOut).start();
             }
         }
         else

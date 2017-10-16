@@ -34,8 +34,9 @@ public class MainBot {
     public static HashMap<User, ArrayList<Message>> historique =new HashMap<>();
     public static HashMap<User, Integer> message_compteur =new HashMap<>();
     public static boolean roleFlag = false;
-
     public static HashMap<User, UserSpamUtils> spamUtils = new HashMap<>();
+
+    public static int messageTimeOut = 10;
 
 
     private static Logger logger = LogManager.getLogger();

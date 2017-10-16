@@ -9,6 +9,7 @@ import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
+import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.events.ExceptionEvent;
 import net.dv8tion.jda.core.events.ReadyEvent;
 import net.dv8tion.jda.core.events.guild.member.GuildMemberJoinEvent;
@@ -43,7 +44,9 @@ public class BotListener extends ListenerAdapter {
     @Override
     public void onGuildMemberJoin(GuildMemberJoinEvent event) {
         logger.info(event.getUser().getName()+ "join the guild, move it!");
-        new Move().exc(event.getMember(),event.getJDA().getRolesByName("Rat_d'égout",true),false,event.getJDA().getGuilds().get(0),event.getJDA().getGuilds().get(0).getManager());
+        new Move().exc(event.getMember(),event.getJDA().getRolesByName("Newbies",true),false,event.getJDA().getGuilds().get(0),event.getJDA().getGuilds().get(0).getManager());
+        TextChannel chanel = event.getGuild().getTextChannelsByName("accueil", true).get(0);
+        chanel.sendMessage("Salut "+event.getUser().getAsMention()+"! Ecris ton nom, prénom, ta promotion et ton groupe ici! Un admin te donnera accées a ton groupe!").complete();
         MainBot.roleFlag = false;
     }
 

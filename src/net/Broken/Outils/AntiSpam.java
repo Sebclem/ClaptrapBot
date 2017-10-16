@@ -72,7 +72,12 @@ public class AntiSpam {
                     MainBot.spamUtils.get(user.getUser()).setMinuteur(new Minuteur(MainBot.spamUtils.get(user.getUser()).getMultip(), move.user, move.saveRoleUser, move.serveur, move.serveurManager,event));
                     MainBot.spamUtils.get(user.getUser()).launchMinuteur();
                 }catch (HierarchyException e){
-                    event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("Impossible de déplacer un "+user.getRoles().get(0).getAsMention())).queue();
+                    Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("Impossible de déplacer un "+user.getRoles().get(0).getAsMention())).complete();
+                    List<Message> messages = new ArrayList<Message>(){{
+                        add(rest);
+                        add(event.getMessage());
+                    }};
+                    new MessageTimeOut(messages,MainBot.messageTimeOut).start();
                     MainBot.spamUtils.get(user.getUser()).setOnSpam(false);
                 }
 
@@ -128,7 +133,12 @@ public class AntiSpam {
             try {
                 move.exc(user, saveRoleUser, true, serveur, serveurManager);    //aSaveroleUser=saveRoleUser.get(i)
             }catch (HierarchyException e){
-                event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("Impossible de déplacer un "+user.getRoles().get(0).getAsMention())).queue();
+                Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("Impossible de déplacer un "+user.getRoles().get(0).getAsMention())).complete();
+                List<Message> messages = new ArrayList<Message>(){{
+                    add(rest);
+                    add(event.getMessage());
+                }};
+                new MessageTimeOut(messages,MainBot.messageTimeOut).start();
                 logger.error("Hierarchy error");
             }
             logger.info("["+user.getEffectiveName()+"] Fin des "+multip+"min");

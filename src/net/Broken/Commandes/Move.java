@@ -3,6 +3,7 @@ package net.Broken.Commandes;
 import net.Broken.Commande;
 import net.Broken.MainBot;
 import net.Broken.Outils.EmbedMessageUtils;
+import net.Broken.Outils.MessageTimeOut;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
@@ -101,7 +102,12 @@ public class Move implements Commande {
                 if(userL.size()<1 ||roleL.size()<1)
                 {
                     logger.info("Mentionnement Incorect.");
-                    event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("Utilisateur ou Role mal mentioner.")).queue();
+                    Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("Utilisateur ou Role mal mentioner.")).complete();
+                    List<Message> messages = new ArrayList<Message>(){{
+                        add(rest);
+                        add(event.getMessage());
+                    }};
+                    new MessageTimeOut(messages,MainBot.messageTimeOut).start();
                 }
                 else
                 {
@@ -117,7 +123,12 @@ public class Move implements Commande {
                             boolean erreur=this.exc(user,roleL,true,serveur,serveur.getManager());
                             if(erreur)
                             {
-                                event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("Verifier le rôle cible. ")).queue();
+                                Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("Verifier le rôle cible. ")).complete();
+                                List<Message> messages = new ArrayList<Message>(){{
+                                    add(rest);
+                                    add(event.getMessage());
+                                }};
+                                new MessageTimeOut(messages,MainBot.messageTimeOut).start();
                             }
                             else
                             {
@@ -137,10 +148,20 @@ public class Move implements Commande {
                                 }
 
 
-                                event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveOk("Déplacement de "+user.getEffectiveName()+" vers "+roleStr.toString()+" reussi.")).queue();
+                                Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveOk("Déplacement de "+user.getEffectiveName()+" vers "+roleStr.toString()+" reussi.")).complete();
+                                List<Message> messages = new ArrayList<Message>(){{
+                                    add(rest);
+                                    add(event.getMessage());
+                                }};
+                                new MessageTimeOut(messages,MainBot.messageTimeOut).start();
                             }
                         }catch (HierarchyException e){
-                            event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("Impossible de déplacer un "+user.getRoles().get(0).getAsMention())).queue();
+                            Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("Impossible de déplacer un "+user.getRoles().get(0).getAsMention())).complete();
+                            List<Message> messages = new ArrayList<Message>(){{
+                                add(rest);
+                                add(event.getMessage());
+                            }};
+                            new MessageTimeOut(messages,MainBot.messageTimeOut).start();
                             logger.error("Hierarchy error, please move bot's role on top!");
                         }
 
@@ -149,7 +170,12 @@ public class Move implements Commande {
                     else
                     {
                         logger.info("Autorisation insuffisante, deplacement refusé");
-                        event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("Vous n'avez pas l'autorisation de faicre ça!")).queue();
+                        Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("Vous n'avez pas l'autorisation de faicre ça!")).complete();
+                        List<Message> messages = new ArrayList<Message>(){{
+                            add(rest);
+                            add(event.getMessage());
+                        }};
+                        new MessageTimeOut(messages,MainBot.messageTimeOut).start();
 
                     }
                 }
@@ -158,8 +184,12 @@ public class Move implements Commande {
             else
             {
                 logger.warn("Arguments maquant.");
-                event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("Arguments manquant.")).queue();
-
+                Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("Arguments manquant.")).complete();
+                List<Message> messages = new ArrayList<Message>(){{
+                    add(rest);
+                    add(event.getMessage());
+                }};
+                new MessageTimeOut(messages,MainBot.messageTimeOut).start();
             }
         }
         else
