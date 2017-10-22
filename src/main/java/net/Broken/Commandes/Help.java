@@ -45,7 +45,7 @@ public class Help implements Commande {
                     }};
                     new MessageTimeOut(messages,MainBot.messageTimeOut).start();
                 } else{
-                    PrivateMessage.send(event.getAuthor(), MainBot.commandes.get(argsString).help(args),logger);
+                    PrivateMessage.send(event.getAuthor(), EmbedMessageUtils.getHelp(argsString, MainBot.commandes.get(argsString).help(args)),logger);
                 }
 
 

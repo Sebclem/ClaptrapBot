@@ -19,6 +19,15 @@ public class EmbedMessageUtils {
 
     }
 
+    public static MessageEmbed getMusicError(String mesage){
+        return new EmbedBuilder().setTitle(":warning: Musique Error :warning:").setDescription(":arrow_right: "+mesage).setFooter("'//help music' pour plus d'info",null).setColor(Color.red).build();
+
+    }
+
+    public static MessageEmbed getMusicOk(String message) {
+        return new EmbedBuilder().setTitle(":loud_sound:  Music :loud_sound:").setDescription(message).setColor(Color.green).setFooter("'//help music' pour plus d'info ", null).build();
+    }
+
     public static MessageEmbed getSpamExtermine(Member autor, int multi) {
         return new EmbedBuilder().setTitle(":mute: Spam Hunter :mute:").setDescription(autor.getAsMention() + " détecté comme spammer !\n\nOn te revoit dans __**" + multi + "**__ min!").setImage("https://media.giphy.com/media/WVudyGEaizNeg/giphy.gif").setFooter("Spam info disponible via '//spaminfo' en privé", null).setColor(Color.orange).build();
     }

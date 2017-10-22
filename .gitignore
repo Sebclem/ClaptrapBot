@@ -6,3 +6,5 @@ out/
 *.iml
 META-INF/
 *.uml
+
+*.class

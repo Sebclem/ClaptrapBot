@@ -6,6 +6,7 @@ import net.Broken.Outils.CommandParser;
 import net.Broken.Outils.DayListener;
 import net.Broken.Outils.EmbedMessageUtils;
 import net.Broken.Outils.UserSpamUtils;
+import net.Broken.audio.AudioM;
 import net.dv8tion.jda.core.*;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
@@ -107,6 +108,7 @@ public class MainBot {
             commandes.put("spam", new Spam());
             commandes.put("spaminfo",new SpamInfo());
             commandes.put("flush",new Flush());
+            commandes.put("music",new Music());
 
             if(!dev){
                 commandes.put("ass",new Ass());
@@ -124,6 +126,7 @@ public class MainBot {
 
             //On recupere le l'id serveur
             Guild serveur = jda.getGuilds().get(0);
+
 
             //On recupere le serveur manageur
             GuildManager guildManager = serveur.getManager();
