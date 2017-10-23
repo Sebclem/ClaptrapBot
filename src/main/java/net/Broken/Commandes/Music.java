@@ -115,7 +115,7 @@ public class Music implements Commande {
 
     @Override
     public String help(String[] args) {
-        return "`//music play <ChanelVocal> <url>`\n:arrow_right:\t*Let's dance!.*\n\n`//music pause`\n:arrow_right:\t*Mise en pause de la piste en cour.*\n\n`//music resume`\n:arrow_right:\t*Reprise de la lecture de la piste en cour.*\n\n`//music next`\n:arrow_right:\t*Change le piste en cour.*\n\n`//music stop`\n:arrow_right:\t*Arrete la piste ne cour.*\n\n`//music info`\n:arrow_right:\t*Affiche les infos de la piste ne cour.*\n\n`//music flush`\n:arrow_right:\t*Suprime la playlist en cour.*\n\n`//music list`\n:arrow_right:\t*Affiche la playlist en cour.*\n\n`//music add <url>`\n:arrow_right:\t*Ajoute l'url à la playlist en cour.*";
+        return "`//music play <ChanelVocal> <url>`\n:arrow_right:\t*Let's dance! Deffinit le chat vocal à utiliser.`//music add`.*\n\n`//music pause`\n:arrow_right:\t*Mise en pause de la piste en cours.*\n\n`//music resume`\n:arrow_right:\t*Reprise de la lecture de la piste en cours.*\n\n`//music next`\n:arrow_right:\t*Change le piste en cours.*\n\n`//music stop`\n:arrow_right:\t*Arrête la piste en cours.*\n\n`//music info`\n:arrow_right:\t*Affiche les infos de la piste en cours.*\n\n`//music flush`\n:arrow_right:\t*Supprime la playlist en cours.*\n\n`//music list`\n:arrow_right:\t*Affiche la playlist en cours.*\n\n`//music add <url>`\n:arrow_right:\t*Ajoute l'url à la playlist en cour.*";
 
     }
 
