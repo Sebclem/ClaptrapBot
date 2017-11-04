@@ -22,10 +22,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AudioM {
-    GuildMusicManager musicManager;
-    AudioPlayerManager playerManager;
-    VoiceChannel playedChanel;
-    int listTimeOut = 30;
+    private GuildMusicManager musicManager;
+    private AudioPlayerManager playerManager;
+    private VoiceChannel playedChanel;
+    private int listTimeOut = 30;
+    private int listExtremLimit = 300;
 
     public AudioM() {
         this.playerManager = new DefaultAudioPlayerManager();
@@ -33,7 +34,7 @@ public class AudioM {
         AudioSourceManagers.registerLocalSource(playerManager);
     }
 
-    public void loadAndPlay(MessageReceivedEvent event, VoiceChannel voiceChannel, final String trackUrl) {
+    public void loadAndPlay(MessageReceivedEvent event, VoiceChannel voiceChannel, final String trackUrl,int playlistLimit,boolean onHead) {
         GuildMusicManager musicManager = getGuildAudioPlayer(event.getGuild());
         playedChanel = voiceChannel;
 
@@ -46,8 +47,7 @@ public class AudioM {
                     add(event.getMessage());
                 }};
                 new MessageTimeOut(messages, MainBot.messageTimeOut).run();
-
-                play(event.getGuild(), voiceChannel, musicManager, track);
+                play(event.getGuild(), voiceChannel, musicManager, track, onHead);
             }
 
             @Override
@@ -62,14 +62,11 @@ public class AudioM {
                 new MessageTimeOut(messages, MainBot.messageTimeOut).run();
                 int i = 0;
                 for(AudioTrack track : playlist.getTracks()){
-                    play(event.getGuild(), voiceChannel, musicManager, track);
+                    play(event.getGuild(), voiceChannel, musicManager, track,onHead);
                     i++;
-                    if(i>30)
+                    if((i>=playlistLimit && i!=-1) || i>listExtremLimit)
                         break;
                 }
-
-
-
 
             }
 
@@ -108,10 +105,13 @@ public class AudioM {
         return musicManager;
     }
 
-    private void play(Guild guild, VoiceChannel channel, GuildMusicManager musicManager, AudioTrack track) {
-        guild.getAudioManager().openAudioConnection(channel);
-
-        musicManager.scheduler.queue(track);
+    private void play(Guild guild, VoiceChannel channel, GuildMusicManager musicManager, AudioTrack track,boolean onHead) {
+        if(!guild.getAudioManager().isConnected())
+            guild.getAudioManager().openAudioConnection(channel);
+        if(!onHead)
+            musicManager.scheduler.queue(track);
+        else
+            musicManager.scheduler.addNext(track);
     }
 
     public void skipTrack(MessageReceivedEvent event) {
@@ -196,9 +196,10 @@ public class AudioM {
         new MessageTimeOut(messages, listTimeOut).run();
     }
 
-    public void add(MessageReceivedEvent event,String url) {
+
+    public void add(MessageReceivedEvent event,String url, int playListLimit, boolean onHead) {
         if(playedChanel != null){
-            loadAndPlay(event,playedChanel, url);
+            loadAndPlay(event,playedChanel, url, playListLimit,onHead);
         }
         else
         {
@@ -210,6 +211,7 @@ public class AudioM {
             new MessageTimeOut(messages, MainBot.messageTimeOut).run();
         }
     }
+
 
     public void stop (MessageReceivedEvent event) {
         GuildMusicManager musicManager = getGuildAudioPlayer(event.getGuild());

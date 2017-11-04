@@ -15,6 +15,7 @@ import net.dv8tion.jda.core.events.ReadyEvent;
 import net.dv8tion.jda.core.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.core.events.guild.member.GuildMemberRoleRemoveEvent;
 import net.dv8tion.jda.core.events.guild.voice.GuildVoiceJoinEvent;
+import net.dv8tion.jda.core.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.events.message.priv.PrivateMessageReceivedEvent;
 import net.dv8tion.jda.core.exceptions.HierarchyException;
@@ -67,6 +68,19 @@ public class BotListener extends ListenerAdapter {
             MainBot.roleFlag = false;
         }
 
+    }
+
+    @Override
+    public void onGuildVoiceLeave(GuildVoiceLeaveEvent event) {
+        super.onGuildVoiceLeave(event);
+        if(event.getVoiceState().inVoiceChannel())
+        {
+            logger.debug("User disconnected from voice channel.");
+            if(event.getVoiceState().getChannel().getMembers().size() == 1){
+                logger.debug("I'm alone, close audio connection.");
+                event.getGuild().getAudioManager().closeAudioConnection();
+            }
+        }
     }
 
     @Override
