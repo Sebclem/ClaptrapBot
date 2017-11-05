@@ -1,1 +1,1 @@
-worker: java -Dlog4j.configurationFile=log4j2.xml -jar Discord_Stroumpf_Beta.jar -t MzY5NDQ1MzY1NDc0MjYzMDUx.DM6e_g.JUG_P9NfH1QHpbgtZf50xYF1RJ8
+worker: java -Dlog4j.configurationFile=log4j2.xml -jar Discord_Stroumpf_Beta.jar -t <token>
