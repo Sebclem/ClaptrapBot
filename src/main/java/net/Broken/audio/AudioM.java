@@ -15,6 +15,7 @@ import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.TextChannel;
 import net.dv8tion.jda.core.entities.VoiceChannel;
+import net.dv8tion.jda.core.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.managers.AudioManager;
 
@@ -217,13 +218,21 @@ public class AudioM {
         GuildMusicManager musicManager = getGuildAudioPlayer(event.getGuild());
         musicManager.scheduler.stop();
         playedChanel = null;
-
+        event.getGuild().getAudioManager().closeAudioConnection();
         Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicOk("Arret de la musique!")).complete();
         List<Message> messages = new ArrayList<Message>(){{
             add(message);
             add(event.getMessage());
         }};
         new MessageTimeOut(messages, MainBot.messageTimeOut).run();
+    }
+
+    public void stop (GuildVoiceLeaveEvent event) {
+
+        GuildMusicManager musicManager = getGuildAudioPlayer(event.getGuild());
+        musicManager.scheduler.stop();
+        playedChanel = null;
+        event.getGuild().getAudioManager().closeAudioConnection();
     }
 
 

@@ -1,6 +1,7 @@
 package net.Broken;
 
 import net.Broken.Commandes.Move;
+import net.Broken.Commandes.Music;
 import net.Broken.Commandes.Spam;
 import net.Broken.Outils.AntiSpam;
 import net.Broken.Outils.MessageTimeOut;
@@ -70,15 +71,20 @@ public class BotListener extends ListenerAdapter {
 
     }
 
+
+
     @Override
     public void onGuildVoiceLeave(GuildVoiceLeaveEvent event) {
         super.onGuildVoiceLeave(event);
-        if(event.getVoiceState().inVoiceChannel())
+        if(event.getGuild().getAudioManager().isConnected())
         {
             logger.debug("User disconnected from voice channel.");
-            if(event.getVoiceState().getChannel().getMembers().size() == 1){
+
+            if(event.getGuild().getAudioManager().getConnectedChannel().getMembers().size() == 1){
                 logger.debug("I'm alone, close audio connection.");
-                event.getGuild().getAudioManager().closeAudioConnection();
+
+                Music music = (Music) MainBot.commandes.get("music");
+                music.audio.stop(event);
             }
         }
     }

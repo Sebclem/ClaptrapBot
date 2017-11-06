@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Music implements Commande {
-    AudioM audio;
+    public AudioM audio;
     Logger logger = LogManager.getLogger();
     public Music() {
         audio = new AudioM();
@@ -80,7 +80,6 @@ public class Music implements Commande {
                     break;
                 case "stop":
                     audio.stop(event);
-                    event.getGuild().getAudioManager().closeAudioConnection();
                     break;
                 case "info":
                     audio.info(event);
