@@ -18,6 +18,8 @@ import net.dv8tion.jda.core.entities.VoiceChannel;
 import net.dv8tion.jda.core.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.managers.AudioManager;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +30,7 @@ public class AudioM {
     private VoiceChannel playedChanel;
     private int listTimeOut = 30;
     private int listExtremLimit = 300;
+    private Logger logger = LogManager.getLogger();
 
     public AudioM() {
         this.playerManager = new DefaultAudioPlayerManager();
@@ -42,6 +45,7 @@ public class AudioM {
         playerManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack track) {
+                logger.info("Single Track detected!");
                 Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicOk("Ajout de "+track.getInfo().title+" à la file d'attente!")).complete();
                 List<Message> messages = new ArrayList<Message>(){{
                     add(message);
@@ -53,6 +57,7 @@ public class AudioM {
 
             @Override
             public void playlistLoaded(AudioPlaylist playlist) {
+                logger.info("Playlist detected! Limit: "+playlistLimit);
                 AudioTrack firstTrack = playlist.getSelectedTrack();
 
                 Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicOk("Ajout de "+firstTrack.getInfo().title+" et les 30 premiers titres à la file d'attente!")).complete();
@@ -73,6 +78,7 @@ public class AudioM {
 
             @Override
             public void noMatches() {
+                logger.warn("Cant find media!");
                 Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicError("Musique introuvable!")).complete();
                 List<Message> messages = new ArrayList<Message>(){{
                     add(message);
@@ -83,6 +89,8 @@ public class AudioM {
 
             @Override
             public void loadFailed(FriendlyException exception) {
+                logger.error("Cant load media!");
+                logger.error(exception.getMessage());
                 Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicError("Erreur de lecture!")).complete();
                 List<Message> messages = new ArrayList<Message>(){{
                     add(message);

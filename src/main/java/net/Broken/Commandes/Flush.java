@@ -33,7 +33,6 @@ public class Flush implements Commande{
                     int limit = Integer.parseInt(args[0]);
                     MessageChannel chanel = event.getChannel();
                     MessageHistory history = chanel.getHistoryAround(chanel.getLatestMessageIdLong(), 100).complete();
-                    logger.debug(history.getRetrievedHistory().size());
                     List<Message> retrieved = history.getRetrievedHistory();
                     if(limit > retrieved.size())
                         limit = retrieved.size()-1;

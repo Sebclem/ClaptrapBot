@@ -52,7 +52,13 @@
         <dependency>
             <groupId>net.dv8tion</groupId>
             <artifactId>JDA</artifactId>
-            <version>3.3.0_260</version>
+            <!--<version>3.3.0_260</version>-->
+            <version>3.3.1_303</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
+            <version>2.9.1</version>
         </dependency>
 
     </dependencies>

@@ -39,11 +39,22 @@ public class Help implements Commande {
                 logger.info("Aide demmander pour la cmd "+argsString+" par "+event.getAuthor().getName());
                 if(!event.isFromType(ChannelType.PRIVATE)) {
                     Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getHelp(argsString, MainBot.commandes.get(argsString).help(args))).complete();
-                    List<Message> messages = new ArrayList<Message>(){{
-                        add(rest);
-                        add(event.getMessage());
-                    }};
-                    new MessageTimeOut(messages,MainBot.messageTimeOut).start();
+                    if(args.length<=1)
+                    {
+                        List<Message> messages = new ArrayList<Message>(){{
+                            add(rest);
+                            add(event.getMessage());
+                        }};
+                        new MessageTimeOut(messages,MainBot.messageTimeOut).start();
+                    }
+                    else if(!args[1].toLowerCase().equals("true")){
+                        List<Message> messages = new ArrayList<Message>(){{
+                            add(rest);
+                            add(event.getMessage());
+                        }};
+                        new MessageTimeOut(messages,MainBot.messageTimeOut).start();
+                    }
+
                 } else{
                     PrivateMessage.send(event.getAuthor(), EmbedMessageUtils.getHelp(argsString, MainBot.commandes.get(argsString).help(args)),logger);
                 }
@@ -81,7 +92,7 @@ public class Help implements Commande {
                 new MessageTimeOut(messages,MainBot.messageTimeOut).start();
             }
 
-                 PrivateMessage.send(event.getAuthor(),new EmbedBuilder().setTitle("Commandes du bot").setDescription(txt.toString()).setFooter("Utilise '//help <commande>' pour plus de détails.",null).setColor(Color.green).setThumbnail(event.getJDA().getSelfUser().getAvatarUrl()).build(),logger);
+            PrivateMessage.send(event.getAuthor(),new EmbedBuilder().setTitle("Commandes du bot").setDescription(txt.toString()).setFooter("Utilise '//help <commande>' pour plus de détails.",null).setColor(Color.green).setThumbnail(event.getJDA().getSelfUser().getAvatarUrl()).build(),logger);
 
 
 
