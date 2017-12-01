@@ -13,14 +13,18 @@ public class EmbedMessageUtils {
         return new EmbedBuilder().setTitle(":warning: Commande inconnue! :warning:").setDescription(":arrow_right: Utilisez `//help` pour voirs les commandes disponible.").setColor(Color.orange).build();
 
     }
+    public static MessageEmbed getError(String message) {
+        return new EmbedBuilder().setTitle(":warning: Error! :warning:").setColor(Color.red).setDescription(message).build();
+
+    }
 
     public static MessageEmbed getNoPrivate(){
         return new EmbedBuilder().setTitle(":warning: Commande non disponible en privé! :warning:").setDescription(":arrow_right: Utilisez `//help` pour voirs les commandes disponible.").setColor(Color.red).build();
 
     }
 
-    public static MessageEmbed getMusicError(String mesage){
-        return new EmbedBuilder().setTitle(":warning: Musique Error :warning:").setDescription(":arrow_right: "+mesage).setFooter("'//help music' pour plus d'info",null).setColor(Color.red).build();
+    public static MessageEmbed getMusicError(String message){
+        return new EmbedBuilder().setTitle(":warning: Musique Error :warning:").setDescription(":arrow_right: "+message).setFooter("'//help music' pour plus d'info",null).setColor(Color.red).build();
 
     }
 

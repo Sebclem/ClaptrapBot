@@ -4,13 +4,11 @@ import net.Broken.Commandes.Move;
 import net.Broken.Commandes.Music;
 import net.Broken.Commandes.Spam;
 import net.Broken.Outils.AntiSpam;
+import net.Broken.Outils.EmbedMessageUtils;
 import net.Broken.Outils.MessageTimeOut;
 import net.Broken.Outils.Moderateur;
 import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.entities.ChannelType;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.TextChannel;
+import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.ExceptionEvent;
 import net.dv8tion.jda.core.events.ReadyEvent;
 import net.dv8tion.jda.core.events.guild.member.GuildMemberJoinEvent;
@@ -25,6 +23,9 @@ import net.dv8tion.jda.core.managers.GuildManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import sun.security.tools.keytool.Main;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -98,6 +99,7 @@ public class BotListener extends ListenerAdapter {
             //On a detecter que c'etait une commande
             //System.out.println(event.getMessage().getContent());
             MainBot.handleCommand(MainBot.parser.parse(event.getMessage().getContent(), event));
+
         }
         else if (!event.getMessage().getAuthor().getId().equals(event.getJDA().getSelfUser().getId()))
         {
