@@ -24,7 +24,6 @@ import java.util.HashMap;
 @SpringBootApplication
 public class MainBot {
 
-
     public static final CommandParser parser =new CommandParser();
     public static HashMap<String, Commande> commandes = new HashMap<>();
     public static HashMap<User, ArrayList<Message>> historique =new HashMap<>();
@@ -38,7 +37,7 @@ public class MainBot {
     private static Logger logger = LogManager.getLogger();
 
     public static void main(String[] args) {
-        ConfigurableApplicationContext ctx = SpringApplication.run(MainBot.class, args);
+
         logger.trace("trace");
         logger.debug("debug");
         logger.info("info");
@@ -63,12 +62,17 @@ public class MainBot {
         }
 
         JDA jda = Init.initBot(token, dev);
+        ConfigurableApplicationContext ctx = SpringApplication.run(MainBot.class, args);
         if(jda == null) {
             System.exit(SpringApplication.exit(ctx, (ExitCodeGenerator) () -> {
                 logger.fatal("Init error! Close application!");
                 return 1;
             }));
         }
+
+
+
+
     }
 
     /***************************************
@@ -105,6 +109,7 @@ public class MainBot {
                 event.getTextChannel().sendMessage(EmbedMessageUtils.getUnknowCommand()).queue();
             logger.warn("Commande inconnue");
         }
+
 
     }
     /*******************************
