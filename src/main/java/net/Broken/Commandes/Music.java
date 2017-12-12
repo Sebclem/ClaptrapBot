@@ -56,7 +56,7 @@ public class Music implements Commande {
                                 add(message);
                                 add(event.getMessage());
                             }};
-                            new MessageTimeOut(messages, MainBot.messageTimeOut).run();
+                            new MessageTimeOut(messages, MainBot.messageTimeOut).start();
                         }
                     }
                     else{
@@ -65,7 +65,7 @@ public class Music implements Commande {
                             add(message);
                             add(event.getMessage());
                         }};
-                        new MessageTimeOut(messages, MainBot.messageTimeOut).run();
+                        new MessageTimeOut(messages, MainBot.messageTimeOut).start();
                     }
 
                     break;
@@ -109,7 +109,7 @@ public class Music implements Commande {
                             add(message);
                             add(event.getMessage());
                         }};
-                        new MessageTimeOut(messages, MainBot.messageTimeOut).run();
+                        new MessageTimeOut(messages, MainBot.messageTimeOut).start();
                     }
                     break;
 
@@ -124,7 +124,7 @@ public class Music implements Commande {
                             add(message);
                             add(event.getMessage());
                         }};
-                        new MessageTimeOut(messages, MainBot.messageTimeOut).run();
+                        new MessageTimeOut(messages, MainBot.messageTimeOut).start();
                     }
                     break;
 
@@ -134,7 +134,7 @@ public class Music implements Commande {
                         add(message);
                         add(event.getMessage());
                     }};
-                    new MessageTimeOut(messages, MainBot.messageTimeOut).run();
+                    new MessageTimeOut(messages, MainBot.messageTimeOut).start();
                     break;
 
             }
@@ -145,7 +145,7 @@ public class Music implements Commande {
                 add(message);
                 add(event.getMessage());
             }};
-            new MessageTimeOut(messages, MainBot.messageTimeOut).run();
+            new MessageTimeOut(messages, MainBot.messageTimeOut).start();
         }
     }
 
@@ -163,5 +163,9 @@ public class Music implements Commande {
     @Override
     public boolean isPrivateUsable() {
         return false;
+    }
+
+    public AudioM getAudioManager(){
+        return audio;
     }
 }

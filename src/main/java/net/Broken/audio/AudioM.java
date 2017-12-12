@@ -51,7 +51,7 @@ public class AudioM {
                     add(message);
                     add(event.getMessage());
                 }};
-                new MessageTimeOut(messages, MainBot.messageTimeOut).run();
+                new MessageTimeOut(messages, MainBot.messageTimeOut).start();
                 play(event.getGuild(), voiceChannel, musicManager, track, onHead);
             }
 
@@ -65,7 +65,7 @@ public class AudioM {
                     add(message);
                     add(event.getMessage());
                 }};
-                new MessageTimeOut(messages, MainBot.messageTimeOut).run();
+                new MessageTimeOut(messages, MainBot.messageTimeOut).start();
                 int i = 0;
                 for(AudioTrack track : playlist.getTracks()){
                     play(event.getGuild(), voiceChannel, musicManager, track,onHead);
@@ -84,7 +84,7 @@ public class AudioM {
                     add(message);
                     add(event.getMessage());
                 }};
-                new MessageTimeOut(messages, MainBot.messageTimeOut).run();
+                new MessageTimeOut(messages, MainBot.messageTimeOut).start();
             }
 
             @Override
@@ -96,7 +96,7 @@ public class AudioM {
                     add(message);
                     add(event.getMessage());
                 }};
-                new MessageTimeOut(messages, MainBot.messageTimeOut).run();
+                new MessageTimeOut(messages, MainBot.messageTimeOut).start();
             }
         });
     }
@@ -132,7 +132,7 @@ public class AudioM {
             add(message);
             add(event.getMessage());
         }};
-        new MessageTimeOut(messages, MainBot.messageTimeOut).run();
+        new MessageTimeOut(messages, MainBot.messageTimeOut).start();
     }
 
     public void pause(MessageReceivedEvent event) {
@@ -144,7 +144,7 @@ public class AudioM {
             add(message);
             add(event.getMessage());
         }};
-        new MessageTimeOut(messages, MainBot.messageTimeOut).run();
+        new MessageTimeOut(messages, MainBot.messageTimeOut).start();
     }
 
     public void resume (MessageReceivedEvent event) {
@@ -156,7 +156,7 @@ public class AudioM {
             add(message);
             add(event.getMessage());
         }};
-        new MessageTimeOut(messages, MainBot.messageTimeOut).run();
+        new MessageTimeOut(messages, MainBot.messageTimeOut).start();
     }
 
     public void info(MessageReceivedEvent event){
@@ -168,7 +168,7 @@ public class AudioM {
             add(message);
             add(event.getMessage());
         }};
-        new MessageTimeOut(messages, MainBot.messageTimeOut).run();
+        new MessageTimeOut(messages, MainBot.messageTimeOut).start();
     }
 
     public void flush(MessageReceivedEvent event){
@@ -179,7 +179,7 @@ public class AudioM {
             add(message);
             add(event.getMessage());
         }};
-        new MessageTimeOut(messages, MainBot.messageTimeOut).run();
+        new MessageTimeOut(messages, MainBot.messageTimeOut).start();
     }
 
     public void list(MessageReceivedEvent event){
@@ -202,7 +202,7 @@ public class AudioM {
             add(message);
             add(event.getMessage());
         }};
-        new MessageTimeOut(messages, listTimeOut).run();
+        new MessageTimeOut(messages, listTimeOut).start();
     }
 
 
@@ -217,7 +217,7 @@ public class AudioM {
                 add(message);
                 add(event.getMessage());
             }};
-            new MessageTimeOut(messages, MainBot.messageTimeOut).run();
+            new MessageTimeOut(messages, MainBot.messageTimeOut).start();
         }
     }
 
@@ -232,7 +232,7 @@ public class AudioM {
             add(message);
             add(event.getMessage());
         }};
-        new MessageTimeOut(messages, MainBot.messageTimeOut).run();
+        new MessageTimeOut(messages, MainBot.messageTimeOut).start();
     }
 
     public void stop (GuildVoiceLeaveEvent event) {
@@ -241,6 +241,14 @@ public class AudioM {
         musicManager.scheduler.stop();
         playedChanel = null;
         event.getGuild().getAudioManager().closeAudioConnection();
+    }
+
+    public GuildMusicManager getMusicManager() throws NullMusicManager, NotConectedException {
+        if( musicManager == null)
+            throw new NullMusicManager();
+        else if( playedChanel == null)
+            throw new NotConectedException();
+        return musicManager;
     }
 
 
