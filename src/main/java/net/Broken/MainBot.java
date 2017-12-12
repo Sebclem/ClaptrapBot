@@ -25,8 +25,7 @@ import java.util.HashMap;
 @SpringBootApplication
 public class MainBot {
 
-    @Value("${name}")
-    public static String test;
+
     public static final CommandParser parser =new CommandParser();
     public static HashMap<String, Commande> commandes = new HashMap<>();
     public static HashMap<User, ArrayList<Message>> historique =new HashMap<>();
@@ -73,7 +72,7 @@ public class MainBot {
             }));
         }
 
-        logger.info(test);
+
 
 
     }

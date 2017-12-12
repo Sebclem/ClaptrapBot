@@ -22,6 +22,7 @@ import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import net.dv8tion.jda.core.managers.GuildManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +36,8 @@ public class BotListener extends ListenerAdapter {
     AntiSpam antispam=new AntiSpam();
     Moderateur modo = new Moderateur();
     Logger logger = LogManager.getLogger();
+    @Value("${name}")
+    public String test;
 
 
     @Override
@@ -93,7 +96,7 @@ public class BotListener extends ListenerAdapter {
     public void onMessageReceived(MessageReceivedEvent event) {
         //                                                      ----------------------Test pour eviter eco de commande-------------------------
 
-
+        logger.info(test);
         if (event.getMessage().getContent().startsWith("//") && !event.getMessage().getAuthor().getId().equals(event.getJDA().getSelfUser().getId())) {
             //On a detecter que c'etait une commande
             //System.out.println(event.getMessage().getContent());
