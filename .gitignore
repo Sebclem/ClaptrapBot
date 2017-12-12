@@ -1,8 +1,11 @@
 .idea/
+.gradle
 config/
 lib/
 logs/
 out/
+
+/build/
 *.iml
 META-INF/
 *.uml

@@ -22,7 +22,6 @@ import net.dv8tion.jda.core.hooks.ListenerAdapter;
 import net.dv8tion.jda.core.managers.GuildManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import sun.security.tools.keytool.Main;
 
 import java.util.ArrayList;
 import java.util.List;
