@@ -10,6 +10,7 @@ import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ExitCodeGenerator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -24,7 +25,8 @@ import java.util.HashMap;
 @SpringBootApplication
 public class MainBot {
 
-
+    @Value("${name}")
+    public static String test;
     public static final CommandParser parser =new CommandParser();
     public static HashMap<String, Commande> commandes = new HashMap<>();
     public static HashMap<User, ArrayList<Message>> historique =new HashMap<>();
@@ -38,7 +40,7 @@ public class MainBot {
     private static Logger logger = LogManager.getLogger();
 
     public static void main(String[] args) {
-        ConfigurableApplicationContext ctx = SpringApplication.run(MainBot.class, args);
+
         logger.trace("trace");
         logger.debug("debug");
         logger.info("info");
@@ -63,12 +65,17 @@ public class MainBot {
         }
 
         JDA jda = Init.initBot(token, dev);
+        ConfigurableApplicationContext ctx = SpringApplication.run(MainBot.class, args);
         if(jda == null) {
             System.exit(SpringApplication.exit(ctx, (ExitCodeGenerator) () -> {
                 logger.fatal("Init error! Close application!");
                 return 1;
             }));
         }
+
+        logger.info(test);
+
+
     }
 
     /***************************************
@@ -105,6 +112,7 @@ public class MainBot {
                 event.getTextChannel().sendMessage(EmbedMessageUtils.getUnknowCommand()).queue();
             logger.warn("Commande inconnue");
         }
+
 
     }
     /*******************************
