@@ -2,7 +2,8 @@
 <Configuration status="error">
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="[%d{HH:mm:ss.SSS}][%-5level][%-30.30c{1.}]: %msg%n" />
+            <PatternLayout pattern="[%d{HH:mm:ss.SSS}]%highlight{[%-5level]}{FATAL=red blink, ERROR=red, WARN=bright yellow , INFO=blue, DEBUG=bright black, TRACE=cyan}[%-30.30c{1.}]: %highlight{%msg%n}{FATAL=red blink, ERROR=red, WARN=bright yellow , INFO=blue, DEBUG=bright black, TRACE=cyan}" />
+            <!--<PatternLayout pattern="[%d{HH:mm:ss.SSS}][%-5level][%-30.30c{1.}]: %msg%n" />-->
             <!--<PatternLayout pattern="[%-5level][%-30.30c{1.}]: %msg%n}{FATAL=red blink, ERROR=red, WARN=bright yellow , INFO=blue, DEBUG=bright black, TRACE=cyan}" />-->
         </Console>
         <!--<RollingFile name="RollingFile" fileName="/logs/curent.log"
