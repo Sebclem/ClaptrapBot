@@ -10,7 +10,7 @@
 > 
 > services:
 >   botdiscord:
->     image: brokenfire/discord_stroumpf_beta 
+>     image: brokenfire/brokendiscordbot 
 >     networks:
 >       - proxy
 >     environment:
@@ -29,4 +29,4 @@
 >     proxy:
 >        external: true 
 > ```
-> Docker hub [repo](https://hub.docker.com/r/brokenfire/discord_stroumpf_beta/)
+> Docker hub [repo](https://hub.docker.com/r/brokenfire/brokendiscordbot/)
