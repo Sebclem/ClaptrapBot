@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  web:
+    build: .
+    command: python3 manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./src:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - database
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    ports:
+      - "8001:80"
+    depends_on:
+      - database
+    env_file:
+      - pma.env
+  database:
+    image: mariadb:latest
+    volumes:
+      - ./db:/var/lib/mysql
+    env_file:
+      - database.env
