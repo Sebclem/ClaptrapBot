@@ -1,4 +1,4 @@
-# Discord_Stroumpf_Beta
+# BrokenDiscordBot
 
 ## Install:
 
