@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+    <title>Starter Template - Materialize</title>
+
+    <!-- CSS  -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+    <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+    <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+</head>
+
+<body class="blue-grey lighten-5" >
+
+<nav class="blue-grey darken-4 z-depth-3" role="navigation">
+    <div class="nav-wrapper container">
+        <a id="logo-container" href="#" class="brand-logo">Discrod IMERIR Social Club</a>
+        <ul class="right hide-on-med-and-down">
+
+            <li>
+                <a href="#" data-target="slide-out" class="sidenav-trigger">Home</a>
+            </li>
+            <li class="active">
+                <a href="#" >Music Control</a>
+            </li>
+        </ul>
+
+        <ul id="nav-mobile" class="side-nav">
+            <li>
+                <a href="#" data-target="slide-out" class="sidenav-trigger">Home</a>
+            </li>
+            <li>
+                <a href="#" data-activates="slide-out" class="button-collapse"><i class="material-icons">ac_unit</i></a>
+            </li>
+        </ul>
+        <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+    </div>
+</nav>
+
+<div class="section no-pad-bot main" id="index-banner">
+    <div class="container">
+        <div class="row center">
+            <img class="responsive-img z-depth-3" style="max-width: 30%" src="https://s3-storage.textopus.nl/wp-content/uploads/2014/06/21163734/The-Test-Fun-for-Friends-iPhone-iPad.png"/>
+        </div>
+        <h4 class="center">Test- By test</h4>
+        <div class="row center">
+            <div class="progress col s6 offset-s3 z-depth-3">
+                <div class="determinate" style="width: 70%"></div>
+            </div>
+        </div>
+        <div class="row center">
+            <div class="col s2 offset-s3 center">
+                <a class="btn-large blue-grey darken-4 z-depth-3 waves-effect waves-light">
+                    <i class="material-icons medium">skip_previous</i>
+                </a>
+            </div>
+            <div class="col s2 center">
+                <a class="btn-large blue-grey darken-4 z-depth-3 waves-effect waves-light">
+                    <i class="material-icons medium">play_arrow</i>
+                </a>
+            </div>
+            <div class="col s2 center">
+                <a class="btn-large blue-grey darken-4 z-depth-3 waves-effect waves-light" >
+                    <i class="material-icons">skip_next</i>
+                </a>
+            </div>
+        </div>
+        <div class="row center">
+            <div class="col s2 center offset-s4">
+                <a class="btn blue-grey darken-4 z-depth-3 waves-effect waves-light">
+                    <i class="material-icons">stop</i>
+                </a>
+            </div>
+            <div class="col s2 center">
+                <a class="btn blue-grey darken-4 z-depth-3 waves-effect waves-light">
+                    <i class="material-icons">info</i>
+                </a>
+            </div>
+        </div>
+
+    </div>
+    <ul id="slide-out" class="side-nav fixed z-depth-3">
+
+    </ul>
+
+
+</div>
+
+<!--  Scripts-->
+<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="js/materialize.js"></script>
+<script src="js/init.js"></script>
+
+</body>
+</html>

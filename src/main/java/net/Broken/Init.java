@@ -24,7 +24,7 @@ public class Init {
     static JDA initBot(String token, boolean dev){
         boolean okInit;
         JDA jda = null;
-        logger.info("-------------------INITIALISATION-------------------");
+        logger.debug("-------------------INITIALISATION-------------------");
 
         //Bot démarrer sans token
         if (token == null) {
@@ -75,32 +75,32 @@ public class Init {
                 //on recupere les utilisateur
                 List<Member> utilisateurCo = serveur.getMembers();
 
-                logger.info("Utilisatieur connecté: ");
+                logger.info("Utilisatieur connecté: "+utilisateurCo.size());
                 for (Member anUtilisateurCo : utilisateurCo)
                 {
                     if (anUtilisateurCo.getOnlineStatus().equals(OnlineStatus.ONLINE))
-                        logger.info("\t*" + anUtilisateurCo.getEffectiveName());
+                        logger.debug("\t*" + anUtilisateurCo.getEffectiveName());
                 }
 
-                logger.info("Utilisatieur absent: ");
+                logger.debug("Utilisatieur absent: ");
                 for (Member anUtilisateurCo : utilisateurCo)
                 {
                     if (anUtilisateurCo.getOnlineStatus().equals(OnlineStatus.DO_NOT_DISTURB))
-                        logger.info("\t*" + anUtilisateurCo.getEffectiveName());
+                        logger.debug("\t*" + anUtilisateurCo.getEffectiveName());
                 }
 
-                logger.info("Utilisatieur hors ligne: ");
+                logger.debug("Utilisatieur hors ligne: ");
                 for (Member anUtilisateurCo : utilisateurCo)
                 {
                     if (anUtilisateurCo.getOnlineStatus().equals(OnlineStatus.OFFLINE))
-                        logger.info("\t*" + anUtilisateurCo.getEffectiveName());
+                        logger.debug("\t*" + anUtilisateurCo.getEffectiveName());
                 }
 
                 MainBot.ModoTimer modotimer = new MainBot.ModoTimer();
                 modotimer.start();
                 DayListener dayListener = new DayListener();
                 dayListener.start();
-                logger.info("-----------------FIN INITIALISATION-----------------");
+                logger.debug("-----------------FIN INITIALISATION-----------------");
 
                 jda.getPresence().setGame(Game.of("Statut: Ok!"));
 

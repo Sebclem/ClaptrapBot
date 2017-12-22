@@ -101,7 +101,7 @@ public class Move implements Commande {
 
                 if(userL.size()<1 ||roleL.size()<1)
                 {
-                    logger.info("Mentionnement Incorect.");
+                    logger.warn("Mentionnement Incorect.");
                     Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("Utilisateur ou Role mal mentioner.")).complete();
                     List<Message> messages = new ArrayList<Message>(){{
                         add(rest);
@@ -118,7 +118,7 @@ public class Move implements Commande {
                     {
 
                         logger.info("Autorisation suffisante, deplacement autorisé");
-                        logger.info("Utilisateur trouvée");
+                        logger.debug("Utilisateur trouvée");
                         try {
                             boolean erreur=this.exc(user,roleL,true,serveur,serveur.getManager());
                             if(erreur)
@@ -169,7 +169,7 @@ public class Move implements Commande {
                     }
                     else
                     {
-                        logger.info("Autorisation insuffisante, deplacement refusé");
+                        logger.warn("Autorisation insuffisante, deplacement refusé");
                         Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("Vous n'avez pas l'autorisation de faicre ça!")).complete();
                         List<Message> messages = new ArrayList<Message>(){{
                             add(rest);
