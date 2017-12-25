@@ -1,22 +1,10 @@
-.main, footer {
-    padding-right: 300px;
-}
-
-.side-nav{
-    top: 10.2%;
-}
-
 .nav-wrapper{
     margin-right: 1%;
     margin-left: 1%;
     width: 100%;
 }
 
-@media only screen and (max-width : 992px) {
-    .main, footer {
-        padding-right: 0;
-    }
-    .side-nav{
-        top: 0%;
-    }
+
+.collapsible-body{
+    padding: 0px;
 }

@@ -25,37 +25,3 @@
     </Loggers>
 </Configuration>
 
-<Configuration status="error" packages="com.coralogix.sdk.appenders">
-    <Appenders>
-        <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="[%d{HH:mm:ss.SSS}]%highlight{[%-5level]}{FATAL=red blink, ERROR=red, WARN=bright yellow , INFO=blue, DEBUG=bright black, TRACE=cyan}[%-30.30c{1.}]: %highlight{%msg%n}{FATAL=red blink, ERROR=red, WARN=bright yellow , INFO=blue, DEBUG=bright black, TRACE=cyan}" />
-            <PatternLayout pattern="[%d{HH:mm:ss.SSS}]%highlight{[%-5level]}{FATAL=red blink, ERROR=red, WARN=bright yellow , INFO=blue, DEBUG=bright black, TRACE=cyan}[%-30.30c{1.}]: %highlight{%msg%n}{FATAL=red blink, ERROR=red, WARN=bright yellow , INFO=blue, DEBUG=bright black, TRACE=cyan}" />
-<<<<<<< Updated upstream
-=======
-            <!--<PatternLayout pattern="[%d{HH:mm:ss.SSS}][%-5level][%-30.30c{1.}]: %msg%n" />-->
->>>>>>> Stashed changes
-        </Console>
-        <RollingFile name="RollingFile" fileName="./logs/curent.log"
-                     filePattern="./logs/$${date:yyyy-MM}/discordBot-%d{yyyy-MM-dd-HH}-%i.log.gz">
-            <PatternLayout>
-                <Pattern>[%d{yyy-MM-dd ~ HH:mm:ss.SSS}][%-5level]%-30.30c{1.}: %msg%n</Pattern>
-            </PatternLayout>
-            <Policies>
-                <OnStartupTriggeringPolicy minSize="1B"/>
-                <TimeBasedTriggeringPolicy/>
-                <SizeBasedTriggeringPolicy size="250 MB"/>
-            </Policies>
-        </RollingFile>
-    </Appenders>
-    <Loggers>
-        <Root level="info">
-            <AppenderRef ref="RollingFile" level="info" />
-            <AppenderRef ref="Console" level="info"/>
-            <AppenderRef ref="RollingFile" level="info"/>
-<<<<<<< Updated upstream
-            <AppenderRef ref="RollingFile" level="info"/>
-=======
->>>>>>> Stashed changes
-        </Root>
-    </Loggers>
-</Configuration>
