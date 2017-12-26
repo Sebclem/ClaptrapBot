@@ -1,5 +1,6 @@
 var savedPlaylist;
 var error = false;
+var state;
 
 $(document).ready(function() {
     setInterval("getCurentMusic()",1000);
@@ -13,18 +14,30 @@ $(document).ready(function() {
     });
     var height = $( window ).height();
 
+    $('#btn_play').click(function () {
+        switch (state){
+            case "PLAYING":
+                sendCommand("PAUSE")
+                break;
+
+            case "PAUSE":
+                sendCommand("PLAY")
+                break;
+        }
+        
+    })
+
+    $('#btn_next').click(function () {
+        sendCommand("NEXT");
+    })
+    $('#btn_stop').click(function () {
+        sendCommand("STOP");
+    })
+
 })
 
 
-function updateModal(data){
-    $('#modal_title').text("Title: "+ data.info.title);
-    $('#modal_author').text("Author: "+ data.info.author);
-    $('#modal_lenght').text("Duration: "+ msToTime(data.info.length));
-    $('#modal_url').text("URL: "+ data.info.uri);
 
-
-
-}
 
 
 
@@ -34,6 +47,7 @@ function getCurentMusic() {
 
         // alert( "second success" );
         // console.log(data);
+        state = data.state;
         switch (data.state) {
             case "STOP":
                 $('#music_text').text("No Music");
@@ -85,12 +99,11 @@ function getCurentMusic() {
     })
 }
 
-
 function getPlayList() {
     $.get("api/music/getPlaylist", function (data) {
     }).done(function (data) {
         data = data.list;
-        if(data.length != 0){
+        if(data != null && data.length != 0){
             var noUpdate = comparePlaylist(data, savedPlaylist);
 
             if(!noUpdate){
@@ -114,6 +127,9 @@ function getPlayList() {
                 });
             }
         }
+        else
+            $('#playlist_list').empty();
+
 
 
 
@@ -121,22 +137,52 @@ function getPlayList() {
 
 }
 
+function updateModal(data){
+    $('#modal_title').text("Title: "+ data.info.title);
+    $('#modal_author').text("Author: "+ data.info.author);
+    $('#modal_lenght').text("Duration: "+ msToTime(data.info.length));
+    $('#modal_url').text("URL: "+ data.info.uri);
 
-function msToTime(duration) {
-    var milliseconds = parseInt((duration%1000)/100)
-        , seconds = parseInt((duration/1000)%60)
-        , minutes = parseInt((duration/(1000*60))%60)
-        , hours = parseInt((duration/(1000*60*60))%24);
 
-    hours = (hours < 10) ? "0" + hours : hours;
-    minutes = (minutes < 10) ? "0" + minutes : minutes;
-    seconds = (seconds < 10) ? "0" + seconds : seconds;
-    if(hours > 0 )
-        return hours + ":" + minutes + ":" + seconds;
-    else
-        return minutes + ":" + seconds;
+
 }
 
+function updateControl(data){
+    $('#music_text').text(data.info.title);
+    var percent = (data.currentPos / data.info.length) * 100;
+    // console.log(percent)
+    if (!$('#btn_info').hasClass("indeterminate")) {
+        $('#btn_info').addClass("determinate").removeClass("indeterminate");
+    }
+    $('#music_progress').width(percent + "%");
+
+
+    if ($('#btn_stop').hasClass("disabled")) {
+        $('#btn_stop').removeClass("disabled");
+    }
+    if ($('#btn_info').hasClass("disabled")) {
+        $('#btn_info').removeClass("disabled");
+    }
+
+    $('#music_img').attr("src","http://img.youtube.com/vi/"+data.info.identifier+"/hqdefault.jpg");
+    updateModal(data);
+}
+
+function sendCommand(commandStr){
+    $.ajax({
+        type: "POST",
+        dataType: 'json',
+        contentType: 'application/json',
+        url: "/api/music/command",
+        data:  JSON.stringify({ command: commandStr}),
+        success: function (data) {
+            console.log(data);
+        }
+
+    }).fail(function (data) {
+        console.log(data);
+    });
+}
 
 function comparePlaylist(list1, list2){
     if(list1 == null || list2 == null){
@@ -160,23 +206,19 @@ function comparePlaylist(list1, list2){
     return true;
 }
 
-function updateControl(data){
-    $('#music_text').text(data.info.title);
-    var percent = (data.currentPos / data.info.length) * 100;
-    // console.log(percent)
-    if (!$('#btn_info').hasClass("indeterminate")) {
-        $('#btn_info').addClass("determinate").removeClass("indeterminate");
-    }
-    $('#music_progress').width(percent + "%");
+function msToTime(duration) {
+    var milliseconds = parseInt((duration%1000)/100)
+        , seconds = parseInt((duration/1000)%60)
+        , minutes = parseInt((duration/(1000*60))%60)
+        , hours = parseInt((duration/(1000*60*60))%24);
 
-
-    if ($('#btn_stop').hasClass("disabled")) {
-        $('#btn_stop').removeClass("disabled");
-    }
-    if ($('#btn_info').hasClass("disabled")) {
-        $('#btn_info').removeClass("disabled");
-    }
-
-    $('#music_img').attr("src","http://img.youtube.com/vi/"+data.info.identifier+"/hqdefault.jpg");
-    updateModal(data);
+    hours = (hours < 10) ? "0" + hours : hours;
+    minutes = (minutes < 10) ? "0" + minutes : minutes;
+    seconds = (seconds < 10) ? "0" + seconds : seconds;
+    if(hours > 0 )
+        return hours + ":" + minutes + ":" + seconds;
+    else
+        return minutes + ":" + seconds;
 }
+
+

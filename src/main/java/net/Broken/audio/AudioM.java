@@ -223,16 +223,18 @@ public class AudioM {
 
 
     public void stop (MessageReceivedEvent event) {
-        GuildMusicManager musicManager = getGuildAudioPlayer(event.getGuild());
         musicManager.scheduler.stop();
         playedChanel = null;
-        event.getGuild().getAudioManager().closeAudioConnection();
-        Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicOk("Arret de la musique!")).complete();
-        List<Message> messages = new ArrayList<Message>(){{
-            add(message);
-            add(event.getMessage());
-        }};
-        new MessageTimeOut(messages, MainBot.messageTimeOut).start();
+
+        if (event != null) {
+            event.getGuild().getAudioManager().closeAudioConnection();
+            Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicOk("Arret de la musique!")).complete();
+            List<Message> messages = new ArrayList<Message>(){{
+                add(message);
+                add(event.getMessage());
+            }};
+            new MessageTimeOut(messages, MainBot.messageTimeOut).start();
+        }
     }
 
     public void stop (GuildVoiceLeaveEvent event) {
