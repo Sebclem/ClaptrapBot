@@ -5,6 +5,7 @@ import net.Broken.MainBot;
 import net.Broken.Outils.EmbedMessageUtils;
 import net.Broken.Outils.MessageTimeOut;
 import net.Broken.audio.AudioM;
+import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.VoiceChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
@@ -18,8 +19,8 @@ import java.util.List;
 public class Music implements Commande {
     public AudioM audio;
     Logger logger = LogManager.getLogger();
-    public Music() {
-        audio = new AudioM();
+    public Music(Guild guild) {
+        audio = new AudioM(guild);
     }
 
     @Override

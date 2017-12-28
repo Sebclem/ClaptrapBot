@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+    <title>Discord Bot - Music Control</title>
+
+    <!-- CSS  -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+    <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+    <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+</head>
+
+<body class="blue-grey lighten-5" >
+
+<nav class="blue-grey darken-4 z-depth-3" role="navigation">
+    <div class="nav-wrapper container">
+        <a id="logo-container" href="#" class="brand-logo">Discord Bot</a>
+        <ul class="right hide-on-med-and-down">
+
+            <li >
+                <a href="/" data-target="slide-out" class="sidenav-trigger">Home</a>
+            </li>
+            <li class="active">
+                <a href="/music" >Music Control</a>
+            </li>
+        </ul>
+
+        <ul id="nav-mobile" class="side-nav">
+            <li >
+                <a href="/" data-target="slide-out" class="sidenav-trigger">Home</a>
+            </li>
+            <li class="active">
+                <a href="/music" data-target="slide-out" class="sidenav-trigger">Music Control</a>
+            </li>
+        </ul>
+        <a href="#" data-activates="nav-mobile" class="button-collapse-1 button-collapse"><i class="material-icons">menu</i></a>
+    </div>
+</nav>
+
+<div class="section no-pad-bot main" id="index-banner">
+    <div class="row">
+        <div class="col s8">
+            <div class="row center" >
+                <img class="responsive-img z-depth-3" id="music_img" style="max-width: 30%" src=""/>
+            </div>
+            <h4 class="center" id="music_text"></h4>
+            <div class="row center">
+                <div class="progress col s6 offset-s3 z-depth-3">
+                    <div class="determinate" id="music_progress" style="width: 0%"></div>
+                </div>
+            </div>
+            <div class="row center">
+                <div class="col s2 offset-s3 center">
+                    <a class="btn-large blue-grey darken-4 z-depth-3 waves-effect waves-light" id="btn_stop">
+                        <i class="material-icons medium">stop</i>
+                    </a>
+                </div>
+                <div class="col s2 center">
+                    <a class="btn-large blue-grey darken-4 z-depth-3 waves-effect waves-light" id="btn_play">
+                        <i class="material-icons medium">play_arrow</i>
+                    </a>
+                </div>
+                <div class="col s2 center">
+                    <a class="btn-large blue-grey darken-4 z-depth-3 waves-effect waves-light" id="btn_next">
+                        <i class="material-icons">skip_next</i>
+                    </a>
+                </div>
+            </div>
+            <div class="row center">
+
+                <div class="col offset-s5 s2 center">
+                    <a class="btn blue-grey darken-4 z-depth-3 waves-effect waves-light modal-trigger" href="#modal1" id="btn_info">
+                        <i class="material-icons">info</i>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col s4" >
+            <table>
+                <thead>
+                <tr>
+                    <th style="padding: 0px;">
+                        <div class="row center valign-wrapper" style="margin: 0px">
+                            <div class="col s5 center"><h5>Playlist</h5></div>
+                            <div class="col s5 offset-s2 center">
+                                <!-- Modal Trigger -->
+                                <a class="waves-effect waves-light btn modal-trigger blue-grey darken-4" id="add_btn" href="#modalAdd">Add</a>
+
+                                <!-- Modal Structure -->
+                                <div id="modalAdd" class="modal disabled">
+                                    <div class="modal-content" style="padding-bottom: 0px">
+                                        <div class="row" style="margin-bottom: 0px">
+                                            <h3 class="col s12"> Add Music</h3>
+                                            <form class="col s12">
+                                                <div class="row" style="margin-bottom: 0px">
+                                                    <div class="input-field col s12" style="padding-left: 0px; padding-right: 0px">
+                                                        <!--<i class="material-icons prefix">link</i>-->
+                                                        <input id="input_link" type="text" class="validate"/>
+                                                        <label for="input_link">Link</label>
+                                                    </div>
+                                                </div>
+                                                <div class="row" style="margin-bottom: 0px">
+                                                    <div class="col s12 center">
+                                                        Playlist Limit
+                                                    </div>
+                                                </div>
+                                                <div class="row" style="margin-bottom: 0px">
+                                                    <p class="range-field">
+                                                        <input type="range" id="limit_range" min="1" max="300" step="1" value="30" />
+                                                    </p>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+                                        <a href="#!" id="btn_add_top" class="modal-action modal-close waves-effect waves-green btn-flat disabled">Add On Top</a>
+                                        <a href="#!" id="btn_add_bottom" class="modal-action modal-close waves-effect waves-green btn-flat disabled">Add On Bottom</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr>
+                    <td>
+                        <ul id="playlist_list" class="collapsible popout" data-collapsible="accordion" style="margin: 0px">
+
+                        </ul>
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
+
+        </div>
+
+
+    </div>
+
+    <!-- Playlist -->
+
+
+    <!-- Modal Structure -->
+    <div id="modal1" class="modal bottom-sheet">
+        <div class="modal-content">
+            <ul class="collection">
+                <li class="collection-item " id="modal_title"></li>
+                <li class="collection-item " id="modal_author"></li>
+                <li class="collection-item " id="modal_lenght"></li>
+                <li class="collection-item " id="modal_url"></li>
+            </ul>
+        </div>
+
+    </div>
+
+
+</div>
+<li id="playlist_template" style="visibility: hidden">
+    <div class="collapsible-header"><i class="material-icons">drag_handle</i>@title</div>
+    <div class="collapsible-body">
+        <ul class="collection">
+            <li class="collection-item">Author: @author</li>
+            <li class="collection-item">Duration: @lenght</li>
+            <li class="collection-item">URL: <a>@url</a></li>
+        </ul>
+    </div>
+</li>
+
+<!--  Scripts-->
+<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="js/materialize.js"></script>
+<script src="js/init.js"></script>
+
+</body>
+</html>

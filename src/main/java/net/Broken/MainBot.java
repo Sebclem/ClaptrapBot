@@ -14,6 +14,7 @@ import org.springframework.boot.ExitCodeGenerator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.stereotype.Controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,6 +23,7 @@ import java.util.HashMap;
  * Created by seb65 on 19/10/2016.
  */
 @SpringBootApplication
+@Controller
 public class MainBot {
 
     public static final CommandParser parser =new CommandParser();
@@ -38,11 +40,9 @@ public class MainBot {
 
     public static void main(String[] args) {
 
-        logger.trace("trace");
-        logger.debug("debug");
-        logger.info("info");
-        logger.warn("warn");
-        logger.error("error");
+        logger.info("=======================================");
+        logger.info("--------------Starting Bot-------------");
+        logger.info("=======================================");
 
         boolean dev = false;
         String token = null;
@@ -118,10 +118,7 @@ public class MainBot {
     public static class ModoTimer extends Thread{
 
 
-        public ModoTimer()
-        {
-
-        }
+        public ModoTimer(){}
 
 
         @Override

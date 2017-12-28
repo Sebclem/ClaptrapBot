@@ -36,5 +36,8 @@ dependencies {
     compile group: 'org.json', name: 'json', version: '20160810'
     testCompile('org.springframework.boot:spring-boot-starter-test')
     testCompile('com.jayway.jsonpath:json-path')
+    compile("org.springframework.boot:spring-boot-starter-thymeleaf") {
+        exclude group:"org.springframework.boot", module: "spring-boot-starter-logging"
+    }
 }
 
