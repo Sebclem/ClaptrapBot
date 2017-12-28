@@ -31,28 +31,34 @@ public class AudioM {
     private int listTimeOut = 30;
     private int listExtremLimit = 300;
     private Logger logger = LogManager.getLogger();
+    private Guild guild;
 
-    public AudioM() {
+
+
+    public AudioM(Guild guild) {
         this.playerManager = new DefaultAudioPlayerManager();
         AudioSourceManagers.registerRemoteSources(playerManager);
         AudioSourceManagers.registerLocalSource(playerManager);
+        this.guild = guild;
     }
 
-    public void loadAndPlay(MessageReceivedEvent event, VoiceChannel voiceChannel, final String trackUrl,int playlistLimit,boolean onHead) {
-        GuildMusicManager musicManager = getGuildAudioPlayer(event.getGuild());
+    public void loadAndPlay(MessageReceivedEvent event, VoiceChannel voiceChannel, final String trackUrl, int playlistLimit, boolean onHead) {
+        GuildMusicManager musicManager = getGuildAudioPlayer(guild);
         playedChanel = voiceChannel;
 
         playerManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack track) {
                 logger.info("Single Track detected!");
+
                 Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicOk("Ajout de "+track.getInfo().title+" à la file d'attente!")).complete();
                 List<Message> messages = new ArrayList<Message>(){{
                     add(message);
                     add(event.getMessage());
                 }};
                 new MessageTimeOut(messages, MainBot.messageTimeOut).start();
-                play(event.getGuild(), voiceChannel, musicManager, track, onHead);
+
+                play(guild, voiceChannel, musicManager, track, onHead);
             }
 
             @Override
@@ -66,13 +72,10 @@ public class AudioM {
                     add(event.getMessage());
                 }};
                 new MessageTimeOut(messages, MainBot.messageTimeOut).start();
-                int i = 0;
-                for(AudioTrack track : playlist.getTracks()){
-                    play(event.getGuild(), voiceChannel, musicManager, track,onHead);
-                    i++;
-                    if((i>=playlistLimit && i!=-1) || i>listExtremLimit)
-                        break;
-                }
+
+                playListLoader(playlist, playlistLimit, onHead);
+
+
 
             }
 
@@ -101,7 +104,15 @@ public class AudioM {
         });
     }
 
-
+    public void playListLoader(AudioPlaylist playlist,int playlistLimit, boolean onHead){
+        int i = 0;
+        for(AudioTrack track : playlist.getTracks()){
+            play(guild, playedChanel, musicManager, track, onHead);
+            i++;
+            if((i>=playlistLimit && i!=-1) || i>listExtremLimit)
+                break;
+        }
+    }
 
 
     private GuildMusicManager getGuildAudioPlayer(Guild guild) {
@@ -114,7 +125,7 @@ public class AudioM {
         return musicManager;
     }
 
-    private void play(Guild guild, VoiceChannel channel, GuildMusicManager musicManager, AudioTrack track,boolean onHead) {
+    public void play(Guild guild, VoiceChannel channel, GuildMusicManager musicManager, AudioTrack track,boolean onHead) {
         if(!guild.getAudioManager().isConnected())
             guild.getAudioManager().openAudioConnection(channel);
         if(!onHead)
@@ -224,10 +235,9 @@ public class AudioM {
 
     public void stop (MessageReceivedEvent event) {
         musicManager.scheduler.stop();
-        playedChanel = null;
+        musicManager.scheduler.flush();
 
         if (event != null) {
-            event.getGuild().getAudioManager().closeAudioConnection();
             Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicOk("Arret de la musique!")).complete();
             List<Message> messages = new ArrayList<Message>(){{
                 add(message);
@@ -253,6 +263,14 @@ public class AudioM {
         return musicManager;
     }
 
+    public Guild getGuild() {
+        return guild;
+    }
 
-
+    public AudioPlayerManager getPlayerManager() {
+        return playerManager;
+    }
+    public VoiceChannel getPlayedChanel() {
+        return playedChanel;
+    }
 }

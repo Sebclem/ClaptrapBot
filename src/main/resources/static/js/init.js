@@ -17,21 +17,71 @@ $(document).ready(function() {
     $('#btn_play').click(function () {
         switch (state){
             case "PLAYING":
-                sendCommand("PAUSE")
+                sendCommand(JSON.stringify({ command: "PAUSE"}))
                 break;
 
             case "PAUSE":
-                sendCommand("PLAY")
+                sendCommand(JSON.stringify({ command: "PLAY"}))
                 break;
         }
         
     })
 
     $('#btn_next').click(function () {
-        sendCommand("NEXT");
+        sendCommand(JSON.stringify({ command: "NEXT"}));
     })
     $('#btn_stop').click(function () {
-        sendCommand("STOP");
+        sendCommand(JSON.stringify({ command: "STOP"}));
+    })
+
+    $('.dropdown-button').dropdown({
+            inDuration: 300,
+            outDuration: 225,
+            constrainWidth: false, // Does not change width of dropdown to that of the activator
+            hover: false, // Activate on hover
+            gutter: 0, // Spacing from edge
+            belowOrigin: false, // Displays dropdown below the button
+            alignment: 'left', // Displays dropdown with edge aligned to the left of button
+            stopPropagation: false // Stops event propagation
+        }
+    );
+
+    $('#input_link').on("input", function () {
+       if($('#input_link').val() == ""){
+           if (!$('#btn_add_bottom').hasClass("disabled")) {
+               $('#btn_add_bottom').addClass("disabled");
+           }
+           if (!$('#btn_add_top').hasClass("disabled")) {
+               $('#btn_add_top').addClass("disabled");
+           }
+       }
+       else{
+           if ($('#btn_add_bottom').hasClass("disabled")) {
+               $('#btn_add_bottom').removeClass("disabled");
+           }
+           if ($('#btn_add_top').hasClass("disabled")) {
+               $('#btn_add_top').removeClass("disabled");
+           }
+       }
+    });
+
+    $('#btn_add_top').click(function () {
+        var command = {
+            command: "ADD",
+            url: $('#input_link').val(),
+            playlistLimit: $('#limit_range').val(),
+            onHead: true
+        };
+        sendCommand(JSON.stringify(command));
+    })
+    $('#btn_add_bottom').click(function () {
+        var command = {
+            command: "ADD",
+            url: $('#input_link').val(),
+            playlistLimit: $('#limit_range').val(),
+            onHead: false
+        };
+        sendCommand(JSON.stringify(command));
     })
 
 })
@@ -50,7 +100,7 @@ function getCurentMusic() {
         state = data.state;
         switch (data.state) {
             case "STOP":
-                $('#music_text').text("No Music");
+                $('#music_text').text("Connected on Vocal Channel");
 
                 if (!$('#btn_info').hasClass("indeterminate")) {
                     $('#btn_info').addClass("determinate").removeClass("indeterminate");
@@ -63,6 +113,9 @@ function getCurentMusic() {
                 }
                 if (!$('#btn_info').hasClass("disabled")) {
                     $('#btn_info').addClass("disabled");
+                }
+                if ($('#add_btn').hasClass("disabled")) {
+                    $('#add_btn').removeClass("disabled");
                 }
 
                 $('#music_img').attr("src","/img/no_music.jpg");
@@ -87,12 +140,41 @@ function getCurentMusic() {
                     $('#btn_info').addClass("indeterminate").removeClass("determinate");
                 }
                 break;
+
+            case "DISCONNECTED":
+                $('#music_text').text("Disconnected from Vocal");
+
+                if (!$('#btn_info').hasClass("indeterminate")) {
+                    $('#btn_info').addClass("determinate").removeClass("indeterminate");
+                }
+                $('#music_progress').width("0%");
+
+                $('#btn_play').children().text("play_arrow");
+                if (!$('#btn_play').hasClass("disabled")) {
+                    $('#btn_play').addClass("disabled");
+                }
+                if (!$('#btn_stop').hasClass("disabled")) {
+                    $('#btn_stop').addClass("disabled");
+                }
+                if (!$('#btn_next').hasClass("disabled")) {
+                    $('#btn_next').addClass("disabled");
+                }
+                if (!$('#btn_info').hasClass("disabled")) {
+                    $('#btn_info').addClass("disabled");
+                }
+                if (!$('#add_btn').hasClass("disabled")) {
+                    $('#add_btn').addClass("disabled");
+                }
+
+
+                $('#music_img').attr("src","/img/disconnected.png");
+                break;
         }
         getPlayList();
     })
     .fail(function (data) {
         if(!error){
-            alert("error");
+            alert("Connection lost, I keep trying to refresh!");
             error = true;
         }
 
@@ -115,7 +197,6 @@ function getPlayList() {
                     template.removeAttr("id");
                     template.removeAttr("style");
                     var content = template.html();
-                    console.log(content);
                     content = content.replace("@title", element.title);
                     content = content.replace("@author", element.author);
                     content = content.replace("@lenght", msToTime(element.length));
@@ -156,12 +237,21 @@ function updateControl(data){
     }
     $('#music_progress').width(percent + "%");
 
-
+    if ($('#btn_play').hasClass("disabled")) {
+        $('#btn_play').removeClass("disabled");
+    }
     if ($('#btn_stop').hasClass("disabled")) {
         $('#btn_stop').removeClass("disabled");
     }
     if ($('#btn_info').hasClass("disabled")) {
         $('#btn_info').removeClass("disabled");
+    }
+    if ($('#add_btn').hasClass("disabled")) {
+        $('#add_btn').removeClass("disabled");
+    }
+
+    if ($('#btn_next').hasClass("disabled")) {
+        $('#btn_next').removeClass("disabled");
     }
 
     $('#music_img').attr("src","http://img.youtube.com/vi/"+data.info.identifier+"/hqdefault.jpg");
@@ -174,33 +264,29 @@ function sendCommand(commandStr){
         dataType: 'json',
         contentType: 'application/json',
         url: "/api/music/command",
-        data:  JSON.stringify({ command: commandStr}),
+        data:  commandStr,
         success: function (data) {
             console.log(data);
         }
 
     }).fail(function (data) {
         console.log(data);
+        alert(data.responseJSON.Message);
     });
 }
 
 function comparePlaylist(list1, list2){
     if(list1 == null || list2 == null){
-        console.log(list1);
-        console.log(list2);
-        console.log("False From null")
         return false;
     }
 
     if(list1.length != list2.length){
-        console.log("False from length");
         return false;
     }
 
 
     for(var i = 0; i++; i < list1.length){
         if(list1[i].uri != list2[i].uri)
-            console.log("false from compare")
             return false
     }
     return true;

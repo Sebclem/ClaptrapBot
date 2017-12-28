@@ -54,7 +54,7 @@ public class Init {
                 MainBot.commandes.put("spam", new Spam());
                 MainBot.commandes.put("spaminfo", new SpamInfo());
                 MainBot.commandes.put("flush", new Flush());
-                MainBot.commandes.put("music", new Music());
+                MainBot.commandes.put("music", new Music(jda.getGuilds().get(0)));
 
                 if (!dev) {
                     MainBot.commandes.put("ass", new Ass());
