@@ -122,6 +122,8 @@ function getCurentMusic() {
                 }
 
                 $('#music_img').attr("src","/img/no_music.jpg");
+                $('#total_time').text("00:00");
+                $('#current_time').text("00:00");
 
                 break;
 
@@ -258,6 +260,9 @@ function updateControl(data){
     }
 
     $('#music_img').attr("src","https://img.youtube.com/vi/"+data.info.identifier+"/hqdefault.jpg");
+    console.log(data);
+    $('#total_time').text(msToTime(data.info.length));
+    $('#current_time').text(msToTime(data.currentPos));
     updateModal(data);
 }
 
