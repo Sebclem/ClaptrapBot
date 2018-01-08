@@ -65,6 +65,13 @@ $(document).ready(function() {
        }
     });
 
+    $('#flush_btn').click(function () {
+        var command = {
+            command: "FLUSH"
+        };
+        sendCommand(JSON.stringify(command));
+    });
+
     $('#btn_add_top').click(function () {
         var command = {
             command: "ADD",
@@ -74,7 +81,7 @@ $(document).ready(function() {
         };
         $('#input_link').val('');
         sendCommand(JSON.stringify(command));
-    })
+    });
     $('#btn_add_bottom').click(function () {
 
         var command = {
@@ -85,7 +92,7 @@ $(document).ready(function() {
         };
         $('#input_link').val('');
         sendCommand(JSON.stringify(command));
-    })
+    });
 
 })
 
@@ -120,8 +127,13 @@ function getCurentMusic() {
                 if ($('#add_btn').hasClass("disabled")) {
                     $('#add_btn').removeClass("disabled");
                 }
+                if ($('#flush_btn').hasClass("disabled")) {
+                    $('#flush_btn').removeClass("disabled");
+                }
 
                 $('#music_img').attr("src","/img/no_music.jpg");
+                $('#total_time').text("00:00");
+                $('#current_time').text("00:00");
 
                 break;
 
@@ -167,6 +179,9 @@ function getCurentMusic() {
                 }
                 if (!$('#add_btn').hasClass("disabled")) {
                     $('#add_btn').addClass("disabled");
+                }
+                if (!$('#flush_btn').hasClass("disabled")) {
+                    $('#flush_btn').addClass("disabled");
                 }
 
 
@@ -252,12 +267,18 @@ function updateControl(data){
     if ($('#add_btn').hasClass("disabled")) {
         $('#add_btn').removeClass("disabled");
     }
+    if ($('#flush_btn').hasClass("disabled")) {
+        $('#flush_btn').removeClass("disabled");
+    }
 
     if ($('#btn_next').hasClass("disabled")) {
         $('#btn_next').removeClass("disabled");
     }
 
     $('#music_img').attr("src","https://img.youtube.com/vi/"+data.info.identifier+"/hqdefault.jpg");
+    console.log(data);
+    $('#total_time').text(msToTime(data.info.length));
+    $('#current_time').text(msToTime(data.currentPos));
     updateModal(data);
 }
 

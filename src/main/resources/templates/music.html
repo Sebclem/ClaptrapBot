@@ -45,10 +45,14 @@
                 <img class="responsive-img z-depth-3" id="music_img" style="max-width: 30%" src=""/>
             </div>
             <h4 class="center" id="music_text"></h4>
-            <div class="row center">
+            <div class="row center" style="margin-bottom: 0px">
                 <div class="progress col s6 offset-s3 z-depth-3">
                     <div class="determinate" id="music_progress" style="width: 0%"></div>
                 </div>
+            </div>
+            <div class="row center">
+                <div class="col s2 offset-s3 left-align" style="padding: 0px" id="current_time">0:00</div>
+                <div class="col s2 offset-s2 right-align " style="padding: 0px" id="total_time">0:00</div>
             </div>
             <div class="row center">
                 <div class="col s2 offset-s3 center">
@@ -82,8 +86,11 @@
                 <tr>
                     <th style="padding: 0px;">
                         <div class="row center valign-wrapper" style="margin: 0px">
-                            <div class="col s5 center"><h5>Playlist</h5></div>
-                            <div class="col s5 offset-s2 center">
+                            <div class="col s4 center"><h5>Playlist</h5></div>
+                            <div class="col s4 center">
+                                <a class="waves-effect waves-light btn modal-trigger blue-grey darken-4" id="flush_btn">Flush</a>
+                            </div>
+                            <div class="col s4 center">
                                 <!-- Modal Trigger -->
                                 <a class="waves-effect waves-light btn modal-trigger blue-grey darken-4" id="add_btn" href="#modalAdd">Add</a>
 
