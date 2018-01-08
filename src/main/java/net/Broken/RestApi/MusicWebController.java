@@ -106,6 +106,15 @@ public class MusicWebController {
                 case "ADD":
                     return new WebLoadUtils(musicCommande ,data).getResponse();
 
+                case "FLUSH":
+                    try {
+                        musicCommande.getAudioManager().getMusicManager().scheduler.flush();
+                        return new ResponseEntity<>(new CommandResponseData(data.command, "Accepted"), HttpStatus.OK);
+                    } catch (NullMusicManager | NotConectedException nullMusicManager) {
+                        return new ResponseEntity<>(new CommandResponseData(data.command, "Not connected to vocal!"), HttpStatus.NOT_ACCEPTABLE);
+                    }
+
+
             }
         }
         else
