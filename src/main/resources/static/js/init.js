@@ -72,15 +72,18 @@ $(document).ready(function() {
             playlistLimit: $('#limit_range').val(),
             onHead: true
         };
+        $('#input_link').val('');
         sendCommand(JSON.stringify(command));
     })
     $('#btn_add_bottom').click(function () {
+
         var command = {
             command: "ADD",
             url: $('#input_link').val(),
             playlistLimit: $('#limit_range').val(),
             onHead: false
         };
+        $('#input_link').val('');
         sendCommand(JSON.stringify(command));
     })
 
@@ -200,7 +203,7 @@ function getPlayList() {
                     content = content.replace("@title", element.title);
                     content = content.replace("@author", element.author);
                     content = content.replace("@lenght", msToTime(element.length));
-                    content = content.replace("@url", element.uri)
+                    content = content.replace(/@url/g, element.uri);
                     template.html(content);
 
                     $('#playlist_list').append(template);
@@ -254,7 +257,7 @@ function updateControl(data){
         $('#btn_next').removeClass("disabled");
     }
 
-    $('#music_img').attr("src","http://img.youtube.com/vi/"+data.info.identifier+"/hqdefault.jpg");
+    $('#music_img').attr("src","https://img.youtube.com/vi/"+data.info.identifier+"/hqdefault.jpg");
     updateModal(data);
 }
 

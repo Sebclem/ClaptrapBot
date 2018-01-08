@@ -45,7 +45,15 @@
 <!--  Scripts-->
 <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
 <script src="js/materialize.js"></script>
-<script src="js/init.js"></script>
+<script>
+    $('.button-collapse-1').sideNav({
+        menuWidth: 400, // Default is 300
+        edge: 'right', // Choose the horizontal origin
+        closeOnClick: false, // Closes side-nav on <a> clicks, useful for Angular/Meteor
+        draggable: true // Choose whether you can drag to open on touch screens,
+    });
+</script>
+<!--<script src="js/init.js"></script>-->
 
 </body>
 </html>
