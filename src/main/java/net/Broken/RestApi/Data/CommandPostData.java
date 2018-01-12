@@ -6,4 +6,5 @@ public class CommandPostData {
     public boolean onHead;
     public String url;
     public int playlistLimit;
+    public String chanelId;
 }
