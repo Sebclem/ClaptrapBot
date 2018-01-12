@@ -1,11 +1,21 @@
 var savedPlaylist;
 var error = false;
 var state;
+var disconected = false;
 
 $(document).ready(function() {
+
     setInterval("getCurentMusic()",1000);
     // the "href" attribute of the modal trigger must specify the modal ID that wants to be triggered
-    $('.modal').modal();
+    $('#modalAdd').modal();
+
+    $('#modalChanels').modal({
+        dismissible: false, // Modal can be dismissed by clicking outside of the modal
+    })
+
+    $('#modalChanels').modal('open');
+
+
     $('.button-collapse-1').sideNav({
         menuWidth: 400, // Default is 300
         edge: 'right', // Choose the horizontal origin
@@ -64,6 +74,11 @@ $(document).ready(function() {
            }
        }
     });
+    $('#modalChanels').change(function () {
+        if ($('#btn_ok_channel').hasClass("disabled")) {
+            $('#btn_ok_channel').removeClass("disabled");
+        }
+    });
 
     $('#flush_btn').click(function () {
         var command = {
@@ -82,6 +97,7 @@ $(document).ready(function() {
         $('#input_link').val('');
         sendCommand(JSON.stringify(command));
     });
+
     $('#btn_add_bottom').click(function () {
 
         var command = {
@@ -91,6 +107,15 @@ $(document).ready(function() {
             onHead: false
         };
         $('#input_link').val('');
+        sendCommand(JSON.stringify(command));
+    });
+
+    $('#btn_ok_channel').click(function () {
+
+        var command = {
+            command: "CONNECT",
+            chanelId: $('input[name=vocalRadio]:checked').val()
+        };
         sendCommand(JSON.stringify(command));
     });
 
@@ -110,6 +135,8 @@ function getCurentMusic() {
         state = data.state;
         switch (data.state) {
             case "STOP":
+                disconected = false;
+                $('#modalChanels').modal('close');
                 $('#music_text').text("Connected on Vocal Channel");
 
                 if (!$('#btn_info').hasClass("indeterminate")) {
@@ -131,6 +158,13 @@ function getCurentMusic() {
                     $('#flush_btn').removeClass("disabled");
                 }
 
+                if ($('#btn_play').hasClass("disabled")) {
+                    $('#btn_play').removeClass("disabled");
+                }
+                if ($('#btn_next').hasClass("disabled")) {
+                    $('#btn_next').removeClass("disabled");
+                }
+
                 $('#music_img').attr("src","/img/no_music.jpg");
                 $('#total_time').text("00:00");
                 $('#current_time').text("00:00");
@@ -138,12 +172,16 @@ function getCurentMusic() {
                 break;
 
             case "PLAYING":
+                disconected = false;
+                $('#modalChanels').modal('close');
                 $('#btn_play').children().text("pause");
                 updateControl(data);
 
                 break;
 
             case "PAUSE":
+                disconected = false;
+                $('#modalChanels').modal('close');
                 $('#btn_play').children().text("play_arrow");
                 updateControl(data);
 
@@ -151,6 +189,8 @@ function getCurentMusic() {
                 break;
 
             case "LOADING":
+                disconected = false;
+                $('#modalChanels').modal('close');
                 if (!$('#btn_info').hasClass("determinate")) {
                     $('#btn_info').addClass("indeterminate").removeClass("determinate");
                 }
@@ -186,6 +226,14 @@ function getCurentMusic() {
 
 
                 $('#music_img').attr("src","/img/disconnected.png");
+
+                if(!disconected){
+                    getChannels();
+                    disconected = true;
+                }
+
+
+
                 break;
         }
         getPlayList();
@@ -234,6 +282,32 @@ function getPlayList() {
 
     });
 
+}
+
+function getChannels(){
+    $.get("api/music/getChanel", function (data) {
+    }).done(function (data) {
+        console.log(data);
+        $('#channelForm').empty();
+        data.forEach(function(element){
+            var template = $('#radioTemplate').clone();
+            template.removeAttr("id");
+            template.removeAttr("style");
+            var content = template.html();
+            content = content.replace("@name", element.name);
+            content = content.replace(/@id/g, element.id);
+            template.html(content);
+
+            $('#channelForm').append(template);
+
+        });
+        $('#modalChanels').modal('open');
+
+
+
+
+
+    });
 }
 
 function updateModal(data){

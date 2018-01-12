@@ -25,6 +25,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AudioM {
+
+
     private GuildMusicManager musicManager;
     private AudioPlayerManager playerManager;
     private VoiceChannel playedChanel;
@@ -115,7 +117,7 @@ public class AudioM {
     }
 
 
-    private GuildMusicManager getGuildAudioPlayer(Guild guild) {
+    public GuildMusicManager getGuildAudioPlayer(Guild guild) {
         if (musicManager == null) {
             musicManager = new GuildMusicManager(playerManager);
         }
@@ -272,5 +274,9 @@ public class AudioM {
     }
     public VoiceChannel getPlayedChanel() {
         return playedChanel;
+    }
+
+    public void setPlayedChanel(VoiceChannel playedChanel) {
+        this.playedChanel = playedChanel;
     }
 }

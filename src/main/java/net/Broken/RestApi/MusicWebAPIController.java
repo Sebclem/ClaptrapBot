@@ -4,22 +4,24 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import net.Broken.Commands.Music;
-// import net.Broken.DB.SavedPlaylistRepository;
 import net.Broken.MainBot;
-import net.Broken.RestApi.Data.CommandPostData;
-import net.Broken.RestApi.Data.CommandResponseData;
-import net.Broken.RestApi.Data.CurrentMusicData;
-import net.Broken.RestApi.Data.PlaylistData;
+import net.Broken.RestApi.Data.*;
 import net.Broken.audio.NotConectedException;
 import net.Broken.audio.NullMusicManager;
+import net.dv8tion.jda.core.entities.VoiceChannel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
+
+// import net.Broken.DB.SavedPlaylistRepository;
 
 @RestController
 @RequestMapping("/api/music/")
@@ -78,6 +80,16 @@ public class MusicWebAPIController {
         else
             logger.info("Null");
         return new ResponseEntity<>(new CommandResponseData(null, null), HttpStatus.NO_CONTENT);
+    }
+
+    @RequestMapping(value = "/getChanel", method = RequestMethod.GET)
+    public List<Chanel> getChanel(){
+        List<Chanel> temp = new ArrayList<>();
+        logger.info(MainBot.jda.getVoiceChannels().size());
+        for(VoiceChannel aChanel : MainBot.jda.getVoiceChannels()){
+            temp.add(new Chanel(aChanel.getName(),aChanel.getId(),aChanel.getPosition()));
+        }
+        return temp;
     }
 
 
