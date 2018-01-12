@@ -10,10 +10,9 @@ $(document).ready(function() {
     $('#modalAdd').modal();
 
     $('#modalChanels').modal({
-        dismissible: false, // Modal can be dismissed by clicking outside of the modal
-    })
+        dismissible: false // Modal can be dismissed by clicking outside of the modal
+    });
 
-    $('#modalChanels').modal('open');
 
 
     $('.button-collapse-1').sideNav({
@@ -22,7 +21,6 @@ $(document).ready(function() {
         closeOnClick: false, // Closes side-nav on <a> clicks, useful for Angular/Meteor
         draggable: true // Choose whether you can drag to open on touch screens,
     });
-    var height = $( window ).height();
 
     $('#btn_play').click(function () {
         switch (state){
@@ -35,14 +33,14 @@ $(document).ready(function() {
                 break;
         }
         
-    })
+    });
 
     $('#btn_next').click(function () {
         sendCommand(JSON.stringify({ command: "NEXT"}));
-    })
+    });
     $('#btn_stop').click(function () {
         sendCommand(JSON.stringify({ command: "STOP"}));
-    })
+    });
 
     $('.dropdown-button').dropdown({
             inDuration: 300,
@@ -74,6 +72,7 @@ $(document).ready(function() {
            }
        }
     });
+
     $('#modalChanels').change(function () {
         if ($('#btn_ok_channel').hasClass("disabled")) {
             $('#btn_ok_channel').removeClass("disabled");

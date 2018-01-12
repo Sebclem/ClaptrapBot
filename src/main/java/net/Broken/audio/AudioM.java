@@ -22,6 +22,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class AudioM {
@@ -108,6 +109,10 @@ public class AudioM {
 
     public void playListLoader(AudioPlaylist playlist,int playlistLimit, boolean onHead){
         int i = 0;
+        List<AudioTrack> tracks = playlist.getTracks();
+        if(onHead)
+            Collections.reverse(tracks);
+            
         for(AudioTrack track : playlist.getTracks()){
             play(guild, playedChanel, musicManager, track, onHead);
             i++;
