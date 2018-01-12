@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * Created by seb65 on 19/10/2016.
  */
-public class PingCommande implements Commande {
+public class Ping implements Commande {
 
 
     private String HELP = "`//ping` \n :arrow_right:\t*Renvoi le ping du bot*";
