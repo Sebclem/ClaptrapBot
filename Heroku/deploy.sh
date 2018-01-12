@@ -1,1 +1,0 @@
-heroku deploy:jar Discord_Stroumpf_Beta.jar -i log4j2.xml  --app discord-stroumpf-beta
