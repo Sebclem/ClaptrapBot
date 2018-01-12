@@ -25,8 +25,8 @@ import java.util.List;
 @RequestMapping("/api/music/")
 public class MusicWebAPIController {
     Logger logger = LogManager.getLogger();
-    @Autowired
-    public SavedPlaylistRepository savedPlaylist;
+//    @Autowired
+//    public SavedPlaylistRepository savedPlaylist;
 
     @RequestMapping("/currentMusicInfo")
     public CurrentMusicData getCurrentM(){
