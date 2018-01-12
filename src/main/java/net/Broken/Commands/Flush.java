@@ -1,4 +1,4 @@
-package net.Broken.Commandes;
+package net.Broken.Commands;
 
 import net.Broken.Commande;
 import net.Broken.Outils.EmbedMessageUtils;

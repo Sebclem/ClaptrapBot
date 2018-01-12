@@ -5,15 +5,13 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import net.Broken.Commandes.Music;
+import net.Broken.Commands.Music;
 import net.Broken.RestApi.Data.CommandPostData;
 import net.Broken.RestApi.Data.CommandResponseData;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
-import java.util.TreeMap;
 
 public class WebLoadUtils {
     ResponseEntity<CommandResponseData> response;

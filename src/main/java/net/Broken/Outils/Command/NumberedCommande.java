@@ -1,4 +1,4 @@
-package net.Broken.Commandes;
+package net.Broken.Outils.Command;
 import net.Broken.Commande;
 import net.Broken.Outils.FindContentOnWebPage;
 import net.Broken.Outils.LimitChecker;

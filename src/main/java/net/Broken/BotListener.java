@@ -1,7 +1,7 @@
 package net.Broken;
 
-import net.Broken.Commandes.Move;
-import net.Broken.Commandes.Music;
+import net.Broken.Commands.Move;
+import net.Broken.Commands.Music;
 import net.Broken.Outils.AntiSpam;
 import net.Broken.Outils.Moderateur;
 import net.dv8tion.jda.core.entities.ChannelType;
