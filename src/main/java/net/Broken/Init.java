@@ -1,7 +1,6 @@
 package net.Broken;
 
-import net.Broken.Commandes.*;
-import net.Broken.Commandes.Over18.*;
+import net.Broken.Outils.Command.CommandLoader;
 import net.Broken.Outils.DayListener;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
@@ -11,7 +10,6 @@ import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
-import net.dv8tion.jda.core.managers.GuildManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -40,6 +38,7 @@ public class Init {
                 logger.info("Connection au serveur...");
                 //connection au bot
                 jda = new JDABuilder(AccountType.BOT).addEventListener(new BotListener()).setToken(token).setBulkDeleteSplittingEnabled(false).buildBlocking();
+                MainBot.jda = jda;
                 jda.setAutoReconnect(true);
                 jda.addEventListener();
 
@@ -48,25 +47,7 @@ public class Init {
                  *************************************/
                 jda.getPresence().setGame(Game.of("Statut: Loading..."));
                 jda.getTextChannels().forEach(textChannel -> textChannel.sendTyping().queue());
-                MainBot.commandes.put("ping", new PingCommande());
-                MainBot.commandes.put("help", new Help());
-                MainBot.commandes.put("move", new Move());
-                MainBot.commandes.put("spam", new Spam());
-                MainBot.commandes.put("spaminfo", new SpamInfo());
-                MainBot.commandes.put("flush", new Flush());
-                MainBot.commandes.put("music", new Music(jda.getGuilds().get(0)));
-
-                if (!dev) {
-                    MainBot.commandes.put("ass", new Ass());
-                    jda.getTextChannels().forEach(textChannel -> textChannel.sendTyping().queue());
-                    MainBot.commandes.put("boobs", new Boobs());
-                    jda.getTextChannels().forEach(textChannel -> textChannel.sendTyping().queue());
-                    MainBot.commandes.put("pipe", new Pipe());
-                    jda.getTextChannels().forEach(textChannel -> textChannel.sendTyping().queue());
-                    MainBot.commandes.put("sm", new SM());
-                    MainBot.commandes.put("madame", new Madame());
-                    MainBot.commandes.put("cat", new Cat());
-                }
+                CommandLoader.load();
 
 
                 //On recupere le l'id serveur

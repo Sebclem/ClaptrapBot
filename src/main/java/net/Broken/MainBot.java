@@ -1,8 +1,9 @@
 package net.Broken;
 
-import net.Broken.Outils.CommandParser;
+import net.Broken.Outils.Command.CommandParser;
 import net.Broken.Outils.EmbedMessageUtils;
 import net.Broken.Outils.UserSpamUtils;
+import net.Broken.RestApi.ApiCommandLoader;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.entities.Message;
@@ -32,6 +33,9 @@ public class MainBot {
     public static HashMap<User, Integer> message_compteur =new HashMap<>();
     public static boolean roleFlag = false;
     public static HashMap<User, UserSpamUtils> spamUtils = new HashMap<>();
+    public static JDA jda;
+
+
 
     public static int messageTimeOut = 10;
 
@@ -61,7 +65,7 @@ public class MainBot {
             i++;
         }
 
-        JDA jda = Init.initBot(token, dev);
+        jda = Init.initBot(token, dev);
         ConfigurableApplicationContext ctx = SpringApplication.run(MainBot.class, args);
         if(jda == null) {
             System.exit(SpringApplication.exit(ctx, (ExitCodeGenerator) () -> {
@@ -69,6 +73,11 @@ public class MainBot {
                 return 1;
             }));
         }
+
+        ApiCommandLoader.load();
+
+
+
 
 
 

@@ -1,4 +1,4 @@
-package net.Broken.Commandes.Over18;
+package net.Broken.Commands.Over18;
 
 import net.Broken.Commande;
 import net.Broken.Outils.Redirection;

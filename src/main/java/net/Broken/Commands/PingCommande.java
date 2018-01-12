@@ -1,4 +1,4 @@
-package net.Broken.Commandes;
+package net.Broken.Commands;
 
 import net.Broken.Commande;
 import net.Broken.MainBot;
@@ -8,8 +8,6 @@ import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.apache.logging.log4j.LogManager;
 
-import java.sql.Timestamp;
-import java.time.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +18,7 @@ import java.util.List;
 public class PingCommande implements Commande {
 
 
-    private String HELP = "`//ping` \n :arrow_right:\t*Le bot vous répondra Pong!*";
+    private String HELP = "`//ping` \n :arrow_right:\t*Renvoi le ping du bot*";
     @Override
     public boolean called(String[] args, MessageReceivedEvent event) {
         return true;
@@ -28,11 +26,12 @@ public class PingCommande implements Commande {
 
     @Override
     public void action(String[] args, MessageReceivedEvent event) {
-        long receivedTime = Timestamp.valueOf(LocalDateTime.ofInstant(event.getMessage().getCreationTime().toInstant(), ZoneId.systemDefault())).getTime();
+        long ping = event.getJDA().getPing();
+//        long receivedTime = Timestamp.valueOf(LocalDateTime.ofInstant(event.getMessage().getCreationTime().toInstant(), ZoneId.systemDefault())).getTime();
         if(event.isFromType(ChannelType.PRIVATE))
-            event.getPrivateChannel().sendMessage(":arrow_right: Pong! `"+((Timestamp.from(Instant.now()).getTime()-receivedTime))+"ms`").queue();
+            event.getPrivateChannel().sendMessage(":arrow_right: Pong! `" + ping+ "ms`").queue();
         else {
-            Message rest = event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n:arrow_right: Pong! `"+((Timestamp.from(Instant.now()).getTime()-receivedTime))+"ms`").complete();
+            Message rest = event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n:arrow_right: Pong! `" + ping + "ms`").complete();
             List<Message> messages = new ArrayList<Message>(){{
                 add(rest);
                 add(event.getMessage());

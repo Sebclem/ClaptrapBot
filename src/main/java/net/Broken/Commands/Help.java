@@ -1,4 +1,4 @@
-package net.Broken.Commandes;
+package net.Broken.Commands;
 
 import net.Broken.Commande;
 import net.Broken.MainBot;
@@ -9,7 +9,6 @@ import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.core.exceptions.RateLimitedException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -84,7 +83,7 @@ public class Help implements Commande {
             }
 
             if(!event.isFromType(ChannelType.PRIVATE)){
-                Message rest = event.getTextChannel().sendMessage(new EmbedBuilder().setTitle("Commandes envoyées par message privé").setColor(Color.green).build()).complete();
+                Message rest = event.getTextChannel().sendMessage(new EmbedBuilder().setTitle("Command envoyées par message privé").setColor(Color.green).build()).complete();
                 List<Message> messages = new ArrayList<Message>(){{
                    add(rest);
                    add(event.getMessage());
@@ -92,7 +91,7 @@ public class Help implements Commande {
                 new MessageTimeOut(messages,MainBot.messageTimeOut).start();
             }
 
-            PrivateMessage.send(event.getAuthor(),new EmbedBuilder().setTitle("Commandes du bot").setDescription(txt.toString()).setFooter("Utilise '//help <commande>' pour plus de détails.",null).setColor(Color.green).setThumbnail(event.getJDA().getSelfUser().getAvatarUrl()).build(),logger);
+            PrivateMessage.send(event.getAuthor(),new EmbedBuilder().setTitle("Command du bot").setDescription(txt.toString()).setFooter("Utilise '//help <commande>' pour plus de détails.",null).setColor(Color.green).setThumbnail(event.getJDA().getSelfUser().getAvatarUrl()).build(),logger);
 
 
 

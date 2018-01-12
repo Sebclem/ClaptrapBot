@@ -1,12 +1,10 @@
-package net.Broken.Commandes.Over18;
+package net.Broken.Commands.Over18;
 
 import net.Broken.Commande;
 import net.Broken.Outils.Redirection;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.io.IOException;
 
 /**
  * Created by seb65 on 10/11/2016.
