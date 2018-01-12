@@ -1,4 +1,4 @@
-package net.Broken.Commandes;
+package net.Broken.Commands;
 
 import net.Broken.Commande;
 import net.Broken.MainBot;
@@ -15,7 +15,6 @@ import org.apache.logging.log4j.Logger;
 
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 /**

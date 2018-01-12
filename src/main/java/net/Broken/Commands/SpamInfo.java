@@ -1,4 +1,4 @@
-package net.Broken.Commandes;
+package net.Broken.Commands;
 
 import net.Broken.Commande;
 import net.Broken.MainBot;
@@ -8,7 +8,6 @@ import net.Broken.Outils.PrivateMessage;
 import net.Broken.Outils.UserSpamUtils;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.ChannelType;
-import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;

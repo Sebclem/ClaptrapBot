@@ -1,7 +1,10 @@
 package net.Broken.Outils;
 
 import net.Broken.MainBot;
-import net.Broken.Commandes.Move;
+import net.Broken.Commands.Move;
+import net.Broken.Outils.EmbedMessageUtils;
+import net.Broken.Outils.MessageTimeOut;
+import net.Broken.Outils.UserSpamUtils;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.exceptions.HierarchyException;

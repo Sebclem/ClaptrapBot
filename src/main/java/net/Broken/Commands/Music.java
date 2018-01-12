@@ -1,4 +1,4 @@
-package net.Broken.Commandes;
+package net.Broken.Commands;
 
 import net.Broken.Commande;
 import net.Broken.MainBot;
@@ -19,8 +19,8 @@ import java.util.List;
 public class Music implements Commande {
     public AudioM audio;
     Logger logger = LogManager.getLogger();
-    public Music(Guild guild) {
-        audio = new AudioM(guild);
+    public Music() {
+        audio = new AudioM(MainBot.jda.getGuilds().get(0));
     }
 
     @Override

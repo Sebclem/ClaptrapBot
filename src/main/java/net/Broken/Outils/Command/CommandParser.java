@@ -1,4 +1,4 @@
-package net.Broken.Outils;
+package net.Broken.Outils.Command;
 
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.apache.logging.log4j.LogManager;
@@ -12,29 +12,31 @@ import java.util.Arrays;
  */
 
 public class CommandParser {
-    Logger logger = LogManager.getLogger();
+    private Logger logger = LogManager.getLogger();
     public CommandContainer parse(String brt, MessageReceivedEvent e)
     {
         ArrayList<String> split =new ArrayList<String>();
         String brut =brt;
-        String sansTete = brut.replaceFirst("//","");   // on retire l'entete
-        String[] splitSansTete = sansTete.split(" ");   // on prend l'espace comme separateur cmd/arg
-        for(String s : splitSansTete){                  //= pourchaque
-            split.add(s);                               // on fait un truc que je comprend pas trop x)
+        String sansTete = brut.replaceFirst("//","");
+        String[] splitSansTete = sansTete.split(" ");
+
+        for(String s : splitSansTete){
+            if(s.length()>0)
+                split.add(s);
         }
-        String commande = split.get(0);                 // on recuperre la 1er partie qui correspond a la cmd
+
+        String commande = split.get(0);
         String[] args = new String[split.size()-1];
         split.subList(1,split.size()).toArray(args);
+
         for(int i=0;i<args.length;i++)
-        {
             args[i]=args[i].replace('$',' ');
 
 
-        }
 
         logger.info("Auteur: "+e.getAuthor().getName()+", Commande: "+commande+", args: "+ Arrays.toString(args));
 
-        return new CommandContainer(brut, sansTete, splitSansTete, commande, args, e);   //On Save toute les info dans le container
+        return new CommandContainer(brut, sansTete, splitSansTete, commande, args, e);
 
     }
     public class CommandContainer{
