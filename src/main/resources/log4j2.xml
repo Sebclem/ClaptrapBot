@@ -2,7 +2,10 @@
 <Configuration status="error" packages="com.coralogix.sdk.appenders">
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
-            <PatternLayout pattern="[%d{HH:mm:ss.SSS}][%-5level][%-30.30c{1.}]: %msg%n" />
+            <!--<PatternLayout pattern="[%d{HH:mm:ss.SSS}][%-5level][%-30.30c{1.}]: %msg%n" />-->
+            <PatternLayout>
+                <Pattern>[%d{HH:mm:ss.SSS}]%highlight{[%-5level]}{FATAL=red blink, ERROR=red, WARN=bright yellow , INFO=blue, DEBUG=bright black, TRACE=cyan}[%-30.30c{1.}]: %highlight{%msg%n}{FATAL=red blink, ERROR=red, WARN=bright yellow , INFO=blue, DEBUG=bright black, TRACE=cyan}</Pattern>
+            </PatternLayout>
         </Console>
         <RollingFile name="RollingFile" fileName="./logs/curent.log"
                      filePattern="./logs/$${date:yyyy-MM}/discordBot-%d{yyyy-MM-dd-HH}-%i.log.gz">
@@ -10,9 +13,10 @@
                 <Pattern>[%d{HH:mm:ss.SSS}]%highlight{[%-5level]}{FATAL=red blink, ERROR=red, WARN=bright yellow , INFO=blue, DEBUG=bright black, TRACE=cyan}[%-30.30c{1.}]: %highlight{%msg%n}{FATAL=red blink, ERROR=red, WARN=bright yellow , INFO=blue, DEBUG=bright black, TRACE=cyan}</Pattern>
             </PatternLayout>
             <Policies>
-                <TimeBasedTriggeringPolicy/>
+                <TimeBasedTriggeringPolicy interval="1"/>
                 <SizeBasedTriggeringPolicy size="250 MB"/>
             </Policies>
+            <DefaultRolloverStrategy max="120"/>
         </RollingFile>
     </Appenders>
     <Loggers>
