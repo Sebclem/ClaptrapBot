@@ -1,7 +1,7 @@
 package net.Broken;
 
-import net.Broken.Outils.Command.CommandLoader;
-import net.Broken.Outils.DayListener;
+import net.Broken.Tools.Command.CommandLoader;
+import net.Broken.Tools.DayListener;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;

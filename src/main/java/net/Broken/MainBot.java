@@ -1,8 +1,8 @@
 package net.Broken;
 
-import net.Broken.Outils.Command.CommandParser;
-import net.Broken.Outils.EmbedMessageUtils;
-import net.Broken.Outils.UserSpamUtils;
+import net.Broken.Tools.Command.CommandParser;
+import net.Broken.Tools.EmbedMessageUtils;
+import net.Broken.Tools.UserSpamUtils;
 import net.Broken.RestApi.ApiCommandLoader;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.ChannelType;
@@ -17,6 +17,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Controller;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -73,6 +74,7 @@ public class MainBot {
                 return 1;
             }));
         }
+
 
         ApiCommandLoader.load();
 
