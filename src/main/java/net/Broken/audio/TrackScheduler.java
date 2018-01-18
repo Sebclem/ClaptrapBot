@@ -5,6 +5,8 @@ import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +21,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class TrackScheduler extends AudioEventAdapter {
     private final AudioPlayer player;
     private final BlockingDeque<AudioTrack> queue;
+    Logger logger = LogManager.getLogger();
 
     /**
      * @param player The audio player this scheduler uses
@@ -83,6 +86,22 @@ public class TrackScheduler extends AudioEventAdapter {
 
     public AudioTrackInfo getInfo(){
         return player.getPlayingTrack().getInfo();
+    }
+
+    public boolean remove(String uri){
+        for(AudioTrack track : queue){
+            if(track.getInfo().uri.equals(uri)){
+                if(!queue.remove(track)) {
+                    logger.info("Delete failure!");
+                    return false;
+                } else {
+                    logger.info("Delete succeful");
+                    return true;
+                }
+            }
+        }
+        logger.info("Delete failure! Not found.");
+        return false;
     }
 
     /**

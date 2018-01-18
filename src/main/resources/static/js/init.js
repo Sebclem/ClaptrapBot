@@ -35,6 +35,8 @@ $(document).ready(function() {
         
     });
 
+
+
     $('#btn_next').click(function () {
         sendCommand(JSON.stringify({ command: "NEXT"}));
     });
@@ -271,6 +273,15 @@ function getPlayList() {
                     $('#playlist_list').append(template);
 
                 });
+                $(".btn_dell_playlist").click(function () {
+                    var command = {
+                        command: "DELL",
+                        url: $(this).attr("data_url")
+                    };
+                    sendCommand(JSON.stringify(command));
+
+
+                });
             }
         }
         else
@@ -349,7 +360,7 @@ function updateControl(data){
     }
 
     $('#music_img').attr("src","https://img.youtube.com/vi/"+data.info.identifier+"/hqdefault.jpg");
-    console.log(data);
+    // console.log(data);
     $('#total_time').text(msToTime(data.info.length));
     $('#current_time').text(msToTime(data.currentPos));
     updateModal(data);

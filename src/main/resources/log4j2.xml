@@ -16,7 +16,7 @@
                 <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
                 <SizeBasedTriggeringPolicy size="250 MB"/>
             </Policies>
-            <DefaultRolloverStrategy max="60" />
+            <DefaultRolloverStrategy max="120"/>
         </RollingFile>
         <File name="current" fileName="logs/current.log" append="false">
             <PatternLayout>
