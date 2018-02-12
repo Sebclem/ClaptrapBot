@@ -1,5 +1,6 @@
 package net.Broken.Tools;
 
+import net.Broken.MainBot;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.MessageEmbed;
@@ -64,6 +65,11 @@ public class EmbedMessageUtils {
 
     public static MessageEmbed getFlushError(String message) {
         return new EmbedBuilder().setTitle(":warning: Flush Error :warning: ").setDescription(message).setColor(Color.red).setFooter("'//help flush' pour plus d'info ", null).build();
+    }
+
+
+    public static MessageEmbed getRegister(String message) {
+        return new EmbedBuilder().setTitle(":pencil: Web Registration :pencil:").setDescription(message).setColor(Color.green).setFooter("bot.seb6596.ovh", MainBot.jda.getSelfUser().getAvatarUrl()).build();
     }
 
 

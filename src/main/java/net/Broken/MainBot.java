@@ -2,6 +2,7 @@ package net.Broken;
 
 import net.Broken.Tools.Command.CommandParser;
 import net.Broken.Tools.EmbedMessageUtils;
+import net.Broken.Tools.UserManager.UserRegister;
 import net.Broken.Tools.UserSpamUtils;
 import net.Broken.RestApi.ApiCommandLoader;
 import net.dv8tion.jda.core.JDA;
@@ -34,7 +35,9 @@ public class MainBot {
     public static HashMap<User, Integer> message_compteur =new HashMap<>();
     public static boolean roleFlag = false;
     public static HashMap<User, UserSpamUtils> spamUtils = new HashMap<>();
+    public static UserRegister userRegister = new UserRegister();
     public static JDA jda;
+
 
 
 

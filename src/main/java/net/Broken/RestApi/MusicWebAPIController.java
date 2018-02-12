@@ -6,6 +6,9 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import net.Broken.Commands.Music;
 import net.Broken.MainBot;
 import net.Broken.RestApi.Data.*;
+import net.Broken.RestApi.Data.UserManager.CheckResposeData;
+import net.Broken.RestApi.Data.UserManager.UserInfoData;
+import net.Broken.Tools.UserManager.Exceptions.UserNotFoundException;
 import net.Broken.audio.NotConectedException;
 import net.Broken.audio.NullMusicManager;
 import net.dv8tion.jda.core.entities.VoiceChannel;
@@ -21,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.List;
 
-// import net.Broken.DB.SavedPlaylistRepository;
+// import net.Broken.DB.Repository.SavedPlaylistRepository;
 
 @RestController
 @RequestMapping("/api/music/")
@@ -85,12 +88,12 @@ public class MusicWebAPIController {
     @RequestMapping(value = "/getChanel", method = RequestMethod.GET)
     public List<Chanel> getChanel(){
         List<Chanel> temp = new ArrayList<>();
-        logger.info(MainBot.jda.getVoiceChannels().size());
         for(VoiceChannel aChanel : MainBot.jda.getVoiceChannels()){
             temp.add(new Chanel(aChanel.getName(),aChanel.getId(),aChanel.getPosition()));
         }
         return temp;
     }
+
 
 
 

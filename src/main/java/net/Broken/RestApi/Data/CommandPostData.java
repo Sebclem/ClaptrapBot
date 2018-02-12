@@ -7,4 +7,5 @@ public class CommandPostData {
     public String url;
     public int playlistLimit;
     public String chanelId;
+    public String name;
 }
