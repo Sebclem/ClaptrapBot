@@ -34,12 +34,13 @@ dependencies {
     compile("com.sedmelluq:lavaplayer:1.2.45")
     compile 'net.dv8tion:JDA:3.3.1_303'
     compile group: 'org.json', name: 'json', version: '20160810'
-    // JPA Data (We are going to use Repositories, Entities, Hibernate, etc...)
-    //compile("org.springframework.boot:spring-boot-starter-data-jpa") {
-    //    exclude group:"org.springframework.boot", module: "spring-boot-starter-logging"
-    //}
-    // Use MySQL Connector-J
-    //compile 'mysql:mysql-connector-java'
+    compile 'org.springframework.security:spring-security-web:5.0.1.RELEASE'
+//     JPA Data (We are going to use Repositories, Entities, Hibernate, etc...)
+    compile("org.springframework.boot:spring-boot-starter-data-jpa") {
+        exclude group:"org.springframework.boot", module: "spring-boot-starter-logging"
+    }
+//     Use MySQL Connector-J
+    compile 'mysql:mysql-connector-java'
     compile 'org.reflections:reflections:0.9.11'
 
 
