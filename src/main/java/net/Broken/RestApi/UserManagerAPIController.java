@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import sun.applet.Main;
 
 @RestController
 @RequestMapping("/api/userManagement")
@@ -69,13 +68,26 @@ public class UserManagerAPIController {
             userRepository.save(user);
             pendingUserRepository.delete(pUser);
 
-            return new ResponseEntity<>(new UserConnectionData(true,"",""),HttpStatus.OK);
+            return new ResponseEntity<>(new UserConnectionData(true,user.getApiToken(),""),HttpStatus.OK);
         } catch (TokenNotMatch tokenNotMatch) {
             logger.warn("Pre token not match for "+data.id+"!");
-            return new ResponseEntity<>(new UserConnectionData(false,null,"Token not match!"),HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<>(new UserConnectionData(false,"Token not match!","token"),HttpStatus.NOT_ACCEPTABLE);
         } catch (UserNotFoundException e) {
             logger.warn("Id not found in DB ("+data.id+")");
-            return new ResponseEntity<>(new UserConnectionData(false,null,"User not found on DB!"),HttpStatus.NOT_ACCEPTABLE);
+            return new ResponseEntity<>(new UserConnectionData(false,"User not found on DB!", "user"),HttpStatus.NOT_ACCEPTABLE);
+        }
+    }
+
+    @RequestMapping(value = "/requestToken", method = RequestMethod.POST)
+    public ResponseEntity<UserConnectionData> requestToken(@RequestBody UserInfoData data){
+        try {
+            UserEntity user = MainBot.userRegister.getUser(userRepository, passwordEncoder, data);
+            return new ResponseEntity<>(new UserConnectionData(true, user.getName(), user.getApiToken(), ""), HttpStatus.OK);
+
+        } catch (UserNotFoundException e) {
+            return new ResponseEntity<>(new UserConnectionData(false,"User not registered!", "user"),HttpStatus.NOT_ACCEPTABLE);
+        } catch (PasswordNotMatchException e) {
+            return new ResponseEntity<>(new UserConnectionData(false,"Wrong user name or password!", "password"),HttpStatus.NOT_ACCEPTABLE);
         }
     }
 

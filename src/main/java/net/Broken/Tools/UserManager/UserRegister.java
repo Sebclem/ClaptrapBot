@@ -1,6 +1,7 @@
 package net.Broken.Tools.UserManager;
 
 import net.Broken.DB.Entity.PendingUserEntity;
+import net.Broken.DB.Entity.UserEntity;
 import net.Broken.DB.Repository.PendingUserRepository;
 import net.Broken.DB.Repository.UserRepository;
 import net.Broken.MainBot;
@@ -105,6 +106,25 @@ public class UserRegister {
         return pendingUser;
     }
 
+    public UserEntity getUser(UserRepository userRepository, PasswordEncoder passwordEncoder, UserInfoData userInfoData) throws UserNotFoundException, PasswordNotMatchException {
+        List<UserEntity> users = userRepository.findByName(userInfoData.name);
+        if(users.size()<1){
+            logger.warn("Login with unknown username: " + userInfoData.name);
+            throw new UserNotFoundException();
+        }
+        else{
+            UserEntity user = users.get(0);
+            if(passwordEncoder.matches(userInfoData.password,user.getPassword())){
+                logger.info("Login successful for " + user.getName());
+                return user;
+            }
+            else
+            {
+                logger.warn("Login fail for " + user.getName() + ", wrong password!");
+                throw new PasswordNotMatchException();
+            }
+        }
+    }
 
     public String generateApiToken(){
         return UUID.randomUUID().toString();
