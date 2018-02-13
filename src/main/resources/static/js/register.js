@@ -15,13 +15,15 @@ $(document).ready(function() {
 
     $('#name').on("input", function () {
         if($('#name').val() === ""){
-            if (!sendBtn.hasClass("disabled")) {
-                sendBtn.addClass("disabled");
+            if (sendBtn.hasClass("scale-in")) {
+                sendBtn.removeClass("scale-in");
+                sendBtn.addClass("scale-out");
             }
         }
         else{
-            if (sendBtn.hasClass("disabled") && ok_passwrd) {
-                sendBtn.removeClass("disabled");
+            if (sendBtn.hasClass("scale-out") && ok_passwrd) {
+                sendBtn.removeClass("scale-out");
+                sendBtn.addClass("scale-in");
             }
         }
     });
@@ -40,8 +42,9 @@ $(document).ready(function() {
 
             }
             if($('#name').val() !== ""){
-                if (sendBtn.hasClass("disabled")) {
-                    sendBtn.removeClass("disabled");
+                if (sendBtn.hasClass("scale-out")) {
+                    sendBtn.removeClass("scale-out");
+                    sendBtn.addClass("scale-in");
                 }
             }
             ok_passwrd = true;
@@ -54,8 +57,9 @@ $(document).ready(function() {
                 confirm.removeClass("valid");
 
             }
-            if (!sendBtn.hasClass("disabled")) {
-                sendBtn.addClass("disabled");
+            if (sendBtn.hasClass("scale-in")) {
+                sendBtn.removeClass("scale-in");
+                sendBtn.addClass("scale-out");
             }
             ok_passwrd = false;
         }
@@ -71,8 +75,9 @@ $(document).ready(function() {
 
             }
             if($('#name').val() !== ""){
-                if (sendBtn.hasClass("disabled")) {
-                    sendBtn.removeClass("disabled");
+                if (sendBtn.hasClass("scale-out")) {
+                    sendBtn.removeClass("scale-out");
+                    sendBtn.addClass("scale-in");
                 }
             }
             ok_passwrd = true;
@@ -85,8 +90,9 @@ $(document).ready(function() {
                 confirm.removeClass("valid");
             }
 
-            if (!sendBtn.hasClass("disabled")) {
-                sendBtn.addClass("disabled");
+            if (sendBtn.hasClass("scale-in")) {
+                sendBtn.removeClass("scale-in");
+                sendBtn.addClass("scale-out");
             }
             ok_passwrd = false;
         }
@@ -132,13 +138,15 @@ $(document).ready(function() {
     $('#input_preToken').on("input", function () {
         var sendBtn = $('#preTokenSend');
         if($('#input_preToken').val().length < 4){
-            if (!sendBtn.hasClass("disabled")) {
-                sendBtn.addClass("disabled");
+            if (sendBtn.hasClass("scale-in")) {
+                sendBtn.removeClass("scale-in");
+                sendBtn.addClass("scale-out");
             }
         }
         else{
-            if (sendBtn.hasClass("disabled")) {
-                sendBtn.removeClass("disabled");
+            if (sendBtn.hasClass("scale-out")) {
+                sendBtn.removeClass("scale-out");
+                sendBtn.addClass("scale-in");
             }
         }
     });

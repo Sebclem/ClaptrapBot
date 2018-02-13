@@ -15,31 +15,108 @@
 </head>
 
 <body class="blue-grey lighten-5" >
-
+<!--__________________________________________________________-->
+<!--                         NAV BAR                          -->
+<!--                           AND                            -->
+<!--                          LOGIN                           -->
+<!--__________________________________________________________-->
 <nav class="blue-grey darken-4 z-depth-3" role="navigation">
     <div class="nav-wrapper container">
         <a id="logo-container" href="#" class="brand-logo">Discord Bot</a>
         <ul class="right hide-on-med-and-down">
 
             <li class="active">
-                <a href="/" data-target="slide-out" class="sidenav-trigger">Home</a>
+                <a class="waves-effect waves-light sidenav-trigger" href="/" data-target="slide-out">Home</a>
             </li>
             <li>
-                <a href="/music" >Music Control</a>
+                <a class="waves-effect waves-light" href="/music" >Music Control</a>
             </li>
+            <li id="nav-bar-account">
+                <a class="dropdown-account" data-activates="dropdown1"><i class="material-icons">account_box</i></a>
+            </li>
+
         </ul>
 
         <ul id="nav-mobile" class="side-nav">
             <li class="active">
-                <a href="/" data-target="slide-out" class="sidenav-trigger">Home</a>
+                <a class="waves-effect waves-light sidenav-trigger" href="/" data-target="slide-out">Home</a>
             </li>
             <li>
-                <a href="/music" data-target="slide-out" class="sidenav-trigger">Music Control</a>
+                <a class="waves-effect waves-light sidenav-trigger" href="/music" data-target="slide-out" >Music Control</a>
             </li>
         </ul>
-        <a href="#" data-activates="nav-mobile" class="button-collapse-1 button-collapse"><i class="material-icons">menu</i></a>
+        <a href="#" data-activates="nav-mobile" class="button-navbar-mobile button-collapse"><i class="material-icons">menu</i></a>
     </div>
 </nav>
+
+<!-- Dropdown connected -->
+<ul id="dropdown_connected" class="dropdown-content ">
+    <li>
+        <a class="center blue-grey-text text-darken-4" id="nav-name" style="text-decoration: underline; font-weight: bold"></a>
+    </li>
+    <li class="divider"></li>
+    <li>
+        <a class="center tooltipped" data-position="left" data-delay="50" data-tooltip="Under Development!">My Account</a>
+    </li>
+    <li>
+        <a class="center tooltipped" data-position="left" data-delay="50" data-tooltip="Under Development!">My Playlists</a>
+    </li>
+    <li class="divider"></li>
+    <li><a class="center red-text" id="nav-disconnect" style="font-weight: bold">Disconnect</a></li>
+</ul>
+
+
+<!--________________________________________-->
+<!--            Connection modal            -->
+<!--________________________________________-->
+<div id="modal_connection" class="modal">
+    <div class="modal-content">
+        <div class="row center">
+            <div class="col s12">
+                <h3 class="" style="font-weight: bold">Sign in</h3>
+            </div>
+        </div>
+        <div class="row center" style="margin-bottom: 0px">
+            <form name="login_form" id="login_form" action="javascript:void(0);" onsubmit="tryConnection()">
+                <div class="row" style="margin-bottom: 0px">
+                    <div class="input-field col s6 offset-s3">
+                        <i class="material-icons prefix">account_box</i>
+                        <input name="username" id="user_input" type="text" class="validate"/>
+                        <label for="user_input" data-error="User not registered!">User Name</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s6 offset-s3">
+                        <i class="material-icons prefix">security</i>
+                        <input name="password" id="password_input" type="password" class="validate"/>
+                        <label for="password_input" data-error="Wrong password!">Password</label>
+                    </div>
+                </div>
+                <div class="row" style="margin-bottom: 10px">
+                    <button id="btn-submit-connect" class="btn waves-effect waves-light light-green darken-1 scale-transition scale-out" type="submit" name="action" >
+                        Submit<i class="material-icons right">send</i>
+                    </button>
+                </div>
+
+                <div class="row">
+                    <a class="btn waves-effect waves-light brown" href="/register">
+                        Create account<i class="material-icons right">person_add</i>
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<!--__________________________________________________________-->
+<!--                                                          -->
+<!--                           END                            -->
+<!--                                                          -->
+<!--__________________________________________________________-->
+
+
+
 
 <div class="section no-pad-bot main" id="index-banner">
 
@@ -48,14 +125,8 @@
 <!--  Scripts-->
 <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
 <script src="js/materialize.js"></script>
-<script>
-    $('.button-collapse-1').sideNav({
-        menuWidth: 400, // Default is 300
-        edge: 'right', // Choose the horizontal origin
-        closeOnClick: false, // Closes side-nav on <a> clicks, useful for Angular/Meteor
-        draggable: true // Choose whether you can drag to open on touch screens,
-    });
-</script>
+<script src="js/navabar.js"></script>
+<script src="js/js.cookie.js"></script>
 <!--<script src="js/init.js"></script>-->
 
 </body>
