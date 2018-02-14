@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Scanner;
 
 
@@ -19,7 +20,7 @@ public class ResourceLoader {
 
         //Get file from resources folder
         ClassLoader classLoader = getClass().getClassLoader();
-        File file = new File(classLoader.getResource(fileName).getFile());
+        InputStream file = classLoader.getResourceAsStream(fileName);
 
         try (Scanner scanner = new Scanner(file)) {
 
@@ -30,8 +31,6 @@ public class ResourceLoader {
 
             scanner.close();
 
-        } catch (IOException e) {
-            logger.catching(e);
         }
 
         return result.toString();
