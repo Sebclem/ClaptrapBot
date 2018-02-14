@@ -159,7 +159,10 @@ $(document).ready(function() {
             data:  JSON.stringify({ id: id.toString(), checkToken: $('#input_preToken').val()}),
             success: function (data) {
                 console.log(data);
-                alert("Connection ok!")
+                Cookies.set('token',data.token);
+                Cookies.set('name', data.name);
+                debugger;
+                window.location.href = "/"
             }
 
         }).fail(function (data) {
