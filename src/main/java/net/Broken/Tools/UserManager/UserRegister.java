@@ -9,15 +9,13 @@ import net.Broken.RestApi.Data.UserManager.UserInfoData;
 import net.Broken.Tools.EmbedMessageUtils;
 import net.Broken.Tools.PrivateMessage;
 import net.Broken.Tools.ResourceLoader;
-import net.Broken.Tools.UserManager.Exceptions.PasswordNotMatchException;
-import net.Broken.Tools.UserManager.Exceptions.TokenNotMatch;
-import net.Broken.Tools.UserManager.Exceptions.UserAlreadyRegistered;
-import net.Broken.Tools.UserManager.Exceptions.UserNotFoundException;
+import net.Broken.Tools.UserManager.Exceptions.*;
 import net.dv8tion.jda.core.entities.MessageEmbed;
 import net.dv8tion.jda.core.entities.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.security.SecureRandom;
@@ -126,11 +124,21 @@ public class UserRegister {
         }
     }
 
+    public UserEntity getUserWithApiToken(UserRepository userRepository, String token) throws UnknownTokenException {
+        List<UserEntity> users = userRepository.findByApiToken(token);
+        if(users.size() > 0){
+            return users.get(0);
+        }
+        else
+            throw new UnknownTokenException();
+
+    }
+
     public String generateApiToken(){
         return UUID.randomUUID().toString();
     }
 
-    public String generateCheckToken(){
+    private String generateCheckToken(){
         SecureRandom random = new SecureRandom();
         long longToken = Math.abs( random.nextLong() );
         String randomStr = Long.toString( longToken, 16 );

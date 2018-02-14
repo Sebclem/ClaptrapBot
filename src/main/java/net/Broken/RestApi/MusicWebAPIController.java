@@ -4,23 +4,29 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import net.Broken.Commands.Music;
+import net.Broken.DB.Entity.UserEntity;
+import net.Broken.DB.Repository.UserRepository;
 import net.Broken.MainBot;
 import net.Broken.RestApi.Data.*;
 import net.Broken.RestApi.Data.UserManager.CheckResposeData;
 import net.Broken.RestApi.Data.UserManager.UserInfoData;
+import net.Broken.Tools.UserManager.Exceptions.UnknownTokenException;
 import net.Broken.Tools.UserManager.Exceptions.UserNotFoundException;
 import net.Broken.audio.NotConectedException;
 import net.Broken.audio.NullMusicManager;
 import net.dv8tion.jda.core.entities.VoiceChannel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +38,9 @@ public class MusicWebAPIController {
     Logger logger = LogManager.getLogger();
 //    @Autowired
 //    public SavedPlaylistRepository savedPlaylist;
+    @Autowired
+    UserRepository userRepository;
+
 
     @RequestMapping("/currentMusicInfo")
     public CurrentMusicData getCurrentM(){
@@ -68,17 +77,32 @@ public class MusicWebAPIController {
     }
 
     @RequestMapping(value = "/command", method = RequestMethod.POST)
-    public ResponseEntity<CommandResponseData> command(@RequestBody CommandPostData data){
+    public ResponseEntity<CommandResponseData> command(@RequestBody CommandPostData data, HttpServletRequest request){
 
         if(data.command != null) {
-            logger.info("receive command: " + data.command);
-            Music musicCommande = (Music) MainBot.commandes.get("music");
+            if(data.token != null) {
+                try {
+                    UserEntity user = MainBot.userRegister.getUserWithApiToken(userRepository, data.token);
+                    logger.info("receive command " + data.command + " from " + request.getRemoteAddr() + " USER: " + user.getName());
+                    Music musicCommande = (Music) MainBot.commandes.get("music");
 
-            if(ApiCommandLoader.apiCommands.containsKey(data.command))
-                return ApiCommandLoader.apiCommands.get(data.command).action(musicCommande,data);
-            else
-                return new ResponseEntity<>(new CommandResponseData(data.command,"Unknown Command"), HttpStatus.BAD_REQUEST);
+                    if (ApiCommandLoader.apiCommands.containsKey(data.command))
+                        return ApiCommandLoader.apiCommands.get(data.command).action(musicCommande, data);
+                    else
+                        return new ResponseEntity<>(new CommandResponseData(data.command, "Unknown Command", "command"), HttpStatus.BAD_REQUEST);
 
+                } catch (UnknownTokenException e) {
+                    logger.warn("Command with unknown token from: "+request.getRemoteAddr());
+                    return new ResponseEntity<>(new CommandResponseData(data.command,"Unknown Token!\nPlease Re-connect.", "token"), HttpStatus.UNAUTHORIZED);
+
+                }
+
+            }
+            else{
+                logger.warn("Command without token! ip: "+ request.getRemoteAddr());
+                return new ResponseEntity<>(new CommandResponseData(data.command,"Missing token!\nPlease Re-connect.","token"), HttpStatus.UNAUTHORIZED);
+
+            }
         }
         else
             logger.info("Null");

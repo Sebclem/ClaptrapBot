@@ -31,6 +31,8 @@ $(document).ready(function() {
             case "PAUSE":
                 sendCommand({ command: "PLAY"})
                 break;
+            default:
+                sendCommand({command: "PLAY"})
         }
         
     });
@@ -419,6 +421,7 @@ function updateControl(data){
 
 function sendCommand(command){
     command["token"] = Cookies.get('token');
+    console.log(command)
     $.ajax({
         type: "POST",
         dataType: 'json',
@@ -432,6 +435,11 @@ function sendCommand(command){
     }).fail(function (data) {
         console.log(data);
         alert(data.responseJSON.Message);
+        if(data.responseJSON.error === "token"){
+            Cookies.remove('token');
+            Cookies.remove('name');
+            location.reload();
+        }
     });
 }
 

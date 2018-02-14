@@ -1,6 +1,6 @@
 var nav_bar_account_link;
 var connected_link = "<a class=\"dropdown-account\" data-activates=\"dropdown_connected\"><i class=\"material-icons green-text\">account_box</i></a>";
-var disconnected_link = "<a class=\"waves-effect waves-light modal-trigger\" href=\".modal_connection\"><i class=\"material-icons red-text\">account_box</i></a>";
+var disconnected_link = "<a class=\"waves-effect waves-light modal-trigger\" href=\"#modal_connection\"><i class=\"material-icons red-text\">account_box</i></a>";
 var input_name;
 var input_psw;
 var btn_submit;
@@ -66,7 +66,11 @@ function connected(){
 function disconnected() {
     console.log("Disconnected");
     nav_bar_account_link.html(disconnected_link);
-    $('.modal').modal();
+    var modalConnection = $('#modal_connection');
+    modalConnection.modal();
+    if(needLogin !== undefined){
+        modalConnection.modal('open');
+    }
 
 }
 
