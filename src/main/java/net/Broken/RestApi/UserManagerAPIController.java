@@ -68,7 +68,7 @@ public class UserManagerAPIController {
             userRepository.save(user);
             pendingUserRepository.delete(pUser);
 
-            return new ResponseEntity<>(new UserConnectionData(true,user.getApiToken(),""),HttpStatus.OK);
+            return new ResponseEntity<>(new UserConnectionData(true, user.getName(), user.getApiToken(),""),HttpStatus.OK);
         } catch (TokenNotMatch tokenNotMatch) {
             logger.warn("Pre token not match for "+data.id+"!");
             return new ResponseEntity<>(new UserConnectionData(false,"Token not match!","token"),HttpStatus.NOT_ACCEPTABLE);
