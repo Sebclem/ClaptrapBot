@@ -68,7 +68,7 @@ function disconnected() {
     nav_bar_account_link.html(disconnected_link);
     var modalConnection = $('#modal_connection');
     modalConnection.modal();
-    if(needLogin !== undefined){
+    if (typeof needLogin !== 'undefined'){
         modalConnection.modal('open');
     }
 
