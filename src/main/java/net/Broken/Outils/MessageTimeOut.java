@@ -1,4 +1,4 @@
-package net.Broken.Tools;
+package net.Broken.Outils;
 
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.exceptions.ErrorResponseException;

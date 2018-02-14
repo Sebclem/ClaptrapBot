@@ -2,10 +2,10 @@ package net.Broken.Commands;
 
 import net.Broken.Commande;
 import net.Broken.MainBot;
-import net.Broken.Tools.EmbedMessageUtils;
-import net.Broken.Tools.MessageTimeOut;
-import net.Broken.Tools.PrivateMessage;
-import net.Broken.Tools.UserSpamUtils;
+import net.Broken.Outils.EmbedMessageUtils;
+import net.Broken.Outils.MessageTimeOut;
+import net.Broken.Outils.PrivateMessage;
+import net.Broken.Outils.UserSpamUtils;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.entities.Message;
