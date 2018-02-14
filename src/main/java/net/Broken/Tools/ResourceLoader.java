@@ -22,7 +22,7 @@ public class ResourceLoader {
         ClassLoader classLoader = getClass().getClassLoader();
         InputStream file = classLoader.getResourceAsStream(fileName);
 
-        try (Scanner scanner = new Scanner(file)) {
+        try (Scanner scanner = new Scanner(file, "UTF-8")) {
 
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
