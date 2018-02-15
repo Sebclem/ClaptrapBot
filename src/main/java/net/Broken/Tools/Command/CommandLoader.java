@@ -1,4 +1,4 @@
-package net.Broken.Outils.Command;
+package net.Broken.Tools.Command;
 
 import net.Broken.Commande;
 import net.Broken.MainBot;

@@ -1,6 +1,6 @@
 package net.Broken.Commands.Over18;
 
-import net.Broken.Outils.Command.NumberedCommande;
+import net.Broken.Tools.Command.NumberedCommande;
 import org.apache.logging.log4j.LogManager;
 
 /**

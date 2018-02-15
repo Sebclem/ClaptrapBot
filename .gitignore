@@ -14,3 +14,7 @@ META-INF/
 
 
 classes/artifacts/Discord_Stroumpf_Beta_jar/
+
+src/main/resources/templates/css
+
+src/main/resources/templates/js

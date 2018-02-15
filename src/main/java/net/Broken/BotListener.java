@@ -2,8 +2,8 @@ package net.Broken;
 
 import net.Broken.Commands.Move;
 import net.Broken.Commands.Music;
-import net.Broken.Outils.AntiSpam;
-import net.Broken.Outils.Moderateur;
+import net.Broken.Tools.AntiSpam;
+import net.Broken.Tools.Moderateur;
 import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;

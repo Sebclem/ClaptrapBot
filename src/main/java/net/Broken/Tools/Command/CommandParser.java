@@ -1,4 +1,4 @@
-package net.Broken.Outils.Command;
+package net.Broken.Tools.Command;
 
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.apache.logging.log4j.LogManager;

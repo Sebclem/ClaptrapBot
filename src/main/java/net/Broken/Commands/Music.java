@@ -2,10 +2,9 @@ package net.Broken.Commands;
 
 import net.Broken.Commande;
 import net.Broken.MainBot;
-import net.Broken.Outils.EmbedMessageUtils;
-import net.Broken.Outils.MessageTimeOut;
+import net.Broken.Tools.EmbedMessageUtils;
+import net.Broken.Tools.MessageTimeOut;
 import net.Broken.audio.AudioM;
-import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.VoiceChannel;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
