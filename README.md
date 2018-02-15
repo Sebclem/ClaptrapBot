@@ -40,6 +40,10 @@
 >       - "traefik.docker.network=proxy"
 >       - "traefik.backend=phpmyadmin"
 >       - "traefik.frontend.entryPoints=http,https"
+>     environment:
+>       - PMA_HOST=database
+>     depends_on:
+>       - "database"
 >
 >   database:
 >     image: mariadb:latest
@@ -55,9 +59,8 @@
 >     networks:
 >       - internal
 >
->
->     environment:
->       - PMA_HOST=database
->     depends_on:
->       - "database"
->     networks:
+> networks:
+>     proxy:
+>       external: true
+>     internal:
+>       external: false
