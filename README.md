@@ -1,7 +1,7 @@
 # BrokenDiscordBot
-
+ 
 ## Install:
-
+ 
 > The easiest method it's to use docker-compose:
 > 
 > docker-compose.yml:
@@ -10,24 +10,38 @@
 > 
 > services:
 >   botdiscord:
->     image: brokenfire/brokendiscordbot:latest  
+>     image: brokenfire/brokendiscordbot:latest
 >     networks:
 >       - proxy
+>       - internal
 >     environment:
->       - PORT=8081
+>       - PORT=8080
 >       - TOKEN=1111111111111 #CHANGE ME!
+>       - DB_URL=jdbc:mysql://database/botdiscord 
+>       - DB_USER=root 
+>       - DB_PWD=ogahxu1eigohN2Eok0xoawae #CHANGE ME!
 >     labels:
 >       - "traefik.frontend.rule=Host:exemple.com" #CHANGE ME!
+>       - "traefik.docker.network=proxy"
 >       - "traefik.port=8080"
 >       - "traefik.backend=botdiscord"
 >       - "traefik.frontend.entryPoints=http,https"
->     volumes:                                                                              
->        - "./logs:/bot_src/logs"
+>     volumes:
+>       - "./logs:/bot_src/logs"
+>     depends_on:
+>       - "database"
 >     restart: always
 > 
-> networks:
->     proxy:
->        external: true 
-> ```
-> Docker hub [repo](https://hub.docker.com/r/brokenfire/brokendiscordbot/)
-                                                      
+>   phpmyadmin:
+>     image: phpmyadmin/phpmyadmin:latest
+>     labels:
+>       - "traefik.frontend.rule=Host:phpmyadmin.exemple.com" #CHANGE ME!
+>       - "traefik.port=80"
+>       - "traefik.docker.network=proxy"
+>       - "traefik.backend=phpmyadmin"
+>       - "traefik.frontend.entryPoints=http,https"
+>     environment:
+>       - PMA_HOST=database
+>     depends_on:
+>       - "database"
+>     networks:
