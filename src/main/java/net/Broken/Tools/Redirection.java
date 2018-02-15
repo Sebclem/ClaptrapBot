@@ -1,4 +1,4 @@
-package net.Broken.Outils;
+package net.Broken.Tools;
 
 import java.io.IOException;
 import java.io.InputStream;

@@ -25,12 +25,14 @@ $(document).ready(function() {
     $('#btn_play').click(function () {
         switch (state){
             case "PLAYING":
-                sendCommand(JSON.stringify({ command: "PAUSE"}))
+                sendCommand({ command: "PAUSE"})
                 break;
 
             case "PAUSE":
-                sendCommand(JSON.stringify({ command: "PLAY"}))
+                sendCommand({ command: "PLAY"})
                 break;
+            default:
+                sendCommand({command: "PLAY"})
         }
         
     });
@@ -38,10 +40,10 @@ $(document).ready(function() {
 
 
     $('#btn_next').click(function () {
-        sendCommand(JSON.stringify({ command: "NEXT"}));
+        sendCommand({ command: "NEXT"});
     });
     $('#btn_stop').click(function () {
-        sendCommand(JSON.stringify({ command: "STOP"}));
+        sendCommand({ command: "STOP"});
     });
 
     $('.dropdown-button').dropdown({
@@ -85,7 +87,7 @@ $(document).ready(function() {
         var command = {
             command: "FLUSH"
         };
-        sendCommand(JSON.stringify(command));
+        sendCommand(command);
     });
 
     $('#btn_add_top').click(function () {
@@ -96,7 +98,7 @@ $(document).ready(function() {
             onHead: true
         };
         $('#input_link').val('');
-        sendCommand(JSON.stringify(command));
+        sendCommand(command);
     });
 
     $('#btn_add_bottom').click(function () {
@@ -108,7 +110,7 @@ $(document).ready(function() {
             onHead: false
         };
         $('#input_link').val('');
-        sendCommand(JSON.stringify(command));
+        sendCommand(command);
     });
 
     $('#btn_ok_channel').click(function () {
@@ -117,7 +119,7 @@ $(document).ready(function() {
             command: "CONNECT",
             chanelId: $('input[name=vocalRadio]:checked').val()
         };
-        sendCommand(JSON.stringify(command));
+        sendCommand(command);
     });
 
 })
@@ -144,27 +146,50 @@ function getCurentMusic() {
                     $('#btn_info').addClass("determinate").removeClass("indeterminate");
                 }
                 $('#music_progress').width("0%");
+                if(Cookies.get('token') != undefined){
+                    if (!$('#btn_stop').hasClass("disabled")) {
+                        $('#btn_stop').addClass("disabled");
+                    }
+                    if (!$('#btn_info').hasClass("disabled")) {
+                        $('#btn_info').addClass("disabled");
+                    }
+                    if ($('#add_btn').hasClass("disabled")) {
+                        $('#add_btn').removeClass("disabled");
+                    }
+                    if ($('#flush_btn').hasClass("disabled")) {
+                        $('#flush_btn').removeClass("disabled");
+                    }
 
+                    if ($('#btn_play').hasClass("disabled")) {
+                        $('#btn_play').removeClass("disabled");
+                    }
+                    if ($('#btn_next').hasClass("disabled")) {
+                        $('#btn_next').removeClass("disabled");
+                    }
+                }
+                else{
+                    if (!$('#btn_stop').hasClass("disabled")) {
+                        $('#btn_stop').addClass("disabled");
+                    }
+                    if (!$('#btn_info').hasClass("disabled")) {
+                        $('#btn_info').addClass("disabled");
+                    }
+                    if (!$('#add_btn').hasClass("disabled")) {
+                        $('#add_btn').addClass("disabled");
+                    }
+                    if (!$('#flush_btn').hasClass("disabled")) {
+                        $('#flush_btn').addClass("disabled");
+                    }
+
+                    if (!$('#btn_play').hasClass("disabled")) {
+                        $('#btn_play').addClass("disabled");
+                    }
+                    if (!$('#btn_next').hasClass("disabled")) {
+                        $('#btn_next').addClass("disabled");
+                    }
+                }
                 $('#btn_play').children().text("play_arrow");
-                if (!$('#btn_stop').hasClass("disabled")) {
-                    $('#btn_stop').addClass("disabled");
-                }
-                if (!$('#btn_info').hasClass("disabled")) {
-                    $('#btn_info').addClass("disabled");
-                }
-                if ($('#add_btn').hasClass("disabled")) {
-                    $('#add_btn').removeClass("disabled");
-                }
-                if ($('#flush_btn').hasClass("disabled")) {
-                    $('#flush_btn').removeClass("disabled");
-                }
 
-                if ($('#btn_play').hasClass("disabled")) {
-                    $('#btn_play').removeClass("disabled");
-                }
-                if ($('#btn_next').hasClass("disabled")) {
-                    $('#btn_next').removeClass("disabled");
-                }
 
                 $('#music_img').attr("src","/img/no_music.jpg");
                 $('#total_time').text("00:00");
@@ -206,6 +231,7 @@ function getCurentMusic() {
                 $('#music_progress').width("0%");
 
                 $('#btn_play').children().text("play_arrow");
+
                 if (!$('#btn_play').hasClass("disabled")) {
                     $('#btn_play').addClass("disabled");
                 }
@@ -227,11 +253,13 @@ function getCurentMusic() {
 
 
                 $('#music_img').attr("src","/img/disconnected.png");
-
-                if(!disconected){
-                    getChannels();
-                    disconected = true;
+                if(Cookies.get('token') != undefined){
+                    if(!disconected){
+                        getChannels();
+                        disconected = true;
+                    }
                 }
+
 
 
 
@@ -278,7 +306,7 @@ function getPlayList() {
                         command: "DELL",
                         url: $(this).attr("data_url")
                     };
-                    sendCommand(JSON.stringify(command));
+                    sendCommand(command);
 
 
                 });
@@ -334,30 +362,55 @@ function updateControl(data){
     $('#music_text').text(data.info.title);
     var percent = (data.currentPos / data.info.length) * 100;
     // console.log(percent)
-    if (!$('#btn_info').hasClass("indeterminate")) {
-        $('#btn_info').addClass("determinate").removeClass("indeterminate");
+    if (!$('#music_progress').hasClass("indeterminate")) {
+        $('#music_progress').addClass("determinate").removeClass("indeterminate");
     }
     $('#music_progress').width(percent + "%");
 
-    if ($('#btn_play').hasClass("disabled")) {
-        $('#btn_play').removeClass("disabled");
+    if(Cookies.get('token') != undefined){
+        if ($('#btn_play').hasClass("disabled")) {
+            $('#btn_play').removeClass("disabled");
+        }
+        if ($('#btn_stop').hasClass("disabled")) {
+            $('#btn_stop').removeClass("disabled");
+        }
+        if ($('#btn_info').hasClass("disabled")) {
+            $('#btn_info').removeClass("disabled");
+        }
+        if ($('#add_btn').hasClass("disabled")) {
+            $('#add_btn').removeClass("disabled");
+        }
+        if ($('#flush_btn').hasClass("disabled")) {
+            $('#flush_btn').removeClass("disabled");
+        }
+
+        if ($('#btn_next').hasClass("disabled")) {
+            $('#btn_next').removeClass("disabled");
+        }
     }
-    if ($('#btn_stop').hasClass("disabled")) {
-        $('#btn_stop').removeClass("disabled");
-    }
-    if ($('#btn_info').hasClass("disabled")) {
-        $('#btn_info').removeClass("disabled");
-    }
-    if ($('#add_btn').hasClass("disabled")) {
-        $('#add_btn').removeClass("disabled");
-    }
-    if ($('#flush_btn').hasClass("disabled")) {
-        $('#flush_btn').removeClass("disabled");
+    else
+    {
+        if (!$('#btn_play').hasClass("disabled")) {
+            $('#btn_play').addClass("disabled");
+        }
+        if (!$('#btn_stop').hasClass("disabled")) {
+            $('#btn_stop').addClass("disabled");
+        }
+        if (!$('#btn_info').hasClass("disabled")) {
+            $('#btn_info').addClass("disabled");
+        }
+        if (!$('#add_btn').hasClass("disabled")) {
+            $('#add_btn').addClass("disabled");
+        }
+        if (!$('#flush_btn').hasClass("disabled")) {
+            $('#flush_btn').addClass("disabled");
+        }
+
+        if (!$('#btn_next').hasClass("disabled")) {
+            $('#btn_next').addClass("disabled");
+        }
     }
 
-    if ($('#btn_next').hasClass("disabled")) {
-        $('#btn_next').removeClass("disabled");
-    }
 
     $('#music_img').attr("src","https://img.youtube.com/vi/"+data.info.identifier+"/hqdefault.jpg");
     // console.log(data);
@@ -366,13 +419,15 @@ function updateControl(data){
     updateModal(data);
 }
 
-function sendCommand(commandStr){
+function sendCommand(command){
+    command["token"] = Cookies.get('token');
+    console.log(command)
     $.ajax({
         type: "POST",
         dataType: 'json',
         contentType: 'application/json',
         url: "/api/music/command",
-        data:  commandStr,
+        data:  JSON.stringify(command),
         success: function (data) {
             console.log(data);
         }
@@ -380,6 +435,11 @@ function sendCommand(commandStr){
     }).fail(function (data) {
         console.log(data);
         alert(data.responseJSON.Message);
+        if(data.responseJSON.error === "token"){
+            Cookies.remove('token');
+            Cookies.remove('name');
+            location.reload();
+        }
     });
 }
 

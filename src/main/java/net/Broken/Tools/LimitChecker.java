@@ -1,4 +1,4 @@
-package net.Broken.Outils;
+package net.Broken.Tools;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
