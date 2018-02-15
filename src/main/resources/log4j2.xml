@@ -7,29 +7,23 @@
                 <Pattern>[%d{HH:mm:ss.SSS}]%highlight{[%-5level]}{FATAL=red blink, ERROR=red, WARN=bright yellow , INFO=blue, DEBUG=bright black, TRACE=cyan}[%-30.30c{1.}]: %highlight{%msg%n}{FATAL=red blink, ERROR=red, WARN=bright yellow , INFO=blue, DEBUG=bright black, TRACE=cyan}</Pattern>
             </PatternLayout>
         </Console>
-        <RollingFile name="RollingFile" fileName="./logs/current-day.log"
-                     filePattern="./logs/$${date:yyyy-MM}/discordBot-%d{yyyy-MM-dd}-%i.log.gz">
+        <RollingFile name="RollingFile" fileName="./logs/curent.log"
+                     filePattern="./logs/$${date:yyyy-MM}/discordBot-%d{yyyy-MM-dd-HH}-%i.log.gz">
             <PatternLayout>
                 <Pattern>[%d{HH:mm:ss.SSS}]%highlight{[%-5level]}{FATAL=red blink, ERROR=red, WARN=bright yellow , INFO=blue, DEBUG=bright black, TRACE=cyan}[%-30.30c{1.}]: %highlight{%msg%n}{FATAL=red blink, ERROR=red, WARN=bright yellow , INFO=blue, DEBUG=bright black, TRACE=cyan}</Pattern>
             </PatternLayout>
             <Policies>
-                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <TimeBasedTriggeringPolicy interval="1"/>
                 <SizeBasedTriggeringPolicy size="250 MB"/>
             </Policies>
             <DefaultRolloverStrategy max="120"/>
         </RollingFile>
-        <File name="current" fileName="logs/current.log" append="false">
-            <PatternLayout>
-                <Pattern>[%d{HH:mm:ss.SSS}]%highlight{[%-5level]}{FATAL=red blink, ERROR=red, WARN=bright yellow , INFO=blue, DEBUG=bright black, TRACE=cyan}[%-30.30c{1.}]: %highlight{%msg%n}{FATAL=red blink, ERROR=red, WARN=bright yellow , INFO=blue, DEBUG=bright black, TRACE=cyan}</Pattern>
-            </PatternLayout>
-        </File>
     </Appenders>
     <Loggers>
         <Root level="debug">
             <AppenderRef ref="RollingFile" level="info" />
             <AppenderRef ref="Console" level="info"/>
             <AppenderRef ref="RollingFile" level="info"/>
-            <AppenderRef ref="current" level="info"/>
         </Root>
     </Loggers>
 </Configuration>

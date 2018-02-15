@@ -2,10 +2,10 @@ package net.Broken.Commands;
 
 import net.Broken.Commande;
 import net.Broken.MainBot;
-import net.Broken.Tools.AntiSpam;
-import net.Broken.Tools.EmbedMessageUtils;
-import net.Broken.Tools.MessageTimeOut;
-import net.Broken.Tools.UserSpamUtils;
+import net.Broken.Outils.AntiSpam;
+import net.Broken.Outils.EmbedMessageUtils;
+import net.Broken.Outils.MessageTimeOut;
+import net.Broken.Outils.UserSpamUtils;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;

@@ -1,8 +1,8 @@
-package net.Broken.Tools.Command;
+package net.Broken.Outils.Command;
 import net.Broken.Commande;
-import net.Broken.Tools.FindContentOnWebPage;
-import net.Broken.Tools.LimitChecker;
-import net.Broken.Tools.Redirection;
+import net.Broken.Outils.FindContentOnWebPage;
+import net.Broken.Outils.LimitChecker;
+import net.Broken.Outils.Redirection;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

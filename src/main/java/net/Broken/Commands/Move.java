@@ -2,8 +2,8 @@ package net.Broken.Commands;
 
 import net.Broken.Commande;
 import net.Broken.MainBot;
-import net.Broken.Tools.EmbedMessageUtils;
-import net.Broken.Tools.MessageTimeOut;
+import net.Broken.Outils.EmbedMessageUtils;
+import net.Broken.Outils.MessageTimeOut;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;

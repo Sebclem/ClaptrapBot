@@ -9,4 +9,4 @@ RUN chmod +x gradlew
 ENV PORT=8080
 ENV TOKEN=10
 RUN ./gradlew build
-CMD java -Xmx500m -jar build/libs/DiscordBot-0.1.0.jar -t ${TOKEN}
+CMD java -jar build/libs/DiscordBot-0.1.0.jar -t ${TOKEN}

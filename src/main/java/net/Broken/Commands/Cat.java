@@ -2,7 +2,7 @@ package net.Broken.Commands;
 
 
 import net.Broken.Commande;
-import net.Broken.Tools.Redirection;
+import net.Broken.Outils.Redirection;
 import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 

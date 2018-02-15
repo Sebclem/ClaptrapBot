@@ -1,5 +1,5 @@
 
-package net.Broken.Tools;
+package net.Broken.Outils;
 
 import net.Broken.MainBot;
 

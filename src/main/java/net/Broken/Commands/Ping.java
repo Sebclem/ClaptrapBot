@@ -2,7 +2,7 @@ package net.Broken.Commands;
 
 import net.Broken.Commande;
 import net.Broken.MainBot;
-import net.Broken.Tools.MessageTimeOut;
+import net.Broken.Outils.MessageTimeOut;
 import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;

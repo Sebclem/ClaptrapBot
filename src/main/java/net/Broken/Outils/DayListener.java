@@ -1,4 +1,4 @@
-package net.Broken.Tools;
+package net.Broken.Outils;
 import net.Broken.Commands.Spam;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
 import org.apache.logging.log4j.LogManager;
