@@ -40,6 +40,22 @@
 >       - "traefik.docker.network=proxy"
 >       - "traefik.backend=phpmyadmin"
 >       - "traefik.frontend.entryPoints=http,https"
+>
+>   database:
+>     image: mariadb:latest
+>     volumes:
+>       - ./db:/var/lib/mysql
+>     labels:
+>       - "traefik.enable=false"
+>     environment:
+>       - MYSQL_ROOT_PASSWORD= #CHANGE ME!
+>       - MYSQL_DATABASE=botdiscord
+>       - MYSQL_USER=bot
+>       - MYSQL_PASSWORD=Ho0duiWo3noo3Ahrahx0rohz #CHANGE ME!
+>     networks:
+>       - internal
+>
+>
 >     environment:
 >       - PMA_HOST=database
 >     depends_on:
