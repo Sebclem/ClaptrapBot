@@ -2,6 +2,7 @@ package net.Broken;
 
 import net.Broken.Tools.Command.CommandLoader;
 import net.Broken.Tools.DayListener.DayListener;
+import net.Broken.Tools.DayListener.Listeners.DailyMadame;
 import net.Broken.Tools.DayListener.Listeners.ResetSpam;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
@@ -83,6 +84,7 @@ public class Init {
 
                 DayListener dayListener = DayListener.getInstance();
                 dayListener.addListener(new ResetSpam());
+                dayListener.addListener(new DailyMadame());
                 dayListener.start();
 
                 logger.debug("-----------------FIN INITIALISATION-----------------");

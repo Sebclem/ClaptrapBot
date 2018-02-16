@@ -22,12 +22,13 @@ public class Madame implements Commande{
 
     @Override
     public void action(String[] args, MessageReceivedEvent event) {
-        if(event.getTextChannel().getName().equals("nsfw-over18")) {
+
+        if(event.getTextChannel().isNSFW()) {
             Redirection redirect = new Redirection();
             boolean success=false;
             boolean error=false;
             int errorCp=0;
-            while(!success&&!error)
+            while(!success && !error)
             {
                 try {
                     event.getTextChannel().sendMessage(redirect.get("http://dites.bonjourmadame.fr/random")).queue();
