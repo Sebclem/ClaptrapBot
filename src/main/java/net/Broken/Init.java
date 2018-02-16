@@ -1,7 +1,8 @@
 package net.Broken;
 
 import net.Broken.Tools.Command.CommandLoader;
-import net.Broken.Tools.DayListener;
+import net.Broken.Tools.DayListener.DayListener;
+import net.Broken.Tools.DayListener.Listeners.ResetSpam;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
@@ -79,8 +80,11 @@ public class Init {
 
                 MainBot.ModoTimer modotimer = new MainBot.ModoTimer();
                 modotimer.start();
-                DayListener dayListener = new DayListener();
+
+                DayListener dayListener = DayListener.getInstance();
+                dayListener.addListener(new ResetSpam());
                 dayListener.start();
+
                 logger.debug("-----------------FIN INITIALISATION-----------------");
 
                 jda.getPresence().setGame(Game.of("Statut: Ok!"));

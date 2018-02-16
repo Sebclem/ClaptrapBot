@@ -28,13 +28,11 @@ import java.util.HashMap;
 @Controller
 public class MainBot {
 
-    public static final CommandParser parser =new CommandParser();
     public static HashMap<String, Commande> commandes = new HashMap<>();
     public static HashMap<User, ArrayList<Message>> historique =new HashMap<>();
     public static HashMap<User, Integer> message_compteur =new HashMap<>();
     public static boolean roleFlag = false;
     public static HashMap<User, UserSpamUtils> spamUtils = new HashMap<>();
-    public static UserRegister userRegister = new UserRegister();
     public static JDA jda;
 
 

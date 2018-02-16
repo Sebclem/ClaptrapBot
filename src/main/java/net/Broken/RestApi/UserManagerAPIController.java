@@ -13,6 +13,7 @@ import net.Broken.Tools.UserManager.Exceptions.PasswordNotMatchException;
 import net.Broken.Tools.UserManager.Exceptions.TokenNotMatch;
 import net.Broken.Tools.UserManager.Exceptions.UserAlreadyRegistered;
 import net.Broken.Tools.UserManager.Exceptions.UserNotFoundException;
+import net.Broken.Tools.UserManager.UserRegister;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,12 +38,14 @@ public class UserManagerAPIController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    UserRegister userRegister = UserRegister.getInstance();
+
 
     @RequestMapping(value = "/preRegister", method = RequestMethod.POST)
     public ResponseEntity<CheckResposeData> command(@RequestBody UserInfoData data){
         if(data != null && data.name != null) {
             try {
-                String id = MainBot.userRegister.sendCheckToken(pendingUserRepository, userRepository, passwordEncoder, data);
+                String id = userRegister.sendCheckToken(pendingUserRepository, userRepository, passwordEncoder, data);
                 return new ResponseEntity<>(new CheckResposeData(true, data.name, "Message sent", id), HttpStatus.OK);
             } catch (UserNotFoundException e) {
                 logger.warn("User \"" + data.name + "\" not found!");
@@ -63,8 +66,8 @@ public class UserManagerAPIController {
     public ResponseEntity<UserConnectionData> confirAccount(@RequestBody ConfirmData data){
         //TODO move pending user to accepted and return right things
         try {
-            PendingUserEntity pUser = MainBot.userRegister.confirmCheckToken(pendingUserRepository, Integer.parseInt(data.id), data.checkToken);
-            UserEntity user = new UserEntity(pUser, MainBot.userRegister.generateApiToken());
+            PendingUserEntity pUser = userRegister.confirmCheckToken(pendingUserRepository, Integer.parseInt(data.id), data.checkToken);
+            UserEntity user = new UserEntity(pUser, userRegister.generateApiToken());
             userRepository.save(user);
             pendingUserRepository.delete(pUser);
 
@@ -81,7 +84,7 @@ public class UserManagerAPIController {
     @RequestMapping(value = "/requestToken", method = RequestMethod.POST)
     public ResponseEntity<UserConnectionData> requestToken(@RequestBody UserInfoData data){
         try {
-            UserEntity user = MainBot.userRegister.getUser(userRepository, passwordEncoder, data);
+            UserEntity user = userRegister.getUser(userRepository, passwordEncoder, data);
             return new ResponseEntity<>(new UserConnectionData(true, user.getName(), user.getApiToken(), ""), HttpStatus.OK);
 
         } catch (UserNotFoundException e) {
