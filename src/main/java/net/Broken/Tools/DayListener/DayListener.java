@@ -16,7 +16,7 @@ public class DayListener extends Thread {
 
     private DayListener() {
         calendar = new GregorianCalendar();
-        previousDay = 0;
+        previousDay = calendar.get(GregorianCalendar.DAY_OF_MONTH);
     }
 
     private static DayListener INSTANCE = new DayListener();
@@ -30,6 +30,12 @@ public class DayListener extends Thread {
         listeners.add(listener);
     }
 
+    public void trigger(){
+        for(NewDayListener listener : listeners){
+            listener.onNewDay();
+        }
+    }
+
 
     @Override
     public void run() {
@@ -38,13 +44,11 @@ public class DayListener extends Thread {
             if(calendar.get(GregorianCalendar.DAY_OF_MONTH) != previousDay)
             {
                 LogManager.getLogger().info("New day triggered!");
-                for(NewDayListener listener : listeners){
-                    listener.onNewDay();
-                }
+                trigger();
                 previousDay = calendar.get(GregorianCalendar.DAY_OF_MONTH);
             }
             try {
-                sleep(7200000);
+                sleep(1800000);
             } catch (InterruptedException e) {
                 LogManager.getLogger().catching(e);
             }
