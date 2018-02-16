@@ -12,6 +12,7 @@ import net.Broken.RestApi.Data.UserManager.CheckResposeData;
 import net.Broken.RestApi.Data.UserManager.UserInfoData;
 import net.Broken.Tools.UserManager.Exceptions.UnknownTokenException;
 import net.Broken.Tools.UserManager.Exceptions.UserNotFoundException;
+import net.Broken.Tools.UserManager.UserRegister;
 import net.Broken.audio.NotConectedException;
 import net.Broken.audio.NullMusicManager;
 import net.dv8tion.jda.core.entities.VoiceChannel;
@@ -40,6 +41,8 @@ public class MusicWebAPIController {
 //    public SavedPlaylistRepository savedPlaylist;
     @Autowired
     UserRepository userRepository;
+
+    UserRegister userRegister = UserRegister.getInstance();
 
 
     @RequestMapping("/currentMusicInfo")
@@ -82,7 +85,7 @@ public class MusicWebAPIController {
         if(data.command != null) {
             if(data.token != null) {
                 try {
-                    UserEntity user = MainBot.userRegister.getUserWithApiToken(userRepository, data.token);
+                    UserEntity user = userRegister.getUserWithApiToken(userRepository, data.token);
                     logger.info("receive command " + data.command + " from " + request.getRemoteAddr() + " USER: " + user.getName());
                     Music musicCommande = (Music) MainBot.commandes.get("music");
 

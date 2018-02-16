@@ -24,7 +24,17 @@ import java.util.UUID;
 
 public class UserRegister {
 
+
+
     private Logger logger = LogManager.getLogger();
+    private static UserRegister INSTANCE = new UserRegister();
+
+    private UserRegister(){}
+
+    public static UserRegister getInstance(){
+        return INSTANCE;
+    }
+
 
 
     public String sendCheckToken(PendingUserRepository pendingUserRepository, UserRepository userRepository, PasswordEncoder passwordEncoder, UserInfoData userInfo) throws UserNotFoundException, PasswordNotMatchException, UserAlreadyRegistered {

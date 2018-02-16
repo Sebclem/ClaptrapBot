@@ -3,6 +3,7 @@ package net.Broken;
 import net.Broken.Commands.Move;
 import net.Broken.Commands.Music;
 import net.Broken.Tools.AntiSpam;
+import net.Broken.Tools.Command.CommandParser;
 import net.Broken.Tools.Moderateur;
 import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.entities.Guild;
@@ -87,7 +88,7 @@ public class BotListener extends ListenerAdapter {
         if (event.getMessage().getContent().startsWith("//") && !event.getMessage().getAuthor().getId().equals(event.getJDA().getSelfUser().getId())) {
             //On a detecter que c'etait une commande
             //System.out.println(event.getMessage().getContent());
-            MainBot.handleCommand(MainBot.parser.parse(event.getMessage().getContent(), event));
+            MainBot.handleCommand(new CommandParser().parse(event.getMessage().getContent(), event));
 
         }
         else if (!event.getMessage().getAuthor().getId().equals(event.getJDA().getSelfUser().getId()))
