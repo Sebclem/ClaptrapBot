@@ -1,10 +1,10 @@
 package net.Broken;
 
+import net.Broken.RestApi.ApiCommandLoader;
 import net.Broken.Tools.Command.CommandParser;
 import net.Broken.Tools.EmbedMessageUtils;
 import net.Broken.Tools.UserManager.UserRegister;
 import net.Broken.Tools.UserSpamUtils;
-import net.Broken.RestApi.ApiCommandLoader;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.entities.Message;
@@ -18,7 +18,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Controller;
 
-import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.HashMap;
 
