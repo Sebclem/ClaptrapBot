@@ -65,4 +65,5 @@
 >     internal:
 >       external: false
 > ```
-> Docker hub [repo](https://hub.docker.com/r/brokenfire/brokendiscordbot/)
+> Docker hub [repo](https://hub.docker.com/r/brokenfire/brokendiscordbot/) 
+
