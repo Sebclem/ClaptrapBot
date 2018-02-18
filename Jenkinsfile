@@ -6,7 +6,7 @@ pipeline {
 
         stage('Clone') {
             steps{
-                node{
+                step{
                     def app
                     // for display purposes
                     // Get some code from a GitHub repository
