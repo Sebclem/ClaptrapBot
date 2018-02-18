@@ -1,5 +1,5 @@
 # BrokenDiscordBot
- 
+[![](https://dockerbuildbadges.quelltext.eu/status.svg?organization=brokenfire&repository=brokendiscordbot)](https://hub.docker.com/r/brokenfire/brokendiscordbot/)
 ## Install:
  
 > The easiest method it's to use docker-compose:
@@ -65,4 +65,4 @@
 >     internal:
 >       external: false
 > ```
-> Docker hub [repo](https://hub.docker.com/r/brokenfire/brokendiscordbot/)
+> Docker hub [repo](https://hub.docker.com/r/brokenfire/brokendiscordbot/) 
