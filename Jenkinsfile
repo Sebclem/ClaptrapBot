@@ -8,7 +8,7 @@ node {
         /* This builds the actual image; synonymous to
          * docker build on the command line */
 
-        app = docker.build("brokenfire/testjenkins","--rm=true .")
+        app = docker.build("brokenfire/brokendiscordbot","--rm=true .")
     }
    stage('Push image') {
         /* Finally, we'll push the image with two tags:
