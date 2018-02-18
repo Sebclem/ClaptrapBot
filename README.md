@@ -1,5 +1,8 @@
 # BrokenDiscordBot
-[![](https://dockerbuildbadges.quelltext.eu/status.svg?organization=brokenfire&repository=brokendiscordbot)](https://hub.docker.com/r/brokenfire/brokendiscordbot/)
+Master:<br/> [![Build Status](https://jenkins.seb6596.ovh/buildStatus/icon?job=BrokenDiscordBot/master)](https://jenkins.seb6596.ovh/job/BrokenDiscordBot/job/master/)
+
+Devel: <br/>[![Build Status](https://jenkins.seb6596.ovh/buildStatus/icon?job=BrokenDiscordBot/master)](https://jenkins.seb6596.ovh/job/BrokenDiscordBot/job/master/)
+
 ## Install:
  
 > The easiest method it's to use docker-compose:
