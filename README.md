@@ -1,7 +1,7 @@
 # BrokenDiscordBot
 Master:<br/> [![Build Status](https://jenkins.seb6596.ovh/buildStatus/icon?job=BrokenDiscordBot/master)](https://jenkins.seb6596.ovh/job/BrokenDiscordBot/job/master/)
 
-Devel: <br/>[![Build Status](https://jenkins.seb6596.ovh/buildStatus/icon?job=BrokenDiscordBot/master)](https://jenkins.seb6596.ovh/job/BrokenDiscordBot/job/master/)
+Devel: <br/>[![Build Status](https://jenkins.seb6596.ovh/buildStatus/icon?job=BrokenDiscordBot/devel)](https://jenkins.seb6596.ovh/job/BrokenDiscordBot/job/devel/)
 
 ## Install:
  
