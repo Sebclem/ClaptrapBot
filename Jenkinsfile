@@ -5,11 +5,13 @@ pipeline {
     stages {
 
         stage('Clone') {
-            node{
-                def app
-                // for display purposes
-                // Get some code from a GitHub repository
-                git 'https://github.com/BrokenFire/BrokenDiscordBot.git'
+            steps{
+                node{
+                    def app
+                    // for display purposes
+                    // Get some code from a GitHub repository
+                    git 'https://github.com/BrokenFire/BrokenDiscordBot.git'
+                }
             }
 
         }
