@@ -2,9 +2,9 @@ pipeline {
     agent any
 
     stages {
-        def app
         stage('Clone') { // for display purposes
             steps{
+                def app
                 // Get some code from a GitHub repository
                 git 'https://github.com/BrokenFire/BrokenDiscordBot.git'
             }
