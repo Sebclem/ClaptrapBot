@@ -8,20 +8,20 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrackState;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CurrentMusicData {
-    private final AudioTrackInfo info;
+    private final UserAudioTrackData info;
     private final long currentPos;
     private final String state;
     private final boolean pause;
 
 
-    public CurrentMusicData(AudioTrackInfo info, long currentPos, String state, boolean pause) {
+    public CurrentMusicData(UserAudioTrackData info, long currentPos, String state, boolean pause) {
         this.info = info;
         this.currentPos = currentPos;
         this.state = state;
         this.pause = pause;
     }
 
-    public AudioTrackInfo getInfo() {
+    public UserAudioTrackData getInfo() {
         return info;
     }
 

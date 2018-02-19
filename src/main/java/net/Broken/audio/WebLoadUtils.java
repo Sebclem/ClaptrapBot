@@ -8,6 +8,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.Broken.Commands.Music;
 import net.Broken.RestApi.Data.CommandPostData;
 import net.Broken.RestApi.Data.CommandResponseData;
+import net.dv8tion.jda.core.entities.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
@@ -17,7 +18,7 @@ public class WebLoadUtils {
     ResponseEntity<CommandResponseData> response;
     Logger logger = LogManager.getLogger();
 
-    public WebLoadUtils(Music musicCommande, CommandPostData data){
+    public WebLoadUtils(Music musicCommande, CommandPostData data, User user){
         AudioPlayerManager playerM = musicCommande.getAudioManager().getPlayerManager();
         try {
 
@@ -28,7 +29,8 @@ public class WebLoadUtils {
                     logger.info("Single Track detected from web!");
 
                     try {
-                        audioM.play(audioM.getGuild(), audioM.getPlayedChanel(), audioM.getMusicManager(), track, data.onHead);
+                        UserAudioTrack userAudioTrack = new UserAudioTrack(user, track); //TODO
+                        audioM.play(audioM.getGuild(), audioM.getPlayedChanel(), audioM.getMusicManager(), userAudioTrack, data.onHead);
                         response = new ResponseEntity<>(new CommandResponseData("ADD", "Loaded"), HttpStatus.OK);
                     } catch (NullMusicManager | NotConectedException nullMusicManager) {
                         nullMusicManager.printStackTrace();
@@ -40,7 +42,7 @@ public class WebLoadUtils {
                 public void playlistLoaded(AudioPlaylist playlist) {
 
                     logger.info("Playlist detected from web! Limit: " + data.playlistLimit);
-                    audioM.playListLoader(playlist,data.playlistLimit,data.onHead);
+                    audioM.playListLoader(playlist, data.playlistLimit, user, data.onHead);
                     response = new ResponseEntity<>(new CommandResponseData("ADD", "Loaded"), HttpStatus.OK);
 
                 }

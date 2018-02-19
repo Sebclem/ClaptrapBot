@@ -57,7 +57,8 @@ public class MusicWebAPIController {
                 {
                     return new CurrentMusicData(null,0, "STOP",false);
                 }
-                return new CurrentMusicData(currentTrack.getInfo(),currentTrack.getPosition(), currentTrack.getState().toString(), player.isPaused());
+                UserAudioTrackData uat = new UserAudioTrackData(musicCommande.audio.getMusicManager().scheduler.getCurrentPlayingTrack());
+                return new CurrentMusicData(uat, currentTrack.getPosition(), currentTrack.getState().toString(), player.isPaused());
             } catch (NullMusicManager | NotConectedException nullMusicManager) {
                 return new CurrentMusicData(null,0, "STOP",false);
             }
@@ -70,7 +71,7 @@ public class MusicWebAPIController {
     @RequestMapping("/getPlaylist")
     public PlaylistData getPlaylist(){
         Music musicCommande = (Music) MainBot.commandes.get("music");
-        List<AudioTrackInfo> list = null;
+        List<UserAudioTrackData> list = null;
         try {
             list = musicCommande.getAudioManager().getMusicManager().scheduler.getList();
             return new PlaylistData(list);
@@ -90,7 +91,7 @@ public class MusicWebAPIController {
                     Music musicCommande = (Music) MainBot.commandes.get("music");
 
                     if (ApiCommandLoader.apiCommands.containsKey(data.command))
-                        return ApiCommandLoader.apiCommands.get(data.command).action(musicCommande, data);
+                        return ApiCommandLoader.apiCommands.get(data.command).action(musicCommande, data, MainBot.jda.getUserById(user.getJdaId()));
                     else
                         return new ResponseEntity<>(new CommandResponseData(data.command, "Unknown Command", "command"), HttpStatus.BAD_REQUEST);
 

@@ -8,6 +8,7 @@ $(document).ready(function() {
     setInterval("getCurentMusic()",1000);
     // the "href" attribute of the modal trigger must specify the modal ID that wants to be triggered
     $('#modalAdd').modal();
+    $('#modal_current_info').modal();
 
     $('#modalChanels').modal({
         dismissible: false // Modal can be dismissed by clicking outside of the modal
@@ -292,10 +293,11 @@ function getPlayList() {
                     template.removeAttr("id");
                     template.removeAttr("style");
                     var content = template.html();
-                    content = content.replace("@title", element.title);
-                    content = content.replace("@author", element.author);
-                    content = content.replace("@lenght", msToTime(element.length));
-                    content = content.replace(/@url/g, element.uri);
+                    content = content.replace("@title", element.audioTrackInfo.title);
+                    content = content.replace("@author", element.audioTrackInfo.author);
+                    content = content.replace("@lenght", msToTime(element.audioTrackInfo.length));
+                    content = content.replace(/@url/g, element.audioTrackInfo.uri);
+                    content = content.replace(/@user/g, element.user);
                     template.html(content);
 
                     $('#playlist_list').append(template);
@@ -349,18 +351,19 @@ function getChannels(){
 }
 
 function updateModal(data){
-    $('#modal_title').text("Title: "+ data.info.title);
+    $('#modal_title').text("Title: "+ data.info.audioTrackInfo.title);
     $('#modal_author').text("Author: "+ data.info.author);
-    $('#modal_lenght').text("Duration: "+ msToTime(data.info.length));
-    $('#modal_url').text("URL: "+ data.info.uri);
+    $('#modal_lenght').text("Duration: "+ msToTime(data.info.audioTrackInfo.length));
+    $('#modal_url').text("URL: "+ data.info.audioTrackInfo.uri);
+    $('#modal_submit').text("Submitted by: "+ data.info.user);
 
 
 
 }
 
 function updateControl(data){
-    $('#music_text').text(data.info.title);
-    var percent = (data.currentPos / data.info.length) * 100;
+    $('#music_text').text(data.info.audioTrackInfo.title);
+    var percent = (data.currentPos / data.info.audioTrackInfo.length) * 100;
     // console.log(percent)
     if (!$('#music_progress').hasClass("indeterminate")) {
         $('#music_progress').addClass("determinate").removeClass("indeterminate");
@@ -412,9 +415,9 @@ function updateControl(data){
     }
 
 
-    $('#music_img').attr("src","https://img.youtube.com/vi/"+data.info.identifier+"/hqdefault.jpg");
+    $('#music_img').attr("src","https://img.youtube.com/vi/"+data.info.audioTrackInfo.identifier+"/hqdefault.jpg");
     // console.log(data);
-    $('#total_time').text(msToTime(data.info.length));
+    $('#total_time').text(msToTime(data.info.audioTrackInfo.length));
     $('#current_time').text(msToTime(data.currentPos));
     updateModal(data);
 }

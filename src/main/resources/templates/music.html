@@ -152,7 +152,7 @@
             <div class="row center">
 
                 <div class="col offset-s5 s2 center">
-                    <a class="btn blue-grey darken-4 z-depth-3 waves-effect waves-light modal-trigger" href="#modal1" id="btn_info">
+                    <a class="btn blue-grey darken-4 z-depth-3 waves-effect waves-light modal-trigger" href="#modal_current_info" id="btn_info">
                         <i class="material-icons">info</i>
                     </a>
                 </div>
@@ -232,13 +232,14 @@
 
 
     <!-- Music  -->
-    <div id="modal1" class="modal bottom-sheet">
+    <div id="modal_current_info" class="modal bottom-sheet">
         <div class="modal-content">
             <ul class="collection">
                 <li class="collection-item " id="modal_title"></li>
                 <li class="collection-item " id="modal_author"></li>
                 <li class="collection-item " id="modal_lenght"></li>
                 <li class="collection-item " id="modal_url"></li>
+                <li class="collection-item " id="modal_submit"></li>
             </ul>
         </div>
 
@@ -255,6 +256,7 @@
             <li class="collection-item">Author: @author</li>
             <li class="collection-item">Duration: @lenght</li>
             <li class="collection-item">URL: <a target="_blank" href="@url">@url</a></li>
+            <li class="collection-item">Submitted by: @user</li>
             <li class="collection-item center">
                 <a class="btn red darken-4 z-depth-3 waves-effect waves-light btn_dell_playlist" data_url="@url">
                     <i class="material-icons medium">delete</i>

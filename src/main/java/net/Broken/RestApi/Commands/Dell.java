@@ -6,12 +6,13 @@ import net.Broken.RestApi.Data.CommandPostData;
 import net.Broken.RestApi.Data.CommandResponseData;
 import net.Broken.audio.NotConectedException;
 import net.Broken.audio.NullMusicManager;
+import net.dv8tion.jda.core.entities.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 public class Dell implements CommandInterface {
     @Override
-    public ResponseEntity<CommandResponseData> action(Music musicCommande, CommandPostData data) {
+    public ResponseEntity<CommandResponseData> action(Music musicCommande, CommandPostData data, User user) {
         if(data.url != null) {
             try {
                 if(musicCommande.getAudioManager().getMusicManager().scheduler.remove(data.url)){

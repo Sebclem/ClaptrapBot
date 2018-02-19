@@ -4,21 +4,25 @@ import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
+import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import net.Broken.MainBot;
+import net.Broken.RestApi.Data.UserAudioTrackData;
 import net.Broken.Tools.EmbedMessageUtils;
 import net.Broken.Tools.MessageTimeOut;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Message;
+import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.entities.VoiceChannel;
 import net.dv8tion.jda.core.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.jws.soap.SOAPBinding;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -51,7 +55,7 @@ public class AudioM {
             @Override
             public void trackLoaded(AudioTrack track) {
                 logger.info("Single Track detected!");
-
+                UserAudioTrack uat = new UserAudioTrack(event.getAuthor(), track);
                 Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicOk("Ajout de "+track.getInfo().title+" à la file d'attente!")).complete();
                 List<Message> messages = new ArrayList<Message>(){{
                     add(message);
@@ -59,7 +63,7 @@ public class AudioM {
                 }};
                 new MessageTimeOut(messages, MainBot.messageTimeOut).start();
 
-                play(guild, voiceChannel, musicManager, track, onHead);
+                play(guild, voiceChannel, musicManager, uat, onHead);
             }
 
             @Override
@@ -74,7 +78,7 @@ public class AudioM {
                 }};
                 new MessageTimeOut(messages, MainBot.messageTimeOut).start();
 
-                playListLoader(playlist, playlistLimit, onHead);
+                playListLoader(playlist, playlistLimit ,event.getAuthor() , onHead);
 
 
 
@@ -105,14 +109,15 @@ public class AudioM {
         });
     }
 
-    public void playListLoader(AudioPlaylist playlist,int playlistLimit, boolean onHead){
+    public void playListLoader(AudioPlaylist playlist, int playlistLimit, User user, boolean onHead){
         int i = 0;
         List<AudioTrack> tracks = playlist.getTracks();
         if(onHead)
             Collections.reverse(tracks);
             
         for(AudioTrack track : playlist.getTracks()){
-            play(guild, playedChanel, musicManager, track, onHead);
+            UserAudioTrack uat = new UserAudioTrack(user, track);
+            play(guild, playedChanel, musicManager, uat, onHead);
             i++;
             if((i>=playlistLimit && i!=-1) || i>listExtremLimit)
                 break;
@@ -130,7 +135,7 @@ public class AudioM {
         return musicManager;
     }
 
-    public void play(Guild guild, VoiceChannel channel, GuildMusicManager musicManager, AudioTrack track,boolean onHead) {
+    public void play(Guild guild, VoiceChannel channel, GuildMusicManager musicManager, UserAudioTrack track,boolean onHead) {
         if(!guild.getAudioManager().isConnected())
             guild.getAudioManager().openAudioConnection(channel);
         if(!onHead)
@@ -178,8 +183,9 @@ public class AudioM {
     public void info(MessageReceivedEvent event){
         GuildMusicManager musicManager = getGuildAudioPlayer(event.getGuild());
         AudioTrackInfo info = musicManager.scheduler.getInfo();
+        UserAudioTrack userAudioTrack = musicManager.scheduler.getCurrentPlayingTrack();
 
-        Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicOk(info.title+"\n"+info.uri)).complete();
+        Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicOk(info.title+"\n"+info.uri+"\nSubmitted by: "+userAudioTrack.getSubmitedUser().getName())).complete();
         List<Message> messages = new ArrayList<Message>(){{
             add(message);
             add(event.getMessage());
@@ -200,16 +206,16 @@ public class AudioM {
 
     public void list(MessageReceivedEvent event){
         GuildMusicManager musicManager = getGuildAudioPlayer(event.getGuild());
-        List<AudioTrackInfo> list = musicManager.scheduler.getList();
+        List<UserAudioTrackData> list = musicManager.scheduler.getList();
         StringBuilder resp = new StringBuilder();
         if(list.size() == 0){
             resp.append("Oh mon dieux!\nElle est vide! \n:astonished: ");
         }
         else
         {
-            for(AudioTrackInfo trackInfo : list){
+            for(UserAudioTrackData trackInfo : list){
                 resp.append("- ");
-                resp.append(trackInfo.title);
+                resp.append(trackInfo.getAudioTrackInfo().title);
                 resp.append("\n");
             }
         }
