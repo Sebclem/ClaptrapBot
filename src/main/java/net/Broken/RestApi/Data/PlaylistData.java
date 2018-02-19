@@ -6,13 +6,13 @@ import java.util.List;
 
 public class PlaylistData {
 
-    private List<AudioTrackInfo> list;
+    private List<UserAudioTrackData> list;
 
-    public PlaylistData(List<AudioTrackInfo> list) {
+    public PlaylistData(List<UserAudioTrackData> list) {
         this.list = list;
     }
 
-    public List<AudioTrackInfo> getList() {
+    public List<UserAudioTrackData> getList() {
         return list;
     }
 }

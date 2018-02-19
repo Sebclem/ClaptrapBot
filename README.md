@@ -68,5 +68,14 @@ Devel: <br/>[![Build Status](https://jenkins.seb6596.ovh/buildStatus/icon?job=Br
 >     internal:
 >       external: false
 > ```
-> Docker hub [repo](https://hub.docker.com/r/brokenfire/brokendiscordbot/) 
+> Docker hub [repo](https://hub.docker.com/r/brokenfire/brokendiscordbot/)
+
+#### Jenkisfile
+`git config --global merge.ours.driver true`
+
+```
+[merge "ours"]
+    name = "Keep ours merge"
+    driver = true
+```
 

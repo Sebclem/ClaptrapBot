@@ -5,6 +5,7 @@ import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
+import net.Broken.RestApi.Data.UserAudioTrackData;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -20,7 +21,8 @@ import java.util.concurrent.LinkedBlockingQueue;
  */
 public class TrackScheduler extends AudioEventAdapter {
     private final AudioPlayer player;
-    private final BlockingDeque<AudioTrack> queue;
+    private final BlockingDeque<UserAudioTrack> queue;
+    private UserAudioTrack currentPlayingTrack;
     Logger logger = LogManager.getLogger();
 
     /**
@@ -30,6 +32,7 @@ public class TrackScheduler extends AudioEventAdapter {
         this.player = player;
         player.setVolume(25);
         this.queue = new LinkedBlockingDeque<>();
+        this.currentPlayingTrack = null;
     }
 
     /**
@@ -37,20 +40,26 @@ public class TrackScheduler extends AudioEventAdapter {
      *
      * @param track The track to play or add to queue.
      */
-    public void queue(AudioTrack track) {
+    public void queue(UserAudioTrack track) {
         // Calling startTrack with the noInterrupt set to true will start the track only if nothing is currently playing. If
         // something is playing, it returns false and does nothing. In that case the player was already playing so this
         // track goes to the queue instead.
-        if (!player.startTrack(track, true)) {
+        if (!player.startTrack(track.getAudioTrack(), true)) {
             queue.offer(track);
         }
+        else{
+            currentPlayingTrack = track;
+        }
     }
-    public void addNext(AudioTrack track) {
+    public void addNext(UserAudioTrack track) {
         // Calling startTrack with the noInterrupt set to true will start the track only if nothing is currently playing. If
         // something is playing, it returns false and does nothing. In that case the player was already playing so this
         // track goes to the queue instead.
-        if (!player.startTrack(track, true)) {
+        if (!player.startTrack(track.getAudioTrack(), true)) {
             queue.addFirst(track);
+        }
+        else{
+            currentPlayingTrack = track;
         }
     }
 
@@ -65,6 +74,7 @@ public class TrackScheduler extends AudioEventAdapter {
 
     public void stop(){
         player.stopTrack();
+        this.currentPlayingTrack = null;
         player.destroy();
     }
 
@@ -72,14 +82,14 @@ public class TrackScheduler extends AudioEventAdapter {
         queue.clear();
     }
 
-    public List<AudioTrackInfo> getList(){
+    public List<UserAudioTrackData> getList(){
 //        AudioTrack[] test = (AudioTrack[]) queue.toArray();
 
-        List<AudioTrackInfo> temp = new ArrayList<>();
+        List<UserAudioTrackData> temp = new ArrayList<>();
         Object[] test = queue.toArray();
         for(Object track: test){
-            AudioTrack casted = (AudioTrack) track;
-            temp.add(casted.getInfo());
+            UserAudioTrack casted = (UserAudioTrack) track;
+            temp.add(new UserAudioTrackData(casted.getSubmitedUser().getName(), casted.getAudioTrack().getInfo()));
         }
         return temp;
     }
@@ -88,9 +98,13 @@ public class TrackScheduler extends AudioEventAdapter {
         return player.getPlayingTrack().getInfo();
     }
 
+    public UserAudioTrack getCurrentPlayingTrack() {
+        return currentPlayingTrack;
+    }
+
     public boolean remove(String uri){
-        for(AudioTrack track : queue){
-            if(track.getInfo().uri.equals(uri)){
+        for(UserAudioTrack track : queue){
+            if(track.getAudioTrack().getInfo().uri.equals(uri)){
                 if(!queue.remove(track)) {
                     logger.info("Delete failure!");
                     return false;
@@ -110,7 +124,9 @@ public class TrackScheduler extends AudioEventAdapter {
     public void nextTrack() {
         // Start the next track, regardless of if something is already playing or not. In case queue was empty, we are
         // giving null to startTrack, which is a valid argument and will simply stop the player.
-        player.startTrack(queue.poll(), false);
+        UserAudioTrack track = queue.poll();
+        this.currentPlayingTrack = track;
+        player.startTrack(track.getAudioTrack(), false);
     }
 
     @Override
