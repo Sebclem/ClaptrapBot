@@ -202,8 +202,8 @@ function getCurentMusic() {
                 disconected = false;
                 $('#modalChanels').modal('close');
                 $('#btn_play').children().text("pause");
-                $('#btn_play').removeClass("amber");
-                $('#btn_play').addClass("green");
+                $('#btn_play').removeClass("green");
+                $('#btn_play').addClass("amber");
                 updateControl(data);
 
                 break;
@@ -212,8 +212,8 @@ function getCurentMusic() {
                 disconected = false;
                 $('#modalChanels').modal('close');
                 $('#btn_play').children().text("play_arrow");
-                $('#btn_play').removeClass("green");
-                $('#btn_play').addClass("amber");
+                $('#btn_play').removeClass("amber");
+                $('#btn_play').addClass("green");
                 updateControl(data);
 
 
