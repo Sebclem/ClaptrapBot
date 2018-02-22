@@ -128,13 +128,21 @@ public class Music implements Commande {
                     }
                     break;
 
+                case "disconnect":
+                    audio.stop();
+                    List<Message> messages = new ArrayList<Message>(){{
+                        add(event.getMessage());
+                    }};
+                    new MessageTimeOut(messages, 0).start();
+                    break;
+
                 default:
                     Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicError("Arguments inconu!")).complete();
-                    List<Message> messages = new ArrayList<Message>(){{
+                    List<Message> messagess = new ArrayList<Message>(){{
                         add(message);
                         add(event.getMessage());
                     }};
-                    new MessageTimeOut(messages, MainBot.messageTimeOut).start();
+                    new MessageTimeOut(messagess, MainBot.messageTimeOut).start();
                     break;
 
             }
