@@ -2,20 +2,23 @@ package net.Broken.Tools.DayListener;
 import net.Broken.Commands.Spam;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 /**
  * Created by seb65 on 09/11/2016.
  */
 public class DayListener extends Thread {
-    private GregorianCalendar calendar;
+    private Calendar calendar;
     private int previousDay;
     private ArrayList<NewDayListener> listeners = new ArrayList<>();
+    private Logger logger = LogManager.getLogger();
 
     private DayListener() {
-        calendar = new GregorianCalendar();
+        calendar = Calendar.getInstance();
         previousDay = calendar.get(GregorianCalendar.DAY_OF_MONTH);
     }
 
@@ -40,7 +43,8 @@ public class DayListener extends Thread {
     @Override
     public void run() {
         while(true)
-        {
+        {   calendar = Calendar.getInstance();
+            logger.debug(calendar.get(GregorianCalendar.DAY_OF_MONTH)+"/"+previousDay);
             if(calendar.get(GregorianCalendar.DAY_OF_MONTH) != previousDay)
             {
                 LogManager.getLogger().info("New day triggered!");
@@ -48,7 +52,7 @@ public class DayListener extends Thread {
                 previousDay = calendar.get(GregorianCalendar.DAY_OF_MONTH);
             }
             try {
-                sleep(1800000);
+                sleep(600000);
             } catch (InterruptedException e) {
                 LogManager.getLogger().catching(e);
             }
