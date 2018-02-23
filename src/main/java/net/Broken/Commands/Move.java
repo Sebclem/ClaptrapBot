@@ -113,70 +113,57 @@ public class Move implements Commande {
                     user = serveur.getMember(userL.get(0));
                     serveur=event.getGuild();
                     logger.info("Tentative de déplacement de "+user.getEffectiveName()+" vers "+roleL+" par l'utilisateur "+event.getAuthor().getName());
-                    if(event.getMember().hasPermission(Permission.ADMINISTRATOR))
-                    {
 
-                        logger.info("Autorisation suffisante, deplacement autorisé");
-                        logger.debug("Utilisateur trouvée");
-                        try {
-                            boolean erreur=this.exc(user,roleL,true,serveur,serveur.getManager());
-                            if(erreur)
-                            {
-                                Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("Verifier le rôle cible. ")).complete();
-                                List<Message> messages = new ArrayList<Message>(){{
-                                    add(rest);
-                                    add(event.getMessage());
-                                }};
-                                new MessageTimeOut(messages,MainBot.messageTimeOut).start();
-                            }
-                            else
-                            {
-                                StringBuilder roleStr = new StringBuilder("");
-                                boolean first = true;
-                                for( Role role : roleL)
-                                {
-                                    if (!first) {
-                                        roleStr.append(", ");
-
-                                    }
-                                    else
-                                        first = false;
-                                    roleStr.append("__");
-                                    roleStr.append(role.getName());
-                                    roleStr.append("__");
-                                }
-
-
-                                Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveOk("Déplacement de "+user.getEffectiveName()+" vers "+roleStr.toString()+" reussi.")).complete();
-                                List<Message> messages = new ArrayList<Message>(){{
-                                    add(rest);
-                                    add(event.getMessage());
-                                }};
-                                new MessageTimeOut(messages,MainBot.messageTimeOut).start();
-                            }
-                        }catch (HierarchyException e){
-                            Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("Impossible de déplacer un "+user.getRoles().get(0).getAsMention())).complete();
+                    logger.info("Autorisation suffisante, deplacement autorisé");
+                    logger.debug("Utilisateur trouvée");
+                    try {
+                        boolean erreur=this.exc(user,roleL,true,serveur,serveur.getManager());
+                        if(erreur)
+                        {
+                            Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("Verifier le rôle cible. ")).complete();
                             List<Message> messages = new ArrayList<Message>(){{
                                 add(rest);
                                 add(event.getMessage());
                             }};
                             new MessageTimeOut(messages,MainBot.messageTimeOut).start();
-                            logger.error("Hierarchy error, please move bot's role on top!");
                         }
+                        else
+                        {
+                            StringBuilder roleStr = new StringBuilder("");
+                            boolean first = true;
+                            for( Role role : roleL)
+                            {
+                                if (!first) {
+                                    roleStr.append(", ");
+
+                                }
+                                else
+                                    first = false;
+                                roleStr.append("__");
+                                roleStr.append(role.getName());
+                                roleStr.append("__");
+                            }
 
 
-                    }
-                    else
-                    {
-                        logger.warn("Autorisation insuffisante, deplacement refusé");
-                        Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("Vous n'avez pas l'autorisation de faicre ça!")).complete();
+                            Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveOk("Déplacement de "+user.getEffectiveName()+" vers "+roleStr.toString()+" reussi.")).complete();
+                            List<Message> messages = new ArrayList<Message>(){{
+                                add(rest);
+                                add(event.getMessage());
+                            }};
+                            new MessageTimeOut(messages,MainBot.messageTimeOut).start();
+                        }
+                    }catch (HierarchyException e){
+                        Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("Impossible de déplacer un "+user.getRoles().get(0).getAsMention())).complete();
                         List<Message> messages = new ArrayList<Message>(){{
                             add(rest);
                             add(event.getMessage());
                         }};
                         new MessageTimeOut(messages,MainBot.messageTimeOut).start();
-
+                        logger.error("Hierarchy error, please move bot's role on top!");
                     }
+
+
+
                 }
 
             }
@@ -205,16 +192,6 @@ public class Move implements Commande {
 
     /**
      *
-     * @param args
-     * @return
-     */
-    @Override
-    public String help(String[] args) {
-        return HELP;
-    }
-
-    /**
-     *
      * @param success
      * @param event
      */
@@ -226,5 +203,10 @@ public class Move implements Commande {
     @Override
     public boolean isPrivateUsable() {
         return false;
+    }
+
+    @Override
+    public boolean isAdminCmd() {
+        return true;
     }
 }

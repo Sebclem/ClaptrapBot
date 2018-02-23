@@ -258,12 +258,13 @@ public class AudioM {
         }
     }
 
-    public void stop (GuildVoiceLeaveEvent event) {
+    public void stop () {
 
-        GuildMusicManager musicManager = getGuildAudioPlayer(event.getGuild());
+        GuildMusicManager musicManager = getGuildAudioPlayer(guild);
         musicManager.scheduler.stop();
+        musicManager.scheduler.flush();
         playedChanel = null;
-        event.getGuild().getAudioManager().closeAudioConnection();
+        guild.getAudioManager().closeAudioConnection();
     }
 
     public GuildMusicManager getMusicManager() throws NullMusicManager, NotConectedException {

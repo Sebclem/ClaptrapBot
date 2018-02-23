@@ -26,10 +26,10 @@ public class MessageTimeOut extends Thread{
                 e.printStackTrace();
             }
         }
+        logger.debug("Timiout! Deleting message!");
         for(Message aMessage: messages)
         {
             try {
-                logger.debug(aMessage.getContent());
                 aMessage.delete().queue();
             }catch (ErrorResponseException e){
                 logger.warn("Unknown Message");

@@ -128,13 +128,21 @@ public class Music implements Commande {
                     }
                     break;
 
+                case "disconnect":
+                    audio.stop();
+                    List<Message> messages = new ArrayList<Message>(){{
+                        add(event.getMessage());
+                    }};
+                    new MessageTimeOut(messages, 0).start();
+                    break;
+
                 default:
                     Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicError("Arguments inconu!")).complete();
-                    List<Message> messages = new ArrayList<Message>(){{
+                    List<Message> messagess = new ArrayList<Message>(){{
                         add(message);
                         add(event.getMessage());
                     }};
-                    new MessageTimeOut(messages, MainBot.messageTimeOut).start();
+                    new MessageTimeOut(messagess, MainBot.messageTimeOut).start();
                     break;
 
             }
@@ -150,18 +158,17 @@ public class Music implements Commande {
     }
 
     @Override
-    public String help(String[] args) {
-        return "`//music play <url>`\n:arrow_right:\t*Let's dance! Deffinit le chat vocal à utiliser.*\n\n`//music pause`\n:arrow_right:\t*Mise en pause de la piste en cours.*\n\n`//music resume`\n:arrow_right:\t*Reprise de la lecture de la piste en cours.*\n\n`//music next`\n:arrow_right:\t*Change le piste en cours.*\n\n`//music stop`\n:arrow_right:\t*Arrête la piste en cours.*\n\n`//music info`\n:arrow_right:\t*Affiche les infos de la piste en cours.*\n\n`//music flush`\n:arrow_right:\t*Supprime la playlist en cours.*\n\n`//music list`\n:arrow_right:\t*Affiche la playlist en cours.*\n\n`//music add(Next) <url>`\n:arrow_right:\t*Ajoute l'url à la playlist en cour.*";
-
-    }
-
-    @Override
     public void executed(boolean success, MessageReceivedEvent event) {
 
     }
 
     @Override
     public boolean isPrivateUsable() {
+        return false;
+    }
+
+    @Override
+    public boolean isAdminCmd() {
         return false;
     }
 

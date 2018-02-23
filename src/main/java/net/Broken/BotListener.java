@@ -51,7 +51,7 @@ public class BotListener extends ListenerAdapter {
 
             if(event.getMember().getRoles().size() == 0){
                 logger.info(event.getUser().getName()+ "have no roles, move it!");
-                new Move().exc(event.getMember(),event.getJDA().getRolesByName("Rat_d'égout",true),false,event.getJDA().getGuilds().get(0),event.getJDA().getGuilds().get(0).getManager());
+                new Move().exc(event.getMember(),event.getJDA().getRolesByName("Populace",true),false,event.getJDA().getGuilds().get(0),event.getJDA().getGuilds().get(0).getManager());
                 MainBot.roleFlag = false;
             }
         }
@@ -76,7 +76,7 @@ public class BotListener extends ListenerAdapter {
                 logger.debug("I'm alone, close audio connection.");
 
                 Music music = (Music) MainBot.commandes.get("music");
-                music.audio.stop(event);
+                music.audio.stop();
             }
         }
     }

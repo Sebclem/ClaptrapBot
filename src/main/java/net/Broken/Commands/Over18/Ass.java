@@ -21,4 +21,9 @@ public class Ass  extends NumberedCommande {
     public boolean isPrivateUsable() {
         return false;
     }
+
+    @Override
+    public boolean isAdminCmd() {
+        return false;
+    }
 }

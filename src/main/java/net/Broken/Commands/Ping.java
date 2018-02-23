@@ -16,9 +16,6 @@ import java.util.List;
  * Created by seb65 on 19/10/2016.
  */
 public class Ping implements Commande {
-
-
-    private String HELP = "`//ping` \n :arrow_right:\t*Renvoi le ping du bot*";
     @Override
     public boolean called(String[] args, MessageReceivedEvent event) {
         return true;
@@ -42,12 +39,6 @@ public class Ping implements Commande {
     }
 
     @Override
-    public String help(String[] args) {
-
-        return HELP;
-    }
-
-    @Override
     public void executed(boolean success, MessageReceivedEvent event)
     {
         return;
@@ -57,5 +48,10 @@ public class Ping implements Commande {
     @Override
     public boolean isPrivateUsable() {
         return true;
+    }
+
+    @Override
+    public boolean isAdminCmd() {
+        return false;
     }
 }

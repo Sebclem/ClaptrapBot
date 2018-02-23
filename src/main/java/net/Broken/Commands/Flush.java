@@ -55,17 +55,17 @@ public class Flush implements Commande{
     }
 
     @Override
-    public String help(String[] args) {
-        return "`//flush <nbr>`\n:arrow_right:\t*Efface les n derniers messages (Max = 100)*";
-    }
-
-    @Override
     public void executed(boolean success, MessageReceivedEvent event) {
 
     }
 
     @Override
     public boolean isPrivateUsable() {
+        return false;
+    }
+
+    @Override
+    public boolean isAdminCmd() {
         return false;
     }
 }

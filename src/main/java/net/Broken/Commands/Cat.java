@@ -64,17 +64,17 @@ public class Cat implements Commande {
     }
 
     @Override
-    public String help(String[] args) {
-        return "";
-    }
-
-    @Override
     public void executed(boolean success, MessageReceivedEvent event) {
 
     }
 
     @Override
     public boolean isPrivateUsable() {
+        return false;
+    }
+
+    @Override
+    public boolean isAdminCmd() {
         return false;
     }
 }

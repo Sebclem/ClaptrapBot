@@ -123,7 +123,11 @@ $(document).ready(function() {
         sendCommand(command);
     });
 
-})
+    $('#btn_disconnect').click(function () {
+        sendCommand({command : "DISCONNECT"})
+    })
+
+});
 
 
 
@@ -167,6 +171,9 @@ function getCurentMusic() {
                     if ($('#btn_next').hasClass("disabled")) {
                         $('#btn_next').removeClass("disabled");
                     }
+                    if ($('#btn_disconnect').hasClass("disabled")) {
+                        $('#btn_disconnect').removeClass("disabled");
+                    }
                 }
                 else{
                     if (!$('#btn_stop').hasClass("disabled")) {
@@ -187,6 +194,10 @@ function getCurentMusic() {
                     }
                     if (!$('#btn_next').hasClass("disabled")) {
                         $('#btn_next').addClass("disabled");
+                    }
+
+                    if (!$('#btn_disconnect').hasClass("disabled")) {
+                        $('#btn_disconnect').addClass("disabled");
                     }
                 }
                 $('#btn_play').children().text("play_arrow");
@@ -215,8 +226,6 @@ function getCurentMusic() {
                 $('#btn_play').removeClass("amber");
                 $('#btn_play').addClass("green");
                 updateControl(data);
-
-
                 break;
 
             case "LOADING":
@@ -254,6 +263,9 @@ function getCurentMusic() {
                 }
                 if (!$('#flush_btn').hasClass("disabled")) {
                     $('#flush_btn').addClass("disabled");
+                }
+                if (!$('#btn_disconnect').hasClass("disabled")) {
+                    $('#btn_disconnect').addClass("disabled");
                 }
 
 
@@ -394,6 +406,9 @@ function updateControl(data){
         if ($('#btn_next').hasClass("disabled")) {
             $('#btn_next').removeClass("disabled");
         }
+        if ($('#btn_disconnect').hasClass("disabled")) {
+            $('#btn_disconnect').removeClass("disabled");
+        }
     }
     else
     {
@@ -415,6 +430,9 @@ function updateControl(data){
 
         if (!$('#btn_next').hasClass("disabled")) {
             $('#btn_next').addClass("disabled");
+        }
+        if (!$('#btn_disconnect').hasClass("disabled")) {
+            $('#btn_disconnect').addClass("disabled");
         }
     }
 
