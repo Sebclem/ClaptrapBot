@@ -31,8 +31,16 @@ public class Madame implements Commande{
             while(!success && !error)
             {
                 try {
-                    event.getTextChannel().sendMessage(redirect.get("http://dites.bonjourmadame.fr/random")).queue();
-                    success=true;
+
+                    String url = redirect.get("http://dites.bonjourmadame.fr/random");
+                    if((url.contains("club") && (url.contains("rejoindre") || url.contains("rejoignez"))) || (url.contains("samedi") && url.contains("dimanche"))){
+                        logger.debug("Advertisement detected! Retry! ("+url+")");
+                    }
+                    else{
+                        event.getTextChannel().sendMessage(redirect.get("http://dites.bonjourmadame.fr/random")).queue();
+                        success=true;
+                    }
+
                 } catch (IOException e) {
                     errorCp++;
                     logger.warn("Erreur de redirection. (Essais n°"+errorCp+")");
