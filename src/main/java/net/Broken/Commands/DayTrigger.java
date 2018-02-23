@@ -26,33 +26,8 @@ public class DayTrigger implements Commande{
 
     @Override
     public void action(String[] args, MessageReceivedEvent event) {
-        if(event.getMember().hasPermission(Permission.ADMINISTRATOR)){
-            DayListener.getInstance().trigger();
             event.getMessage().delete().queue();
-        }
-        else{
-            logger.warn("Not admin! DENY!");
-            if(!event.isFromType(ChannelType.PRIVATE)){
-                Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getError("Vous n'avez pas l'autorisation de faire ça!")).complete();
-                List<Message> messages = new ArrayList<Message>(){{
-                    add(message);
-                    add(event.getMessage());
-                }};
-                new MessageTimeOut(messages, MainBot.messageTimeOut).start();
-            }
-            else{
-                PrivateMessage.send(event.getAuthor(),EmbedMessageUtils.getError("Vous n'avez pas l'autorisation de faire ça!"),logger);
-            }
 
-
-
-        }
-
-    }
-
-    @Override
-    public String help(String[] args) {
-        return null;
     }
 
     @Override
@@ -62,6 +37,11 @@ public class DayTrigger implements Commande{
 
     @Override
     public boolean isPrivateUsable() {
+        return true;
+    }
+
+    @Override
+    public boolean isAdminCmd() {
         return true;
     }
 }

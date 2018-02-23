@@ -54,4 +54,9 @@ public class Pipe extends NumberedCommande {
     public boolean isPrivateUsable() {
         return false;
     }
+
+    @Override
+    public boolean isAdminCmd() {
+        return false;
+    }
 }

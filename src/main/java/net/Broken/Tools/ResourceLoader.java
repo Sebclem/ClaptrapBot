@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Scanner;
@@ -14,13 +15,15 @@ public class ResourceLoader {
 
     private Logger logger = LogManager.getLogger();
 
-    public String getFile(String fileName) {
+    public String getFile(String fileName) throws FileNotFoundException {
 
         StringBuilder result = new StringBuilder("");
 
         //Get file from resources folder
         ClassLoader classLoader = getClass().getClassLoader();
         InputStream file = classLoader.getResourceAsStream(fileName);
+        if(file == null)
+            throw new FileNotFoundException();
 
         try (Scanner scanner = new Scanner(file, "UTF-8")) {
 

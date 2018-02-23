@@ -3,9 +3,12 @@ package net.Broken;
 import net.Broken.RestApi.ApiCommandLoader;
 import net.Broken.Tools.Command.CommandParser;
 import net.Broken.Tools.EmbedMessageUtils;
+import net.Broken.Tools.MessageTimeOut;
+import net.Broken.Tools.PrivateMessage;
 import net.Broken.Tools.UserManager.UserRegister;
 import net.Broken.Tools.UserSpamUtils;
 import net.dv8tion.jda.core.JDA;
+import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.User;
@@ -20,6 +23,7 @@ import org.springframework.stereotype.Controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by seb65 on 19/10/2016.
@@ -95,19 +99,37 @@ public class MainBot {
 
         if (commandes.containsKey(cmd.commande))
         {
-            if(cmd.event.isFromType(ChannelType.PRIVATE) && commandes.get(cmd.commande).isPrivateUsable())
-            {
+            Commande cmdObj = commandes.get(cmd.commande);
+            if(!cmdObj.isAdminCmd() || cmd.event.getMember().hasPermission(Permission.ADMINISTRATOR)){
+                if(cmd.event.isFromType(ChannelType.PRIVATE) && commandes.get(cmd.commande).isPrivateUsable())
+                {
 
-                commandes.get(cmd.commande).action(cmd.args, cmd.event);
-                commandes.get(cmd.commande).executed(true, cmd.event);
+                    commandes.get(cmd.commande).action(cmd.args, cmd.event);
+                    commandes.get(cmd.commande).executed(true, cmd.event);
+                }
+                else if (!cmd.event.isFromType(ChannelType.PRIVATE))
+                {
+                    commandes.get(cmd.commande).action(cmd.args, cmd.event);
+                    commandes.get(cmd.commande).executed(true, cmd.event);
+                }
+                else
+                    cmd.event.getPrivateChannel().sendMessage(EmbedMessageUtils.getNoPrivate()).queue();
             }
-            else if (!cmd.event.isFromType(ChannelType.PRIVATE))
-            {
-                commandes.get(cmd.commande).action(cmd.args, cmd.event);
-                commandes.get(cmd.commande).executed(true, cmd.event);
+            else{
+                if(cmd.event.isFromType(ChannelType.PRIVATE)){
+                    PrivateMessage.send(cmd.event.getAuthor(),EmbedMessageUtils.getUnautorized(), logger);
+                }
+                else{
+                    Message msg = cmd.event.getTextChannel().sendMessage(EmbedMessageUtils.getUnautorized()).complete();
+                    List<Message> messages = new ArrayList<Message>(){{
+                        add(msg);
+                        add(cmd.event.getMessage());
+                    }};
+                    new MessageTimeOut(messages, messageTimeOut).start();
+                }
             }
-            else
-                cmd.event.getPrivateChannel().sendMessage(EmbedMessageUtils.getNoPrivate()).queue();
+
+
 
 
         }

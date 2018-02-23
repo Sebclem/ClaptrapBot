@@ -27,7 +27,6 @@ public class SpamInfo implements Commande{
     private HashMap<User,MessageUpdater> threadHashMap = new HashMap<>();
 
     Logger logger = LogManager.getLogger();
-    private String HELP="`//spaminfo <@utilisateur> `\n:arrow_right:\t*Affiche les infos relatives aux punitions contre le spam de l'utilisateur mentionnée (de l'auteur si pas de mention)*";
     @Override
     public boolean called(String[] args, MessageReceivedEvent event) {
         return false;
@@ -96,11 +95,6 @@ public class SpamInfo implements Commande{
     }
 
     @Override
-    public String help(String[] args) {
-        return HELP;
-    }
-
-    @Override
     public void executed(boolean success, MessageReceivedEvent event) {
 
     }
@@ -108,6 +102,11 @@ public class SpamInfo implements Commande{
     @Override
     public boolean isPrivateUsable() {
         return true;
+    }
+
+    @Override
+    public boolean isAdminCmd() {
+        return false;
     }
 
     public String formatSecond(int second){

@@ -20,4 +20,9 @@ public class Boobs extends NumberedCommande {
     public boolean isPrivateUsable() {
         return false;
     }
+
+    @Override
+    public boolean isAdminCmd() {
+        return false;
+    }
 }

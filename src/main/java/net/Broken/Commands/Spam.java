@@ -76,14 +76,6 @@ public class Spam implements Commande {
     }
 
 
-
-
-    @Override
-    public String help(String[] args)
-    {
-        return "`//spam extermine <@utilisateur> <multiplicateur>`\n:arrow_right:\t*Punir un spammeur.*\n\n`//spam pardon <@utilisateur>`\n:arrow_right:\t*Annuler la punition d'un utilisateur.*\n\n`//spam reset <@utilisateur>`\n:arrow_right:\t*RAZ du multiplicateur d'un utilisateur.*";
-    }
-
     @Override
     public void executed(boolean success, MessageReceivedEvent event)
     {
@@ -93,6 +85,11 @@ public class Spam implements Commande {
     @Override
     public boolean isPrivateUsable() {
         return false;
+    }
+
+    @Override
+    public boolean isAdminCmd() {
+        return true;
     }
 
     public void pardon(MessageReceivedEvent event, String[] args){
@@ -125,30 +122,12 @@ public class Spam implements Commande {
             else {
                 Member user = serveur.getMember(userL.get(0));
                 logger.info("Tentative de pardon de " + user.getEffectiveName() + " par l'utilisateur " + event.getMember().getEffectiveName());
-                /****************************
-                 * c'est un big dady    *
+            /****************************
+                 * virif si en spammer    *
                  ****************************/
-
-                if(event.getMember().hasPermission(Permission.ADMINISTRATOR)){
-                    logger.info("Autorisation suffisante, pardon autorisé");
-
-                    /****************************
-                     * virif si en spammer    *
-                     ****************************/
-                    if (MainBot.spamUtils.containsKey(user.getUser())) {
-                        if (MainBot.spamUtils.get(user.getUser()).isOnSpam()) {
-                            MainBot.spamUtils.get(user.getUser()).setOnSpam(false);
-                        } else {
-                            logger.warn("Utilisateur pas en spam.");
-                            Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError(":arrow_right: Utilisateur non spammeur.","pardon")).complete();
-                            List<Message> messages = new ArrayList<Message>(){{
-                                add(rest);
-                                add(event.getMessage());
-                            }};
-                            new MessageTimeOut(messages,MainBot.messageTimeOut).start();
-                        }
-
-
+                if (MainBot.spamUtils.containsKey(user.getUser())) {
+                    if (MainBot.spamUtils.get(user.getUser()).isOnSpam()) {
+                        MainBot.spamUtils.get(user.getUser()).setOnSpam(false);
                     } else {
                         logger.warn("Utilisateur pas en spam.");
                         Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError(":arrow_right: Utilisateur non spammeur.","pardon")).complete();
@@ -159,9 +138,10 @@ public class Spam implements Commande {
                         new MessageTimeOut(messages,MainBot.messageTimeOut).start();
                     }
 
+
                 } else {
-                    logger.warn("Autorisation insuffisante, pardon refusé");
-                    Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError("Vous n'avez pas l'autorisation de faire ça!")).complete();
+                    logger.warn("Utilisateur pas en spam.");
+                    Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError(":arrow_right: Utilisateur non spammeur.","pardon")).complete();
                     List<Message> messages = new ArrayList<Message>(){{
                         add(rest);
                         add(event.getMessage());
@@ -210,48 +190,36 @@ public class Spam implements Commande {
                 Guild serveur = event.getGuild();
                 Member user = serveur.getMember(userL.get(0));
                 logger.info("Tentative d'extermination de "+user.getEffectiveName()+" par l'utilisateur "+event.getAuthor().getName());
+
+
+                String multiStr =args[2];
+
+
                 /****************************
-                 * c'est un big dady    *
+                 * virif pas deja en spammer    *
                  ****************************/
-
-                if(event.getMember().hasPermission(Permission.ADMINISTRATOR))
+                if(MainBot.spamUtils.containsKey(user.getUser()))
                 {
-                    logger.info("Autorisation suffisante, extermination autorisé");
-                    String multiStr =args[2];
-
-
-                    /****************************
-                     * virif pas deja en spammer    *
-                     ****************************/
-                    if(MainBot.spamUtils.containsKey(user.getUser()))
-                    {
-                        if(!MainBot.spamUtils.get(user.getUser()).isOnSpam())
-                        {
-                            this.goSpam(user,multiStr,serveur,event);
-                        }
-                        else
-                        {
-                            logger.warn("Utilisateur deja en spam.");
-                            Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError("Utilisateur déjà spammeur.","extermine")).complete();
-                        }
-
-
-                    }
-                    else
+                    if(!MainBot.spamUtils.get(user.getUser()).isOnSpam())
                     {
                         this.goSpam(user,multiStr,serveur,event);
                     }
+                    else
+                    {
+                        logger.warn("Utilisateur deja en spam.");
+                        Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError("Utilisateur déjà spammeur.","extermine")).complete();
+                        List<Message> messages = new ArrayList<Message>(){{
+                            add(rest);
+                            add(event.getMessage());
+                        }};
+                        new MessageTimeOut(messages,MainBot.messageTimeOut).start();
+                    }
+
 
                 }
                 else
                 {
-                    logger.warn("Autorisation insuffisante, extermination refusé");
-                    Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError("Vous n'avez pas l'autorisation de faire ça!")).complete();
-                    List<Message> messages = new ArrayList<Message>(){{
-                        add(rest);
-                        add(event.getMessage());
-                    }};
-                    new MessageTimeOut(messages,MainBot.messageTimeOut).start();
+                    this.goSpam(user,multiStr,serveur,event);
                 }
 
             }
@@ -300,36 +268,23 @@ public class Spam implements Commande {
                 else {
                     Member user = serveur.getMember(userL.get(0));
                     logger.info("Tentative de reset de " + user.getEffectiveName() + " par l'utilisateur " + event.getMember().getEffectiveName());
+
+
                     /****************************
-                     * c'est un big dady    *
+                     * verif utilisteur trouver *
                      ****************************/
-
-                    if(event.getMember().hasPermission(Permission.ADMINISTRATOR)){
-                        logger.info("Autorisation suffisante, pardon autorisé");
-                        /****************************
-                         * verif utilisteur trouver *
-                         ****************************/
-                        if (MainBot.spamUtils.containsKey(user.getUser())) {
-                            logger.info("Reset du multiplicateur de " + user.getEffectiveName() + " réussi");
-                            Message rest = event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n *Le multiplcicateur de " + user.getEffectiveName() + " a été remit a zéro.*").complete();
-                            List<Message> messages = new ArrayList<Message>(){{
-                                add(rest);
-                                add(event.getMessage());
-                            }};
-                            new MessageTimeOut(messages,MainBot.messageTimeOut).start();
-                            MainBot.spamUtils.remove(user.getUser());
-
-                        }
-                    } else {
-                        logger.warn("Autorisation insuffisante, reset refusé");
-                        Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError("Vous n'avez pas l'autorisation de faire ça!")).complete();
+                    if (MainBot.spamUtils.containsKey(user.getUser())) {
+                        logger.info("Reset du multiplicateur de " + user.getEffectiveName() + " réussi");
+                        Message rest = event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n *Le multiplcicateur de " + user.getEffectiveName() + " a été remit a zéro.*").complete();
                         List<Message> messages = new ArrayList<Message>(){{
                             add(rest);
                             add(event.getMessage());
                         }};
                         new MessageTimeOut(messages,MainBot.messageTimeOut).start();
+                        MainBot.spamUtils.remove(user.getUser());
 
                     }
+
                 }
             }
             else

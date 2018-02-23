@@ -18,6 +18,7 @@ import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceS
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.io.FileNotFoundException;
 import java.security.SecureRandom;
 import java.util.List;
 import java.util.UUID;
@@ -86,7 +87,12 @@ public class UserRegister {
             pendingUserEntity = pendingUserRepository.save(pendingUserEntity);
         }
 
-        String message = new ResourceLoader().getFile("MessagesTemplates/RegisterMessage.md");
+        String message = null;
+        try {
+            message = new ResourceLoader().getFile("MessagesTemplates/RegisterMessage.md");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
 
         message = message.replace("%code",token);
 

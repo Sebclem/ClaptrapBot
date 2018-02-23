@@ -8,11 +8,13 @@ import net.Broken.Tools.PrivateMessage;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.entities.Message;
+import net.dv8tion.jda.core.entities.MessageEmbed;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.awt.*;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -36,26 +38,39 @@ public class Help implements Commande {
             if (MainBot.commandes.containsKey(argsString))
             {
                 logger.info("Aide demmander pour la cmd "+argsString+" par "+event.getAuthor().getName());
+                MessageEmbed messageEmbed;
+                try {
+                    messageEmbed = EmbedMessageUtils.getHelp(argsString);
+                } catch (FileNotFoundException e) {
+                    try {
+                        messageEmbed = EmbedMessageUtils.getHelp("Default");
+                    } catch (FileNotFoundException e1) {
+                        messageEmbed = EmbedMessageUtils.getInternalError();
+                        logger.catching(e1);
+                    }
+                }
                 if(!event.isFromType(ChannelType.PRIVATE)) {
-                    Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getHelp(argsString, MainBot.commandes.get(argsString).help(args))).complete();
+                    Message rest = event.getTextChannel().sendMessage(messageEmbed).complete();
                     if(args.length<=1)
                     {
+                        Message finalRest = rest;
                         List<Message> messages = new ArrayList<Message>(){{
-                            add(rest);
+                            add(finalRest);
                             add(event.getMessage());
                         }};
                         new MessageTimeOut(messages,MainBot.messageTimeOut).start();
                     }
                     else if(!args[1].toLowerCase().equals("true")){
+                        Message finalRest1 = rest;
                         List<Message> messages = new ArrayList<Message>(){{
-                            add(rest);
+                            add(finalRest1);
                             add(event.getMessage());
                         }};
                         new MessageTimeOut(messages,MainBot.messageTimeOut).start();
                     }
 
                 } else{
-                    PrivateMessage.send(event.getAuthor(), EmbedMessageUtils.getHelp(argsString, MainBot.commandes.get(argsString).help(args)),logger);
+                    PrivateMessage.send(event.getAuthor(), messageEmbed,logger);
                 }
 
 
@@ -103,11 +118,6 @@ public class Help implements Commande {
     }
 
     @Override
-    public String help(String[] args) {
-        return null;
-    }
-
-    @Override
     public void executed(boolean success, MessageReceivedEvent event) {
 
     }
@@ -115,5 +125,10 @@ public class Help implements Commande {
     @Override
     public boolean isPrivateUsable() {
         return true;
+    }
+
+    @Override
+    public boolean isAdminCmd() {
+        return false;
     }
 }
