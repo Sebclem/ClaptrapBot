@@ -98,5 +98,9 @@ public class EmbedMessageUtils {
         return getError("Vous n'avez pas l'autorisation de faire ça!");
     }
 
+    public static MessageEmbed getHelpList(String role, String list){
+        return new EmbedBuilder().setTitle("Command du bot ("+role+")").setDescription(list).setFooter("Utilise '//help <commande>' pour plus de détails.",null).setColor(Color.green).setThumbnail(MainBot.jda.getSelfUser().getAvatarUrl()).build();
+    }
+
 
 }
