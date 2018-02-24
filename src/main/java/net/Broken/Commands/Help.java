@@ -2,10 +2,12 @@ package net.Broken.Commands;
 
 import net.Broken.Commande;
 import net.Broken.MainBot;
+import net.Broken.RestApi.CommandInterface;
 import net.Broken.Tools.EmbedMessageUtils;
 import net.Broken.Tools.MessageTimeOut;
 import net.Broken.Tools.PrivateMessage;
 import net.dv8tion.jda.core.EmbedBuilder;
+import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageEmbed;
@@ -37,41 +39,61 @@ public class Help implements Commande {
             //System.out.println(argsString);
             if (MainBot.commandes.containsKey(argsString))
             {
-                logger.info("Aide demmander pour la cmd "+argsString+" par "+event.getAuthor().getName());
-                MessageEmbed messageEmbed;
-                try {
-                    messageEmbed = EmbedMessageUtils.getHelp(argsString);
-                } catch (FileNotFoundException e) {
+                Commande cmdObj = MainBot.commandes.get(argsString);
+                if(!cmdObj.isAdminCmd() || event.getMember().hasPermission(Permission.ADMINISTRATOR))
+                {
+                    logger.info("Aide demmander pour la cmd "+argsString+" par "+event.getAuthor().getName());
+                    MessageEmbed messageEmbed;
                     try {
-                        messageEmbed = EmbedMessageUtils.getHelp("Default");
-                    } catch (FileNotFoundException e1) {
-                        messageEmbed = EmbedMessageUtils.getInternalError();
-                        logger.catching(e1);
+                        messageEmbed = EmbedMessageUtils.getHelp(argsString);
+                    } catch (FileNotFoundException e) {
+                        try {
+                            messageEmbed = EmbedMessageUtils.getHelp("Default");
+                        } catch (FileNotFoundException e1) {
+                            messageEmbed = EmbedMessageUtils.getInternalError();
+                            logger.catching(e1);
+                        }
                     }
-                }
-                if(!event.isFromType(ChannelType.PRIVATE)) {
-                    Message rest = event.getTextChannel().sendMessage(messageEmbed).complete();
-                    if(args.length<=1)
-                    {
-                        Message finalRest = rest;
-                        List<Message> messages = new ArrayList<Message>(){{
-                            add(finalRest);
-                            add(event.getMessage());
-                        }};
-                        new MessageTimeOut(messages,MainBot.messageTimeOut).start();
-                    }
-                    else if(!args[1].toLowerCase().equals("true")){
-                        Message finalRest1 = rest;
-                        List<Message> messages = new ArrayList<Message>(){{
-                            add(finalRest1);
-                            add(event.getMessage());
-                        }};
-                        new MessageTimeOut(messages,MainBot.messageTimeOut).start();
-                    }
+                    if(!event.isFromType(ChannelType.PRIVATE)) {
+                        Message rest = event.getTextChannel().sendMessage(messageEmbed).complete();
+                        if(args.length<=1)
+                        {
+                            Message finalRest = rest;
+                            List<Message> messages = new ArrayList<Message>(){{
+                                add(finalRest);
+                                add(event.getMessage());
+                            }};
+                            new MessageTimeOut(messages,MainBot.messageTimeOut).start();
+                        }
+                        else if(!args[1].toLowerCase().equals("true")){
+                            Message finalRest1 = rest;
+                            List<Message> messages = new ArrayList<Message>(){{
+                                add(finalRest1);
+                                add(event.getMessage());
+                            }};
+                            new MessageTimeOut(messages,MainBot.messageTimeOut).start();
+                        }
 
-                } else{
-                    PrivateMessage.send(event.getAuthor(), messageEmbed,logger);
+                    } else{
+                        PrivateMessage.send(event.getAuthor(), messageEmbed,logger);
+                    }
                 }
+                else
+                {
+                    logger.info("Help wanted for admin command, Denied!");
+                    if(!event.isFromType(ChannelType.PRIVATE)) {
+                        Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getUnautorized()).complete();
+                        List<Message> messages = new ArrayList<Message>(){{
+                            add(rest);
+                            add(event.getMessage());
+                        }};
+                        new MessageTimeOut(messages,MainBot.messageTimeOut).start();
+
+                    } else{
+                        PrivateMessage.send(event.getAuthor(), EmbedMessageUtils.getUnautorized(), logger);
+                    }
+                }
+
 
 
             }
@@ -94,7 +116,8 @@ public class Help implements Commande {
         {
             StringBuilder txt= new StringBuilder();
             for (Map.Entry<String, Commande> e : MainBot.commandes.entrySet()) {
-                txt.append("\n- ").append(e.getKey());
+                if(!e.getValue().isAdminCmd() || event.getMember().hasPermission(Permission.ADMINISTRATOR))
+                    txt.append("\n- ").append(e.getKey());
             }
 
             if(!event.isFromType(ChannelType.PRIVATE)){
@@ -106,7 +129,14 @@ public class Help implements Commande {
                 new MessageTimeOut(messages,MainBot.messageTimeOut).start();
             }
 
-            PrivateMessage.send(event.getAuthor(),new EmbedBuilder().setTitle("Command du bot").setDescription(txt.toString()).setFooter("Utilise '//help <commande>' pour plus de détails.",null).setColor(Color.green).setThumbnail(event.getJDA().getSelfUser().getAvatarUrl()).build(),logger);
+
+            String role;
+            if(event.getMember().hasPermission(Permission.ADMINISTRATOR))
+                role = "Admin";
+            else
+                role = "Non Admin";
+
+            PrivateMessage.send(event.getAuthor(),EmbedMessageUtils.getHelpList(role, txt.toString()),logger);
 
 
 
