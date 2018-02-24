@@ -24,7 +24,7 @@ public  class FindContentOnWebPage {
         return split[0];
     }
 
-    private static String getUrlSource(String url) throws IOException {
+    public static String getUrlSource(String url) throws IOException {
         URL urlC = new URL(url);
         URLConnection yc = urlC.openConnection();
         BufferedReader in = new BufferedReader(new InputStreamReader(
