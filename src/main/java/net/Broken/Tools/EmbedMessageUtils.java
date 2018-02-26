@@ -15,9 +15,9 @@ public class EmbedMessageUtils {
         return new EmbedBuilder().setTitle(":warning: Commande inconnue! :warning:").setDescription(":arrow_right: Utilisez `//help` pour voirs les commandes disponible.").setColor(Color.orange).setFooter("bot.seb6596.ovh", MainBot.jda.getSelfUser().getAvatarUrl()).build();
 
     }
-    public static MessageEmbed getError(String message) {
+    public static EmbedBuilder getError(String message) {
         EmbedBuilder temp = new EmbedBuilder().setTitle(":warning: Error! :warning:").setColor(Color.red).setDescription(message);
-        return buildStandar(temp);
+        return temp;
 
 
     }
@@ -85,7 +85,7 @@ public class EmbedMessageUtils {
     }
 
     public static MessageEmbed getInternalError(){
-        return getError("Je... Je... je ne me sent pas bien...  :thermometer_face: \nContactez vite mon developeur!");
+        return buildStandar(getError("Je... Je... je ne me sens pas bien...  :thermometer_face: \nContactez vite mon developeur!").setImage("https://media.giphy.com/media/Rkis28kMJd1aE/giphy.gif"));
     }
 
     public static MessageEmbed buildStandar(EmbedBuilder embedBuilder){
@@ -95,7 +95,7 @@ public class EmbedMessageUtils {
     }
 
     public static MessageEmbed getUnautorized(){
-        return getError("Vous n'avez pas l'autorisation de faire ça!");
+        return buildStandar(getError("Vous n'avez pas l'autorisation de faire ça!"));
     }
 
     public static MessageEmbed getHelpList(String role, String list){

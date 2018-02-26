@@ -4,11 +4,14 @@ import net.Broken.Commands.Move;
 import net.Broken.Commands.Music;
 import net.Broken.Tools.AntiSpam;
 import net.Broken.Tools.Command.CommandParser;
+import net.Broken.Tools.EmbedMessageUtils;
 import net.Broken.Tools.Moderateur;
+import net.Broken.Tools.PrivateMessage;
 import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.TextChannel;
+import net.dv8tion.jda.core.events.ExceptionEvent;
 import net.dv8tion.jda.core.events.ReadyEvent;
 import net.dv8tion.jda.core.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.core.events.guild.member.GuildMemberRoleRemoveEvent;
@@ -85,38 +88,48 @@ public class BotListener extends ListenerAdapter {
     public void onMessageReceived(MessageReceivedEvent event) {
         //                                                      ----------------------Test pour eviter eco de commande-------------------------
 
-        if (event.getMessage().getContent().startsWith("//") && !event.getMessage().getAuthor().getId().equals(event.getJDA().getSelfUser().getId())) {
-            //On a detecter que c'etait une commande
-            //System.out.println(event.getMessage().getContent());
-            MainBot.handleCommand(new CommandParser().parse(event.getMessage().getContent(), event));
 
-        }
-        else if (!event.getMessage().getAuthor().getId().equals(event.getJDA().getSelfUser().getId()))
-        {
+        try{
+            if (event.getMessage().getContent().startsWith("//") && !event.getMessage().getAuthor().getId().equals(event.getJDA().getSelfUser().getId())) {
+                //On a detecter que c'etait une commande
+                //System.out.println(event.getMessage().getContent());
+                MainBot.handleCommand(new CommandParser().parse(event.getMessage().getContent(), event));
 
-            if(!event.isFromType(ChannelType.PRIVATE)) {
-                if (!event.getTextChannel().getName().equals("le_dongeon")) {
-                    Guild serveur = event.getGuild();
-                    GuildManager guildManager = serveur.getManager();
-                    Member user = event.getMember();
-
-                    // appel de la methode d'analyse de message de "Moderateur"
-                    if (!event.getAuthor().getName().equals("Aethex") && event.getMessage().getContent().length() > 0) {
-
-                        if (modo.analyse(user, serveur, guildManager, event) == 1) {
-                            antispam.extermine(user, serveur, guildManager, true, event);
-                        }
-                    } else if (event.getMessage().getContent().length() == 0)
-                        logger.error("Image detected, ignoring it.");
-
-                }
             }
+            else if (!event.getMessage().getAuthor().getId().equals(event.getJDA().getSelfUser().getId()))
+            {
+
+                if(!event.isFromType(ChannelType.PRIVATE)) {
+                    if (!event.getTextChannel().getName().equals("le_dongeon")) {
+                        Guild serveur = event.getGuild();
+                        GuildManager guildManager = serveur.getManager();
+                        Member user = event.getMember();
+
+                        // appel de la methode d'analyse de message de "Moderateur"
+                        if (!event.getAuthor().getName().equals("Aethex") && event.getMessage().getContent().length() > 0) {
+
+                            if (modo.analyse(user, serveur, guildManager, event) == 1) {
+                                antispam.extermine(user, serveur, guildManager, true, event);
+                            }
+                        } else if (event.getMessage().getContent().length() == 0)
+                            logger.error("Image detected, ignoring it.");
+
+                    }
+                }
 
 
+            }
+        }catch (Exception e){
+            logger.catching(e);
 
-
-
+            if(event.isFromType(ChannelType.PRIVATE))
+                PrivateMessage.send(event.getAuthor(), EmbedMessageUtils.getInternalError(), logger);
+            else
+                event.getTextChannel().sendMessage(EmbedMessageUtils.getInternalError()).queue();
         }
+
+
 
     }
+
 }
