@@ -13,6 +13,7 @@ import net.Broken.RestApi.Data.UserManager.UserInfoData;
 import net.Broken.Tools.UserManager.Exceptions.UnknownTokenException;
 import net.Broken.Tools.UserManager.Exceptions.UserNotFoundException;
 import net.Broken.Tools.UserManager.UserRegister;
+import net.Broken.audio.FindGeneral;
 import net.Broken.audio.NotConectedException;
 import net.Broken.audio.NullMusicManager;
 import net.dv8tion.jda.core.entities.VoiceChannel;
@@ -116,7 +117,7 @@ public class MusicWebAPIController {
     @RequestMapping(value = "/getChanel", method = RequestMethod.GET)
     public List<Chanel> getChanel(){
         List<Chanel> temp = new ArrayList<>();
-        for(VoiceChannel aChanel : MainBot.jda.getVoiceChannels()){
+        for(VoiceChannel aChanel : FindGeneral.find(MainBot.jda.getGuilds().get(0)).getVoiceChannels()){
             temp.add(new Chanel(aChanel.getName(),aChanel.getId(),aChanel.getPosition()));
         }
         return temp;

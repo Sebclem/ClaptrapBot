@@ -115,8 +115,16 @@ public class Help implements Commande {
         else
         {
             StringBuilder txt= new StringBuilder();
+
+            boolean isAdmin;
+            if(event.isFromType(ChannelType.PRIVATE))
+                isAdmin = event.getJDA().getGuilds().get(0).getMember(event.getAuthor()).hasPermission(Permission.ADMINISTRATOR);
+            else
+                isAdmin = event.getMember().hasPermission(Permission.ADMINISTRATOR);
+
+
             for (Map.Entry<String, Commande> e : MainBot.commandes.entrySet()) {
-                if(!e.getValue().isAdminCmd() || event.getMember().hasPermission(Permission.ADMINISTRATOR))
+                if(!e.getValue().isAdminCmd() || isAdmin)
                     txt.append("\n- ").append(e.getKey());
             }
 
@@ -131,7 +139,7 @@ public class Help implements Commande {
 
 
             String role;
-            if(event.getMember().hasPermission(Permission.ADMINISTRATOR))
+            if(isAdmin)
                 role = "Admin";
             else
                 role = "Non Admin";
