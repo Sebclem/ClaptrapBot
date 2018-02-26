@@ -30,7 +30,7 @@ $(document).ready(function() {
         connected();
     }
 
-    listeners();
+    navListeners();
 });
 
 
@@ -110,7 +110,7 @@ function tryConnection() {
 }
 
 
-function listeners() {
+function navListeners() {
     input_name.on("input", function () {
         if(input_name.val() !== "" && input_psw.val() !== "") {
             popInSubmit();
