@@ -85,8 +85,8 @@ function tryConnection() {
         data:  JSON.stringify(request),
         success: function (data) {
             console.log(data);
-            Cookies.set('token',data.token);
-            Cookies.set('name', data.name);
+            Cookies.set('token',data.token, { expires: 31 });
+            Cookies.set('name', data.name, { expires: 31 });
             debugger;
             location.reload();
         }
