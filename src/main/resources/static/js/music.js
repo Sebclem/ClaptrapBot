@@ -2,20 +2,41 @@ var savedPlaylist;
 var error = false;
 var state;
 var disconected = false;
+var modal_loading;
+var btn_play;
+var btn_stop;
+var btn_next;
+var btn_info;
+var btn_disconnect;
+var btn_flush;
+var btn_add;
+
 
 $(document).ready(function() {
 
+    btn_play = $('#btn_play');
+    btn_stop = $('#btn_stop');
+    btn_next = $('#btn_next');
+    btn_info = $('#btn_info');
+    btn_disconnect = $('#btn_disconnect');
+    btn_flush = $('#flush_btn');
+    btn_add = $('#add_btn');
+
+
     setInterval("getCurentMusic()",1000);
-    // the "href" attribute of the modal trigger must specify the modal ID that wants to be triggered
     $('#modalAdd').modal();
+    
     $('#modal_current_info').modal();
 
     $('#modalChanels').modal({
         dismissible: false // Modal can be dismissed by clicking outside of the modal
     });
-
-
-
+    
+    modal_loading = $('#modal_loading');
+    modal_loading.modal({
+        dismissible: false
+    });
+    
     $('.button-collapse-1').sideNav({
         menuWidth: 400, // Default is 300
         edge: 'right', // Choose the horizontal origin
@@ -23,123 +44,25 @@ $(document).ready(function() {
         draggable: true // Choose whether you can drag to open on touch screens,
     });
 
-    $('#btn_play').click(function () {
-        switch (state){
-            case "PLAYING":
-                sendCommand({ command: "PAUSE"})
-                break;
-
-            case "PAUSE":
-                sendCommand({ command: "PLAY"})
-                break;
-            default:
-                sendCommand({command: "PLAY"})
-        }
-        
-    });
-
-
-
-    $('#btn_next').click(function () {
-        sendCommand({ command: "NEXT"});
-    });
-    $('#btn_stop').click(function () {
-        sendCommand({ command: "STOP"});
-    });
-
     $('.dropdown-button').dropdown({
-            inDuration: 300,
-            outDuration: 225,
-            constrainWidth: false, // Does not change width of dropdown to that of the activator
-            hover: false, // Activate on hover
-            gutter: 0, // Spacing from edge
-            belowOrigin: false, // Displays dropdown below the button
-            alignment: 'left', // Displays dropdown with edge aligned to the left of button
-            stopPropagation: false // Stops event propagation
-        }
-    );
-
-    $('#input_link').on("input", function () {
-       if($('#input_link').val() == ""){
-           if (!$('#btn_add_bottom').hasClass("disabled")) {
-               $('#btn_add_bottom').addClass("disabled");
-           }
-           if (!$('#btn_add_top').hasClass("disabled")) {
-               $('#btn_add_top').addClass("disabled");
-           }
-       }
-       else{
-           if ($('#btn_add_bottom').hasClass("disabled")) {
-               $('#btn_add_bottom').removeClass("disabled");
-           }
-           if ($('#btn_add_top').hasClass("disabled")) {
-               $('#btn_add_top').removeClass("disabled");
-           }
-       }
+        inDuration: 300,
+        outDuration: 225,
+        constrainWidth: false, // Does not change width of dropdown to that of the activator
+        hover: false, // Activate on hover
+        gutter: 0, // Spacing from edge
+        belowOrigin: false, // Displays dropdown below the button
+        alignment: 'left', // Displays dropdown with edge aligned to the left of button
+        stopPropagation: false // Stops event propagation
     });
 
-    $('#modalChanels').change(function () {
-        if ($('#btn_ok_channel').hasClass("disabled")) {
-            $('#btn_ok_channel').removeClass("disabled");
-        }
-    });
-
-    $('#flush_btn').click(function () {
-        var command = {
-            command: "FLUSH"
-        };
-        sendCommand(command);
-    });
-
-    $('#btn_add_top').click(function () {
-        var command = {
-            command: "ADD",
-            url: $('#input_link').val(),
-            playlistLimit: $('#limit_range').val(),
-            onHead: true
-        };
-        $('#input_link').val('');
-        sendCommand(command);
-    });
-
-    $('#btn_add_bottom').click(function () {
-
-        var command = {
-            command: "ADD",
-            url: $('#input_link').val(),
-            playlistLimit: $('#limit_range').val(),
-            onHead: false
-        };
-        $('#input_link').val('');
-        sendCommand(command);
-    });
-
-    $('#btn_ok_channel').click(function () {
-
-        var command = {
-            command: "CONNECT",
-            chanelId: $('input[name=vocalRadio]:checked').val()
-        };
-        sendCommand(command);
-    });
-
-    $('#btn_disconnect').click(function () {
-        sendCommand({command : "DISCONNECT"})
-    })
+    listeners();
 
 });
-
-
-
-
-
 
 function getCurentMusic() {
     $.get("api/music/currentMusicInfo", function (data) {
     }).done(function (data) {
 
-        // alert( "second success" );
-        // console.log(data);
         state = data.state;
         switch (data.state) {
             case "STOP":
@@ -152,69 +75,38 @@ function getCurentMusic() {
                 }
                 $('#music_progress').width("0%");
                 if(Cookies.get('token') != undefined){
-                    if (!$('#btn_stop').hasClass("disabled")) {
-                        $('#btn_stop').addClass("disabled");
-                    }
-                    if (!$('#btn_info').hasClass("disabled")) {
-                        $('#btn_info').addClass("disabled");
-                    }
-                    if ($('#add_btn').hasClass("disabled")) {
-                        $('#add_btn').removeClass("disabled");
-                    }
-                    if ($('#flush_btn').hasClass("disabled")) {
-                        $('#flush_btn').removeClass("disabled");
-                    }
-
-                    if ($('#btn_play').hasClass("disabled")) {
-                        $('#btn_play').removeClass("disabled");
-                    }
-                    if ($('#btn_next').hasClass("disabled")) {
-                        $('#btn_next').removeClass("disabled");
-                    }
-                    if ($('#btn_disconnect').hasClass("disabled")) {
-                        $('#btn_disconnect').removeClass("disabled");
-                    }
+                    disableBtn(btn_stop);
+                    disableBtn(btn_info);
+                    enableBtn(btn_add);
+                    enableBtn(btn_flush);
+                    enableBtn(btn_play);
+                    enableBtn(btn_next);
+                    enableBtn(btn_disconnect);
                 }
                 else{
-                    if (!$('#btn_stop').hasClass("disabled")) {
-                        $('#btn_stop').addClass("disabled");
-                    }
-                    if (!$('#btn_info').hasClass("disabled")) {
-                        $('#btn_info').addClass("disabled");
-                    }
-                    if (!$('#add_btn').hasClass("disabled")) {
-                        $('#add_btn').addClass("disabled");
-                    }
-                    if (!$('#flush_btn').hasClass("disabled")) {
-                        $('#flush_btn').addClass("disabled");
-                    }
-
-                    if (!$('#btn_play').hasClass("disabled")) {
-                        $('#btn_play').addClass("disabled");
-                    }
-                    if (!$('#btn_next').hasClass("disabled")) {
-                        $('#btn_next').addClass("disabled");
-                    }
-
-                    if (!$('#btn_disconnect').hasClass("disabled")) {
-                        $('#btn_disconnect').addClass("disabled");
-                    }
+                    disableBtn(btn_play);
+                    disableBtn(btn_stop);
+                    disableBtn(btn_info);
+                    disableBtn(btn_add);
+                    disableBtn(btn_flush);
+                    disableBtn(btn_next);
+                    disableBtn(btn_disconnect);
                 }
-                $('#btn_play').children().text("play_arrow");
-
-
+                btn_play.children().text("play_arrow");
                 $('#music_img').attr("src","/img/no_music.jpg");
                 $('#total_time').text("00:00");
                 $('#current_time').text("00:00");
+                btn_play.removeClass("amber");
+                btn_play.addClass("green");
 
                 break;
 
             case "PLAYING":
                 disconected = false;
                 $('#modalChanels').modal('close');
-                $('#btn_play').children().text("pause");
-                $('#btn_play').removeClass("green");
-                $('#btn_play').addClass("amber");
+                btn_play.children().text("pause");
+                btn_play.removeClass("green");
+                btn_play.addClass("amber");
                 updateControl(data);
 
                 break;
@@ -222,9 +114,10 @@ function getCurentMusic() {
             case "PAUSE":
                 disconected = false;
                 $('#modalChanels').modal('close');
-                $('#btn_play').children().text("play_arrow");
-                $('#btn_play').removeClass("amber");
-                $('#btn_play').addClass("green");
+                btn_play.children().text("play_arrow");
+                btn_play.removeClass("amber");
+                btn_play.addClass("green");
+                btn_play.addClass("green");
                 updateControl(data);
                 break;
 
@@ -246,28 +139,13 @@ function getCurentMusic() {
 
                 $('#btn_play').children().text("play_arrow");
 
-                if (!$('#btn_play').hasClass("disabled")) {
-                    $('#btn_play').addClass("disabled");
-                }
-                if (!$('#btn_stop').hasClass("disabled")) {
-                    $('#btn_stop').addClass("disabled");
-                }
-                if (!$('#btn_next').hasClass("disabled")) {
-                    $('#btn_next').addClass("disabled");
-                }
-                if (!$('#btn_info').hasClass("disabled")) {
-                    $('#btn_info').addClass("disabled");
-                }
-                if (!$('#add_btn').hasClass("disabled")) {
-                    $('#add_btn').addClass("disabled");
-                }
-                if (!$('#flush_btn').hasClass("disabled")) {
-                    $('#flush_btn').addClass("disabled");
-                }
-                if (!$('#btn_disconnect').hasClass("disabled")) {
-                    $('#btn_disconnect').addClass("disabled");
-                }
-
+                disableBtn(btn_play);
+                disableBtn(btn_stop);
+                disableBtn(btn_info);
+                disableBtn(btn_add);
+                disableBtn(btn_flush);
+                disableBtn(btn_next);
+                disableBtn(btn_disconnect);
 
                 $('#music_img').attr("src","/img/disconnected.png");
                 if(Cookies.get('token') != undefined){
@@ -332,9 +210,11 @@ function getPlayList() {
         }
         else
             $('#playlist_list').empty();
-
-
-
+    }).fail(function (data) {
+        if(!error){
+            alert("Comunication error, please refresh.");
+            error = true;
+        }
 
     });
 
@@ -355,13 +235,14 @@ function getChannels(){
             template.html(content);
 
             $('#channelForm').append(template);
-
         });
         $('#modalChanels').modal('open');
 
-
-
-
+    }).fail(function (data) {
+        if(!error){
+            alert("Com error, please refresh.");
+            error = true;
+        }
 
     });
 }
@@ -387,53 +268,23 @@ function updateControl(data){
     $('#music_progress').width(percent + "%");
 
     if(Cookies.get('token') != undefined){
-        if ($('#btn_play').hasClass("disabled")) {
-            $('#btn_play').removeClass("disabled");
-        }
-        if ($('#btn_stop').hasClass("disabled")) {
-            $('#btn_stop').removeClass("disabled");
-        }
-        if ($('#btn_info').hasClass("disabled")) {
-            $('#btn_info').removeClass("disabled");
-        }
-        if ($('#add_btn').hasClass("disabled")) {
-            $('#add_btn').removeClass("disabled");
-        }
-        if ($('#flush_btn').hasClass("disabled")) {
-            $('#flush_btn').removeClass("disabled");
-        }
-
-        if ($('#btn_next').hasClass("disabled")) {
-            $('#btn_next').removeClass("disabled");
-        }
-        if ($('#btn_disconnect').hasClass("disabled")) {
-            $('#btn_disconnect').removeClass("disabled");
-        }
+        enableBtn(btn_play);
+        enableBtn(btn_stop);
+        enableBtn(btn_info);
+        enableBtn(btn_add);
+        enableBtn(btn_flush);
+        enableBtn(btn_next);
+        enableBtn(btn_disconnect);
     }
     else
     {
-        if (!$('#btn_play').hasClass("disabled")) {
-            $('#btn_play').addClass("disabled");
-        }
-        if (!$('#btn_stop').hasClass("disabled")) {
-            $('#btn_stop').addClass("disabled");
-        }
-        if (!$('#btn_info').hasClass("disabled")) {
-            $('#btn_info').addClass("disabled");
-        }
-        if (!$('#add_btn').hasClass("disabled")) {
-            $('#add_btn').addClass("disabled");
-        }
-        if (!$('#flush_btn').hasClass("disabled")) {
-            $('#flush_btn').addClass("disabled");
-        }
-
-        if (!$('#btn_next').hasClass("disabled")) {
-            $('#btn_next').addClass("disabled");
-        }
-        if (!$('#btn_disconnect').hasClass("disabled")) {
-            $('#btn_disconnect').addClass("disabled");
-        }
+        disableBtn(btn_play);
+        disableBtn(btn_stop);
+        disableBtn(btn_info);
+        disableBtn(btn_add);
+        disableBtn(btn_flush);
+        disableBtn(btn_next);
+        disableBtn(btn_disconnect);
     }
 
 
@@ -445,6 +296,7 @@ function updateControl(data){
 }
 
 function sendCommand(command){
+    modal_loading.modal('open');
     command["token"] = Cookies.get('token');
     console.log(command)
     $.ajax({
@@ -455,11 +307,14 @@ function sendCommand(command){
         data:  JSON.stringify(command),
         success: function (data) {
             console.log(data);
+            getCurentMusic();
+            modal_loading.modal('close');
         }
 
     }).fail(function (data) {
         console.log(data);
         alert(data.responseJSON.Message);
+        modal_loading.modal('close');
         if(data.responseJSON.error === "token"){
             Cookies.remove('token');
             Cookies.remove('name');
@@ -498,6 +353,102 @@ function msToTime(duration) {
         return hours + ":" + minutes + ":" + seconds;
     else
         return minutes + ":" + seconds;
+}
+
+function listeners() {
+    $('#btn_play').click(function () {
+        switch (state){
+            case "PLAYING":
+                sendCommand({ command: "PAUSE"})
+                break;
+
+            case "PAUSE":
+                sendCommand({ command: "PLAY"})
+                break;
+            default:
+                sendCommand({command: "PLAY"})
+        }
+
+    });
+
+    $('#btn_next').click(function () {
+        sendCommand({ command: "NEXT"});
+    });
+    $('#btn_stop').click(function () {
+        sendCommand({ command: "STOP"});
+    });
+
+    $('#input_link').on("input", function () {
+        if($('#input_link').val() == ""){
+            disableBtn($('#btn_add_bottom'));
+            disableBtn($('#btn_add_top'));
+        }
+        else{
+            enableBtn($('#btn_add_bottom'));
+            enableBtn($('#btn_add_top'));
+        }
+    });
+
+    $('#modalChanels').change(function () {
+        if ($('#btn_ok_channel').hasClass("disabled")) {
+            $('#btn_ok_channel').removeClass("disabled");
+        }
+    });
+
+    $('#flush_btn').click(function () {
+        var command = {
+            command: "FLUSH"
+        };
+        sendCommand(command);
+    });
+
+    $('#btn_add_top').click(function () {
+        var command = {
+            command: "ADD",
+            url: $('#input_link').val(),
+            playlistLimit: $('#limit_range').val(),
+            onHead: true
+        };
+        $('#input_link').val('');
+        sendCommand(command);
+    });
+
+    $('#btn_add_bottom').click(function () {
+
+        var command = {
+            command: "ADD",
+            url: $('#input_link').val(),
+            playlistLimit: $('#limit_range').val(),
+            onHead: false
+        };
+        $('#input_link').val('');
+        sendCommand(command);
+    });
+
+    $('#btn_ok_channel').click(function () {
+
+        var command = {
+            command: "CONNECT",
+            chanelId: $('input[name=vocalRadio]:checked').val()
+        };
+        sendCommand(command);
+    });
+
+    $('#btn_disconnect').click(function () {
+        sendCommand({command : "DISCONNECT"})
+    });
+}
+
+function disableBtn(btn) {
+    if (!btn.hasClass("disabled")) {
+        btn.addClass("disabled");
+    }
+}
+
+function enableBtn(btn){
+    if (btn.hasClass("disabled")) {
+        btn.removeClass("disabled");
+    }
 }
 
 
