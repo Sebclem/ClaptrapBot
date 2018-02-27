@@ -6,6 +6,7 @@ import net.Broken.RestApi.CommandInterface;
 import net.Broken.Tools.EmbedMessageUtils;
 import net.Broken.Tools.MessageTimeOut;
 import net.Broken.Tools.PrivateMessage;
+import net.Broken.Tools.TableRenderer;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.ChannelType;
@@ -26,6 +27,7 @@ import java.util.Map;
  */
 public class Help implements Commande {
     Logger logger = LogManager.getLogger();
+    private int cellLenght = 25;
     @Override
     public boolean called(String[] args, MessageReceivedEvent event) {
         return true;
@@ -114,7 +116,9 @@ public class Help implements Commande {
         }
         else
         {
-            StringBuilder txt= new StringBuilder();
+            TableRenderer table = new TableRenderer();
+            List<String> noPu = new ArrayList<>();
+            table.setHeader("Command","PU");
 
             boolean isAdmin;
             if(event.isFromType(ChannelType.PRIVATE))
@@ -124,9 +128,20 @@ public class Help implements Commande {
 
 
             for (Map.Entry<String, Commande> e : MainBot.commandes.entrySet()) {
-                if(!e.getValue().isAdminCmd() || isAdmin)
-                    txt.append("\n- ").append(e.getKey());
+                if(!e.getValue().isAdminCmd() || isAdmin){
+                    if(e.getValue().isPrivateUsable())
+                        table.addRow(e.getKey(), "XX");
+                    else
+                        noPu.add(e.getKey());
+                }
+
+
             }
+
+            for(String key : noPu)
+                table.addRow(key, "");
+
+            String txt = table.build();
 
             if(!event.isFromType(ChannelType.PRIVATE)){
                 Message rest = event.getTextChannel().sendMessage(new EmbedBuilder().setTitle("Command envoyées par message privé").setColor(Color.green).build()).complete();
@@ -144,10 +159,13 @@ public class Help implements Commande {
             else
                 role = "Non Admin";
 
-            PrivateMessage.send(event.getAuthor(),EmbedMessageUtils.getHelpList(role, txt.toString()),logger);
+            try {
+                PrivateMessage.send(event.getAuthor(),EmbedMessageUtils.getHelpList(role, txt),logger);
+            } catch (FileNotFoundException e) {
+                logger.catching(e);
+                PrivateMessage.send(event.getAuthor(),EmbedMessageUtils.getInternalError(), logger);
 
-
-
+            }
 
 
         }

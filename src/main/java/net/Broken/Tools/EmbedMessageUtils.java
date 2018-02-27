@@ -98,8 +98,10 @@ public class EmbedMessageUtils {
         return buildStandar(getError("Vous n'avez pas l'autorisation de faire ça!"));
     }
 
-    public static MessageEmbed getHelpList(String role, String list){
-        return new EmbedBuilder().setTitle("Command du bot ("+role+")").setDescription(list).setFooter("Utilise '//help <commande>' pour plus de détails.",null).setColor(Color.green).setThumbnail(MainBot.jda.getSelfUser().getAvatarUrl()).build();
+    public static MessageEmbed getHelpList(String role, String list) throws FileNotFoundException {
+        String message = new ResourceLoader().getFile("Help/main.md");
+        message = message.replace("@list", list);
+        return new EmbedBuilder().setTitle("Command du bot ("+role+")").setDescription(message).setFooter("Utilise '//help <commande>' pour plus de détails.",null).setColor(Color.green).setThumbnail(MainBot.jda.getSelfUser().getAvatarUrl()).build();
     }
 
 
