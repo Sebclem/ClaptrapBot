@@ -2,7 +2,7 @@ node {
     def app
    stage('Clone') { // for display purposes
       // Get some code from a GitHub repository
-      git 'https://github.com/BrokenFire/BrokenDiscordBot.git'
+      git url: 'https://github.com/BrokenFire/BrokenDiscordBot.git', branch: 'devel'
    }
    stage('Build image') {
         /* This builds the actual image; synonymous to
