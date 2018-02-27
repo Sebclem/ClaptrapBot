@@ -26,4 +26,9 @@ public class Ass  extends NumberedCommande {
     public boolean isAdminCmd() {
         return false;
     }
+
+    @Override
+    public boolean isNSFW() {
+        return true;
+    }
 }

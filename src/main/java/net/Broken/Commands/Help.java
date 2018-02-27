@@ -145,11 +145,7 @@ public class Help implements Commande {
 
             if(!event.isFromType(ChannelType.PRIVATE)){
                 Message rest = event.getTextChannel().sendMessage(new EmbedBuilder().setTitle("Command envoyées par message privé").setColor(Color.green).build()).complete();
-                List<Message> messages = new ArrayList<Message>(){{
-                   add(rest);
-                   add(event.getMessage());
-                }};
-                new MessageTimeOut(messages,MainBot.messageTimeOut).start();
+                new MessageTimeOut(MainBot.messageTimeOut, rest, event.getMessage()).start();
             }
 
 
@@ -160,10 +156,10 @@ public class Help implements Commande {
                 role = "Non Admin";
 
             try {
-                PrivateMessage.send(event.getAuthor(),EmbedMessageUtils.getHelpList(role, txt),logger);
+                PrivateMessage.send(event.getAuthor(), EmbedMessageUtils.getHelpList(role, txt),logger);
             } catch (FileNotFoundException e) {
                 logger.catching(e);
-                PrivateMessage.send(event.getAuthor(),EmbedMessageUtils.getInternalError(), logger);
+                PrivateMessage.send(event.getAuthor(), EmbedMessageUtils.getInternalError(), logger);
 
             }
 
@@ -185,6 +181,11 @@ public class Help implements Commande {
 
     @Override
     public boolean isAdminCmd() {
+        return false;
+    }
+
+    @Override
+    public boolean isNSFW() {
         return false;
     }
 }

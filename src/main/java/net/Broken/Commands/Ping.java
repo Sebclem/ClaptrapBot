@@ -29,11 +29,7 @@ public class Ping implements Commande {
             event.getPrivateChannel().sendMessage(":arrow_right: Pong! `" + ping+ "ms`").queue();
         else {
             Message rest = event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n:arrow_right: Pong! `" + ping + "ms`").complete();
-            List<Message> messages = new ArrayList<Message>(){{
-                add(rest);
-                add(event.getMessage());
-            }};
-            new MessageTimeOut(messages, MainBot.messageTimeOut).start();
+            new MessageTimeOut(MainBot.messageTimeOut, event.getMessage(), rest).start();
         }
         LogManager.getLogger().debug("pong");
     }
@@ -41,7 +37,6 @@ public class Ping implements Commande {
     @Override
     public void executed(boolean success, MessageReceivedEvent event)
     {
-        return;
 
     }
 
@@ -52,6 +47,11 @@ public class Ping implements Commande {
 
     @Override
     public boolean isAdminCmd() {
+        return false;
+    }
+
+    @Override
+    public boolean isNSFW() {
         return false;
     }
 }

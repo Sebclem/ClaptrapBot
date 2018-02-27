@@ -101,6 +101,7 @@ public class MainBot {
         {
             Commande cmdObj = commandes.get(cmd.commande);
             if(!cmdObj.isAdminCmd() || cmd.event.getMember().hasPermission(Permission.ADMINISTRATOR)){
+
                 if(cmd.event.isFromType(ChannelType.PRIVATE) && commandes.get(cmd.commande).isPrivateUsable())
                 {
 
@@ -109,8 +110,15 @@ public class MainBot {
                 }
                 else if (!cmd.event.isFromType(ChannelType.PRIVATE))
                 {
-                    commandes.get(cmd.commande).action(cmd.args, cmd.event);
-                    commandes.get(cmd.commande).executed(true, cmd.event);
+                    if(!cmdObj.isNSFW() || cmd.event.getTextChannel().isNSFW()){
+                        commandes.get(cmd.commande).action(cmd.args, cmd.event);
+                        commandes.get(cmd.commande).executed(true, cmd.event);
+                    }
+                    else{
+                        Message msg = cmd.event.getTextChannel().sendMessage(cmd.event.getAuthor().getAsMention() + "\n:warning: **__Channel règlementé! Go sur over18!__**:warning: ").complete();
+                        new MessageTimeOut(messageTimeOut, msg, cmd.event.getMessage()).start();
+                    }
+
                 }
                 else
                     cmd.event.getPrivateChannel().sendMessage(EmbedMessageUtils.getNoPrivate()).queue();
@@ -121,11 +129,7 @@ public class MainBot {
                 }
                 else{
                     Message msg = cmd.event.getTextChannel().sendMessage(EmbedMessageUtils.getUnautorized()).complete();
-                    List<Message> messages = new ArrayList<Message>(){{
-                        add(msg);
-                        add(cmd.event.getMessage());
-                    }};
-                    new MessageTimeOut(messages, messageTimeOut).start();
+                    new MessageTimeOut(messageTimeOut, msg, cmd.event.getMessage()).start();
                 }
             }
 

@@ -68,4 +68,9 @@ public class Flush implements Commande{
     public boolean isAdminCmd() {
         return false;
     }
+
+    @Override
+    public boolean isNSFW() {
+        return false;
+    }
 }

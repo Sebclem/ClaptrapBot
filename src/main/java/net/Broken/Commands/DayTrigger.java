@@ -44,4 +44,9 @@ public class DayTrigger implements Commande{
     public boolean isAdminCmd() {
         return true;
     }
+
+    @Override
+    public boolean isNSFW() {
+        return false;
+    }
 }

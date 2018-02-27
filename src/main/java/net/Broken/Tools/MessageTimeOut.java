@@ -5,6 +5,8 @@ import net.dv8tion.jda.core.exceptions.ErrorResponseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class MessageTimeOut extends Thread{
@@ -13,6 +15,11 @@ public class MessageTimeOut extends Thread{
     Logger logger = LogManager.getLogger();
     public MessageTimeOut(List<Message> messages, int second) {
         this.messages = messages;
+        this.second = second;
+    }
+
+    public MessageTimeOut(int second, Message... messages) {
+        this.messages = Arrays.asList(messages);
         this.second = second;
     }
 

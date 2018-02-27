@@ -12,6 +12,7 @@ public interface Commande {
     void executed(boolean success, MessageReceivedEvent event);
     boolean isPrivateUsable();
     boolean isAdminCmd();
+    boolean isNSFW();
 
 
 }

@@ -25,4 +25,9 @@ public class Boobs extends NumberedCommande {
     public boolean isAdminCmd() {
         return false;
     }
+
+    @Override
+    public boolean isNSFW() {
+        return true;
+    }
 }
