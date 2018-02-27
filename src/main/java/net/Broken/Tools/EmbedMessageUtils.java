@@ -84,7 +84,7 @@ public class EmbedMessageUtils {
     }
 
     public static MessageEmbed getInternalError(){
-        return buildStandar(getError("Je... Je... je ne me sens pas bien...  :thermometer_face: \nContactez vite mon developeur!").setImage("https://media.giphy.com/media/Rkis28kMJd1aE/giphy.gif"));
+        return buildStandar(getError("Je... Je... je ne me sens pas bien...  :thermometer_face: \nContactez vite mon developeur!").setImage("https://i.imgur.com/anKv8U5.gif"));
     }
 
     public static MessageEmbed buildStandar(EmbedBuilder embedBuilder){
