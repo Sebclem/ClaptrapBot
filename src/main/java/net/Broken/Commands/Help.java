@@ -117,8 +117,11 @@ public class Help implements Commande {
         else
         {
             TableRenderer table = new TableRenderer();
-            List<String> noPu = new ArrayList<>();
             table.setHeader("Command","PU");
+
+            TableRenderer nsfwTable = new TableRenderer();
+            nsfwTable.setHeader("NSFW Only\u00A0", "PU");
+            List<String> noPu = new ArrayList<>();
 
             boolean isAdmin;
             if(event.isFromType(ChannelType.PRIVATE))
@@ -131,6 +134,8 @@ public class Help implements Commande {
                 if(!e.getValue().isAdminCmd() || isAdmin){
                     if(e.getValue().isPrivateUsable())
                         table.addRow(e.getKey(), "XX");
+                    else if(e.getValue().isNSFW())
+                        nsfwTable.addRow(e.getKey(),"");
                     else
                         noPu.add(e.getKey());
                 }
@@ -142,6 +147,8 @@ public class Help implements Commande {
                 table.addRow(key, "");
 
             String txt = table.build();
+            txt += "\n\n";
+            txt += nsfwTable.build();
 
             if(!event.isFromType(ChannelType.PRIVATE)){
                 Message rest = event.getTextChannel().sendMessage(new EmbedBuilder().setTitle("Command envoyées par message privé").setColor(Color.green).build()).complete();
