@@ -101,7 +101,14 @@ public class MainBot {
         if (commandes.containsKey(cmd.commande))
         {
             Commande cmdObj = commandes.get(cmd.commande);
-            if(!cmdObj.isAdminCmd() || cmd.event.getMember().hasPermission(Permission.ADMINISTRATOR)){
+            boolean isAdmin;
+            if(cmd.event.isFromType(ChannelType.PRIVATE)){
+                isAdmin = jda.getGuilds().get(0).getMember(cmd.event.getAuthor()).hasPermission(Permission.ADMINISTRATOR);
+            }
+            else
+                isAdmin = cmd.event.getMember().hasPermission(Permission.ADMINISTRATOR);
+
+            if(!cmdObj.isAdminCmd() || isAdmin){
 
                 if(cmd.event.isFromType(ChannelType.PRIVATE) && commandes.get(cmd.commande).isPrivateUsable())
                 {
