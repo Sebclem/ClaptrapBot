@@ -94,7 +94,7 @@ public class EmbedMessageUtils {
     }
 
     public static MessageEmbed getUnautorized(){
-        return buildStandar(getError("Vous n'avez pas l'autorisation de faire ça!"));
+        return buildStandar(getError("Vous n'avez pas l'autorisation de faire ça!").setImage("https://i.imgur.com/0OSsdvW.gif"));
     }
 
     public static MessageEmbed getHelpList(String role, String list) throws FileNotFoundException {

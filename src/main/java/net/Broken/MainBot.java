@@ -43,6 +43,7 @@ public class MainBot {
 
 
     public static int messageTimeOut = 10;
+    public static int gifMessageTimeOut = 30;
 
 
     private static Logger logger = LogManager.getLogger();
@@ -100,7 +101,14 @@ public class MainBot {
         if (commandes.containsKey(cmd.commande))
         {
             Commande cmdObj = commandes.get(cmd.commande);
-            if(!cmdObj.isAdminCmd() || cmd.event.getMember().hasPermission(Permission.ADMINISTRATOR)){
+            boolean isAdmin;
+            if(cmd.event.isFromType(ChannelType.PRIVATE)){
+                isAdmin = jda.getGuilds().get(0).getMember(cmd.event.getAuthor()).hasPermission(Permission.ADMINISTRATOR);
+            }
+            else
+                isAdmin = cmd.event.getMember().hasPermission(Permission.ADMINISTRATOR);
+
+            if(!cmdObj.isAdminCmd() || isAdmin){
 
                 if(cmd.event.isFromType(ChannelType.PRIVATE) && commandes.get(cmd.commande).isPrivateUsable())
                 {
@@ -129,7 +137,7 @@ public class MainBot {
                 }
                 else{
                     Message msg = cmd.event.getTextChannel().sendMessage(EmbedMessageUtils.getUnautorized()).complete();
-                    new MessageTimeOut(messageTimeOut, msg, cmd.event.getMessage()).start();
+                    new MessageTimeOut(gifMessageTimeOut, msg, cmd.event.getMessage()).start();
                 }
             }
 
@@ -142,8 +150,10 @@ public class MainBot {
             MessageReceivedEvent event = cmd.event;
             if(event.isFromType(ChannelType.PRIVATE))
                 event.getPrivateChannel().sendMessage(EmbedMessageUtils.getUnknowCommand()).queue();
-            else
-                event.getTextChannel().sendMessage(EmbedMessageUtils.getUnknowCommand()).queue();
+            else {
+                Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getUnknowCommand()).complete();
+                new MessageTimeOut(messageTimeOut, message, event.getMessage());
+            }
             logger.warn("Commande inconnue");
         }
 

@@ -26,7 +26,9 @@ public class DayTrigger implements Commande{
 
     @Override
     public void action(String[] args, MessageReceivedEvent event) {
+        if(!event.isFromType(ChannelType.PRIVATE))
             event.getMessage().delete().queue();
+        DayListener.getInstance().trigger();
 
     }
 
