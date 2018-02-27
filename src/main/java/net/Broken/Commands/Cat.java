@@ -77,4 +77,9 @@ public class Cat implements Commande {
     public boolean isAdminCmd() {
         return false;
     }
+
+    @Override
+    public boolean isNSFW() {
+        return false;
+    }
 }

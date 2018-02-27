@@ -38,4 +38,9 @@ public class Error implements Commande{
     public boolean isAdminCmd() {
         return true;
     }
+
+    @Override
+    public boolean isNSFW() {
+        return false;
+    }
 }

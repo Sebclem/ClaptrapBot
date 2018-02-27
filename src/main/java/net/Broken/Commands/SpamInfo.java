@@ -109,6 +109,11 @@ public class SpamInfo implements Commande{
         return false;
     }
 
+    @Override
+    public boolean isNSFW() {
+        return false;
+    }
+
     public String formatSecond(int second){
         long days = TimeUnit.SECONDS.toDays(second);
         second -= TimeUnit.DAYS.toSeconds(days);

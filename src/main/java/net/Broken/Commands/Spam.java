@@ -92,6 +92,11 @@ public class Spam implements Commande {
         return true;
     }
 
+    @Override
+    public boolean isNSFW() {
+        return false;
+    }
+
     public void pardon(MessageReceivedEvent event, String[] args){
 
         Guild serveur = event.getGuild();

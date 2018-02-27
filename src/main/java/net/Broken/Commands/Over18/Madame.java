@@ -26,50 +26,41 @@ public class Madame implements Commande{
     @Override
     public void action(String[] args, MessageReceivedEvent event) {
         this.event = event;
-
-        if(event.getTextChannel().isNSFW()) {
-            Redirection redirect = new Redirection();
-            boolean success=false;
-            boolean error=false;
-            int errorCp=0;
-            while(!success && !error)
-            {
-                try {
-
-                    String url = redirect.get("http://dites.bonjourmadame.fr/random");
-                    logger.debug("URL: "+url);
-                    if(scanPageForTipeee(url)){
-                        logger.debug("Advertisement detected! Retry! ("+url+")");
-                    }
-                    else{
-                        event.getTextChannel().sendMessage(url).queue();
-                        success=true;
-                    }
-
-                } catch (IOException e) {
-                    errorCp++;
-                    logger.warn("Erreur de redirection. (Essais n°"+errorCp+")");
-                    if(errorCp>5)
-                    {
-                        logger.error("5 Erreur de redirection.");
-                        error=true;
-                        event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n:warning: **__Erreur de redirection (5 essais), Réessayez__**:warning: ").queue();
-
-                    }
-
-                }catch (StringIndexOutOfBoundsException e){
-                    logger.catching(e);
-                    event.getTextChannel().sendMessage(EmbedMessageUtils.getInternalError()).queue();
-                }
-            }
-
-        }
-        else
+        Redirection redirect = new Redirection();
+        boolean success=false;
+        boolean error=false;
+        int errorCp=0;
+        while(!success && !error)
         {
-            event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n:warning: **__Channel règlementé! Go sur over18!__**:warning: ").queue();
+            try {
 
-            logger.warn("Erreur chanel.");
+                String url = redirect.get("http://dites.bonjourmadame.fr/random");
+                logger.debug("URL: "+url);
+                if(scanPageForTipeee(url)){
+                    logger.debug("Advertisement detected! Retry! ("+url+")");
+                }
+                else{
+                    event.getTextChannel().sendMessage(url).queue();
+                    success=true;
+                }
+
+            } catch (IOException e) {
+                errorCp++;
+                logger.warn("Erreur de redirection. (Essais n°"+errorCp+")");
+                if(errorCp>5)
+                {
+                    logger.error("5 Erreur de redirection.");
+                    error=true;
+                    event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n:warning: **__Erreur de redirection (5 essais), Réessayez__**:warning: ").queue();
+
+                }
+
+            }catch (StringIndexOutOfBoundsException e){
+                logger.catching(e);
+                event.getTextChannel().sendMessage(EmbedMessageUtils.getInternalError()).queue();
+            }
         }
+
     }
 
     @Override
@@ -87,22 +78,10 @@ public class Madame implements Commande{
         return false;
     }
 
-
-    private boolean isAdvertisementUrl(String url){
-        //Scan url
-        if(url.toLowerCase().contains("club") && (url.toLowerCase().contains("rejoindre") || url.toLowerCase().contains("rejoignez"))){
-            logger.debug("Advertisement detected with \"club\" and \"rejoidre\" or \"rejoignez\"");
-            return true;
-        }
-        else if(url.contains("samedi") && url.contains("dimanche")){
-            logger.debug("Advertisement detected with \"samedi\" and \"dimanche\"");
-            return true;
-        }
-        else{
-            return  false;
-        }
+    @Override
+    public boolean isNSFW() {
+        return true;
     }
-
 
     private boolean scanPageForTipeee(String url) throws StringIndexOutOfBoundsException, IOException{
             String content = FindContentOnWebPage.getUrlSource(url);

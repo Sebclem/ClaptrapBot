@@ -15,6 +15,7 @@ public class EmbedMessageUtils {
         return new EmbedBuilder().setTitle(":warning: Commande inconnue! :warning:").setDescription(":arrow_right: Utilisez `//help` pour voirs les commandes disponible.").setColor(Color.orange).setFooter("bot.seb6596.ovh", MainBot.jda.getSelfUser().getAvatarUrl()).build();
 
     }
+
     public static EmbedBuilder getError(String message) {
         EmbedBuilder temp = new EmbedBuilder().setTitle(":warning: Error! :warning:").setColor(Color.red).setDescription(message);
         return temp;
@@ -44,7 +45,6 @@ public class EmbedMessageUtils {
     public static MessageEmbed getSpamPardon(Member autor) {
         return new EmbedBuilder().setTitle(":mute: Spam Hunter :mute:").setDescription(autor.getAsMention() + " est de retour, fais gaffe!\nJe te surveille!").setImage("https://media.giphy.com/media/3o7TKwBctlv08kY08M/giphy.gif").setFooter("Spam info disponible via '//spaminfo' en privé", null).setColor(Color.orange).build();
     }
-
 
     public static MessageEmbed getHelp(String command) throws FileNotFoundException {
         String name = command.substring(0, 1).toUpperCase() + command.substring(1).toLowerCase();
@@ -79,7 +79,6 @@ public class EmbedMessageUtils {
         return new EmbedBuilder().setTitle(":warning: Flush Error :warning: ").setDescription(message).setColor(Color.red).setFooter("'//help flush' pour plus d'info ", MainBot.jda.getSelfUser().getAvatarUrl()).build();
     }
 
-
     public static MessageEmbed getRegister(String message) {
         return new EmbedBuilder().setTitle(":pencil: Web Registration :pencil:").setDescription(message).setColor(Color.green).setFooter("bot.seb6596.ovh", MainBot.jda.getSelfUser().getAvatarUrl()).build();
     }
@@ -98,9 +97,12 @@ public class EmbedMessageUtils {
         return buildStandar(getError("Vous n'avez pas l'autorisation de faire ça!"));
     }
 
-    public static MessageEmbed getHelpList(String role, String list){
-        return new EmbedBuilder().setTitle("Command du bot ("+role+")").setDescription(list).setFooter("Utilise '//help <commande>' pour plus de détails.",null).setColor(Color.green).setThumbnail(MainBot.jda.getSelfUser().getAvatarUrl()).build();
+    public static MessageEmbed getHelpList(String role, String list) throws FileNotFoundException {
+        String message = new ResourceLoader().getFile("Help/main.md");
+        message = message.replace("@list", list);
+        return new EmbedBuilder().setTitle("Command du bot ("+role+")").setDescription(message).setFooter("Utilise '//help <commande>' pour plus de détails.",null).setColor(Color.green).setThumbnail(MainBot.jda.getSelfUser().getAvatarUrl()).build();
     }
+
 
 
 }

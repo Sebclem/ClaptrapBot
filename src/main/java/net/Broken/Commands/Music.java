@@ -172,6 +172,11 @@ public class Music implements Commande {
         return false;
     }
 
+    @Override
+    public boolean isNSFW() {
+        return false;
+    }
+
     public AudioM getAudioManager(){
         return audio;
     }
