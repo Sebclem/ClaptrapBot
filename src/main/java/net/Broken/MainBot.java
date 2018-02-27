@@ -43,6 +43,7 @@ public class MainBot {
 
 
     public static int messageTimeOut = 10;
+    public static int gifMessageTimeOut = 30;
 
 
     private static Logger logger = LogManager.getLogger();
@@ -129,7 +130,7 @@ public class MainBot {
                 }
                 else{
                     Message msg = cmd.event.getTextChannel().sendMessage(EmbedMessageUtils.getUnautorized()).complete();
-                    new MessageTimeOut(messageTimeOut, msg, cmd.event.getMessage()).start();
+                    new MessageTimeOut(gifMessageTimeOut, msg, cmd.event.getMessage()).start();
                 }
             }
 
@@ -142,8 +143,10 @@ public class MainBot {
             MessageReceivedEvent event = cmd.event;
             if(event.isFromType(ChannelType.PRIVATE))
                 event.getPrivateChannel().sendMessage(EmbedMessageUtils.getUnknowCommand()).queue();
-            else
-                event.getTextChannel().sendMessage(EmbedMessageUtils.getUnknowCommand()).queue();
+            else {
+                Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getUnknowCommand()).complete();
+                new MessageTimeOut(messageTimeOut, message, event.getMessage());
+            }
             logger.warn("Commande inconnue");
         }
 
