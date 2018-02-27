@@ -1,5 +1,5 @@
 
-Une tentative d'association à etait demandé.
+Une tentative d'association a été demandée.
 
 Voici le code de vérification: 
 **%code**
