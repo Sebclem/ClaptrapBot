@@ -14,25 +14,34 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+/**
+ * Interface between WebApi and Music bot for submitting track
+ */
 public class WebLoadUtils {
     ResponseEntity<CommandResponseData> response;
     Logger logger = LogManager.getLogger();
 
-    public WebLoadUtils(Music musicCommande, CommandPostData data, User user){
-        AudioPlayerManager playerM = musicCommande.getAudioManager().getPlayerManager();
+    /**
+     * Submit a track or playlist to Music bot
+     * @param musicCommand The current guild music command.
+     * @param data Received data from API
+     * @param user User who submit the track
+     */
+    public WebLoadUtils(Music musicCommand, CommandPostData data, User user){
+        AudioPlayerManager playerM = musicCommand.getAudioManager().getPlayerManager();
         try {
 
-            AudioM audioM = musicCommande.getAudioManager();
-            playerM.loadItemOrdered(musicCommande.getAudioManager().getMusicManager(), data.url, new AudioLoadResultHandler() {
+            AudioM audioM = musicCommand.getAudioManager();
+            playerM.loadItemOrdered(musicCommand.getAudioManager().getGuildMusicManager(), data.url, new AudioLoadResultHandler() {
                 @Override
                 public void trackLoaded(AudioTrack track) {
                     logger.info("Single Track detected from web!");
 
                     try {
                         UserAudioTrack userAudioTrack = new UserAudioTrack(user, track); //TODO
-                        audioM.play(audioM.getGuild(), audioM.getPlayedChanel(), audioM.getMusicManager(), userAudioTrack, data.onHead);
+                        audioM.play(audioM.getGuild(), audioM.getPlayedChanel(), audioM.getGuildMusicManager(), userAudioTrack, data.onHead);
                         response = new ResponseEntity<>(new CommandResponseData("ADD", "Loaded"), HttpStatus.OK);
-                    } catch (NullMusicManager | NotConectedException nullMusicManager) {
+                    } catch (NullMusicManager | NotConnectedException nullMusicManager) {
                         nullMusicManager.printStackTrace();
                     }
 
@@ -64,11 +73,15 @@ public class WebLoadUtils {
             while(response == null)
                 Thread.sleep(10);
 
-        } catch (NullMusicManager | NotConectedException | InterruptedException nullMusicManager) {
+        } catch (NullMusicManager | NotConnectedException | InterruptedException nullMusicManager) {
             nullMusicManager.printStackTrace();
         }
     }
 
+    /**
+     * Wait for the end of submit process and return ResponseEntity
+     * @return HTTP Response
+     */
     public ResponseEntity<CommandResponseData> getResponse(){
         while(response == null) {
             try {

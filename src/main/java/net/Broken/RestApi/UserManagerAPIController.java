@@ -4,7 +4,6 @@ import net.Broken.DB.Entity.PendingUserEntity;
 import net.Broken.DB.Entity.UserEntity;
 import net.Broken.DB.Repository.PendingUserRepository;
 import net.Broken.DB.Repository.UserRepository;
-import net.Broken.MainBot;
 import net.Broken.RestApi.Data.UserManager.CheckResposeData;
 import net.Broken.RestApi.Data.UserManager.ConfirmData;
 import net.Broken.RestApi.Data.UserManager.UserConnectionData;
@@ -13,7 +12,7 @@ import net.Broken.Tools.UserManager.Exceptions.PasswordNotMatchException;
 import net.Broken.Tools.UserManager.Exceptions.TokenNotMatch;
 import net.Broken.Tools.UserManager.Exceptions.UserAlreadyRegistered;
 import net.Broken.Tools.UserManager.Exceptions.UserNotFoundException;
-import net.Broken.Tools.UserManager.UserRegister;
+import net.Broken.Tools.UserManager.UserUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +24,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+
+/**
+ * Rest Api controller for /api/userManagement
+ */
 @RestController
 @RequestMapping("/api/userManagement")
 public class UserManagerAPIController {
@@ -38,14 +41,14 @@ public class UserManagerAPIController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    UserRegister userRegister = UserRegister.getInstance();
+    UserUtils userUtils = UserUtils.getInstance();
 
 
     @RequestMapping(value = "/preRegister", method = RequestMethod.POST)
     public ResponseEntity<CheckResposeData> command(@RequestBody UserInfoData data){
         if(data != null && data.name != null) {
             try {
-                String id = userRegister.sendCheckToken(pendingUserRepository, userRepository, passwordEncoder, data);
+                String id = userUtils.sendCheckToken(pendingUserRepository, userRepository, passwordEncoder, data);
                 return new ResponseEntity<>(new CheckResposeData(true, data.name, "Message sent", id), HttpStatus.OK);
             } catch (UserNotFoundException e) {
                 logger.warn("User \"" + data.name + "\" not found!");
@@ -66,8 +69,8 @@ public class UserManagerAPIController {
     public ResponseEntity<UserConnectionData> confirAccount(@RequestBody ConfirmData data){
         //TODO move pending user to accepted and return right things
         try {
-            PendingUserEntity pUser = userRegister.confirmCheckToken(pendingUserRepository, Integer.parseInt(data.id), data.checkToken);
-            UserEntity user = new UserEntity(pUser, userRegister.generateApiToken());
+            PendingUserEntity pUser = userUtils.confirmCheckToken(pendingUserRepository, Integer.parseInt(data.id), data.checkToken);
+            UserEntity user = new UserEntity(pUser, userUtils.generateApiToken());
             userRepository.save(user);
             pendingUserRepository.delete(pUser);
 
@@ -84,7 +87,7 @@ public class UserManagerAPIController {
     @RequestMapping(value = "/requestToken", method = RequestMethod.POST)
     public ResponseEntity<UserConnectionData> requestToken(@RequestBody UserInfoData data){
         try {
-            UserEntity user = userRegister.getUser(userRepository, passwordEncoder, data);
+            UserEntity user = userUtils.getUser(userRepository, passwordEncoder, data);
             return new ResponseEntity<>(new UserConnectionData(true, user.getName(), user.getApiToken(), ""), HttpStatus.OK);
 
         } catch (UserNotFoundException e) {

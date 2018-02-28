@@ -2,7 +2,6 @@ package net.Broken.Tools.Command;
 import net.Broken.Commande;
 import net.Broken.Tools.FindContentOnWebPage;
 import net.Broken.Tools.LimitChecker;
-import net.Broken.Tools.Redirection;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -12,18 +11,24 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 /**
- * Created by seb65 on 07/11/2016.
+ * Abstact class used for all command that need to find the max number of page on a web site.
  */
 public abstract class NumberedCommande implements Commande{
     private Logger logger = LogManager.getLogger();
-    public String HELP="T'es sérieux la?";
-    int minNumber = 1;
-    int maxNumber = -1;
-    String baseURL;
-    String divClass;
-    String htmlType;
+    private int minNumber = 1;
+    private int maxNumber = -1;
+    private String baseURL;
+    private String divClass;
+    private String htmlType;
 
 
+    /**
+     * Default constructor
+     * @param logger Logger used for logs
+     * @param baseURL WebSite base url
+     * @param divClass DivClass to search to extract image
+     * @param htmlType HTML tag to extract image (img)
+     */
     public NumberedCommande(Logger logger, String baseURL, String divClass, String htmlType) {
         this.logger = logger;
         this.baseURL = baseURL;
@@ -36,11 +41,6 @@ public abstract class NumberedCommande implements Commande{
         } catch (IOException e) {
             logger.catching(e);
         }
-    }
-
-    @Override
-    public boolean called(String[] args, MessageReceivedEvent event) {
-        return false;
     }
 
     @Override
@@ -114,11 +114,6 @@ public abstract class NumberedCommande implements Commande{
             logger.catching(e);
         }
 
-
-    }
-
-    @Override
-    public void executed(boolean success, MessageReceivedEvent event) {
 
     }
 

@@ -14,7 +14,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.ArrayList;
 
 /**
- * Created by Parayre on 24/10/2016.
+ * Auto spam utils TODO Rebuild all this shit!
  */
 public class Moderateur {
 
@@ -25,7 +25,16 @@ public class Moderateur {
     // Cette méthode récupère le dernier message est le rajoute à "historique"
     // SI (spam) retourne 1 (si l'user spam)
     // SINON     retourne 0
-    public int analyse(Member user, Guild serveur, GuildManager serveurManager, MessageReceivedEvent event){
+
+    /**
+     * Get last message and add it on history. After analyse for spam detection
+     * @param user User
+     * @param guild Guild
+     * @param guildManager Guild manager
+     * @param event Message received event
+     * @return 1 if detected as spam, else 0
+     */
+    public int analyse(Member user, Guild guild, GuildManager guildManager, MessageReceivedEvent event){
 
         ArrayList<Message> thisUserHistory = new ArrayList<>();//Creer tableau pour la copie
         int i = 0; // variable de parcours de "historique"

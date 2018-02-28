@@ -1,5 +1,8 @@
 package net.Broken.RestApi.Data.UserManager;
 
+/**
+ * Data for JSON Parsing
+ */
 public class CheckResposeData {
     public boolean accepted;
     public String name;

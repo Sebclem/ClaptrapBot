@@ -7,12 +7,16 @@ import net.dv8tion.jda.core.entities.MessageEmbed;
 
 import java.awt.*;
 import java.io.FileNotFoundException;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Pre build Message Embed
+ */
 public class EmbedMessageUtils {
     public static MessageEmbed getUnknowCommand() {
-        return new EmbedBuilder().setTitle(":warning: Commande inconnue! :warning:").setDescription(":arrow_right: Utilisez `//help` pour voirs les commandes disponible.").setColor(Color.orange).setFooter("bot.seb6596.ovh", MainBot.jda.getSelfUser().getAvatarUrl()).build();
+        return new EmbedBuilder().setTitle(":warning: Commande inconnue! :warning:").setDescription(":arrow_right: Utilisez `//help` pour voirs les commandes disponible.").setColor(Color.orange).setFooter("bot.seb6596.ovh", MainBot.jda.getSelfUser().getAvatarUrl()).setTimestamp(Instant.now()).build();
 
     }
 
@@ -29,7 +33,7 @@ public class EmbedMessageUtils {
     }
 
     public static MessageEmbed getMusicError(String message){
-        return new EmbedBuilder().setTitle(":warning: Musique Error :warning:").setDescription(":arrow_right: "+message).setFooter("'//help music' pour plus d'info",null).setColor(Color.red).setFooter("bot.seb6596.ovh", MainBot.jda.getSelfUser().getAvatarUrl()).build();
+        return new EmbedBuilder().setTitle(":warning: Musique Error :warning:").setDescription(":arrow_right: "+message).setFooter("'//help music' pour plus d'info",MainBot.jda.getSelfUser().getAvatarUrl()).setTimestamp(Instant.now()).setColor(Color.red).setFooter("bot.seb6596.ovh", MainBot.jda.getSelfUser().getAvatarUrl()).build();
 
     }
 
@@ -39,11 +43,11 @@ public class EmbedMessageUtils {
     }
 
     public static MessageEmbed getSpamExtermine(Member autor, int multi) {
-        return new EmbedBuilder().setTitle(":mute: Spam Hunter :mute:").setDescription(autor.getAsMention() + " détecté comme spammer !\n\nOn te revoit dans __**" + multi + "**__ min!").setImage("https://media.giphy.com/media/WVudyGEaizNeg/giphy.gif").setFooter("Spam info disponible via '//spaminfo' en privé", null).setColor(Color.orange).build();
+        return new EmbedBuilder().setTitle(":mute: Spam Hunter :mute:").setDescription(autor.getAsMention() + " détecté comme spammer !\n\nOn te revoit dans __**" + multi + "**__ min!").setImage("https://media.giphy.com/media/WVudyGEaizNeg/giphy.gif").setFooter("Spam info disponible via '//spaminfo' en privé", MainBot.jda.getSelfUser().getAvatarUrl()).setTimestamp(Instant.now()).setTimestamp(Instant.now()).setColor(Color.orange).setColor(Color.orange).build();
     }
 
     public static MessageEmbed getSpamPardon(Member autor) {
-        return new EmbedBuilder().setTitle(":mute: Spam Hunter :mute:").setDescription(autor.getAsMention() + " est de retour, fais gaffe!\nJe te surveille!").setImage("https://media.giphy.com/media/3o7TKwBctlv08kY08M/giphy.gif").setFooter("Spam info disponible via '//spaminfo' en privé", null).setColor(Color.orange).build();
+        return new EmbedBuilder().setTitle(":mute: Spam Hunter :mute:").setDescription(autor.getAsMention() + " est de retour, fais gaffe!\nJe te surveille!").setImage("https://media.giphy.com/media/3o7TKwBctlv08kY08M/giphy.gif").setFooter("Spam info disponible via '//spaminfo' en privé", MainBot.jda.getSelfUser().getAvatarUrl()).setTimestamp(Instant.now()).setColor(Color.orange).build();
     }
 
     public static MessageEmbed getHelp(String command) throws FileNotFoundException {
@@ -54,7 +58,7 @@ public class EmbedMessageUtils {
     }
 
     public static MessageEmbed getMoveError(String message) {
-        return new EmbedBuilder().setTitle(":warning: Move Error :warning: ").setDescription(message).setColor(Color.red).setFooter("'//help move' pour plus d'info ", MainBot.jda.getSelfUser().getAvatarUrl()).build();
+        return new EmbedBuilder().setTitle(":warning: Move Error :warning: ").setDescription(message).setColor(Color.red).setFooter("'//help move' pour plus d'info ", MainBot.jda.getSelfUser().getAvatarUrl()).setTimestamp(Instant.now()).build();
     }
 
     public static MessageEmbed getMoveOk(String message) {
@@ -67,7 +71,7 @@ public class EmbedMessageUtils {
     }
 
     public static MessageEmbed getSpamError(String message, String sub) {
-        return new EmbedBuilder().setTitle(":warning: Spam Error :warning: ").setDescription(message).setColor(Color.red).setFooter("'//help spam "+sub+"' pour plus d'info ", null).build();
+        return new EmbedBuilder().setTitle(":warning: Spam Error :warning: ").setDescription(message).setColor(Color.red).setFooter("'//help spam "+sub+"' pour plus d'info ", MainBot.jda.getSelfUser().getAvatarUrl()).setThumbnail(MainBot.jda.getSelfUser().getAvatarUrl()).setTimestamp(Instant.now()).build();
     }
 
     public static MessageEmbed getSpamInfo(String message) {
@@ -76,11 +80,11 @@ public class EmbedMessageUtils {
     }
 
     public static MessageEmbed getFlushError(String message) {
-        return new EmbedBuilder().setTitle(":warning: Flush Error :warning: ").setDescription(message).setColor(Color.red).setFooter("'//help flush' pour plus d'info ", MainBot.jda.getSelfUser().getAvatarUrl()).build();
+        return new EmbedBuilder().setTitle(":warning: Flush Error :warning: ").setDescription(message).setColor(Color.red).setFooter("'//help flush' pour plus d'info ", MainBot.jda.getSelfUser().getAvatarUrl()).setTimestamp(Instant.now()).build();
     }
 
     public static MessageEmbed getRegister(String message) {
-        return new EmbedBuilder().setTitle(":pencil: Web Registration :pencil:").setDescription(message).setColor(Color.green).setFooter("bot.seb6596.ovh", MainBot.jda.getSelfUser().getAvatarUrl()).build();
+        return buildStandar(new EmbedBuilder().setTitle(":pencil: Web Registration :pencil:").setDescription(message).setColor(Color.green));
     }
 
     public static MessageEmbed getInternalError(){
@@ -88,9 +92,7 @@ public class EmbedMessageUtils {
     }
 
     public static MessageEmbed buildStandar(EmbedBuilder embedBuilder){
-        String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM"));
-        String time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm"));
-        return embedBuilder.setFooter("bot.seb6596.ovh | "+date+" at "+time, MainBot.jda.getSelfUser().getAvatarUrl()).setThumbnail(MainBot.jda.getSelfUser().getAvatarUrl()).build();
+        return embedBuilder.setFooter("bot.seb6596.ovh", MainBot.jda.getSelfUser().getAvatarUrl()).setThumbnail(MainBot.jda.getSelfUser().getAvatarUrl()).setTimestamp(Instant.now()).build();
     }
 
     public static MessageEmbed getUnautorized(){
@@ -100,7 +102,7 @@ public class EmbedMessageUtils {
     public static MessageEmbed getHelpList(String role, String list) throws FileNotFoundException {
         String message = new ResourceLoader().getFile("Help/main.md");
         message = message.replace("@list", list);
-        return new EmbedBuilder().setTitle("Command du bot ("+role+")").setDescription(message).setFooter("Utilise '//help <commande>' pour plus de détails.",null).setColor(Color.green).setThumbnail(MainBot.jda.getSelfUser().getAvatarUrl()).build();
+        return new EmbedBuilder().setTitle("Command du bot ("+role+")").setDescription(message).setFooter("Utilise '//help <commande>' pour plus de détails.",MainBot.jda.getSelfUser().getAvatarUrl()).setTimestamp(Instant.now()).setColor(Color.green).setThumbnail(MainBot.jda.getSelfUser().getAvatarUrl()).build();
     }
 
 

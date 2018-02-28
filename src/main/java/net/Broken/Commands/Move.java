@@ -4,7 +4,6 @@ import net.Broken.Commande;
 import net.Broken.MainBot;
 import net.Broken.Tools.EmbedMessageUtils;
 import net.Broken.Tools.MessageTimeOut;
-import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.exceptions.HierarchyException;
@@ -17,12 +16,9 @@ import org.apache.logging.log4j.Logger;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by seb65 on 20/10/2016.
- */
 
 /**
- *
+ * Move Command
  */
 public class Move implements Commande {
 
@@ -34,14 +30,14 @@ public class Move implements Commande {
     public GuildManager serveurManager;
     public GuildController guildController;
 
-    /**
+    /** Perform a move (Reset is role and add target(s) role(s)
      *
-     * @param user
-     * @param cible
+     * @param user User to move
+     * @param cible Complete list of new role
      * @param reset
-     * @param serveur
-     * @param serveurManager
-     * @return
+     * @param serveur Guild
+     * @param serveurManager GuildManager
+     * @return success
      */
     public boolean exc(Member user, List<Role> cible , boolean reset, Guild serveur, GuildManager serveurManager) throws HierarchyException
     {
@@ -77,13 +73,7 @@ public class Move implements Commande {
         return erreur;
     }
 
-    @Override
-
-    public boolean called(String[] args, MessageReceivedEvent event) {
-        return false;
-    }
-
-    /**
+    /** Command handler
      *
      * @param args
      * @param event
@@ -187,16 +177,6 @@ public class Move implements Commande {
 
 
 
-
-    }
-
-    /**
-     *
-     * @param success
-     * @param event
-     */
-    @Override
-    public void executed(boolean success, MessageReceivedEvent event) {
 
     }
 

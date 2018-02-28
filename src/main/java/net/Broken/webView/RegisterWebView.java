@@ -6,8 +6,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+/**
+ * WebPage Controller for /register
+ */
 @Controller
-public class ResisterWebView {
+public class RegisterWebView {
     @RequestMapping("/register")
     public String music(@RequestParam(value="id", required = true, defaultValue = "") String id, Model model){
         model.addAttribute("id", id);

@@ -12,16 +12,12 @@ import java.io.IOException;
 
 
 /**
- * Created by seb65 on 11/11/2016.
+ * Madame command that return random picture from dites.bonjourmadame.fr
  */
 public class Madame implements Commande{
     Logger logger = LogManager.getLogger();
     MessageReceivedEvent event;
     public String HELP="T'es sérieux la?";
-    @Override
-    public boolean called(String[] args, MessageReceivedEvent event) {
-        return false;
-    }
 
     @Override
     public void action(String[] args, MessageReceivedEvent event) {
@@ -64,11 +60,6 @@ public class Madame implements Commande{
     }
 
     @Override
-    public void executed(boolean success, MessageReceivedEvent event) {
-
-    }
-
-    @Override
     public boolean isPrivateUsable() {
         return false;
     }
@@ -83,8 +74,16 @@ public class Madame implements Commande{
         return true;
     }
 
+
+    /**
+     * Detect if picture link go to Tepeee
+     * @param url
+     * @return true is Tepeee link is detected
+     * @throws StringIndexOutOfBoundsException
+     * @throws IOException
+     */
     private boolean scanPageForTipeee(String url) throws StringIndexOutOfBoundsException, IOException{
-            String content = FindContentOnWebPage.getUrlSource(url);
+            String content = FindContentOnWebPage.getSourceUrl(url);
             String imgClickLink = content.substring(content.indexOf("photo post"));
             imgClickLink = imgClickLink.substring(imgClickLink.indexOf("<a"));
             imgClickLink = imgClickLink.substring(imgClickLink.indexOf("\""));

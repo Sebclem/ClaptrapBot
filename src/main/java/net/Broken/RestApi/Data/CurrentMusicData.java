@@ -5,7 +5,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackState;
-
+/**
+ * Data for JSON Parsing
+ */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CurrentMusicData {
     private final UserAudioTrackData info;

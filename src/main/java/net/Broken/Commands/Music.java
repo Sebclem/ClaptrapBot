@@ -15,16 +15,15 @@ import org.apache.logging.log4j.Logger;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Music commands
+ */
+
 public class Music implements Commande {
     public AudioM audio;
     Logger logger = LogManager.getLogger();
     public Music() {
         audio = new AudioM(MainBot.jda.getGuilds().get(0));
-    }
-
-    @Override
-    public boolean called(String[] args, MessageReceivedEvent event) {
-        return false;
     }
 
     @Override
@@ -155,11 +154,6 @@ public class Music implements Commande {
             }};
             new MessageTimeOut(messages, MainBot.messageTimeOut).start();
         }
-    }
-
-    @Override
-    public void executed(boolean success, MessageReceivedEvent event) {
-
     }
 
     @Override

@@ -17,22 +17,25 @@ import static java.lang.Thread.sleep;
 
 
 /**
- * Created by seb65 on 20/10/2016.
+ * AntiSpam punishment system
  */
 public class AntiSpam {
-    public Move move = new Move();
+
     Logger logger = LogManager.getLogger();
-
+    public Move move = new Move();
     public AntiSpam() {
-
-
-
-
-        //Constructeur
 
     }
 
-    public void extermine(Member user, Guild serveur, GuildManager serveurManger, Boolean incrMulti, MessageReceivedEvent event){
+    /**
+     * Send user to Spam role
+     * @param user User to punish
+     * @param guild Guild
+     * @param guildManager GuildManager
+     * @param incrMulti True for increment punishment time
+     * @param event Message Received Event
+     */
+    public void extermine(Member user, Guild guild, GuildManager guildManager, Boolean incrMulti, MessageReceivedEvent event){
         try {
             sleep(1000);
         } catch (InterruptedException e) {
@@ -65,9 +68,9 @@ public class AntiSpam {
             if(!MainBot.spamUtils.get(user.getUser()).isOnSpam())
             {
                 MainBot.spamUtils.get(user.getUser()).setOnSpam(true);
-                List<Role> spm = serveur.getRolesByName("Spammer", false);
+                List<Role> spm = guild.getRolesByName("Spammer", false);
                 try{
-                    move.exc(user, spm, true, serveur, serveurManger);
+                    move.exc(user, spm, true, guild, guildManager);
                     MainBot.spamUtils.get(user.getUser()).addMessage(event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamExtermine(user,MainBot.spamUtils.get(user.getUser()).getMultip())).complete());
                     MainBot.spamUtils.get(user.getUser()).setMinuteur(new Minuteur(MainBot.spamUtils.get(user.getUser()).getMultip(), move.user, move.saveRoleUser, move.serveur, move.serveurManager,event));
                     MainBot.spamUtils.get(user.getUser()).launchMinuteur();
@@ -89,6 +92,9 @@ public class AntiSpam {
 
     }
 
+    /**
+     * Timer to auto remove user from Spam role
+     */
     public class Minuteur extends Thread{
         public TextChannel chanel;
         public List<Role> saveRoleUser;

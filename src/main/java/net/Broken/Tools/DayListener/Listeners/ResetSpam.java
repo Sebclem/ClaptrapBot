@@ -6,6 +6,9 @@ import net.dv8tion.jda.core.exceptions.RateLimitedException;
 
 import java.util.GregorianCalendar;
 
+/**
+ * Daily spam reset
+ */
 public class ResetSpam implements NewDayListener {
     @Override
     public void onNewDay() {

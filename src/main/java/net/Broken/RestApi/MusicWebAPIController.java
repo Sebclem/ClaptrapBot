@@ -2,19 +2,15 @@ package net.Broken.RestApi;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import net.Broken.Commands.Music;
 import net.Broken.DB.Entity.UserEntity;
 import net.Broken.DB.Repository.UserRepository;
 import net.Broken.MainBot;
 import net.Broken.RestApi.Data.*;
-import net.Broken.RestApi.Data.UserManager.CheckResposeData;
-import net.Broken.RestApi.Data.UserManager.UserInfoData;
 import net.Broken.Tools.UserManager.Exceptions.UnknownTokenException;
-import net.Broken.Tools.UserManager.Exceptions.UserNotFoundException;
-import net.Broken.Tools.UserManager.UserRegister;
+import net.Broken.Tools.UserManager.UserUtils;
 import net.Broken.audio.FindGeneral;
-import net.Broken.audio.NotConectedException;
+import net.Broken.audio.NotConnectedException;
 import net.Broken.audio.NullMusicManager;
 import net.dv8tion.jda.core.entities.VoiceChannel;
 import org.apache.logging.log4j.LogManager;
@@ -22,7 +18,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -32,18 +27,18 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
-// import net.Broken.DB.Repository.SavedPlaylistRepository;
+/**
+ * Rest Api Controller for /api/music
+ */
 
 @RestController
 @RequestMapping("/api/music/")
 public class MusicWebAPIController {
     Logger logger = LogManager.getLogger();
-//    @Autowired
-//    public SavedPlaylistRepository savedPlaylist;
     @Autowired
     UserRepository userRepository;
 
-    UserRegister userRegister = UserRegister.getInstance();
+    UserUtils userUtils = UserUtils.getInstance();
 
 
     @RequestMapping("/currentMusicInfo")
@@ -52,15 +47,15 @@ public class MusicWebAPIController {
 
         if(musicCommande.audio.getGuild().getAudioManager().isConnected()){
             try {
-                AudioPlayer player = musicCommande.audio.getMusicManager().player;
+                AudioPlayer player = musicCommande.audio.getGuildMusicManager().player;
                 AudioTrack currentTrack = player.getPlayingTrack();
                 if(currentTrack == null)
                 {
                     return new CurrentMusicData(null,0, "STOP",false);
                 }
-                UserAudioTrackData uat = new UserAudioTrackData(musicCommande.audio.getMusicManager().scheduler.getCurrentPlayingTrack());
+                UserAudioTrackData uat = new UserAudioTrackData(musicCommande.audio.getGuildMusicManager().scheduler.getCurrentPlayingTrack());
                 return new CurrentMusicData(uat, currentTrack.getPosition(), currentTrack.getState().toString(), player.isPaused());
-            } catch (NullMusicManager | NotConectedException nullMusicManager) {
+            } catch (NullMusicManager | NotConnectedException nullMusicManager) {
                 return new CurrentMusicData(null,0, "STOP",false);
             }
         }else
@@ -74,9 +69,9 @@ public class MusicWebAPIController {
         Music musicCommande = (Music) MainBot.commandes.get("music");
         List<UserAudioTrackData> list = null;
         try {
-            list = musicCommande.getAudioManager().getMusicManager().scheduler.getList();
+            list = musicCommande.getAudioManager().getGuildMusicManager().scheduler.getList();
             return new PlaylistData(list);
-        } catch (NullMusicManager | NotConectedException nullMusicManager) {
+        } catch (NullMusicManager | NotConnectedException nullMusicManager) {
             return new PlaylistData(list);
         }
     }
@@ -87,7 +82,7 @@ public class MusicWebAPIController {
         if(data.command != null) {
             if(data.token != null) {
                 try {
-                    UserEntity user = userRegister.getUserWithApiToken(userRepository, data.token);
+                    UserEntity user = userUtils.getUserWithApiToken(userRepository, data.token);
                     logger.info("receive command " + data.command + " from " + request.getRemoteAddr() + " USER: " + user.getName());
                     Music musicCommande = (Music) MainBot.commandes.get("music");
 
@@ -115,34 +110,13 @@ public class MusicWebAPIController {
     }
 
     @RequestMapping(value = "/getChanel", method = RequestMethod.GET)
-    public List<Chanel> getChanel(){
-        List<Chanel> temp = new ArrayList<>();
+    public List<ChanelData> getChanel(){
+        List<ChanelData> temp = new ArrayList<>();
         for(VoiceChannel aChanel : FindGeneral.find(MainBot.jda.getGuilds().get(0)).getVoiceChannels()){
-            temp.add(new Chanel(aChanel.getName(),aChanel.getId(),aChanel.getPosition()));
+            temp.add(new ChanelData(aChanel.getName(),aChanel.getId(),aChanel.getPosition()));
         }
         return temp;
     }
-
-
-
-
-
-//    DB Test Ignore it
-
-//    @RequestMapping(value = "/test", method = RequestMethod.GET)
-//    public ResponseEntity<String> test(){
-//        SavedPlaylistEntity savedPlaylistEntity = new SavedPlaylistEntity();
-//        savedPlaylistEntity.setAutorName("Test");
-//        savedPlaylistEntity.setName("Playlist de test");
-//        savedPlaylist.save(savedPlaylistEntity);
-//        logger.info(savedPlaylistEntity);
-//        return new ResponseEntity<String>("OK",HttpStatus.OK);
-//    }
-//    @GetMapping(path="/all")
-//    public @ResponseBody Iterable<SavedPlaylistEntity> getAllUsers() {
-//        // This returns a JSON or XML with the users
-//        return savedPlaylist.findAll();
-//    }
 
 
 }

@@ -5,6 +5,10 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 
+/**
+ * Repository for UserEntity
+ */
+
 public interface UserRepository extends CrudRepository<UserEntity, Integer>{
     List<UserEntity> findByName(String name);
     List<UserEntity> findByJdaId(String jdaId);

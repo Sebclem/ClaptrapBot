@@ -14,8 +14,6 @@ import net.dv8tion.jda.core.entities.MessageEmbed;
 import net.dv8tion.jda.core.entities.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.io.FileNotFoundException;
@@ -23,21 +21,37 @@ import java.security.SecureRandom;
 import java.util.List;
 import java.util.UUID;
 
-public class UserRegister {
-
-
+public class UserUtils {
 
     private Logger logger = LogManager.getLogger();
-    private static UserRegister INSTANCE = new UserRegister();
 
-    private UserRegister(){}
+    private static UserUtils INSTANCE = new UserUtils();
 
-    public static UserRegister getInstance(){
+    /**
+     * Private default constructor
+     */
+    private UserUtils(){}
+
+    /**
+     * Singleton
+     * @return Unique UserUtils instance
+     */
+    public static UserUtils getInstance(){
         return INSTANCE;
     }
 
 
-
+    /**
+     * Check if user exist on Guild, if exist, generate and send checkTocken, create entry on PendingUser DB
+     * @param pendingUserRepository Pending user DB interface
+     * @param userRepository User DB interface
+     * @param passwordEncoder Password encoder
+     * @param userInfo Received data
+     * @return PendingUserEntity PK
+     * @throws UserNotFoundException User not found in guild
+     * @throws PasswordNotMatchException User already registered in PendingUser DB but password not match
+     * @throws UserAlreadyRegistered User already registered in User DB
+     */
     public String sendCheckToken(PendingUserRepository pendingUserRepository, UserRepository userRepository, PasswordEncoder passwordEncoder, UserInfoData userInfo) throws UserNotFoundException, PasswordNotMatchException, UserAlreadyRegistered {
 
         logger.info("New registration for " + userInfo.name);
@@ -102,6 +116,15 @@ public class UserRegister {
         
     }
 
+    /**
+     * Confirm user account
+     * @param pendingUserRepository Pending user DB interface
+     * @param id UserPendingEntity PK to cofirm
+     * @param checkToken received token
+     * @return PendingUserEntity
+     * @throws TokenNotMatch Given token not match
+     * @throws UserNotFoundException User not found in Pending user DB
+     */
     public PendingUserEntity confirmCheckToken(PendingUserRepository pendingUserRepository, int id, String checkToken ) throws TokenNotMatch, UserNotFoundException {
         PendingUserEntity pendingUser = pendingUserRepository.findOne(id);
         if(pendingUser != null) {
@@ -120,6 +143,15 @@ public class UserRegister {
         return pendingUser;
     }
 
+    /**
+     * Get user Entity
+     * @param userRepository User DB interface
+     * @param passwordEncoder Password encoder
+     * @param userInfoData Received data
+     * @return User Entity
+     * @throws UserNotFoundException User not found in User DB
+     * @throws PasswordNotMatchException Given password not match
+     */
     public UserEntity getUser(UserRepository userRepository, PasswordEncoder passwordEncoder, UserInfoData userInfoData) throws UserNotFoundException, PasswordNotMatchException {
         List<UserEntity> users = userRepository.findByName(userInfoData.name);
         if(users.size()<1){
@@ -140,6 +172,13 @@ public class UserRegister {
         }
     }
 
+    /**
+     * return token's UserEntity
+     * @param userRepository User DB interface
+     * @param token Received token
+     * @return User Entity
+     * @throws UnknownTokenException Can't find token on User DB
+     */
     public UserEntity getUserWithApiToken(UserRepository userRepository, String token) throws UnknownTokenException {
         List<UserEntity> users = userRepository.findByApiToken(token);
         if(users.size() > 0){
@@ -150,10 +189,18 @@ public class UserRegister {
 
     }
 
+    /**
+     * Generate API Token
+     * @return UUID String TODO Find something more secure
+     */
     public String generateApiToken(){
         return UUID.randomUUID().toString();
     }
 
+    /**
+     * Generate short check token
+     * @return check token as string
+     */
     private String generateCheckToken(){
         SecureRandom random = new SecureRandom();
         long longToken = Math.abs( random.nextLong() );

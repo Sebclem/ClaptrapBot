@@ -4,7 +4,6 @@ import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
-import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioSourceManager;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
@@ -17,26 +16,42 @@ import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.entities.VoiceChannel;
-import net.dv8tion.jda.core.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.jws.soap.SOAPBinding;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class AudioM {
 
-
+    /**
+     * Music manager for this guild
+     */
     private GuildMusicManager musicManager;
+    /**
+     * Audio player manager for this guild
+     */
     private AudioPlayerManager playerManager;
+    /**
+     * Current voice chanel (null if not connected)
+     */
     private VoiceChannel playedChanel;
+    /**
+     * Time out for list message
+     */
     private int listTimeOut = 30;
+    /**
+     * Extrem limit for playlist
+     */
     private int listExtremLimit = 300;
-    private Logger logger = LogManager.getLogger();
+    /**
+     * Current guild
+     */
     private Guild guild;
+    private Logger logger = LogManager.getLogger();
+
 
 
 
@@ -47,6 +62,14 @@ public class AudioM {
         this.guild = guild;
     }
 
+    /**
+     * Load audio track from url, connect to chanel if not connected
+     * @param event
+     * @param voiceChannel Voice channel to connect if no connected
+     * @param trackUrl Audio track url
+     * @param playlistLimit Limit of playlist
+     * @param onHead True for adding audio track on top of playlist
+     */
     public void loadAndPlay(MessageReceivedEvent event, VoiceChannel voiceChannel, final String trackUrl, int playlistLimit, boolean onHead) {
         GuildMusicManager musicManager = getGuildAudioPlayer(guild);
         playedChanel = voiceChannel;
@@ -109,6 +132,13 @@ public class AudioM {
         });
     }
 
+    /**
+     * Load playlist to playlist
+     * @param playlist Loaded playlist
+     * @param playlistLimit Playlist limit
+     * @param user User who have submitted the playlist
+     * @param onHead True for adding audio track on top of playlist
+     */
     public void playListLoader(AudioPlaylist playlist, int playlistLimit, User user, boolean onHead){
         int i = 0;
         List<AudioTrack> tracks = playlist.getTracks();
@@ -135,6 +165,14 @@ public class AudioM {
         return musicManager;
     }
 
+    /**
+     * Add single track to playlist, auto-connect if not connected to vocal chanel
+     * @param guild guild
+     * @param channel Chanel for auto-connect
+     * @param musicManager Guild music manager
+     * @param track Track to add to playlist
+     * @param onHead True for adding audio track on top of playlist
+     */
     public void play(Guild guild, VoiceChannel channel, GuildMusicManager musicManager, UserAudioTrack track,boolean onHead) {
         if(!guild.getAudioManager().isConnected())
             guild.getAudioManager().openAudioConnection(channel);
@@ -144,66 +182,66 @@ public class AudioM {
             musicManager.scheduler.addNext(track);
     }
 
+    /**
+     * Skip current track
+     * @param event
+     */
     public void skipTrack(MessageReceivedEvent event) {
         GuildMusicManager musicManager = getGuildAudioPlayer(event.getGuild());
         musicManager.scheduler.nextTrack();
-
         Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicOk("Musique suivante!")).complete();
-        List<Message> messages = new ArrayList<Message>(){{
-            add(message);
-            add(event.getMessage());
-        }};
-        new MessageTimeOut(messages, MainBot.messageTimeOut).start();
+        new MessageTimeOut(MainBot.messageTimeOut, message, event.getMessage()).start();
     }
 
+    /**
+     * Pause current track
+     * @param event
+     */
     public void pause(MessageReceivedEvent event) {
         GuildMusicManager musicManager = getGuildAudioPlayer(event.getGuild());
         musicManager.scheduler.pause();
 
         Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicOk("Musique en pause !")).complete();
-        List<Message> messages = new ArrayList<Message>(){{
-            add(message);
-            add(event.getMessage());
-        }};
-        new MessageTimeOut(messages, MainBot.messageTimeOut).start();
+        new MessageTimeOut(MainBot.messageTimeOut, event.getMessage(), message).start();
+
     }
 
+    /**
+     * Resume paused track
+     * @param event
+     */
     public void resume (MessageReceivedEvent event) {
         GuildMusicManager musicManager = getGuildAudioPlayer(event.getGuild());
         musicManager.scheduler.resume();
 
         Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicOk("Reprise de la piste en cour !")).complete();
-        List<Message> messages = new ArrayList<Message>(){{
-            add(message);
-            add(event.getMessage());
-        }};
-        new MessageTimeOut(messages, MainBot.messageTimeOut).start();
+        new MessageTimeOut(MainBot.messageTimeOut, event.getMessage(), message).start();
     }
 
-    public void info(MessageReceivedEvent event){
+    /**
+     * Print current played track info
+     * @param event
+     */
+    public void info(MessageReceivedEvent event) {
         GuildMusicManager musicManager = getGuildAudioPlayer(event.getGuild());
         AudioTrackInfo info = musicManager.scheduler.getInfo();
         UserAudioTrack userAudioTrack = musicManager.scheduler.getCurrentPlayingTrack();
 
-        Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicOk(info.title+"\n"+info.uri+"\nSubmitted by: "+userAudioTrack.getSubmitedUser().getName())).complete();
-        List<Message> messages = new ArrayList<Message>(){{
-            add(message);
-            add(event.getMessage());
-        }};
-        new MessageTimeOut(messages, MainBot.messageTimeOut).start();
+        Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicOk(info.title + "\n" + info.uri + "\nSubmitted by: " + userAudioTrack.getSubmittedUser().getName())).complete();
+        new MessageTimeOut(MainBot.messageTimeOut, event.getMessage(), message).start();
     }
 
-    public void flush(MessageReceivedEvent event){
+        public void flush(MessageReceivedEvent event){
         GuildMusicManager musicManager = getGuildAudioPlayer(event.getGuild());
         musicManager.scheduler.flush();
         Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicOk("RAZ de la playlist!")).complete();
-        List<Message> messages = new ArrayList<Message>(){{
-            add(message);
-            add(event.getMessage());
-        }};
-        new MessageTimeOut(messages, MainBot.messageTimeOut).start();
+        new MessageTimeOut(MainBot.messageTimeOut, event.getMessage(), message).start();
     }
 
+    /**
+     * Print current playlist content
+     * @param event
+     */
     public void list(MessageReceivedEvent event){
         GuildMusicManager musicManager = getGuildAudioPlayer(event.getGuild());
         List<UserAudioTrackData> list = musicManager.scheduler.getList();
@@ -220,44 +258,44 @@ public class AudioM {
             }
         }
         Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicOk("Playlist:\n\n"+resp.toString())).complete();
-        List<Message> messages = new ArrayList<Message>(){{
-            add(message);
-            add(event.getMessage());
-        }};
-        new MessageTimeOut(messages, listTimeOut).start();
+        new MessageTimeOut(MainBot.messageTimeOut, event.getMessage(), message).start();
     }
 
-
-    public void add(MessageReceivedEvent event,String url, int playListLimit, boolean onHead) {
+    /**
+     * Called by //add, only if already connected
+     * @param event
+     * @param url Audio track url
+     * @param playListLimit Limit of playlist
+     * @param onHead True for adding audio track on top of playlist
+     */
+    public void add(MessageReceivedEvent event, String url, int playListLimit, boolean onHead) {
         if(playedChanel != null){
             loadAndPlay(event,playedChanel, url, playListLimit,onHead);
         }
         else
         {
             Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicError("Aucune lecture en cour!")).complete();
-            List<Message> messages = new ArrayList<Message>(){{
-                add(message);
-                add(event.getMessage());
-            }};
-            new MessageTimeOut(messages, MainBot.messageTimeOut).start();
+            new MessageTimeOut(MainBot.messageTimeOut, event.getMessage(), message).start();
         }
     }
 
-
+    /**
+     * Stop current playing track and flush playlist
+     * @param event
+     */
     public void stop (MessageReceivedEvent event) {
         musicManager.scheduler.stop();
         musicManager.scheduler.flush();
 
         if (event != null) {
             Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicOk("Arret de la musique!")).complete();
-            List<Message> messages = new ArrayList<Message>(){{
-                add(message);
-                add(event.getMessage());
-            }};
-            new MessageTimeOut(messages, MainBot.messageTimeOut).start();
+            new MessageTimeOut(MainBot.messageTimeOut, event.getMessage(), message).start();
         }
     }
 
+    /**
+     * Stop current playing track and flush playlist (no confirmation message)
+     */
     public void stop () {
 
         GuildMusicManager musicManager = getGuildAudioPlayer(guild);
@@ -267,11 +305,11 @@ public class AudioM {
         guild.getAudioManager().closeAudioConnection();
     }
 
-    public GuildMusicManager getMusicManager() throws NullMusicManager, NotConectedException {
+    public GuildMusicManager getGuildMusicManager() throws NullMusicManager, NotConnectedException {
         if( musicManager == null)
             throw new NullMusicManager();
         else if( playedChanel == null)
-            throw new NotConectedException();
+            throw new NotConnectedException();
         return musicManager;
     }
 

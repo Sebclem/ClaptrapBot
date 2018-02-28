@@ -6,7 +6,7 @@ import java.net.URL;
 import java.net.URLConnection;
 
 /**
- * Created by seb65 on 07/11/2016.
+ * Redirection URL Util
  */
 public class Redirection {
 
@@ -15,7 +15,12 @@ public class Redirection {
 
     }
 
-
+    /**
+     * Return Redirected URL
+     * @param urlString Source URL
+     * @return Redirected URL
+     * @throws IOException
+     */
     public String get(String urlString) throws IOException {
         URLConnection con = new URL(urlString).openConnection();
         //System.out.println( "orignal url: " + con.getURL() );

@@ -9,6 +9,9 @@ import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+/**
+ * Stop RestApi Command
+ */
 public class Stop implements CommandInterface {
     @Override
     public ResponseEntity<CommandResponseData> action(Music musicCommande, CommandPostData data, User user) {

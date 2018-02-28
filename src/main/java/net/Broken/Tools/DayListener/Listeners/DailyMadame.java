@@ -9,8 +9,11 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
+/**
+ * Daily Listener for DailyMadame
+ */
 public class DailyMadame implements NewDayListener{
-    Logger logger = LogManager.getLogger();
+    private Logger logger = LogManager.getLogger();
     @Override
     public void onNewDay() {
         Redirection redirect = new Redirection();

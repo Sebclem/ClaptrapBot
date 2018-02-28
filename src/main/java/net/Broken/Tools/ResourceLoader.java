@@ -15,6 +15,12 @@ public class ResourceLoader {
 
     private Logger logger = LogManager.getLogger();
 
+    /**
+     * Get file contents as string for resource folder
+     * @param fileName Requested file
+     * @return File contents as string
+     * @throws FileNotFoundException
+     */
     public String getFile(String fileName) throws FileNotFoundException {
 
         StringBuilder result = new StringBuilder("");

@@ -6,6 +6,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+/**
+ * Entity for DB. Represent user who not yet confirmed  her account.
+ */
 @Entity
 public class PendingUserEntity {
     @Id

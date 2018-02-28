@@ -9,10 +9,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Auto dell message util
+ */
 public class MessageTimeOut extends Thread{
     List<Message> messages;
     int second;
     Logger logger = LogManager.getLogger();
+
     public MessageTimeOut(List<Message> messages, int second) {
         this.messages = messages;
         this.second = second;

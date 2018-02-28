@@ -13,13 +13,9 @@ import java.net.URL;
 import java.net.URLConnection;
 
 /**
- * Created by Seb on 06/02/2017.
+ * Command that return a random picture of cat.
  */
 public class Cat implements Commande {
-    @Override
-    public boolean called(String[] args, MessageReceivedEvent event) {
-        return false;
-    }
 
     @Override
     public void action(String[] args, MessageReceivedEvent event) {
@@ -60,11 +56,6 @@ public class Cat implements Commande {
         }
         else
             event.getPrivateChannel().sendMessage("\n:warning: **__Commande non disponible en priver!__** :warning:");
-
-    }
-
-    @Override
-    public void executed(boolean success, MessageReceivedEvent event) {
 
     }
 

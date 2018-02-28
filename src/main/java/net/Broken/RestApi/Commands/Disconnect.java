@@ -10,6 +10,9 @@ import net.dv8tion.jda.core.entities.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+/**
+ * Disconnect from vocal chanel RestApi Command
+ */
 public class Disconnect implements CommandInterface{
     @Override
     public ResponseEntity<CommandResponseData> action(Music musicCommande, CommandPostData data, User user) {

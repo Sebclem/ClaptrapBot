@@ -21,16 +21,12 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Created by sebastien on 13/03/17.
+ * Spam Info Command
  */
 public class SpamInfo implements Commande{
     private HashMap<User,MessageUpdater> threadHashMap = new HashMap<>();
 
     Logger logger = LogManager.getLogger();
-    @Override
-    public boolean called(String[] args, MessageReceivedEvent event) {
-        return false;
-    }
 
     @Override
     public void action(String[] args, MessageReceivedEvent event) {
@@ -91,11 +87,6 @@ public class SpamInfo implements Commande{
 
 
 
-
-    }
-
-    @Override
-    public void executed(boolean success, MessageReceivedEvent event) {
 
     }
 
