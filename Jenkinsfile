@@ -20,5 +20,6 @@ node {
     }
     stage('Cleaning'){
         sh "docker image prune -f"
+        build job: 'Bot Discord javadoc', wait: false
     }
 } 
