@@ -2,12 +2,12 @@ node {
     def app
    stage('Clone') { // for display purposes
       // Get some code from a GitHub repository
-      git url: 'https://github.com/BrokenFire/BrokenDiscordBot.git', branch: 'devel'
+      git 'https://github.com/BrokenFire/BrokenDiscordBot.git'
    }
    stage('Build image') {
         /* This builds the actual image; synonymous to
          * docker build on the command line */
- 
+
         app = docker.build("brokenfire/brokendiscordbot","--rm=true .")
     }
    stage('Push image') {
@@ -15,10 +15,11 @@ node {
          * First, the incremental build number from Jenkins
          * Second, the 'latest' tag.
          * Pushing multiple tags is cheap, as all the layers are reused. */
-        app.push("devel") 
+        app.push()
         
     }
     stage('Cleaning'){
         sh "docker image prune -f"
+        build job: 'Bot Discord javadoc', wait: false
     }
 } 

@@ -1,5 +1,5 @@
 # BrokenDiscordBot
-Master:<br/> [![Build Status](https://jenkins.seb6596.ovh/buildStatus/icon?job=BrokenDiscordBot/master)](https://jenkins.seb6596.ovh/job/BrokenDiscordBot/job/master/)
+Master:<br/>[![Build Status](https://jenkins.seb6596.ovh/job/Bot%20Discord%20Gradle/badge/icon)](https://jenkins.seb6596.ovh/job/Bot%20Discord%20Gradle/)
 
 Devel: <br/>[![Build Status](https://jenkins.seb6596.ovh/buildStatus/icon?job=BrokenDiscordBot/devel)](https://jenkins.seb6596.ovh/job/BrokenDiscordBot/job/devel/)
 
@@ -69,6 +69,10 @@ Devel: <br/>[![Build Status](https://jenkins.seb6596.ovh/buildStatus/icon?job=Br
 >       external: false
 > ```
 > Docker hub [repo](https://hub.docker.com/r/brokenfire/brokendiscordbot/)
+
+### [Javadoc](https://jenkins.seb6596.ovh/job/Bot%20Discord%20Gradle/javadoc/)
+
+### [Jenkins](https://jenkins.seb6596.ovh/job/Bot%20Discord%20Gradle/)
 
 #### Jenkisfile
 `git config --global merge.ours.driver true`
