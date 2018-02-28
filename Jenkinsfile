@@ -21,9 +21,4 @@ node {
     stage('Cleaning'){
         sh "docker image prune -f"
     }
-    stage('build Javadoc'){
-        archiveJavadoc{
-            javadocDir('build/docs/javadoc')
-        }
-    }
 } 
