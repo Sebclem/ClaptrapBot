@@ -8,7 +8,7 @@ node {
         /* This builds the actual image; synonymous to
          * docker build on the command line */
  
-        app = docker.build("brokenfire/brokendiscordbot","--rm=true .")
+        app = docker.build("brokenfire/brokendiscordbot","--rm=true .","-v build/:build/")
     }
    stage('Push image') {
         /* Finally, we'll push the image with two tags:
@@ -20,5 +20,10 @@ node {
     }
     stage('Cleaning'){
         sh "docker image prune -f"
+    }
+    stage('build Javadoc'){
+        archiveJavadoc{
+            javadocDir('build/docs/javadoc')
+        }
     }
 } 
