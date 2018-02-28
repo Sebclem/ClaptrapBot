@@ -8,6 +8,9 @@ import java.util.stream.IntStream;
 
 import org.apache.commons.lang3.StringUtils;
 
+/**
+ * Utils to render table in block code
+ */
 public class TableRenderer {
 
     private int width;
@@ -20,19 +23,31 @@ public class TableRenderer {
 
     }
 
+    /**
+     * Set Table header(s)
+     * @param header Header(s) as String
+     */
     public void setHeader(Object... header) {
         this.header = Arrays.asList(header);
         if (header.length > this.width)
             this.width = header.length;
     }
 
-    public void addRow(Object... header) {
-        List<Object> objects = Arrays.asList(header);
+    /**
+     * Add row to table
+     * @param content Content(s) as string
+     */
+    public void addRow(Object... content) {
+        List<Object> objects = Arrays.asList(content);
         table.add(objects);
-        if (header.length > this.width)
-            this.width = header.length;
+        if (content.length > this.width)
+            this.width = content.length;
     }
 
+    /**
+     * Change default empty string
+     * @param str
+     */
     public void setEmptyString(String str) {
         this.empty = str;
     }

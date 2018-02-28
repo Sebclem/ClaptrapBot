@@ -11,6 +11,9 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Pre build Message Embed
+ */
 public class EmbedMessageUtils {
     public static MessageEmbed getUnknowCommand() {
         return new EmbedBuilder().setTitle(":warning: Commande inconnue! :warning:").setDescription(":arrow_right: Utilisez `//help` pour voirs les commandes disponible.").setColor(Color.orange).setFooter("bot.seb6596.ovh", MainBot.jda.getSelfUser().getAvatarUrl()).setTimestamp(Instant.now()).build();

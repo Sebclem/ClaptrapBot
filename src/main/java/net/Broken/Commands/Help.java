@@ -2,7 +2,6 @@ package net.Broken.Commands;
 
 import net.Broken.Commande;
 import net.Broken.MainBot;
-import net.Broken.RestApi.CommandInterface;
 import net.Broken.Tools.EmbedMessageUtils;
 import net.Broken.Tools.MessageTimeOut;
 import net.Broken.Tools.PrivateMessage;
@@ -23,15 +22,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by seb65 on 23/10/2016.
+ * Help Command.
  */
 public class Help implements Commande {
     Logger logger = LogManager.getLogger();
     private int cellLenght = 25;
-    @Override
-    public boolean called(String[] args, MessageReceivedEvent event) {
-        return true;
-    }
 
     @Override
     public void action(String[] args, MessageReceivedEvent event) {
@@ -173,11 +168,6 @@ public class Help implements Commande {
 
         }
 
-
-    }
-
-    @Override
-    public void executed(boolean success, MessageReceivedEvent event) {
 
     }
 

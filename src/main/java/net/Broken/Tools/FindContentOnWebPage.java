@@ -6,12 +6,17 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 
-/**
- * Created by sebastien on 10/05/17.
- */
 public  class FindContentOnWebPage {
+    /**
+     * Find picture URL on webPage
+     * @param url Web Page URL
+     * @param divClass Div class where the picture is
+     * @param htmlType HTML tag of image (img)
+     * @return Picture URL
+     * @throws IOException
+     */
     public static String doYourJob(String url, String divClass, String htmlType) throws IOException {
-        String source = getUrlSource(url);
+        String source = getSourceUrl(url);
         int divIndex = source.indexOf(divClass);
         String sub = source.substring(divIndex);
 //        System.out.println(sub);
@@ -24,7 +29,13 @@ public  class FindContentOnWebPage {
         return split[0];
     }
 
-    public static String getUrlSource(String url) throws IOException {
+    /**
+     * Get source code of web page
+     * @param url Web page URL
+     * @return Web page source as String
+     * @throws IOException
+     */
+    public static String getSourceUrl(String url) throws IOException {
         URL urlC = new URL(url);
         URLConnection yc = urlC.openConnection();
         BufferedReader in = new BufferedReader(new InputStreamReader(

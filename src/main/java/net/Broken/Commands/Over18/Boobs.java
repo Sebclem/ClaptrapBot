@@ -4,7 +4,7 @@ import net.Broken.Tools.Command.NumberedCommande;
 import org.apache.logging.log4j.LogManager;
 
 /**
- * Created by seb65 on 07/11/2016.
+ * Boobs command, return random picture from lesaintdesseins.fr
  */
 public class Boobs extends NumberedCommande {
 

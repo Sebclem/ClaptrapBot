@@ -18,9 +18,16 @@ import org.apache.logging.log4j.Logger;
 import javax.security.auth.login.LoginException;
 import java.util.List;
 
+
 public class Init {
     static private Logger logger = LogManager.getLogger();
 
+    /**
+     * Initialize all bot functionality
+     * @param token bot user token
+     * @param dev dev Mode or not
+     * @return JDA object
+     */
     static JDA initBot(String token, boolean dev){
         boolean okInit;
         JDA jda = null;

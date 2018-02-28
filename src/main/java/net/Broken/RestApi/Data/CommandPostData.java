@@ -1,6 +1,8 @@
 package net.Broken.RestApi.Data;
 
-
+/**
+ * Data for JSON Parsing
+ */
 public class CommandPostData {
     public String command;
     public boolean onHead;

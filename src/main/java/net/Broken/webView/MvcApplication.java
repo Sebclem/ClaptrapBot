@@ -8,6 +8,9 @@ import org.springframework.web.servlet.resource.ContentVersionStrategy;
 import org.springframework.web.servlet.resource.ResourceUrlEncodingFilter;
 import org.springframework.web.servlet.resource.VersionResourceResolver;
 
+/**
+ * Configuration for js auto versioning
+ */
 @Configuration
 public class MvcApplication extends WebMvcConfigurerAdapter {
 

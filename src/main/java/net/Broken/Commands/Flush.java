@@ -12,13 +12,12 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 
+/**
+ * Command to flush X last message on channel.
+ */
 
 public class Flush implements Commande{
     Logger logger = LogManager.getLogger();
-    @Override
-    public boolean called(String[] args, MessageReceivedEvent event) {
-        return true;
-    }
 
     @Override
     public void action(String[] args, MessageReceivedEvent event) {
@@ -52,11 +51,6 @@ public class Flush implements Commande{
 
 
         }
-    }
-
-    @Override
-    public void executed(boolean success, MessageReceivedEvent event) {
-
     }
 
     @Override

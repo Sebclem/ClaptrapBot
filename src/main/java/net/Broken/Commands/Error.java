@@ -8,13 +8,13 @@ import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Send standard internal error.
+ */
+
 public class Error implements Commande{
 
     private Logger logger = LogManager.getLogger();
-    @Override
-    public boolean called(String[] args, MessageReceivedEvent event) {
-        return false;
-    }
 
     @Override
     public void action(String[] args, MessageReceivedEvent event) {
@@ -22,11 +22,6 @@ public class Error implements Commande{
             PrivateMessage.send(event.getAuthor(), EmbedMessageUtils.getInternalError(), logger);
         else
             event.getTextChannel().sendMessage(EmbedMessageUtils.getInternalError()).queue();
-    }
-
-    @Override
-    public void executed(boolean success, MessageReceivedEvent event) {
-
     }
 
     @Override

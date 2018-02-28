@@ -4,7 +4,7 @@ import net.Broken.Tools.Command.NumberedCommande;
 import org.apache.logging.log4j.LogManager;
 
 /**
- * Created by seb65 on 07/11/2016.
+ * Ass command, return random picture from feelation.com
  */
 public class Pipe extends NumberedCommande {
     public Pipe() {

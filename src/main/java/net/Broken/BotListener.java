@@ -24,7 +24,7 @@ import org.apache.logging.log4j.Logger;
 
 
 /**
- * Created by seb65 on 19/10/2016.
+ * Bot Listener
  */
 public class BotListener extends ListenerAdapter {
     private AntiSpam antispam=new AntiSpam();

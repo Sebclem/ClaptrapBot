@@ -6,7 +6,6 @@ import net.Broken.Tools.AntiSpam;
 import net.Broken.Tools.EmbedMessageUtils;
 import net.Broken.Tools.MessageTimeOut;
 import net.Broken.Tools.UserSpamUtils;
-import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Message;
@@ -23,14 +22,10 @@ import java.util.Objects;
 
 
 /**
- * Created by seb65 on 27/10/2016.
+ * Spam admin command
  */
 public class Spam implements Commande {
     Logger logger = LogManager.getLogger();
-    @Override
-    public boolean called(String[] args, MessageReceivedEvent event) {
-        return false;
-    }
 
     @Override
     public void action(String[] args, MessageReceivedEvent event)
@@ -75,12 +70,6 @@ public class Spam implements Commande {
         }
     }
 
-
-    @Override
-    public void executed(boolean success, MessageReceivedEvent event)
-    {
-
-    }
 
     @Override
     public boolean isPrivateUsable() {

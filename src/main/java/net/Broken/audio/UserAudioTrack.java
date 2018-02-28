@@ -3,6 +3,9 @@ package net.Broken.audio;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.core.entities.User;
 
+/**
+ * Container that link AudioTrack to who submit it (User)
+ */
 public class UserAudioTrack{
     private User user;
     private AudioTrack audioTrack;
@@ -12,7 +15,7 @@ public class UserAudioTrack{
         this.audioTrack = audioTrack;
     }
 
-    public User getSubmitedUser() {
+    public User getSubmittedUser() {
         return user;
     }
 

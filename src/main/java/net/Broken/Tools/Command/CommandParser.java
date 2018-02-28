@@ -8,11 +8,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- * Created by seb65 on 19/10/2016.
+ *
  */
 
 public class CommandParser {
     private Logger logger = LogManager.getLogger();
+
+    /**
+     * Parse raw received string.
+     * @param brt Raw command string.
+     * @param e Event
+     * @return Readable container that contain all useful data
+     */
     public CommandContainer parse(String brt, MessageReceivedEvent e)
     {
         ArrayList<String> split =new ArrayList<String>();
@@ -39,6 +46,10 @@ public class CommandParser {
         return new CommandContainer(brut, sansTete, splitSansTete, commande, args, e);
 
     }
+
+    /**
+     * Container
+     */
     public class CommandContainer{
         public final String brut;
         public final String sansTete;

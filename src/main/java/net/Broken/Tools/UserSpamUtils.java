@@ -5,6 +5,9 @@ import net.dv8tion.jda.core.entities.Message;
 
 import java.util.List;
 
+/**
+ * Spam info for one user
+ */
 public class UserSpamUtils {
     private AntiSpam.Minuteur minuteur;
     private Member user;

@@ -5,7 +5,6 @@ import net.Broken.Tools.Command.CommandParser;
 import net.Broken.Tools.EmbedMessageUtils;
 import net.Broken.Tools.MessageTimeOut;
 import net.Broken.Tools.PrivateMessage;
-import net.Broken.Tools.UserManager.UserRegister;
 import net.Broken.Tools.UserSpamUtils;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.Permission;
@@ -23,10 +22,9 @@ import org.springframework.stereotype.Controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 /**
- * Created by seb65 on 19/10/2016.
+ * Main Class
  */
 @SpringBootApplication
 @Controller
@@ -91,9 +89,10 @@ public class MainBot {
 
     }
 
-    /***************************************
-     *      Traitement de la commande      *
-     ***************************************/
+    /**
+     * Perform test (admin, NSFW and private usable or not) and execute command or not
+     * @param cmd Container whit all command info
+     */
     public static void handleCommand(CommandParser.CommandContainer cmd)
     {
         //On verifie que la commande existe
@@ -114,13 +113,11 @@ public class MainBot {
                 {
 
                     commandes.get(cmd.commande).action(cmd.args, cmd.event);
-                    commandes.get(cmd.commande).executed(true, cmd.event);
                 }
                 else if (!cmd.event.isFromType(ChannelType.PRIVATE))
                 {
                     if(!cmdObj.isNSFW() || cmd.event.getTextChannel().isNSFW()){
                         commandes.get(cmd.commande).action(cmd.args, cmd.event);
-                        commandes.get(cmd.commande).executed(true, cmd.event);
                     }
                     else{
                         Message msg = cmd.event.getTextChannel().sendMessage(cmd.event.getAuthor().getAsMention() + "\n:warning: **__Channel règlementé! Go sur over18!__**:warning: ").complete();
@@ -159,9 +156,11 @@ public class MainBot {
 
 
     }
-    /*******************************
-     *      RAZ Compteur Spam      *
-     *******************************/
+
+
+    /**
+     * TODO Change this, better use daylistener
+     */
     public static class ModoTimer extends Thread{
 
 

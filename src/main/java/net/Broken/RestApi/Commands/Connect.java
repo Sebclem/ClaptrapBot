@@ -10,6 +10,9 @@ import net.dv8tion.jda.core.entities.VoiceChannel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+/**
+ * Connect to vocal channel RestApi command
+ */
 public class Connect implements CommandInterface{
     @Override
     public ResponseEntity<CommandResponseData> action(Music musicCommande, CommandPostData data, User user) {

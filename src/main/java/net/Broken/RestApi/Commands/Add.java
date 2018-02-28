@@ -8,6 +8,9 @@ import net.Broken.audio.WebLoadUtils;
 import net.dv8tion.jda.core.entities.User;
 import org.springframework.http.ResponseEntity;
 
+/**
+ * Add track RestApi
+ */
 public class Add implements CommandInterface {
     @Override
     public ResponseEntity<CommandResponseData> action(Music musicCommande, CommandPostData data, User user) {

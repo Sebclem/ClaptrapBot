@@ -9,30 +9,49 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 /**
- * Created by seb65 on 09/11/2016.
+ * Day change listener
  */
 public class DayListener extends Thread {
+    private Logger logger = LogManager.getLogger();
     private Calendar calendar;
     private int previousDay;
-    private ArrayList<NewDayListener> listeners = new ArrayList<>();
-    private Logger logger = LogManager.getLogger();
 
+    /**
+     * List of listeners to need to be triggered
+     */
+    private ArrayList<NewDayListener> listeners = new ArrayList<>();
+    private static DayListener INSTANCE = new DayListener();
+
+
+    /**
+     * Default private constructor
+     */
     private DayListener() {
         calendar = Calendar.getInstance();
         previousDay = calendar.get(GregorianCalendar.DAY_OF_MONTH);
     }
 
-    private static DayListener INSTANCE = new DayListener();
 
+    /**
+     * Singleton
+     * @return Unique DayListener instance.
+     */
     public static DayListener getInstance()
     {
         return INSTANCE;
     }
 
+    /**
+     * Add Listener who will be triggered
+     * @param listener
+     */
     public void addListener(NewDayListener listener){
         listeners.add(listener);
     }
 
+    /**
+     * Trigger all listeners
+     */
     public void trigger(){
         for(NewDayListener listener : listeners){
             listener.onNewDay();
@@ -40,6 +59,9 @@ public class DayListener extends Thread {
     }
 
 
+    /**
+     * Thread loop
+     */
     @Override
     public void run() {
         while(true)

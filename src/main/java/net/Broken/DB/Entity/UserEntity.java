@@ -5,6 +5,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+/**
+ * Entity for DB. Represent confirmed user account.
+ */
 @Entity
 public class UserEntity {
     @Id

@@ -8,18 +8,11 @@ import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.apache.logging.log4j.LogManager;
 
-import java.util.ArrayList;
-import java.util.List;
-
 
 /**
- * Created by seb65 on 19/10/2016.
+ * Command that return the Bot's ping
  */
 public class Ping implements Commande {
-    @Override
-    public boolean called(String[] args, MessageReceivedEvent event) {
-        return true;
-    }
 
     @Override
     public void action(String[] args, MessageReceivedEvent event) {
@@ -32,12 +25,6 @@ public class Ping implements Commande {
             new MessageTimeOut(MainBot.messageTimeOut, event.getMessage(), rest).start();
         }
         LogManager.getLogger().debug("pong");
-    }
-
-    @Override
-    public void executed(boolean success, MessageReceivedEvent event)
-    {
-
     }
 
     @Override

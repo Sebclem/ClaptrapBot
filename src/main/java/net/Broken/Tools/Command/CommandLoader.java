@@ -10,8 +10,16 @@ import org.reflections.util.ConfigurationBuilder;
 
 import java.util.Set;
 
+
+/**
+ * Find and load bot's command
+ */
 public class CommandLoader {
     private static Logger logger = LogManager.getLogger();
+
+    /**
+     * Search all implemented Command interface class and add it to MainBot.commands HashMap
+     */
     public static void load(){
         logger.info("Loading Command...");
         Reflections reflections = new Reflections(new ConfigurationBuilder().setUrls(ClasspathHelper.forPackage(

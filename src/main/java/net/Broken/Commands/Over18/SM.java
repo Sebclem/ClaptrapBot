@@ -7,15 +7,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /**
- * Created by seb65 on 10/11/2016.
+ * TODO Remove this
  */
 public class SM implements Commande {
     Logger logger = LogManager.getLogger();
     public String HELP="T'es sérieux la?";
-    @Override
-    public boolean called(String[] args, MessageReceivedEvent event) {
-        return false;
-    }
 
     @Override
     public void action(String[] args, MessageReceivedEvent event) {
@@ -27,11 +23,6 @@ public class SM implements Commande {
 //                logger.warn("Erreur de redirection.");
 //                event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n:warning: **__Erreur de redirection (5 essais), Réessayez__**:warning: ").queue();
 //            }
-
-    }
-
-    @Override
-    public void executed(boolean success, MessageReceivedEvent event) {
 
     }
 

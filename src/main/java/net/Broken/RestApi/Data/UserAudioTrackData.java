@@ -2,7 +2,9 @@ package net.Broken.RestApi.Data;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import net.Broken.audio.UserAudioTrack;
-
+/**
+ * Data for JSON Parsing
+ */
 public class UserAudioTrackData {
     private String user;
     private AudioTrackInfo audioTrackInfo;
@@ -14,7 +16,7 @@ public class UserAudioTrackData {
 
     public UserAudioTrackData(UserAudioTrack userAudioTrack){
         this.audioTrackInfo = userAudioTrack.getAudioTrack().getInfo();
-        this.user = userAudioTrack.getSubmitedUser().getName();
+        this.user = userAudioTrack.getSubmittedUser().getName();
     }
 
     public String getUser() {

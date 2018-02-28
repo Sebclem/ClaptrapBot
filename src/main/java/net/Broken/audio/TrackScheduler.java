@@ -12,9 +12,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingDeque;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
-import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * This class schedules tracks for the audio player. It contains the queue of tracks.
@@ -51,6 +49,11 @@ public class TrackScheduler extends AudioEventAdapter {
             currentPlayingTrack = track;
         }
     }
+
+    /**
+     * Add track on top of playlist
+     * @param track
+     */
     public void addNext(UserAudioTrack track) {
         // Calling startTrack with the noInterrupt set to true will start the track only if nothing is currently playing. If
         // something is playing, it returns false and does nothing. In that case the player was already playing so this
@@ -63,6 +66,7 @@ public class TrackScheduler extends AudioEventAdapter {
         }
     }
 
+
     public void pause() {
         player.setPaused(true);
     }
@@ -71,6 +75,7 @@ public class TrackScheduler extends AudioEventAdapter {
         player.setPaused(false);
 
     }
+
 
     public void stop(){
         player.stopTrack();
@@ -89,7 +94,7 @@ public class TrackScheduler extends AudioEventAdapter {
         Object[] test = queue.toArray();
         for(Object track: test){
             UserAudioTrack casted = (UserAudioTrack) track;
-            temp.add(new UserAudioTrackData(casted.getSubmitedUser().getName(), casted.getAudioTrack().getInfo()));
+            temp.add(new UserAudioTrackData(casted.getSubmittedUser().getName(), casted.getAudioTrack().getInfo()));
         }
         return temp;
     }
@@ -106,7 +111,7 @@ public class TrackScheduler extends AudioEventAdapter {
         for(UserAudioTrack track : queue){
             if(track.getAudioTrack().getInfo().uri.equals(uri)){
                 if(!queue.remove(track)) {
-                    logger.info("Delete failure!");
+                    logger.error("Delete failure!");
                     return false;
                 } else {
                     logger.info("Delete succeful");
