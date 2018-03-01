@@ -25,7 +25,7 @@ node {
         /* This builds the actual image; synonymous to
          * docker build on the command line */
 
-        app = docker.build("brokenfire/brokendiscordbot","--rm=true . --build-arg BUILD_NBR=${BUILD_NUMBER} --build-arg BRANCH_NAME=${BRANCH_NAME}")
+        app = docker.build("brokenfire/brokendiscordbot","--rm=true . ", "--build-arg BUILD_NBR=${BUILD_NUMBER}", "--build-arg BRANCH_NAME=${BRANCH_NAME}")
     }
    stage('Push image') {
         /* Finally, we'll push the image with two tags:
