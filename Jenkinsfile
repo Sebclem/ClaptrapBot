@@ -33,7 +33,7 @@ node {
          * Second, the 'latest' tag.
          * Pushing multiple tags is cheap, as all the layers are reused. */
          withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker-hub-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
-	     sh 'docker login -u $USERNAME -p $PASSWORD
+	     sh 'docker login -u $USERNAME -p $PASSWORD'
              script {
 		    if (env.BRANCH_NAME == 'master') {
 			    app.push()
