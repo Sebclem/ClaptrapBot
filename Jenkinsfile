@@ -32,14 +32,16 @@ node {
          * First, the incremental build number from Jenkins
          * Second, the 'latest' tag.
          * Pushing multiple tags is cheap, as all the layers are reused. */
-         def docker_tag
-         script {
-            if (env.BRANCH_NAME == 'master') {
-                    app.push()
-            } else {
-                    app.push("devel")
-            }
+         docker.withRegistry('https://docker.io', 'docker-hub-credentials') {
+             script {
+		    if (env.BRANCH_NAME == 'master') {
+			    app.push()
+		    } else {
+			    app.push("devel")
+		    }
+       	    }
          }
+        
         
         
     }
