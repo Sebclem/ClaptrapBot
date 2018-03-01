@@ -26,8 +26,12 @@ targetCompatibility = 1.8
 
 
 
+jar.doFirst {
+    delete "${buildDir}/libs/*"
+}
+
 jar {
-    delete "${buildDir}/libs/"
+
     baseName = 'DiscordBot'
 
 }
