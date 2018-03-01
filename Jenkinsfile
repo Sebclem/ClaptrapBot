@@ -2,7 +2,9 @@ node {
     def app
    stage('Clone') { // for display purposes
       // Get some code from a GitHub repository
+      echo env.BRANCH_NAME
       git url: 'https://github.com/BrokenFire/BrokenDiscordBot.git', branch: 'env.BRANCH_NAME' 
+
    }
    stage('Gradle Buil'){
         build job: 'Bot Discord Gradle', wait: true
