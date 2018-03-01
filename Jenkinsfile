@@ -32,7 +32,8 @@ node {
          * First, the incremental build number from Jenkins
          * Second, the 'latest' tag.
          * Pushing multiple tags is cheap, as all the layers are reused. */
-         docker.withRegistry('https://docker.io', 'docker-hub-credentials') {
+         withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'docker-hub-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD']]) {
+	     sh 'docker login -u $USERNAME -p $PASSWORD
              script {
 		    if (env.BRANCH_NAME == 'master') {
 			    app.push()
