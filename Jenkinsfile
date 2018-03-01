@@ -21,13 +21,13 @@ node {
             }
         }
    }
-   stage('Build image') {
+   stage('Build Docker image') {
         /* This builds the actual image; synonymous to
          * docker build on the command line */
 
         app = docker.build("brokenfire/brokendiscordbot",'--build-arg BUILD_NBR=${BUILD_NUMBER} --build-arg BRANCH_NAME=${BRANCH_NAME} --rm=true .')
     }
-   stage('Push image') {
+   stage('Push Docker image') {
         /* Finally, we'll push the image with two tags:
          * First, the incremental build number from Jenkins
          * Second, the 'latest' tag.

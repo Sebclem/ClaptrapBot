@@ -1,8 +1,10 @@
 # BrokenDiscordBot
-Master:<br/>[![Build Status](https://jenkins.seb6596.ovh/job/Bot%20Discord%20Gradle/badge/icon)](https://jenkins.seb6596.ovh/job/Bot%20Discord%20Gradle/)
 
-Devel: <br/>[![Build Status](https://jenkins.seb6596.ovh/buildStatus/icon?job=BrokenDiscordBot/devel)](https://jenkins.seb6596.ovh/job/BrokenDiscordBot/job/devel/)
+Gradle:<br/>
+[![Build Status](https://jenkins.seb6596.ovh/job/Bot%20Discord%20Gradle/badge/icon)](https://jenkins.seb6596.ovh/job/Bot%20Discord%20Gradle/)
 
+Docker:<br/>
+[![Build Status](https://jenkins.seb6596.ovh/job/Discord%20Bot%20Docker/job/master/badge/icon)](https://jenkins.seb6596.ovh/job/Discord%20Bot%20Docker/job/master/)
 ## Install:
  
 > The easiest method it's to use docker-compose:
@@ -70,16 +72,8 @@ Devel: <br/>[![Build Status](https://jenkins.seb6596.ovh/buildStatus/icon?job=Br
 > ```
 > Docker hub [repo](https://hub.docker.com/r/brokenfire/brokendiscordbot/)
 
-### [Javadoc](https://jenkins.seb6596.ovh/job/Bot%20Discord%20Gradle/javadoc/)
+## Javadoc & Jenkins
+- [Javadoc](https://jenkins.seb6596.ovh/job/Bot%20Discord%20Gradle/javadoc/)
+- [Jenkins](https://jenkins.seb6596.ovh/)
 
-### [Jenkins](https://jenkins.seb6596.ovh/job/Bot%20Discord%20Gradle/)
-
-#### Jenkisfile
-`git config --global merge.ours.driver true`
-
-```
-[merge "ours"]
-    name = "Keep ours merge"
-    driver = true
-```
 
