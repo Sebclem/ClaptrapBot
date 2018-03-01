@@ -3,6 +3,14 @@ node {
    stage('Clone') { // for display purposes
       // Get some code from a GitHub repository
       echo env.BRANCH_NAME
+		script {
+            if (env.BRANCH_NAME == 'master') {
+                    git url: 'https://github.com/BrokenFire/BrokenDiscordBot.git', branch: 'master' 
+            } else {
+                   git url: 'https://github.com/BrokenFire/BrokenDiscordBot.git', branch: 'devel' 
+            }
+	    }
+
       git url: 'https://github.com/BrokenFire/BrokenDiscordBot.git', branch: 'env.BRANCH_NAME' 
 
    }
