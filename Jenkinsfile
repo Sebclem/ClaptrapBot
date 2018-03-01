@@ -35,7 +35,7 @@ node {
          def docker_tag
          script {
             if (env.BRANCH_NAME == 'master') {
-                    app.push(docker_tag)
+                    app.push()
             } else {
                     app.push("devel")
             }
