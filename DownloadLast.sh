@@ -7,13 +7,14 @@ jarFile=$(grep -oPm1 "(?<=<fileName>)[^<]+" <<< "$data")
 
 echo $1
 
-if [[  $1="master"  ]]; then
+if [[  $1 = "master"  ]]
+then
 	url="https://jenkins.seb6596.ovh/job/Bot%20Discord%20Gradle/lastStableBuild/artifact/"${relativePath}
 else
 	url="https://jenkins.seb6596.ovh/job/Bot%20Discord%20Gradle%20Devel/lastStableBuild/artifact/"${relativePath}
 fi
 echo ${url}
 
-wget ${url} -O bot.jar
+wget ${url} -O bot.jar -q
 
 
