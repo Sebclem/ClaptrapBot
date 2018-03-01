@@ -2,7 +2,7 @@ node {
     def app
    stage('Clone') { // for display purposes
       // Get some code from a GitHub repository
-      git url: 'https://github.com/BrokenFire/BrokenDiscordBot.git'
+      git url: 'https://github.com/BrokenFire/BrokenDiscordBot.git', branch: '${env.BRANCH}' 
    }
    stage('Gradle Buil'){
         build job: 'Bot Discord Gradle', wait: true
@@ -18,7 +18,14 @@ node {
          * First, the incremental build number from Jenkins
          * Second, the 'latest' tag.
          * Pushing multiple tags is cheap, as all the layers are reused. */
-        app.push()
+         script {
+            if (${env.BRANCH} == 'master') {
+                    app.push()
+            } else {
+                    app.push("devel")
+            }
+    }
+        
         
     }
     stage('Cleaning'){
