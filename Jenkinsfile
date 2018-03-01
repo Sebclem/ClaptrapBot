@@ -35,13 +35,11 @@ node {
          def docker_tag
          script {
             if (env.BRANCH_NAME == 'master') {
-                    docker_tag = "latest"
+                    app.push(docker_tag)
             } else {
-                    docler_tag = "devel"
+                    app.push("devel")
             }
          }
-         echo docker_tag
-         app.push(docker_tag)
         
         
     }
