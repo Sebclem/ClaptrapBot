@@ -4,7 +4,7 @@ node {
       // Get some code from a GitHub repository
       git 'https://github.com/BrokenFire/BrokenDiscordBot.git'
    }
-   stage('Gradle Buil){
+   stage('Gradle Buil'){
         build job: 'Bot Discord Gradle', wait: true
    }
    stage('Build image') {
