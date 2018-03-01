@@ -2,7 +2,10 @@ node {
     def app
    stage('Clone') { // for display purposes
       // Get some code from a GitHub repository
-      git 'https://github.com/BrokenFire/BrokenDiscordBot.git'
+      git url: 'https://github.com/BrokenFire/BrokenDiscordBot.git', branch: 'devel'
+   }
+   stage('Gradle Buil'){
+        build job: 'Bot Discord Gradle', wait: true
    }
    stage('Build image') {
         /* This builds the actual image; synonymous to
@@ -15,11 +18,10 @@ node {
          * First, the incremental build number from Jenkins
          * Second, the 'latest' tag.
          * Pushing multiple tags is cheap, as all the layers are reused. */
-        app.push()
+        app.push("devel")
         
     }
     stage('Cleaning'){
         sh "docker image prune -f"
-        build job: 'Bot Discord javadoc', wait: false
     }
 } 

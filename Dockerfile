@@ -1,12 +1,11 @@
 FROM debian:latest
-#RUN apt-key update
 RUN apt-get update
 RUN apt-get -y upgrade
-RUN apt-get -y install openjdk-8-jre openjdk-8-jdk
+RUN apt-get -y install openjdk-8-jre openjdk-8-jdk curl wget
 WORKDIR /bot_src
-ADD . /bot_src/
-RUN chmod +x gradlew
+ADD DownloadLast.sh /bot_src/
+RUN chmod +x DownloadLast.sh
+RUN ./DownloadLast.sh
 ENV PORT=8080
 ENV TOKEN=10
-RUN ./gradlew build
-CMD java -jar build/libs/DiscordBot-0.1.0.jar -t ${TOKEN}
+CMD java -jar bot.jar -t ${TOKEN}
