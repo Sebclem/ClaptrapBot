@@ -14,6 +14,6 @@ jarFile=$(grep -oPm1 "(?<=<fileName>)[^<]+" <<< "$data")
 
 
 
-wget ${base_url}"/artifact/"${relativePath} -O bot.jar -q
+wget ${base_url}"/artifact/"${relativePath} -O bot.jar -nq
 
 
