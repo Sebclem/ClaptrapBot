@@ -31,7 +31,7 @@ jar.doFirst {
 }
 
 jar {
-
+    delete "${buildDir}/libs/*"
     baseName = 'DiscordBot'
 
 }
