@@ -12,8 +12,14 @@ node {
 	    }
 
    }
-   stage('Gradle Buil'){
-        build job: 'Bot Discord Gradle', wait: true
+   stage('Gradle Build'){
+        script {
+            if (env.BRANCH_NAME == 'master') {
+                    build job: 'Bot Discord Gradle', wait: true
+            } else {
+                   build job: 'Bot Discord Gradle devel', wait: true
+            }
+        }
    }
    stage('Build image') {
         /* This builds the actual image; synonymous to
