@@ -1,6 +1,6 @@
 FROM debian:latest
-ARG BUILD_NBR=nop
-ARG BRANCH_NAME=nop
+ARG BUILD_NBR
+ARG BRANCH_NAME
 RUN apt-get update
 RUN apt-get -y upgrade
 RUN apt-get -y install openjdk-8-jre openjdk-8-jdk curl wget
