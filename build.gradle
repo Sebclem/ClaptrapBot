@@ -13,9 +13,21 @@ apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 
+
+def versionObj = new Version(major: 0, minor: 2, revision: 0)
+
+group = "net.broken"
+archivesBaseName = "BrokenDiscordBot"
+version = "$versionObj"
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+
+
 jar {
     baseName = 'DiscordBot'
-    version =  '0.1.0'
+
 }
 
 repositories {
@@ -28,8 +40,6 @@ javadoc {
     classpath = configurations.compile
 }
 
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
 
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-web"){
@@ -56,3 +66,15 @@ dependencies {
     }
 }
 
+class Version {
+    String major, minor, revision
+
+    static String getBuild() {
+        System.getenv("BUILD_NUMBER") ?: System.getProperty("BUILD_NUMBER") ?:
+                System.getenv("GIT_COMMIT")?.substring(0, 7) ?: System.getProperty("GIT_COMMIT")?.substring(0, 7) ?:"DEV"
+    }
+
+    String toString() {
+        "${major}.${minor}.${revision}_$build"
+    }
+}

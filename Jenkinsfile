@@ -4,6 +4,9 @@ node {
       // Get some code from a GitHub repository
       git 'https://github.com/BrokenFire/BrokenDiscordBot.git'
    }
+   stage('Gradle Buil){
+        build job: 'Bot Discord Gradle', wait: true
+   }
    stage('Build image') {
         /* This builds the actual image; synonymous to
          * docker build on the command line */
@@ -20,6 +23,5 @@ node {
     }
     stage('Cleaning'){
         sh "docker image prune -f"
-        build job: 'Bot Discord javadoc', wait: false
     }
 } 
