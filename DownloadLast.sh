@@ -5,6 +5,8 @@ data=$(curl -g "https://jenkins.seb6596.ovh/job/Bot%20Discord%20Gradle/lastStabl
 relativePath=$(grep -oPm1 "(?<=<relativePath>)[^<]+" <<< "$data")
 jarFile=$(grep -oPm1 "(?<=<fileName>)[^<]+" <<< "$data")
 
+echo ${BRANCH_NAME}
+
 if [[ $BRANCH_NAME=="master"  ]]; then
 	url="https://jenkins.seb6596.ovh/job/Bot%20Discord%20Gradle/lastStableBuild/artifact/"${relativePath}
 else
