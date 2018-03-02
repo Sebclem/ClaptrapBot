@@ -4,6 +4,7 @@ import net.Broken.Tools.Command.CommandLoader;
 import net.Broken.Tools.DayListener.DayListener;
 import net.Broken.Tools.DayListener.Listeners.DailyMadame;
 import net.Broken.Tools.DayListener.Listeners.ResetSpam;
+import net.Broken.audio.Youtube.YoutubeTools;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
@@ -16,6 +17,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.security.auth.login.LoginException;
+import java.io.IOException;
 import java.util.List;
 
 
@@ -56,6 +58,7 @@ public class Init {
                  *************************************/
                 jda.getPresence().setGame(Game.of("Statut: Loading..."));
                 jda.getTextChannels().forEach(textChannel -> textChannel.sendTyping().queue());
+                YoutubeTools.getInstance(jda.getGuilds().get(0)).getYouTubeService();
                 CommandLoader.load();
 
 
@@ -94,6 +97,7 @@ public class Init {
                 dayListener.addListener(new DailyMadame());
                 dayListener.start();
 
+
                 logger.debug("-----------------FIN INITIALISATION-----------------");
 
                 jda.getPresence().setGame(Game.of("Statut: Ok!"));
@@ -102,6 +106,8 @@ public class Init {
             catch (LoginException | InterruptedException | RateLimitedException e)
             {
                 logger.catching(e);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
 

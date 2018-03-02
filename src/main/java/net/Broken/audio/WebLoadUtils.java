@@ -31,7 +31,7 @@ public class WebLoadUtils {
         AudioPlayerManager playerM = musicCommand.getAudioManager().getPlayerManager();
         try {
 
-            AudioM audioM = musicCommand.getAudioManager();
+            AudioM audioM = AudioM.getInstance(null);
             playerM.loadItemOrdered(musicCommand.getAudioManager().getGuildMusicManager(), data.url, new AudioLoadResultHandler() {
                 @Override
                 public void trackLoaded(AudioTrack track) {

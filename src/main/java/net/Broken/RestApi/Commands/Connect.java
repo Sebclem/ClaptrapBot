@@ -16,7 +16,7 @@ import org.springframework.http.ResponseEntity;
 public class Connect implements CommandInterface{
     @Override
     public ResponseEntity<CommandResponseData> action(Music musicCommande, CommandPostData data, User user) {
-        AudioM audioM = musicCommande.getAudioManager();
+        AudioM audioM = AudioM.getInstance(null);
         if(data.chanelId == null)
             return new ResponseEntity<>(new CommandResponseData(data.command,"Missing chanelId"),HttpStatus.BAD_REQUEST);
         VoiceChannel voiceChannel = null;

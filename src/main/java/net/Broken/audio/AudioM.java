@@ -52,10 +52,19 @@ public class AudioM {
     private Guild guild;
     private Logger logger = LogManager.getLogger();
 
+    private static AudioM INSTANCE;
+
+    public static AudioM getInstance(Guild guild){
+        if(INSTANCE == null){
+            INSTANCE = new AudioM(guild);
+        }
+
+        return INSTANCE;
+    }
 
 
 
-    public AudioM(Guild guild) {
+    private AudioM(Guild guild) {
         this.playerManager = new DefaultAudioPlayerManager();
         AudioSourceManagers.registerRemoteSources(playerManager);
         AudioSourceManagers.registerLocalSource(playerManager);
@@ -80,11 +89,7 @@ public class AudioM {
                 logger.info("Single Track detected!");
                 UserAudioTrack uat = new UserAudioTrack(event.getAuthor(), track);
                 Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicOk("Ajout de "+track.getInfo().title+" à la file d'attente!")).complete();
-                List<Message> messages = new ArrayList<Message>(){{
-                    add(message);
-                    add(event.getMessage());
-                }};
-                new MessageTimeOut(messages, MainBot.messageTimeOut).start();
+                new MessageTimeOut(MainBot.messageTimeOut, message, event.getMessage()).start();
 
                 play(guild, voiceChannel, musicManager, uat, onHead);
             }
@@ -95,11 +100,7 @@ public class AudioM {
                 AudioTrack firstTrack = playlist.getSelectedTrack();
 
                 Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicOk("Ajout de "+firstTrack.getInfo().title+" et les 30 premiers titres à la file d'attente!")).complete();
-                List<Message> messages = new ArrayList<Message>(){{
-                    add(message);
-                    add(event.getMessage());
-                }};
-                new MessageTimeOut(messages, MainBot.messageTimeOut).start();
+                new MessageTimeOut(MainBot.messageTimeOut, message, event.getMessage()).start();
 
                 playListLoader(playlist, playlistLimit ,event.getAuthor() , onHead);
 
@@ -131,6 +132,37 @@ public class AudioM {
             }
         });
     }
+
+    public void loadAndPlayAuto(String trackUrl){
+        playerManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler(){
+            @Override
+            public void trackLoaded(AudioTrack track) {
+                logger.info("Auto add " + track.getInfo().title +" to playlist.");
+                UserAudioTrack userAudioTrack = new UserAudioTrack(MainBot.jda.getSelfUser(),track);
+                play(guild, playedChanel, musicManager, userAudioTrack, true);
+            }
+
+            @Override
+            public void playlistLoaded(AudioPlaylist playlist) {
+                AudioTrack track = playlist.getTracks().get(0);
+                logger.info("Auto add " + track.getInfo().title +" to playlist.");
+                UserAudioTrack userAudioTrack = new UserAudioTrack(MainBot.jda.getSelfUser(),track);
+                play(guild, playedChanel, musicManager, userAudioTrack, true);
+            }
+
+            @Override
+            public void noMatches() {
+                logger.warn("Track not found: "+trackUrl);
+            }
+
+            @Override
+            public void loadFailed(FriendlyException exception) {
+                logger.error("Cant load media!");
+                logger.error(exception.getMessage());
+            }
+        });
+    }
+
 
     /**
      * Load playlist to playlist
@@ -270,7 +302,7 @@ public class AudioM {
      */
     public void add(MessageReceivedEvent event, String url, int playListLimit, boolean onHead) {
         if(playedChanel != null){
-            loadAndPlay(event,playedChanel, url, playListLimit,onHead);
+            loadAndPlay(event ,playedChanel, url, playListLimit,onHead);
         }
         else
         {
@@ -320,6 +352,7 @@ public class AudioM {
     public AudioPlayerManager getPlayerManager() {
         return playerManager;
     }
+
     public VoiceChannel getPlayedChanel() {
         return playedChanel;
     }

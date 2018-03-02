@@ -23,7 +23,7 @@ public class Music implements Commande {
     public AudioM audio;
     Logger logger = LogManager.getLogger();
     public Music() {
-        audio = new AudioM(MainBot.jda.getGuilds().get(0));
+        audio = AudioM.getInstance(MainBot.jda.getGuilds().get(0));
     }
 
     @Override

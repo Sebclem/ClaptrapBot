@@ -1,14 +1,20 @@
 package net.Broken.audio;
 
+import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
+import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
+import net.Broken.Commands.Music;
+import net.Broken.MainBot;
 import net.Broken.RestApi.Data.UserAudioTrackData;
+import net.Broken.audio.Youtube.YoutubeTools;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingDeque;
@@ -21,6 +27,7 @@ public class TrackScheduler extends AudioEventAdapter {
     private final AudioPlayer player;
     private final BlockingDeque<UserAudioTrack> queue;
     private UserAudioTrack currentPlayingTrack;
+    private boolean autoPlay = true;
     Logger logger = LogManager.getLogger();
 
     /**
@@ -48,6 +55,9 @@ public class TrackScheduler extends AudioEventAdapter {
         else{
             currentPlayingTrack = track;
         }
+        needAutoPlay();
+
+
     }
 
     /**
@@ -64,6 +74,7 @@ public class TrackScheduler extends AudioEventAdapter {
         else{
             currentPlayingTrack = track;
         }
+        needAutoPlay();
     }
 
 
@@ -120,6 +131,7 @@ public class TrackScheduler extends AudioEventAdapter {
             }
         }
         logger.info("Delete failure! Not found.");
+        needAutoPlay();
         return false;
     }
 
@@ -133,6 +145,7 @@ public class TrackScheduler extends AudioEventAdapter {
         this.currentPlayingTrack = track;
         if(track != null)
             player.startTrack(track.getAudioTrack(), false);
+        needAutoPlay();
     }
 
     @Override
@@ -140,6 +153,26 @@ public class TrackScheduler extends AudioEventAdapter {
         // Only start the next track if the end reason is suitable for it (FINISHED or LOAD_FAILED)
         if (endReason.mayStartNext) {
             nextTrack();
+            needAutoPlay();
+        }
+    }
+
+    private void needAutoPlay(){
+        if((queue.size() < 1) && autoPlay && currentPlayingTrack != null){
+            logger.info("Auto add needed!");
+            AudioM audioM = AudioM.getInstance(null);
+            YoutubeTools youtubeTools = YoutubeTools.getInstance(null);
+            try {
+                String id =  youtubeTools.getRelatedVideo(currentPlayingTrack.getAudioTrack().getInfo().identifier);
+                logger.info("Related id: "+id);
+                audioM.loadAndPlayAuto(id);
+
+            } catch (GoogleJsonResponseException e) {
+                logger.error("There was a service error: " + e.getDetails().getCode() + " : " + e.getDetails().getMessage());
+            } catch (Throwable t) {
+                logger.catching(t);
+            }
+
         }
     }
 
