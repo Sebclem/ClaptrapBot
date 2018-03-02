@@ -88,7 +88,7 @@ public class YoutubeTools {
         GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
                 HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES)
                 .setDataStoreFactory(DATA_STORE_FACTORY)
-                .setAccessType("offline")
+                .setAccessType("online")
                 .build();
         Credential credential = new Autorization(flow, new LocalServerReceiver(), guild).authorize("user");
         logger.debug("Credentials saved to " + DATA_STORE_DIR.getAbsolutePath());
