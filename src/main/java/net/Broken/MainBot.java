@@ -86,7 +86,7 @@ public class MainBot {
             e.printStackTrace();
         }
 
-        Init.polish();
+        Init.polish(jda);
 
 
 

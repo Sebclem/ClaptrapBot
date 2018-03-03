@@ -18,6 +18,7 @@ public class YoutubeCallBack {
         if(!code.equals("")){
             Receiver.getInstance(null).setCode(code);
         }
+
         return "youtubeCallBack";
     }
 }

@@ -25,7 +25,7 @@ public class Receiver extends AbstractPromptReceiver {
 
     @Override
     public String getRedirectUri() throws IOException {
-        return System.getenv("SITE_URL") + "/youtube/callback";
+        return System.getenv("SITE_URL") + "/youtube/callback/";
     }
 
     @Override

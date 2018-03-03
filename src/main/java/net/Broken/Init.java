@@ -97,7 +97,6 @@ public class Init {
 
                 logger.debug("-----------------FIN INITIALISATION-----------------");
 
-                jda.getPresence().setGame(Game.of("Statut: Ok!"));
 
             }
             catch (LoginException | InterruptedException | RateLimitedException e)
@@ -110,8 +109,10 @@ public class Init {
     }
 
 
-    static void polish(){
+    static void polish(JDA jda){
         CommandLoader.load();
         ApiCommandLoader.load();
+        jda.getPresence().setGame(Game.of("Statut: Ok!"));
+
     }
 }
