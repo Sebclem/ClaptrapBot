@@ -6,6 +6,7 @@ import net.Broken.Tools.EmbedMessageUtils;
 import net.Broken.Tools.MessageTimeOut;
 import net.Broken.Tools.PrivateMessage;
 import net.Broken.Tools.UserSpamUtils;
+import net.Broken.audio.Youtube.YoutubeTools;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.ChannelType;
@@ -20,6 +21,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -69,7 +71,7 @@ public class MainBot {
             i++;
         }
 
-        jda = Init.initBot(token, dev);
+        jda = Init.initJda(token, dev);
         ConfigurableApplicationContext ctx = SpringApplication.run(MainBot.class, args);
         if(jda == null) {
             System.exit(SpringApplication.exit(ctx, (ExitCodeGenerator) () -> {
@@ -78,8 +80,13 @@ public class MainBot {
             }));
         }
 
+        try {
+            YoutubeTools.getInstance(jda.getGuilds().get(0)).getYouTubeService();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-        ApiCommandLoader.load();
+        Init.polish();
 
 
 
@@ -145,13 +152,25 @@ public class MainBot {
         else
         {
             MessageReceivedEvent event = cmd.event;
-            if(event.isFromType(ChannelType.PRIVATE))
-                event.getPrivateChannel().sendMessage(EmbedMessageUtils.getUnknowCommand()).queue();
-            else {
-                Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getUnknowCommand()).complete();
-                new MessageTimeOut(messageTimeOut, message, event.getMessage());
+            if(commandes.size() == 0){
+                if(event.isFromType(ChannelType.PRIVATE))
+                    event.getPrivateChannel().sendMessage("Loading please wait...").queue();
+                else {
+                    Message message = event.getTextChannel().sendMessage("Loading please wait...").complete();
+                    new MessageTimeOut(messageTimeOut, message, event.getMessage());
+                }
             }
-            logger.warn("Commande inconnue");
+            else{
+
+                if(event.isFromType(ChannelType.PRIVATE))
+                    event.getPrivateChannel().sendMessage(EmbedMessageUtils.getUnknowCommand()).queue();
+                else {
+                    Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getUnknowCommand()).complete();
+                    new MessageTimeOut(messageTimeOut, message, event.getMessage());
+                }
+                logger.warn("Commande inconnue");
+            }
+
         }
 
 

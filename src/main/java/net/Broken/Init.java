@@ -1,5 +1,6 @@
 package net.Broken;
 
+import net.Broken.RestApi.ApiCommandLoader;
 import net.Broken.Tools.Command.CommandLoader;
 import net.Broken.Tools.DayListener.DayListener;
 import net.Broken.Tools.DayListener.Listeners.DailyMadame;
@@ -30,15 +31,13 @@ public class Init {
      * @param dev dev Mode or not
      * @return JDA object
      */
-    static JDA initBot(String token, boolean dev){
-        boolean okInit;
+    static JDA initJda(String token, boolean dev){
         JDA jda = null;
         logger.debug("-------------------INITIALISATION-------------------");
 
         //Bot démarrer sans token
         if (token == null) {
             logger.fatal("Veuilliez indiquer le token du bot en argument...");
-            okInit=false;
         }
         else
         {
@@ -58,8 +57,6 @@ public class Init {
                  *************************************/
                 jda.getPresence().setGame(Game.of("Statut: Loading..."));
                 jda.getTextChannels().forEach(textChannel -> textChannel.sendTyping().queue());
-                YoutubeTools.getInstance(jda.getGuilds().get(0)).getYouTubeService();
-                CommandLoader.load();
 
 
                 //On recupere le l'id serveur
@@ -106,11 +103,15 @@ public class Init {
             catch (LoginException | InterruptedException | RateLimitedException e)
             {
                 logger.catching(e);
-            } catch (IOException e) {
-                e.printStackTrace();
             }
         }
 
         return jda;
+    }
+
+
+    static void polish(){
+        CommandLoader.load();
+        ApiCommandLoader.load();
     }
 }
