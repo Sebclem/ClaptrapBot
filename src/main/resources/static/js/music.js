@@ -177,7 +177,7 @@ function getPlayList() {
         data = data.list;
         if(data != null && data.length != 0){
             var noUpdate = comparePlaylist(data, savedPlaylist);
-
+            // console.log("List up to date : "+noUpdate);
             if(!noUpdate){
                 savedPlaylist = data;
                 $('#playlist_list').empty();
@@ -208,8 +208,11 @@ function getPlayList() {
                 });
             }
         }
-        else
+        else{
             $('#playlist_list').empty();
+            savedPlaylist = {};
+        }
+
     }).fail(function (data) {
         if(!error){
             alert("Comunication error, please refresh.");
