@@ -176,5 +176,7 @@ public class TrackScheduler extends AudioEventAdapter {
         }
     }
 
-
+    public void setAutoPlay(boolean autoPlay) {
+        this.autoPlay = autoPlay;
+    }
 }
