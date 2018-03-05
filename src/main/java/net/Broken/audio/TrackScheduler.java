@@ -141,12 +141,13 @@ public class TrackScheduler extends AudioEventAdapter {
                     return false;
                 } else {
                     logger.info("Delete succeful");
+                    needAutoPlay();
                     return true;
                 }
             }
         }
         logger.info("Delete failure! Not found.");
-        needAutoPlay();
+
         return false;
     }
 

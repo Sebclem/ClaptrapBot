@@ -10,7 +10,7 @@ var btn_info;
 var btn_disconnect;
 var btn_flush;
 var btn_add;
-
+var loadingFlag = false;
 
 $(document).ready(function() {
 
@@ -161,6 +161,7 @@ function getCurentMusic() {
                 break;
         }
         getPlayList();
+
     })
     .fail(function (data) {
         if(!error){
@@ -212,11 +213,20 @@ function getPlayList() {
             $('#playlist_list').empty();
             savedPlaylist = {};
         }
+        if(loadingFlag){
+            modal_loading.modal('close');
+            loadingFlag = false;
+        }
+
 
     }).fail(function (data) {
         if(!error){
             alert("Comunication error, please refresh.");
             error = true;
+        }
+        if(loadingFlag){
+            modal_loading.modal('close');
+            loadingFlag = false;
         }
 
     });
@@ -252,7 +262,7 @@ function getChannels(){
 
 function updateModal(data){
     $('#modal_title').text("Title: "+ data.info.audioTrackInfo.title);
-    $('#modal_author').text("Author: "+ data.info.author);
+    $('#modal_author').text("Author: "+ data.info.audioTrackInfo.author);
     $('#modal_lenght').text("Duration: "+ msToTime(data.info.audioTrackInfo.length));
     $('#modal_url').text("URL: "+ data.info.audioTrackInfo.uri);
     $('#modal_submit').text("Submitted by: "+ data.info.user);
@@ -310,8 +320,9 @@ function sendCommand(command){
         data:  JSON.stringify(command),
         success: function (data) {
             console.log(data);
+            loadingFlag = true;
             getCurentMusic();
-            modal_loading.modal('close');
+
         }
 
     }).fail(function (data) {
