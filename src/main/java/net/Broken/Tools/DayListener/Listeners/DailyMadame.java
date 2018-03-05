@@ -1,5 +1,6 @@
 package net.Broken.Tools.DayListener.Listeners;
 
+import net.Broken.Commands.Over18.Madame;
 import net.Broken.MainBot;
 import net.Broken.Tools.DayListener.NewDayListener;
 import net.Broken.Tools.Redirection;
@@ -24,8 +25,16 @@ public class DailyMadame implements NewDayListener{
         while(!success && !error)
         {
             try {
-                chanel.sendMessage("Le Daily Madame mes petits cochons :kissing_heart:\n" + redirect.get("http://dites.bonjourmadame.fr/random")).queue();
-                success=true;
+
+                String url = redirect.get("http://dites.bonjourmadame.fr/random");
+                logger.debug("URL: "+url);
+                if(Madame.scanPageForTipeee(url, logger)){
+                    logger.debug("Advertisement detected! Retry! ("+url+")");
+                }
+                else{
+                    chanel.sendMessage("Le Daily Madame mes petits cochons :kissing_heart:\n" + redirect.get("http://dites.bonjourmadame.fr/random")).queue();
+                    success=true;
+                }
             } catch (IOException e) {
                 errorCp++;
                 logger.warn("Erreur de redirection. (Essais n°"+errorCp+")");
