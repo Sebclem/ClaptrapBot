@@ -12,14 +12,13 @@ import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.YouTubeScopes;
 import com.google.api.services.youtube.model.SearchListResponse;
+import com.google.api.services.youtube.model.SearchResult;
 import net.dv8tion.jda.core.entities.Guild;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.*;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
+import java.util.*;
 
 public class YoutubeTools {
     /** Application name. */
@@ -109,7 +108,7 @@ public class YoutubeTools {
                 .build();
     }
 
-    public String getRelatedVideo(String videoId) throws IOException, GoogleJsonResponseException, Throwable {
+    public String getRelatedVideo(String videoId, ArrayList<String> history) throws IOException, GoogleJsonResponseException, Throwable {
 
         YouTube youtube = getYouTubeService();
 
@@ -118,7 +117,7 @@ public class YoutubeTools {
         parameters.put("relatedToVideoId", videoId);
         parameters.put("type", "video");
 
-        YouTube.Search.List searchListRelatedVideosRequest = youtube.search().list(parameters.get("part").toString());
+        YouTube.Search.List searchListRelatedVideosRequest = youtube.search().list(parameters.get("part"));
         if (parameters.containsKey("relatedToVideoId") && parameters.get("relatedToVideoId") != "") {
             searchListRelatedVideosRequest.setRelatedToVideoId(parameters.get("relatedToVideoId"));
         }
@@ -129,6 +128,15 @@ public class YoutubeTools {
 
         SearchListResponse response = searchListRelatedVideosRequest.execute();
 
+        for(SearchResult item : response.getItems()){
+            if(!history.contains(item.getId().getVideoId())){
+                return item.getId().getVideoId();
+            }
+            else
+                logger.debug("ID already on history");
+        }
+
+        logger.debug("All on history ?");
         return response.getItems().get(0).getId().getVideoId();
 
     }

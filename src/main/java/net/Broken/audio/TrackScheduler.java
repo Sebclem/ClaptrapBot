@@ -28,6 +28,7 @@ public class TrackScheduler extends AudioEventAdapter {
     private final BlockingDeque<UserAudioTrack> queue;
     private UserAudioTrack currentPlayingTrack;
     private boolean autoPlay = true;
+    private ArrayList<String> history = new ArrayList<>();
     Logger logger = LogManager.getLogger();
 
     /**
@@ -49,6 +50,12 @@ public class TrackScheduler extends AudioEventAdapter {
         // Calling startTrack with the noInterrupt set to true will start the track only if nothing is currently playing. If
         // something is playing, it returns false and does nothing. In that case the player was already playing so this
         // track goes to the queue instead.
+        if(track.getSubmittedUser() != MainBot.jda.getSelfUser()){
+            logger.debug("Flush history");
+            history = new ArrayList<>();
+        }
+
+        history.add(track.getAudioTrack().getIdentifier());
         if (!player.startTrack(track.getAudioTrack(), true)) {
             queue.offer(track);
         }
@@ -68,6 +75,12 @@ public class TrackScheduler extends AudioEventAdapter {
         // Calling startTrack with the noInterrupt set to true will start the track only if nothing is currently playing. If
         // something is playing, it returns false and does nothing. In that case the player was already playing so this
         // track goes to the queue instead.
+        if(track.getSubmittedUser() != MainBot.jda.getSelfUser()){
+            logger.debug("Flush history");
+            history = new ArrayList<>();
+        }
+
+        history.add(track.getAudioTrack().getIdentifier());
         if (!player.startTrack(track.getAudioTrack(), true)) {
             queue.addFirst(track);
         }
@@ -163,7 +176,7 @@ public class TrackScheduler extends AudioEventAdapter {
             AudioM audioM = AudioM.getInstance(null);
             YoutubeTools youtubeTools = YoutubeTools.getInstance(null);
             try {
-                String id =  youtubeTools.getRelatedVideo(currentPlayingTrack.getAudioTrack().getInfo().identifier);
+                String id =  youtubeTools.getRelatedVideo(currentPlayingTrack.getAudioTrack().getInfo().identifier, history);
                 logger.info("Related id: "+id);
                 audioM.loadAndPlayAuto(id);
 
@@ -178,5 +191,6 @@ public class TrackScheduler extends AudioEventAdapter {
 
     public void setAutoPlay(boolean autoPlay) {
         this.autoPlay = autoPlay;
+        needAutoPlay();
     }
 }
