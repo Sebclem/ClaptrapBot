@@ -62,7 +62,9 @@ public class TrackScheduler extends AudioEventAdapter {
         else{
             currentPlayingTrack = track;
         }
-        needAutoPlay();
+        if(track.getSubmittedUser() != MainBot.jda.getSelfUser()) {
+            needAutoPlay();
+        }
 
 
     }
@@ -87,7 +89,9 @@ public class TrackScheduler extends AudioEventAdapter {
         else{
             currentPlayingTrack = track;
         }
-        needAutoPlay();
+        if(track.getSubmittedUser() != MainBot.jda.getSelfUser()) {
+            needAutoPlay();
+        }
     }
 
     public void pause() {
