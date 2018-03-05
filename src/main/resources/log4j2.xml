@@ -25,6 +25,9 @@
         </File>
     </Appenders>
     <Loggers>
+        <Logger name="net.Broken" level="trace" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
         <Root level="debug">
             <AppenderRef ref="RollingFile" level="info" />
             <AppenderRef ref="Console" level="info"/>
