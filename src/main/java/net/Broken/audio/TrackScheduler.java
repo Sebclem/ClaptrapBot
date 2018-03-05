@@ -90,7 +90,6 @@ public class TrackScheduler extends AudioEventAdapter {
         needAutoPlay();
     }
 
-
     public void pause() {
         player.setPaused(true);
     }
@@ -99,7 +98,6 @@ public class TrackScheduler extends AudioEventAdapter {
         player.setPaused(false);
 
     }
-
 
     public void stop(){
         player.stopTrack();
