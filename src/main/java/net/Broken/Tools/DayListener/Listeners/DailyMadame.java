@@ -32,7 +32,7 @@ public class DailyMadame implements NewDayListener{
                     logger.debug("Advertisement detected! Retry! ("+url+")");
                 }
                 else{
-                    chanel.sendMessage("Le Daily Madame mes petits cochons :kissing_heart:\n" + redirect.get("http://dites.bonjourmadame.fr/random")).queue();
+                    chanel.sendMessage("Le Daily Madame mes petits cochons :kissing_heart:\n" + url).queue();
                     success=true;
                 }
             } catch (IOException e) {
