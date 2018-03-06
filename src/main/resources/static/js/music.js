@@ -10,6 +10,7 @@ var btn_info;
 var btn_disconnect;
 var btn_flush;
 var btn_add;
+var switchAutoFlow;
 var loadingFlag = false;
 
 $(document).ready(function() {
@@ -21,7 +22,7 @@ $(document).ready(function() {
     btn_disconnect = $('#btn_disconnect');
     btn_flush = $('#flush_btn');
     btn_add = $('#add_btn');
-
+    switchAutoFlow = $("#autoflow");
 
     setInterval("getCurentMusic()",1000);
     $('#modalAdd').modal();
@@ -160,6 +161,8 @@ function getCurentMusic() {
 
                 break;
         }
+        if(switchAutoFlow.is(':checked') != data.autoflow)
+            switchAutoFlow.prop('checked', data.autoflow);
         getPlayList();
 
     })
@@ -450,6 +453,15 @@ function listeners() {
 
     $('#btn_disconnect').click(function () {
         sendCommand({command : "DISCONNECT"})
+    });
+
+    switchAutoFlow.click(function () {
+        console.log(switchAutoFlow.is(':checked'))
+        if(switchAutoFlow.is(':checked')){
+            sendCommand({command: 'AUTOFLOWON'})
+        }
+        else
+            sendCommand({command: 'AUTOFLOWOFF'})
     });
 }
 

@@ -2,19 +2,16 @@ package net.Broken.audio;
 
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
-import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
-import net.Broken.Commands.Music;
 import net.Broken.MainBot;
 import net.Broken.RestApi.Data.UserAudioTrackData;
 import net.Broken.audio.Youtube.YoutubeTools;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingDeque;
@@ -27,7 +24,7 @@ public class TrackScheduler extends AudioEventAdapter {
     private final AudioPlayer player;
     private final BlockingDeque<UserAudioTrack> queue;
     private UserAudioTrack currentPlayingTrack;
-    private boolean autoPlay = true;
+    private boolean autoFlow = true;
     private ArrayList<String> history = new ArrayList<>();
     Logger logger = LogManager.getLogger();
 
@@ -175,7 +172,7 @@ public class TrackScheduler extends AudioEventAdapter {
     }
 
     private void needAutoPlay(){
-        if((queue.size() < 1) && autoPlay && currentPlayingTrack != null){
+        if((queue.size() < 1) && autoFlow && currentPlayingTrack != null){
             logger.info("Auto add needed!");
             AudioM audioM = AudioM.getInstance(null);
             YoutubeTools youtubeTools = YoutubeTools.getInstance(null);
@@ -193,8 +190,12 @@ public class TrackScheduler extends AudioEventAdapter {
         }
     }
 
-    public void setAutoPlay(boolean autoPlay) {
-        this.autoPlay = autoPlay;
+    public void setAutoFlow(boolean autoFlow) {
+        this.autoFlow = autoFlow;
         needAutoPlay();
+    }
+
+    public boolean isAutoFlow() {
+        return autoFlow;
     }
 }

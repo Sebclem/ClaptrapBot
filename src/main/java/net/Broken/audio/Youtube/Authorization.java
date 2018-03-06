@@ -33,7 +33,6 @@ public class Authorization extends AuthorizationCodeInstalledApp {
 
     protected void notify(String url){
         Preconditions.checkNotNull(url);
-        // Ask user to open in their browser using copy-paste
         logger.fatal("Please open this URL: "+url);
         PrivateMessage.send(guild.getOwner().getUser(),"Please open this url to confirm google api account acces : " + url,null);
 

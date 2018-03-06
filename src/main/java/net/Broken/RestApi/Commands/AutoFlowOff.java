@@ -20,7 +20,7 @@ public class AutoFlowOff implements CommandInterface{
         AudioM audioM = AudioM.getInstance(null);
         try {
             TrackScheduler scheduler = audioM.getGuildMusicManager().scheduler;
-            scheduler.setAutoPlay(false);
+            scheduler.setAutoFlow(false);
             return new ResponseEntity<>(new CommandResponseData(data.command,"ok"), HttpStatus.OK);
         } catch (NullMusicManager | NotConnectedException nullMusicManager) {
             LogManager.getLogger().catching(nullMusicManager);

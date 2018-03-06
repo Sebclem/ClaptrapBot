@@ -14,13 +14,15 @@ public class CurrentMusicData {
     private final long currentPos;
     private final String state;
     private final boolean pause;
+    private final boolean autoflow;
 
 
-    public CurrentMusicData(UserAudioTrackData info, long currentPos, String state, boolean pause) {
+    public CurrentMusicData(UserAudioTrackData info, long currentPos, String state, boolean pause, boolean autoflow) {
         this.info = info;
         this.currentPos = currentPos;
         this.state = state;
         this.pause = pause;
+        this.autoflow = autoflow;
     }
 
     public UserAudioTrackData getInfo() {
@@ -36,5 +38,9 @@ public class CurrentMusicData {
             return "PAUSE";
         else
             return state;
+    }
+
+    public boolean isAutoflow() {
+        return autoflow;
     }
 }
