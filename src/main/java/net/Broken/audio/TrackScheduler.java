@@ -24,7 +24,7 @@ public class TrackScheduler extends AudioEventAdapter {
     private final AudioPlayer player;
     private final BlockingDeque<UserAudioTrack> queue;
     private UserAudioTrack currentPlayingTrack;
-    private boolean autoFlow = true;
+    private boolean autoFlow = false;
     private ArrayList<String> history = new ArrayList<>();
     Logger logger = LogManager.getLogger();
 
