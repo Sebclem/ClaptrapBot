@@ -11,6 +11,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class GeneralWebView {
     @RequestMapping("/")
     public String music(Model model){
-        return "index";
+
+        return CheckPage.getPageIfReady("index");
+    }
+    @RequestMapping("/loading")
+    public String loading(Model model){
+        return "loading";
     }
 }

@@ -11,6 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class MusicWebView {
     @RequestMapping("/music")
     public String music(Model model){
-        return "music";
+        return CheckPage.getPageIfReady("music");
     }
 }

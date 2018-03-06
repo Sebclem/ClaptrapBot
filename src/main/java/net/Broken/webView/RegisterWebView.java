@@ -14,6 +14,6 @@ public class RegisterWebView {
     @RequestMapping("/register")
     public String music(@RequestParam(value="id", required = true, defaultValue = "") String id, Model model){
         model.addAttribute("id", id);
-        return "register";
+        return CheckPage.getPageIfReady("register");
     }
 }

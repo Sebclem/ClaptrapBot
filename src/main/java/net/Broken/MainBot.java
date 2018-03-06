@@ -38,6 +38,7 @@ public class MainBot {
     public static boolean roleFlag = false;
     public static HashMap<User, UserSpamUtils> spamUtils = new HashMap<>();
     public static JDA jda;
+    public static boolean ready = false;
 
 
 
@@ -87,6 +88,7 @@ public class MainBot {
         }
 
         Init.polish(jda);
+        ready = true;
 
 
 
@@ -102,8 +104,14 @@ public class MainBot {
      */
     public static void handleCommand(CommandParser.CommandContainer cmd)
     {
-        //On verifie que la commande existe
 
+        if(!ready)
+        {
+
+            return;
+        }
+
+        //On verifie que la commande existe
         if (commandes.containsKey(cmd.commande))
         {
             Commande cmdObj = commandes.get(cmd.commande);
