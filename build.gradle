@@ -66,8 +66,6 @@ dependencies {
     compile 'org.apache.commons:commons-lang3:3.7'
     compile 'com.google.api-client:google-api-client:1.23.0'
     compile 'com.google.apis:google-api-services-youtube:v3-rev192-1.23.0'
-    compile 'com.google.oauth-client:google-oauth-client-java6:1.23.0'
-    compile 'com.google.oauth-client:google-oauth-client-jetty:1.23.0'
 
     testCompile('org.springframework.boot:spring-boot-starter-test')
     testCompile('com.jayway.jsonpath:json-path')

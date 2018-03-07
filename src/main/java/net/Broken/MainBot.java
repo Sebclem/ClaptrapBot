@@ -81,12 +81,6 @@ public class MainBot {
             }));
         }
 
-        try {
-            YoutubeTools.getInstance(jda.getGuilds().get(0)).getYouTubeService();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
         Init.polish(jda);
         ready = true;
 

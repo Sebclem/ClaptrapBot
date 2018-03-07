@@ -20,3 +20,9 @@ src/main/resources/templates/css
 src/main/resources/templates/js
 
 \.directory
+
+\.credentials/
+
+src/main/resources/static/error/css
+
+src/main/resources/static/error/js
