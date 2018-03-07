@@ -33,7 +33,10 @@ pipeline {
             /* This builds the actual image; synonymous to
              * docker build on the command line */
             steps{
-                app = docker.build("brokenfire/brokendiscordbot",'--build-arg BUILD_NBR=${BUILD_NUMBER} --build-arg BRANCH_NAME=${BRANCH_NAME} --rm=true .')
+                script{
+                    app = docker.build("brokenfire/brokendiscordbot",'--build-arg BUILD_NBR=${BUILD_NUMBER} --build-arg BRANCH_NAME=${BRANCH_NAME} --rm=true .')
+                }
+
             }
 
         }
