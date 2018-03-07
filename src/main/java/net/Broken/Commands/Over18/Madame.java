@@ -32,7 +32,7 @@ public class Madame implements Commande{
 
                 String url = redirect.get("http://dites.bonjourmadame.fr/random");
                 logger.debug("URL: "+url);
-                if(scanPageForTipeee(url)){
+                if(scanPageForTipeee(url, logger)){
                     logger.debug("Advertisement detected! Retry! ("+url+")");
                 }
                 else{
@@ -82,7 +82,7 @@ public class Madame implements Commande{
      * @throws StringIndexOutOfBoundsException
      * @throws IOException
      */
-    private boolean scanPageForTipeee(String url) throws StringIndexOutOfBoundsException, IOException{
+    public static boolean scanPageForTipeee(String url, Logger logger) throws StringIndexOutOfBoundsException, IOException{
             String content = FindContentOnWebPage.getSourceUrl(url);
             String imgClickLink = content.substring(content.indexOf("photo post"));
             imgClickLink = imgClickLink.substring(imgClickLink.indexOf("<a"));

@@ -1,11 +1,14 @@
 package net.Broken.audio;
 
+import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
+import net.Broken.MainBot;
 import net.Broken.RestApi.Data.UserAudioTrackData;
+import net.Broken.audio.Youtube.YoutubeTools;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -21,6 +24,8 @@ public class TrackScheduler extends AudioEventAdapter {
     private final AudioPlayer player;
     private final BlockingDeque<UserAudioTrack> queue;
     private UserAudioTrack currentPlayingTrack;
+    private boolean autoFlow = false;
+    private ArrayList<String> history = new ArrayList<>();
     Logger logger = LogManager.getLogger();
 
     /**
@@ -42,12 +47,23 @@ public class TrackScheduler extends AudioEventAdapter {
         // Calling startTrack with the noInterrupt set to true will start the track only if nothing is currently playing. If
         // something is playing, it returns false and does nothing. In that case the player was already playing so this
         // track goes to the queue instead.
+        if(track.getSubmittedUser() != MainBot.jda.getSelfUser()){
+            logger.debug("Flush history");
+            history = new ArrayList<>();
+        }
+
+        history.add(track.getAudioTrack().getIdentifier());
         if (!player.startTrack(track.getAudioTrack(), true)) {
             queue.offer(track);
         }
         else{
             currentPlayingTrack = track;
         }
+        if(track.getSubmittedUser() != MainBot.jda.getSelfUser()) {
+            needAutoPlay();
+        }
+
+
     }
 
     /**
@@ -58,14 +74,22 @@ public class TrackScheduler extends AudioEventAdapter {
         // Calling startTrack with the noInterrupt set to true will start the track only if nothing is currently playing. If
         // something is playing, it returns false and does nothing. In that case the player was already playing so this
         // track goes to the queue instead.
+        if(track.getSubmittedUser() != MainBot.jda.getSelfUser()){
+            logger.debug("Flush history");
+            history = new ArrayList<>();
+        }
+
+        history.add(track.getAudioTrack().getIdentifier());
         if (!player.startTrack(track.getAudioTrack(), true)) {
             queue.addFirst(track);
         }
         else{
             currentPlayingTrack = track;
         }
+        if(track.getSubmittedUser() != MainBot.jda.getSelfUser()) {
+            needAutoPlay();
+        }
     }
-
 
     public void pause() {
         player.setPaused(true);
@@ -75,7 +99,6 @@ public class TrackScheduler extends AudioEventAdapter {
         player.setPaused(false);
 
     }
-
 
     public void stop(){
         player.stopTrack();
@@ -115,11 +138,13 @@ public class TrackScheduler extends AudioEventAdapter {
                     return false;
                 } else {
                     logger.info("Delete succeful");
+                    needAutoPlay();
                     return true;
                 }
             }
         }
         logger.info("Delete failure! Not found.");
+
         return false;
     }
 
@@ -130,9 +155,11 @@ public class TrackScheduler extends AudioEventAdapter {
         // Start the next track, regardless of if something is already playing or not. In case queue was empty, we are
         // giving null to startTrack, which is a valid argument and will simply stop the player.
         UserAudioTrack track = queue.poll();
-        this.currentPlayingTrack = track;
+        if(track != null)
+            this.currentPlayingTrack = track;
         if(track != null)
             player.startTrack(track.getAudioTrack(), false);
+        needAutoPlay();
     }
 
     @Override
@@ -140,8 +167,35 @@ public class TrackScheduler extends AudioEventAdapter {
         // Only start the next track if the end reason is suitable for it (FINISHED or LOAD_FAILED)
         if (endReason.mayStartNext) {
             nextTrack();
+            needAutoPlay();
         }
     }
 
+    private void needAutoPlay(){
+        if((queue.size() < 1) && autoFlow && currentPlayingTrack != null){
+            logger.info("Auto add needed!");
+            AudioM audioM = AudioM.getInstance(null);
+            YoutubeTools youtubeTools = YoutubeTools.getInstance(null);
+            try {
+                String id =  youtubeTools.getRelatedVideo(currentPlayingTrack.getAudioTrack().getInfo().identifier, history);
+                logger.info("Related id: "+id);
+                audioM.loadAndPlayAuto(id);
 
+            } catch (GoogleJsonResponseException e) {
+                logger.error("There was a service error: " + e.getDetails().getCode() + " : " + e.getDetails().getMessage());
+            } catch (Throwable t) {
+                logger.catching(t);
+            }
+
+        }
+    }
+
+    public void setAutoFlow(boolean autoFlow) {
+        this.autoFlow = autoFlow;
+        needAutoPlay();
+    }
+
+    public boolean isAutoFlow() {
+        return autoFlow;
+    }
 }

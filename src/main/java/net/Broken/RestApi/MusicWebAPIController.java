@@ -51,16 +51,16 @@ public class MusicWebAPIController {
                 AudioTrack currentTrack = player.getPlayingTrack();
                 if(currentTrack == null)
                 {
-                    return new CurrentMusicData(null,0, "STOP",false);
+                    return new CurrentMusicData(null,0, "STOP",false, musicCommande.audio.getGuildMusicManager().scheduler.isAutoFlow());
                 }
                 UserAudioTrackData uat = new UserAudioTrackData(musicCommande.audio.getGuildMusicManager().scheduler.getCurrentPlayingTrack());
-                return new CurrentMusicData(uat, currentTrack.getPosition(), currentTrack.getState().toString(), player.isPaused());
+                return new CurrentMusicData(uat, currentTrack.getPosition(), currentTrack.getState().toString(), player.isPaused(), musicCommande.audio.getGuildMusicManager().scheduler.isAutoFlow());
             } catch (NullMusicManager | NotConnectedException nullMusicManager) {
-                return new CurrentMusicData(null,0, "STOP",false);
+                return new CurrentMusicData(null,0, "STOP",false, false);
             }
         }else
         {
-            return new CurrentMusicData(null,0, "DISCONNECTED",false);
+            return new CurrentMusicData(null,0, "DISCONNECTED",false, false);
         }
     }
 

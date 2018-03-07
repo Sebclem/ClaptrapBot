@@ -174,11 +174,11 @@
                 <tr>
                     <th style="padding: 0px;">
                         <div class="row center valign-wrapper" style="margin: 0px">
-                            <div class="col s4 center"><h5>Playlist</h5></div>
-                            <div class="col s4 center">
+                            <div class="col s3 center blue-grey-text text-darken-3"><h5><b>Playlist</b></h5></div>
+                            <div class="col s3 center">
                                 <a class="waves-effect waves-light btn modal-trigger red darken-4" id="flush_btn"><i class="material-icons">delete_sweep</i></a>
                             </div>
-                            <div class="col s4 center">
+                            <div class="col s3 center" style="padding-right: 0px">
                                 <!-- Modal Trigger -->
                                 <a class="waves-effect waves-light btn modal-trigger green darken-4" id="add_btn" href="#modalAdd"><i class="material-icons">add_circle_outline</i></a>
 
@@ -213,6 +213,17 @@
                                         <a href="#!" id="btn_add_top" class="modal-action modal-close waves-effect waves-green btn-flat disabled">Add On Top</a>
                                         <a href="#!" id="btn_add_bottom" class="modal-action modal-close waves-effect waves-green btn-flat disabled">Add On Bottom</a>
                                     </div>
+                                </div>
+                            </div>
+                            <div class="col s3 center " style="padding-left: 0px">
+                                <div class="row switch  blue-grey-text text-darken-3" style="margin-bottom: 0px">
+                                    AutoFlow
+                                </div>
+                                <div class="row switch tooltipped" data-position="bottom" data-delay="50" data-tooltip="Experimental!">
+                                    <label>
+                                        <input type="checkbox" id="autoflow"/>
+                                        <span class="lever"></span>
+                                    </label>
                                 </div>
                             </div>
 
@@ -360,7 +371,9 @@
 </p>
 
 <!--  Scripts-->
-<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.js"
+        integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+        crossorigin="anonymous"></script>
 
 <script>
     var needLogin = true;
