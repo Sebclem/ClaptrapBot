@@ -1,7 +1,7 @@
 pipeline {
     agent any
     stages {
-        def app
+
         stage('Clone') { // for display purposes
             // Get some code from a GitHub repository
             steps {
