@@ -87,8 +87,11 @@ public class TrackScheduler extends AudioEventAdapter {
             currentPlayingTrack = track;
         }
         if(track.getSubmittedUser() != MainBot.jda.getSelfUser()) {
+
             needAutoPlay();
         }
+        else
+            logger.debug("Bot add, ignore autoFlow");
     }
 
     public void pause() {
@@ -166,19 +169,19 @@ public class TrackScheduler extends AudioEventAdapter {
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
         // Only start the next track if the end reason is suitable for it (FINISHED or LOAD_FAILED)
         if (endReason.mayStartNext) {
+            logger.debug("End of track, start next.");
             nextTrack();
-            needAutoPlay();
         }
     }
 
     private void needAutoPlay(){
         if((queue.size() < 1) && autoFlow && currentPlayingTrack != null){
-            logger.info("Auto add needed!");
+            logger.debug("Auto add needed!");
             AudioM audioM = AudioM.getInstance(null);
             YoutubeTools youtubeTools = YoutubeTools.getInstance(null);
             try {
                 String id =  youtubeTools.getRelatedVideo(currentPlayingTrack.getAudioTrack().getInfo().identifier, history);
-                logger.info("Related id: "+id);
+                logger.debug("Related id: "+id);
                 audioM.loadAndPlayAuto(id);
 
             } catch (GoogleJsonResponseException e) {
