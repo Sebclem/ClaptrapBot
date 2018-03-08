@@ -16,11 +16,7 @@ import org.springframework.http.ResponseEntity;
 public class Next implements CommandInterface {
     @Override
     public ResponseEntity<CommandResponseData> action(Music musicCommande, CommandPostData data, User user) {
-        try {
-            musicCommande.getAudioManager().getGuildMusicManager().scheduler.nextTrack();
-            return new ResponseEntity<>(new CommandResponseData(data.command, "Accepted"), HttpStatus.OK);
-        } catch (NullMusicManager | NotConnectedException nullMusicManager) {
-            return new ResponseEntity<>(new CommandResponseData(data.command, "Not connected to vocal!"), HttpStatus.NOT_ACCEPTABLE);
-        }
+        musicCommande.getAudioManager().getGuildMusicManager().scheduler.nextTrack();
+        return new ResponseEntity<>(new CommandResponseData(data.command, "Accepted"), HttpStatus.OK);
     }
 }

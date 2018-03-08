@@ -18,13 +18,8 @@ public class AutoFlowOff implements CommandInterface{
     @Override
     public ResponseEntity<CommandResponseData> action(Music musicCommande, CommandPostData data, User user) {
         AudioM audioM = AudioM.getInstance(null);
-        try {
-            TrackScheduler scheduler = audioM.getGuildMusicManager().scheduler;
-            scheduler.setAutoFlow(false);
-            return new ResponseEntity<>(new CommandResponseData(data.command,"ok"), HttpStatus.OK);
-        } catch (NullMusicManager | NotConnectedException nullMusicManager) {
-            LogManager.getLogger().catching(nullMusicManager);
-            return new ResponseEntity<>(new CommandResponseData(data.command,"Not connected", "connect"), HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        TrackScheduler scheduler = audioM.getGuildMusicManager().scheduler;
+        scheduler.setAutoFlow(false);
+        return new ResponseEntity<>(new CommandResponseData(data.command,"ok"), HttpStatus.OK);
     }
 }

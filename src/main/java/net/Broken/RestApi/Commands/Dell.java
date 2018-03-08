@@ -17,15 +17,11 @@ public class Dell implements CommandInterface {
     @Override
     public ResponseEntity<CommandResponseData> action(Music musicCommande, CommandPostData data, User user) {
         if(data.url != null) {
-            try {
-                if(musicCommande.getAudioManager().getGuildMusicManager().scheduler.remove(data.url)){
-                    return new ResponseEntity<>(new CommandResponseData(data.command, "Accepted"), HttpStatus.OK);
-                }
-                else
-                    return new ResponseEntity<>(new CommandResponseData(data.command,"URL not found"), HttpStatus.NOT_FOUND);
-            } catch (NullMusicManager | NotConnectedException nullMusicManager) {
-                return new ResponseEntity<>(new CommandResponseData(data.command, "Not connected to vocal!"), HttpStatus.NOT_ACCEPTABLE);
+            if(musicCommande.getAudioManager().getGuildMusicManager().scheduler.remove(data.url)){
+                return new ResponseEntity<>(new CommandResponseData(data.command, "Accepted"), HttpStatus.OK);
             }
+            else
+                return new ResponseEntity<>(new CommandResponseData(data.command,"URL not found"), HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(new CommandResponseData(data.command, "Missing URL"), HttpStatus.NOT_ACCEPTABLE);
 

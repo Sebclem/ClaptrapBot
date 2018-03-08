@@ -46,18 +46,14 @@ public class MusicWebAPIController {
         Music musicCommande = (Music) MainBot.commandes.get("music");
 
         if(musicCommande.audio.getGuild().getAudioManager().isConnected()){
-            try {
-                AudioPlayer player = musicCommande.audio.getGuildMusicManager().player;
-                AudioTrack currentTrack = player.getPlayingTrack();
-                if(currentTrack == null)
-                {
-                    return new CurrentMusicData(null,0, "STOP",false, musicCommande.audio.getGuildMusicManager().scheduler.isAutoFlow());
-                }
-                UserAudioTrackData uat = new UserAudioTrackData(musicCommande.audio.getGuildMusicManager().scheduler.getCurrentPlayingTrack());
-                return new CurrentMusicData(uat, currentTrack.getPosition(), currentTrack.getState().toString(), player.isPaused(), musicCommande.audio.getGuildMusicManager().scheduler.isAutoFlow());
-            } catch (NullMusicManager | NotConnectedException nullMusicManager) {
-                return new CurrentMusicData(null,0, "STOP",false, false);
+            AudioPlayer player = musicCommande.audio.getGuildMusicManager().player;
+            AudioTrack currentTrack = player.getPlayingTrack();
+            if(currentTrack == null)
+            {
+                return new CurrentMusicData(null,0, "STOP",false, musicCommande.audio.getGuildMusicManager().scheduler.isAutoFlow());
             }
+            UserAudioTrackData uat = new UserAudioTrackData(musicCommande.audio.getGuildMusicManager().scheduler.getCurrentPlayingTrack());
+            return new CurrentMusicData(uat, currentTrack.getPosition(), currentTrack.getState().toString(), player.isPaused(), musicCommande.audio.getGuildMusicManager().scheduler.isAutoFlow());
         }else
         {
             return new CurrentMusicData(null,0, "DISCONNECTED",false, false);
@@ -68,12 +64,8 @@ public class MusicWebAPIController {
     public PlaylistData getPlaylist(){
         Music musicCommande = (Music) MainBot.commandes.get("music");
         List<UserAudioTrackData> list = null;
-        try {
-            list = musicCommande.getAudioManager().getGuildMusicManager().scheduler.getList();
-            return new PlaylistData(list);
-        } catch (NullMusicManager | NotConnectedException nullMusicManager) {
-            return new PlaylistData(list);
-        }
+        list = musicCommande.getAudioManager().getGuildMusicManager().scheduler.getList();
+        return new PlaylistData(list);
     }
 
     @RequestMapping(value = "/command", method = RequestMethod.POST)

@@ -14,6 +14,6 @@ import org.springframework.http.ResponseEntity;
 public class Add implements CommandInterface {
     @Override
     public ResponseEntity<CommandResponseData> action(Music musicCommande, CommandPostData data, User user) {
-        return new WebLoadUtils(musicCommande ,data, user).getResponse();
+        return new WebLoadUtils(data, user, true).getResponse();
     }
 }

@@ -337,11 +337,9 @@ public class AudioM {
         guild.getAudioManager().closeAudioConnection();
     }
 
-    public GuildMusicManager getGuildMusicManager() throws NullMusicManager, NotConnectedException {
+    public GuildMusicManager getGuildMusicManager(){
         if( musicManager == null)
-            throw new NullMusicManager();
-        else if( playedChanel == null)
-            throw new NotConnectedException();
+            musicManager = getGuildAudioPlayer(guild);
         return musicManager;
     }
 
