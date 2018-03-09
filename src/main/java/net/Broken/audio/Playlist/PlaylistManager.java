@@ -9,6 +9,7 @@ import net.Broken.DB.Repository.UserRepository;
 import net.Broken.MainBot;
 import net.Broken.RestApi.Data.CommandResponseData;
 import net.Broken.RestApi.Data.Playlist.AddToPlaylistData;
+import net.Broken.RestApi.Data.Playlist.DeleteTrackData;
 import net.Broken.RestApi.Data.Playlist.PlaylistResponseData;
 import net.Broken.SpringContext;
 import net.Broken.Tools.UserManager.Exceptions.UnknownTokenException;
@@ -92,6 +93,51 @@ public class PlaylistManager {
     }
 
 
+    public ResponseEntity<PlaylistResponseData> removeTrack(String token, DeleteTrackData data){
+        UserUtils userUtils = UserUtils.getInstance();
+        try {
+            UserEntity user = userUtils.getUserWithApiToken(userRepository, token);
+            PlaylistEntity playlist = getPlaylist(data.playlistId);
+
+            List<TrackEntity> tracks = trackRepository.findDistinctByPlaylistOrderByPos(playlist);
+
+            TrackEntity toDelete = trackRepository.findOne(data.id);
+            if(toDelete == null){
+                logger.warn("Track not found in DB, id: "+ data.id);
+                return TRACK_NOT_FOUND;
+            }
+            int toDeleteIndex = tracks.indexOf(toDelete);
+            logger.debug("To delete index: "  + toDeleteIndex);
+            if(toDeleteIndex == -1){
+                logger.warn("Track not found in playlist, id: " + data.id + " playlist: " + data.playlistId);
+                return TRACK_NOT_FOUND;
+            }
+
+
+            for(int i = toDeleteIndex + 1; i< tracks.size(); i++){
+                tracks.get(i).setPos(tracks.get(i).getPos() - 1);
+                trackRepository.save(tracks.get(i));
+            }
+
+            tracks.remove(toDelete);
+            trackRepository.delete(toDelete);
+
+            playlist.setTracks(tracks);
+            playlist = playlistRepository.save(playlist);
+
+
+            return new ResponseEntity<>(new PlaylistResponseData("Ok", playlist),HttpStatus.OK);
+
+        } catch (UnknownTokenException e) {
+            logger.warn("Unknown token: "+ token);
+            return TOKEN_ERROR;
+        } catch (PlaylistNotFoundException e) {
+            logger.debug("Playlist not found: "+ data.playlistId);
+            return PLAYLIST_NOT_FOUND;
+        }
+    }
+
+
 
 
     private PlaylistEntity getPlaylist(int id) throws PlaylistNotFoundException{
@@ -102,6 +148,7 @@ public class PlaylistManager {
             return playlist;
 
     }
+
 
     private PlaylistEntity insert(PlaylistEntity playlistEntity, TrackEntity trackEntity){
         List<TrackEntity> tracks = trackRepository.findDistinctByPlaylistOrderByPos(playlistEntity);

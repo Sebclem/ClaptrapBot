@@ -6,15 +6,11 @@ import net.Broken.DB.Entity.UserEntity;
 import net.Broken.DB.Repository.PlaylistRepository;
 import net.Broken.DB.Repository.TrackRepository;
 import net.Broken.DB.Repository.UserRepository;
-import net.Broken.MainBot;
-import net.Broken.RestApi.Data.CommandPostData;
-import net.Broken.RestApi.Data.CommandResponseData;
 import net.Broken.RestApi.Data.Playlist.AddToPlaylistData;
 import net.Broken.RestApi.Data.Playlist.CreatePlaylistData;
+import net.Broken.RestApi.Data.Playlist.DeleteTrackData;
 import net.Broken.RestApi.Data.Playlist.PlaylistResponseData;
 import net.Broken.audio.Playlist.PlaylistManager;
-import net.Broken.audio.WebLoadUtils;
-import net.dv8tion.jda.core.entities.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,6 +79,14 @@ public class PlaylistAPIController {
         PlaylistManager playlistManager = PlaylistManager.getINSTANCE();
 
         return playlistManager.addToPlaylist(token, data);
+
+    }
+
+    @RequestMapping("/dellTrack")
+    public ResponseEntity<PlaylistResponseData> dellTrack(@CookieValue(value = "token", defaultValue = "") String token, @RequestBody DeleteTrackData data){
+        PlaylistManager playlistManager = PlaylistManager.getINSTANCE();
+
+        return playlistManager.removeTrack(token, data);
 
     }
 
