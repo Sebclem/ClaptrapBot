@@ -99,33 +99,18 @@ public class PlaylistManager {
             UserEntity user = userUtils.getUserWithApiToken(userRepository, token);
             PlaylistEntity playlist = getPlaylist(data.playlistId);
 
-            List<TrackEntity> tracks = trackRepository.findDistinctByPlaylistOrderByPos(playlist);
+
 
             TrackEntity toDelete = trackRepository.findOne(data.id);
-            if(toDelete == null){
-                logger.warn("Track not found in DB, id: "+ data.id);
+
+            playlist = remove(playlist, toDelete);
+
+            if(playlist == null)
+            {
+                logger.warn("Playlist: " + data.playlistId + " Track: " + data.id);
                 return TRACK_NOT_FOUND;
             }
-            int toDeleteIndex = tracks.indexOf(toDelete);
-            logger.debug("To delete index: "  + toDeleteIndex);
-            if(toDeleteIndex == -1){
-                logger.warn("Track not found in playlist, id: " + data.id + " playlist: " + data.playlistId);
-                return TRACK_NOT_FOUND;
-            }
-
-
-            for(int i = toDeleteIndex + 1; i< tracks.size(); i++){
-                tracks.get(i).setPos(tracks.get(i).getPos() - 1);
-                trackRepository.save(tracks.get(i));
-            }
-
-            tracks.remove(toDelete);
-            trackRepository.delete(toDelete);
-
-            playlist.setTracks(tracks);
-            playlist = playlistRepository.save(playlist);
-
-
+            
             return new ResponseEntity<>(new PlaylistResponseData("Ok", playlist),HttpStatus.OK);
 
         } catch (UnknownTokenException e) {
@@ -179,6 +164,38 @@ public class PlaylistManager {
 
 
         return playlistRepository.save(playlistEntity);
+
+    }
+
+    private PlaylistEntity remove(PlaylistEntity playlistEntity, TrackEntity trackEntity){
+
+        if(trackEntity == null){
+            logger.warn("Track not found in DB!");
+            return null;
+        }
+
+        List<TrackEntity> tracks = trackRepository.findDistinctByPlaylistOrderByPos(playlistEntity);
+
+        int toDeleteIndex = tracks.indexOf(trackEntity);
+        logger.debug("To delete index: "  + toDeleteIndex);
+        if(toDeleteIndex == -1){
+            logger.warn("Track not found in playlist");
+            return null;
+        }
+
+
+        for(int i = toDeleteIndex + 1; i< tracks.size(); i++){
+            tracks.get(i).setPos(tracks.get(i).getPos() - 1);
+            trackRepository.save(tracks.get(i));
+        }
+
+        tracks.remove(trackEntity);
+        trackRepository.delete(trackEntity);
+
+        playlistEntity.setTracks(tracks);
+        playlistEntity = playlistRepository.save(playlistEntity);
+
+        return playlistEntity;
 
     }
 
