@@ -10,6 +10,7 @@ import net.Broken.MainBot;
 import net.Broken.RestApi.Data.CommandResponseData;
 import net.Broken.RestApi.Data.Playlist.AddToPlaylistData;
 import net.Broken.RestApi.Data.Playlist.DeleteTrackData;
+import net.Broken.RestApi.Data.Playlist.MoveTrackData;
 import net.Broken.RestApi.Data.Playlist.PlaylistResponseData;
 import net.Broken.SpringContext;
 import net.Broken.Tools.UserManager.Exceptions.UnknownTokenException;
@@ -110,7 +111,7 @@ public class PlaylistManager {
                 logger.warn("Playlist: " + data.playlistId + " Track: " + data.id);
                 return TRACK_NOT_FOUND;
             }
-            
+
             return new ResponseEntity<>(new PlaylistResponseData("Ok", playlist),HttpStatus.OK);
 
         } catch (UnknownTokenException e) {
@@ -122,8 +123,42 @@ public class PlaylistManager {
         }
     }
 
+    public ResponseEntity<PlaylistResponseData> moveTrack(String token, MoveTrackData data) {
+        UserUtils userUtils = UserUtils.getInstance();
+        try {
+            UserEntity user = userUtils.getUserWithApiToken(userRepository, token);
+            PlaylistEntity playlist = getPlaylist(data.playlistId);
 
 
+
+            TrackEntity toMove = trackRepository.findOne(data.id);
+
+            TrackEntity save = new TrackEntity(toMove);
+
+            playlist = remove(playlist, toMove);
+
+            if(playlist == null)
+            {
+                logger.warn("Playlist: " + data.playlistId + " Track: " + data.id);
+                return TRACK_NOT_FOUND;
+            }
+
+            save.setPos(data.newPos);
+
+            playlist = insert(playlist, save);
+
+
+
+            return new ResponseEntity<>(new PlaylistResponseData("Ok", playlist),HttpStatus.OK);
+
+        } catch (UnknownTokenException e) {
+            logger.warn("Unknown token: "+ token);
+            return TOKEN_ERROR;
+        } catch (PlaylistNotFoundException e) {
+            logger.debug("Playlist not found: "+ data.playlistId);
+            return PLAYLIST_NOT_FOUND;
+        }
+    }
 
     private PlaylistEntity getPlaylist(int id) throws PlaylistNotFoundException{
         PlaylistEntity playlist = playlistRepository.findOne(id);

@@ -6,10 +6,7 @@ import net.Broken.DB.Entity.UserEntity;
 import net.Broken.DB.Repository.PlaylistRepository;
 import net.Broken.DB.Repository.TrackRepository;
 import net.Broken.DB.Repository.UserRepository;
-import net.Broken.RestApi.Data.Playlist.AddToPlaylistData;
-import net.Broken.RestApi.Data.Playlist.CreatePlaylistData;
-import net.Broken.RestApi.Data.Playlist.DeleteTrackData;
-import net.Broken.RestApi.Data.Playlist.PlaylistResponseData;
+import net.Broken.RestApi.Data.Playlist.*;
 import net.Broken.audio.Playlist.PlaylistManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -89,6 +86,16 @@ public class PlaylistAPIController {
         return playlistManager.removeTrack(token, data);
 
     }
+
+    @RequestMapping("/moveTrack")
+    public ResponseEntity<PlaylistResponseData> moveTrack(@CookieValue(value = "token", defaultValue = "") String token, @RequestBody MoveTrackData data){
+        PlaylistManager playlistManager = PlaylistManager.getINSTANCE();
+
+        return playlistManager.moveTrack(token, data);
+
+    }
+
+
 
 
 }

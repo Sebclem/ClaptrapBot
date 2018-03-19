@@ -36,6 +36,14 @@ public class TrackEntity {
         this.pos = pos;
     }
 
+    public TrackEntity(TrackEntity trackEntity){
+        this.title = trackEntity.title;
+        this.url  = trackEntity.url;
+        this.identifier = trackEntity.identifier;
+        this.pos = trackEntity.pos;
+        this.playlist = trackEntity.playlist;
+    }
+
     public Integer getId() {
         return id;
     }
