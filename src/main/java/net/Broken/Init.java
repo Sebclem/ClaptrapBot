@@ -112,7 +112,7 @@ public class Init {
     static void polish(JDA jda){
         CommandLoader.load();
         ApiCommandLoader.load();
-        jda.getPresence().setGame(Game.of("Statut: Ok!"));
+        jda.getPresence().setGame(Game.of("bot.seb6596.ovh"));
 
     }
 }
