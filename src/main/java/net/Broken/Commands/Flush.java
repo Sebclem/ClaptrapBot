@@ -36,7 +36,7 @@ public class Flush implements Commande{
                     if(limit > retrieved.size())
                         limit = retrieved.size()-1;
                     for(int i = 0; i<limit+1; i++){
-                        logger.debug(retrieved.get(i).getContent());
+                        logger.debug(retrieved.get(i).getContentRaw());
                         retrieved.get(i).delete().queue();
                     }
                 }catch (NumberFormatException e){

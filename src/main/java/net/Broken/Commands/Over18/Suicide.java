@@ -12,7 +12,7 @@ public class Suicide implements Commande{
 
     private String redirectUrl = "https://suicidegirlsandhopefuls.tumblr.com/random";
 
-    
+
     @Override
     public void action(String[] args, MessageReceivedEvent event) {
         Redirection redirection = new Redirection();

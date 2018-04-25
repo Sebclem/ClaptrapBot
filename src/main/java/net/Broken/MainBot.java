@@ -178,33 +178,4 @@ public class MainBot {
 
     }
 
-
-    /**
-     * TODO Change this, better use daylistener
-     */
-    public static class ModoTimer extends Thread{
-
-
-        public ModoTimer(){}
-
-
-        @Override
-        public void run()
-        {
-            while(true)
-            {
-                try {
-                    sleep(5000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                for (User unUser: message_compteur.keySet())
-                {
-                    MainBot.message_compteur.put(unUser, 0);
-                }
-            }
-
-        }
-    }
-
 }

@@ -90,10 +90,10 @@ public class BotListener extends ListenerAdapter {
 
 
         try{
-            if (event.getMessage().getContent().startsWith("//") && !event.getMessage().getAuthor().getId().equals(event.getJDA().getSelfUser().getId())) {
+            if (event.getMessage().getContentRaw().startsWith("//") && !event.getMessage().getAuthor().getId().equals(event.getJDA().getSelfUser().getId())) {
                 //On a detecter que c'etait une commande
                 //System.out.println(event.getMessage().getContent());
-                MainBot.handleCommand(new CommandParser().parse(event.getMessage().getContent(), event));
+                MainBot.handleCommand(new CommandParser().parse(event.getMessage().getContentRaw(), event));
 
             }
             else if (!event.getMessage().getAuthor().getId().equals(event.getJDA().getSelfUser().getId()))
@@ -106,12 +106,12 @@ public class BotListener extends ListenerAdapter {
                         Member user = event.getMember();
 
                         // appel de la methode d'analyse de message de "Moderateur"
-                        if (!event.getAuthor().getName().equals("Aethex") && event.getMessage().getContent().length() > 0) {
+                        if (!event.getAuthor().getName().equals("Aethex") && event.getMessage().getContentRaw().length() > 0) {
 
                             if (modo.analyse(user, serveur, guildManager, event) == 1) {
                                 antispam.extermine(user, serveur, guildManager, true, event);
                             }
-                        } else if (event.getMessage().getContent().length() == 0)
+                        } else if (event.getMessage().getContentRaw().length() == 0)
                             logger.error("Image detected, ignoring it.");
 
                     }

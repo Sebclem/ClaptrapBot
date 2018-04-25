@@ -101,12 +101,12 @@ public abstract class NumberedCommande implements Commande{
                             }
                         } else {
                             event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n:warning: **__Erreur__** :warning:\n:arrow_right: Erreur d'argument. `//help " + this.toString().toLowerCase() + "` pour plus d'info ").queue();
-                            logger.warn("Bad Argument: " + event.getMessage().getContent() + " From " + event.getAuthor().getName());
+                            logger.warn("Bad Argument: " + event.getMessage().getContentRaw() + " From " + event.getAuthor().getName());
                         }
                         break;
                     default:
                         event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n:warning: **__Erreur__** :warning:\n:arrow_right: Erreur d'argument. `//help " + this.toString().toLowerCase() + "` pour plus d'info ").queue();
-                        logger.warn("Bad Argument: " + event.getMessage().getContent() + " From " + event.getAuthor().getName());
+                        logger.warn("Bad Argument: " + event.getMessage().getContentRaw() + " From " + event.getAuthor().getName());
                         break;
                 }
             }

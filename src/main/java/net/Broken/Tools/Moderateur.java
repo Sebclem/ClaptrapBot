@@ -69,9 +69,9 @@ public class Moderateur {
             int equalCont = 0;
             String oldMessage = "";
             for(Message aMessage : thisUserHistory){
-                if(aMessage.getContent().equals(oldMessage))
+                if(aMessage.getContentRaw().equals(oldMessage))
                     equalCont++;
-                oldMessage = aMessage.getContent();
+                oldMessage = aMessage.getContentRaw();
 
             }
             if(equalCont >= nbMessage){
@@ -79,7 +79,7 @@ public class Moderateur {
                 logger.info("Detection de spam pour "+user.getEffectiveName()+"avec 3 messages identique: ");
                 for(Message aMessage : thisUserHistory)
                 {
-                    logger.info("\t - "+aMessage.getContent());
+                    logger.info("\t - "+aMessage.getContentRaw());
                 }
                 MainBot.historique.put(user.getUser(), new ArrayList<Message>());
             }
