@@ -63,31 +63,34 @@ public class Init {
 
 
                 //On recupere le l'id serveur
-                Guild serveur = jda.getGuilds().get(0);
+                for( Guild server : jda.getGuilds()){
+                    //on recupere les utilisateur
+                    List<Member> utilisateurCo = server.getMembers();
 
-                //on recupere les utilisateur
-                List<Member> utilisateurCo = serveur.getMembers();
+                    logger.info("Online users: "+utilisateurCo.size());
+                    for (Member anUtilisateurCo : utilisateurCo)
+                    {
+                        if (anUtilisateurCo.getOnlineStatus().equals(OnlineStatus.ONLINE))
+                            logger.debug("\t*" + anUtilisateurCo.getEffectiveName());
+                    }
 
-                logger.info("Online users: "+utilisateurCo.size());
-                for (Member anUtilisateurCo : utilisateurCo)
-                {
-                    if (anUtilisateurCo.getOnlineStatus().equals(OnlineStatus.ONLINE))
-                        logger.debug("\t*" + anUtilisateurCo.getEffectiveName());
+                    logger.debug("Do not disturb users: ");
+                    for (Member anUtilisateurCo : utilisateurCo)
+                    {
+                        if (anUtilisateurCo.getOnlineStatus().equals(OnlineStatus.DO_NOT_DISTURB))
+                            logger.debug("\t*" + anUtilisateurCo.getEffectiveName());
+                    }
+
+                    logger.debug("Offline users: ");
+                    for (Member anUtilisateurCo : utilisateurCo)
+                    {
+                        if (anUtilisateurCo.getOnlineStatus().equals(OnlineStatus.OFFLINE))
+                            logger.debug("\t*" + anUtilisateurCo.getEffectiveName());
+                    }
                 }
 
-                logger.debug("Do not disturb users: ");
-                for (Member anUtilisateurCo : utilisateurCo)
-                {
-                    if (anUtilisateurCo.getOnlineStatus().equals(OnlineStatus.DO_NOT_DISTURB))
-                        logger.debug("\t*" + anUtilisateurCo.getEffectiveName());
-                }
 
-                logger.debug("Offline users: ");
-                for (Member anUtilisateurCo : utilisateurCo)
-                {
-                    if (anUtilisateurCo.getOnlineStatus().equals(OnlineStatus.OFFLINE))
-                        logger.debug("\t*" + anUtilisateurCo.getEffectiveName());
-                }
+
 
 
                 DayListener dayListener = DayListener.getInstance();
