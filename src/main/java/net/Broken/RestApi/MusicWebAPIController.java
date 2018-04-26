@@ -46,7 +46,7 @@ public class MusicWebAPIController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         else{
-            logger.info("currentMusicInfo for " + guild.getName());
+            logger.trace("currentMusicInfo for " + guild.getName());
         }
 
         Music musicCommande = (Music) MainBot.commandes.get("music");
@@ -74,7 +74,7 @@ public class MusicWebAPIController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         else{
-            logger.info("getPlaylist for " + guild.getName());
+            logger.trace("getPlaylist for " + guild.getName());
         }
 
         List<UserAudioTrackData> list = null;
@@ -82,6 +82,7 @@ public class MusicWebAPIController {
         return new ResponseEntity<>(new PlaylistData(list), HttpStatus.OK);
     }
 
+//    TODO change token to cookie
     @RequestMapping(value = "/command", method = RequestMethod.POST)
     public ResponseEntity<CommandResponseData> command(@RequestBody CommandPostData data, HttpServletRequest request, @RequestParam(value = "guild") String guildId){
 
@@ -128,7 +129,7 @@ public class MusicWebAPIController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         else{
-            logger.info("getPlaylist for " + guild.getName());
+            logger.trace("getPlaylist for " + guild.getName());
         }
         List<ChanelData> temp = new ArrayList<>();
         for(VoiceChannel aChanel : FindGeneral.find(guild).getVoiceChannels()){

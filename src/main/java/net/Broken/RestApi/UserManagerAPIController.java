@@ -4,25 +4,22 @@ import net.Broken.DB.Entity.PendingUserEntity;
 import net.Broken.DB.Entity.UserEntity;
 import net.Broken.DB.Repository.PendingUserRepository;
 import net.Broken.DB.Repository.UserRepository;
-import net.Broken.RestApi.Data.UserManager.CheckResposeData;
-import net.Broken.RestApi.Data.UserManager.ConfirmData;
-import net.Broken.RestApi.Data.UserManager.UserConnectionData;
-import net.Broken.RestApi.Data.UserManager.UserInfoData;
-import net.Broken.Tools.UserManager.Exceptions.PasswordNotMatchException;
-import net.Broken.Tools.UserManager.Exceptions.TokenNotMatch;
-import net.Broken.Tools.UserManager.Exceptions.UserAlreadyRegistered;
-import net.Broken.Tools.UserManager.Exceptions.UserNotFoundException;
+import net.Broken.MainBot;
+import net.Broken.RestApi.Data.UserManager.*;
+import net.Broken.Tools.UserManager.Exceptions.*;
 import net.Broken.Tools.UserManager.UserUtils;
+import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.core.entities.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -95,6 +92,27 @@ public class UserManagerAPIController {
         } catch (PasswordNotMatchException e) {
             return new ResponseEntity<>(new UserConnectionData(false,"Wrong user name or password!", "password"),HttpStatus.NOT_ACCEPTABLE);
         }
+    }
+
+    @RequestMapping(value = "/getGuilds", method = RequestMethod.GET)
+    public ResponseEntity<List<GuildInfo>> getGuilds(@CookieValue("token") String token){
+        logger.debug(token);
+        try {
+            UserEntity userE = userUtils.getUserWithApiToken(userRepository, token);
+            User user = MainBot.jda.getUserById(userE.getJdaId());
+            List<GuildInfo> temp = new ArrayList<>();
+
+            for (Guild guild : user.getMutualGuilds()){
+                temp.add(new GuildInfo(guild.getName(), guild.getId()));
+            }
+            return new ResponseEntity<>(temp, HttpStatus.OK);
+
+
+        } catch (UnknownTokenException e) {
+            logger.catching(e);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
     }
 
 
