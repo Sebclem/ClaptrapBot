@@ -22,6 +22,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 public class AudioM {
@@ -52,14 +53,14 @@ public class AudioM {
     private Guild guild;
     private Logger logger = LogManager.getLogger();
 
-    private static AudioM INSTANCE;
+    private static HashMap<Guild,AudioM> INSTANCES = new HashMap<>();
 
     public static AudioM getInstance(Guild guild){
-        if(INSTANCE == null){
-            INSTANCE = new AudioM(guild);
+        if(!INSTANCES.containsKey(guild)){
+            INSTANCES.put(guild, new AudioM(guild));
         }
 
-        return INSTANCE;
+        return INSTANCES.get(guild);
     }
 
 
@@ -80,7 +81,7 @@ public class AudioM {
      * @param onHead True for adding audio track on top of playlist
      */
     public void loadAndPlay(MessageReceivedEvent event, VoiceChannel voiceChannel, final String trackUrl, int playlistLimit, boolean onHead) {
-        GuildMusicManager musicManager = getGuildAudioPlayer(guild);
+        GuildMusicManager musicManager = getGuildAudioPlayer();
         playedChanel = voiceChannel;
 
         playerManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
@@ -187,9 +188,9 @@ public class AudioM {
     }
 
 
-    public GuildMusicManager getGuildAudioPlayer(Guild guild) {
+    public GuildMusicManager getGuildAudioPlayer() {
         if (musicManager == null) {
-            musicManager = new GuildMusicManager(playerManager);
+            musicManager = new GuildMusicManager(playerManager, guild);
         }
 
         guild.getAudioManager().setSendingHandler(musicManager.getSendHandler());
@@ -219,7 +220,7 @@ public class AudioM {
      * @param event
      */
     public void skipTrack(MessageReceivedEvent event) {
-        GuildMusicManager musicManager = getGuildAudioPlayer(event.getGuild());
+        GuildMusicManager musicManager = getGuildAudioPlayer();
         musicManager.scheduler.nextTrack();
         Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicOk("Musique suivante!")).complete();
         new MessageTimeOut(MainBot.messageTimeOut, message, event.getMessage()).start();
@@ -230,7 +231,7 @@ public class AudioM {
      * @param event
      */
     public void pause(MessageReceivedEvent event) {
-        GuildMusicManager musicManager = getGuildAudioPlayer(event.getGuild());
+        GuildMusicManager musicManager = getGuildAudioPlayer();
         musicManager.scheduler.pause();
 
         Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicOk("Musique en pause !")).complete();
@@ -243,7 +244,7 @@ public class AudioM {
      * @param event
      */
     public void resume (MessageReceivedEvent event) {
-        GuildMusicManager musicManager = getGuildAudioPlayer(event.getGuild());
+        GuildMusicManager musicManager = getGuildAudioPlayer();
         musicManager.scheduler.resume();
 
         Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicOk("Reprise de la piste en cour !")).complete();
@@ -255,7 +256,7 @@ public class AudioM {
      * @param event
      */
     public void info(MessageReceivedEvent event) {
-        GuildMusicManager musicManager = getGuildAudioPlayer(event.getGuild());
+        GuildMusicManager musicManager = getGuildAudioPlayer();
         AudioTrackInfo info = musicManager.scheduler.getInfo();
         UserAudioTrack userAudioTrack = musicManager.scheduler.getCurrentPlayingTrack();
 
@@ -264,7 +265,7 @@ public class AudioM {
     }
 
         public void flush(MessageReceivedEvent event){
-        GuildMusicManager musicManager = getGuildAudioPlayer(event.getGuild());
+        GuildMusicManager musicManager = getGuildAudioPlayer();
         musicManager.scheduler.flush();
         Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicOk("RAZ de la playlist!")).complete();
         new MessageTimeOut(MainBot.messageTimeOut, event.getMessage(), message).start();
@@ -275,7 +276,7 @@ public class AudioM {
      * @param event
      */
     public void list(MessageReceivedEvent event){
-        GuildMusicManager musicManager = getGuildAudioPlayer(event.getGuild());
+        GuildMusicManager musicManager = getGuildAudioPlayer();
         List<UserAudioTrackData> list = musicManager.scheduler.getList();
         StringBuilder resp = new StringBuilder();
         if(list.size() == 0){
@@ -330,7 +331,7 @@ public class AudioM {
      */
     public void stop () {
 
-        GuildMusicManager musicManager = getGuildAudioPlayer(guild);
+        GuildMusicManager musicManager = getGuildAudioPlayer();
         musicManager.scheduler.stop();
         musicManager.scheduler.flush();
         playedChanel = null;
@@ -339,8 +340,9 @@ public class AudioM {
 
     public GuildMusicManager getGuildMusicManager(){
         if( musicManager == null)
-            musicManager = getGuildAudioPlayer(guild);
+            musicManager = getGuildAudioPlayer();
         return musicManager;
+
     }
 
     public Guild getGuild() {

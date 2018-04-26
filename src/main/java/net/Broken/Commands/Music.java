@@ -20,21 +20,20 @@ import java.util.List;
  */
 
 public class Music implements Commande {
-    public AudioM audio;
-    Logger logger = LogManager.getLogger();
-    public Music() {
-        audio = AudioM.getInstance(MainBot.jda.getGuilds().get(0));
-    }
+    private Logger logger = LogManager.getLogger();
+
 
     @Override
     public void action(String[] args, MessageReceivedEvent event) {
-
+        AudioM audio = AudioM.getInstance(event.getGuild());
         if(args.length >= 1){
             switch (args[0]){
                 case "play":
                     event.getTextChannel().sendTyping().queue();
+
                     if(args.length>=2){
                         if(event.getMember().getVoiceState().inVoiceChannel()){
+
                             VoiceChannel voiceChanel = event.getMember().getVoiceState().getChannel();
                             logger.info("Connecting to "+voiceChanel.getName()+"...");
                             if(args.length ==2){
@@ -169,9 +168,5 @@ public class Music implements Commande {
     @Override
     public boolean isNSFW() {
         return false;
-    }
-
-    public AudioM getAudioManager(){
-        return audio;
     }
 }

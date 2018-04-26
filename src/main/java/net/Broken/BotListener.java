@@ -7,6 +7,7 @@ import net.Broken.Tools.Command.CommandParser;
 import net.Broken.Tools.EmbedMessageUtils;
 import net.Broken.Tools.Moderateur;
 import net.Broken.Tools.PrivateMessage;
+import net.Broken.audio.AudioM;
 import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
@@ -78,8 +79,7 @@ public class BotListener extends ListenerAdapter {
             if(event.getGuild().getAudioManager().getConnectedChannel().getMembers().size() == 1){
                 logger.debug("I'm alone, close audio connection.");
 
-                Music music = (Music) MainBot.commandes.get("music");
-                music.audio.stop();
+                AudioM.getInstance(event.getGuild()).stop();
             }
         }
     }

@@ -7,6 +7,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.Broken.RestApi.Data.CommandPostData;
 import net.Broken.RestApi.Data.CommandResponseData;
+import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,13 +26,14 @@ public class WebLoadUtils {
      * Submit a track or playlist to Music bot
      * @param data Received data from API
      * @param user User who submit the track
+     * @param guild
      */
-    public WebLoadUtils(CommandPostData data, User user, boolean submit){
-        AudioPlayerManager playerM = AudioM.getInstance(null).getPlayerManager();
+    public WebLoadUtils(CommandPostData data, User user, Guild guild, boolean submit){
+        AudioPlayerManager playerM = AudioM.getInstance(guild).getPlayerManager();
 
         try {
 
-            AudioM audioM = AudioM.getInstance(null);
+            AudioM audioM = AudioM.getInstance(guild);
             playerM.loadItemOrdered(audioM.getGuildMusicManager(), data.url, new AudioLoadResultHandler() {
                 @Override
                 public void trackLoaded(AudioTrack track) {

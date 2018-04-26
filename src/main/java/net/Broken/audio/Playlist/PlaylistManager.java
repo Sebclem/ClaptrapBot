@@ -7,7 +7,6 @@ import net.Broken.DB.Repository.PlaylistRepository;
 import net.Broken.DB.Repository.TrackRepository;
 import net.Broken.DB.Repository.UserRepository;
 import net.Broken.MainBot;
-import net.Broken.RestApi.Data.CommandResponseData;
 import net.Broken.RestApi.Data.Playlist.AddToPlaylistData;
 import net.Broken.RestApi.Data.Playlist.DeleteTrackData;
 import net.Broken.RestApi.Data.Playlist.MoveTrackData;
@@ -23,7 +22,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import sun.applet.Main;
 
 import java.util.List;
 
@@ -68,7 +66,7 @@ public class PlaylistManager {
 
             User jdaUser = MainBot.jda.getUserById(user.getJdaId());
 
-            WebLoadUtils webLoadUtils = new WebLoadUtils(data, jdaUser, false);
+            WebLoadUtils webLoadUtils = new WebLoadUtils(data, jdaUser, MainBot.jda.getGuilds().get(0) , false);
             webLoadUtils.getResponse();
 
             if(webLoadUtils.userAudioTrack == null){
