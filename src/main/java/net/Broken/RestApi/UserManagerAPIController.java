@@ -96,7 +96,6 @@ public class UserManagerAPIController {
 
     @RequestMapping(value = "/getGuilds", method = RequestMethod.GET)
     public ResponseEntity<List<GuildInfo>> getGuilds(@CookieValue("token") String token){
-        logger.debug(token);
         try {
             UserEntity userE = userUtils.getUserWithApiToken(userRepository, token);
             User user = MainBot.jda.getUserById(userE.getJdaId());
