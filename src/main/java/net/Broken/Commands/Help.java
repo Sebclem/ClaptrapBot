@@ -120,7 +120,7 @@ public class Help implements Commande {
 
             boolean isAdmin;
             if(event.isFromType(ChannelType.PRIVATE))
-                isAdmin = event.getJDA().getGuilds().get(0).getMember(event.getAuthor()).hasPermission(Permission.ADMINISTRATOR);
+                isAdmin = event.getGuild().getMember(event.getAuthor()).hasPermission(Permission.ADMINISTRATOR);
             else
                 isAdmin = event.getMember().hasPermission(Permission.ADMINISTRATOR);
 

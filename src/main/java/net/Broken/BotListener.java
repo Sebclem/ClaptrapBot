@@ -42,8 +42,9 @@ public class BotListener extends ListenerAdapter {
     @Override
     public void onGuildMemberJoin(GuildMemberJoinEvent event) {
         logger.info(event.getUser().getName()+ "join the guild, move it!");
-        new Move().exc(event.getMember(),event.getJDA().getRolesByName("Newbies",true),false,event.getJDA().getGuilds().get(0),event.getJDA().getGuilds().get(0).getManager());
+        new Move().exc(event.getMember(),event.getJDA().getRolesByName("Newbies",true),false,event.getGuild(),event.getGuild().getManager());
         TextChannel chanel = event.getGuild().getTextChannelsByName("accueil", true).get(0);
+        if(chanel != null)
         chanel.sendMessage("Salut "+event.getUser().getAsMention()+"! Ecris ton nom, prénom, ta promotion et ton groupe ici! Un admin te donnera accées a ton groupe!").complete();
         MainBot.roleFlag = false;
     }
@@ -55,7 +56,7 @@ public class BotListener extends ListenerAdapter {
 
             if(event.getMember().getRoles().size() == 0){
                 logger.info(event.getUser().getName()+ "have no roles, move it!");
-                new Move().exc(event.getMember(),event.getJDA().getRolesByName("Populace",true),false,event.getJDA().getGuilds().get(0),event.getJDA().getGuilds().get(0).getManager());
+                new Move().exc(event.getMember(),event.getGuild().getRolesByName("Populace",true),false,event.getGuild(),event.getGuild().getManager());
                 MainBot.roleFlag = false;
             }
         }
