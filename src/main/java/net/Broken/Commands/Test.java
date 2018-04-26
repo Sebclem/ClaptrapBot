@@ -13,7 +13,7 @@ import java.io.IOException;
 public class ytTest implements Commande {
     @Override
     public void action(String[] args, MessageReceivedEvent event) {
-        event.getJDA().getPresence().setPresence(RichPresence.listening("Noting"),false);
+        event.getJDA().getPresence().setPresence(RichPresence.playing("test").asRichPresence(),false);
     }
 
     @Override

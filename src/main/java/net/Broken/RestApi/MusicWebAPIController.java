@@ -96,7 +96,7 @@ public class MusicWebAPIController {
 
                 try {
                     UserEntity user = userUtils.getUserWithApiToken(userRepository, data.token);
-                    logger.info("Receive command " + data.command + " from " + request.getRemoteAddr() + " USER: " + user.getName() + "GUILD: " + guild.getName());
+                    logger.info("Receive command " + data.command + " from " + request.getRemoteAddr() + " USER: " + user.getName() + " GUILD: " + guild.getName());
 
                     if (ApiCommandLoader.apiCommands.containsKey(data.command))
                         return ApiCommandLoader.apiCommands.get(data.command).action(data, MainBot.jda.getUserById(user.getJdaId()), guild);
