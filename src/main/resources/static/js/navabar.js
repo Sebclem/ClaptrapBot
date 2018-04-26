@@ -66,8 +66,10 @@ function connected(){
         }
     );
     nav_name.text(Cookies.get('name'));
-    if(Cookies.get('guild') === undefined){
-        getGuild()
+    if (typeof needLogin !== 'undefined') {
+        if (Cookies.get('guild') === undefined) {
+            getGuild()
+        }
     }
 }
 

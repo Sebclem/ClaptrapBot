@@ -39,7 +39,7 @@ public class WebLoadUtils {
                 public void trackLoaded(AudioTrack track) {
                     logger.info("Single Track detected from web!");
 
-                    userAudioTrack = new UserAudioTrack(user, track); //TODO
+                    userAudioTrack = new UserAudioTrack(user, track);
                     if(submit)
                         audioM.play(audioM.getGuild(), audioM.getPlayedChanel(), audioM.getGuildMusicManager(), userAudioTrack, data.onHead);
                     response = new ResponseEntity<>(new CommandResponseData("ADD", "Loaded"), HttpStatus.OK);

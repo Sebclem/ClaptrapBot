@@ -10,7 +10,7 @@ import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 
 import java.io.IOException;
 
-public class ytTest implements Commande {
+public class Test implements Commande {
     @Override
     public void action(String[] args, MessageReceivedEvent event) {
         event.getJDA().getPresence().setPresence(RichPresence.playing("test").asRichPresence(),false);

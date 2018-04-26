@@ -43,37 +43,37 @@ public class AntiSpam {
         }
 
         // On créer un nouvelle case dans le tableau des statuts si il n'y est pas
-        if(!MainBot.spamUtils.containsKey(user.getUser()))
+        if(!MainBot.spamUtils.containsKey(user))
         {
             List<Message> messages = new ArrayList<>();
-            messages.addAll(MainBot.historique.get(user.getUser()));
-            MainBot.spamUtils.put(user.getUser(),new UserSpamUtils(user,messages));
+            messages.addAll(MainBot.historique.get(user));
+            MainBot.spamUtils.put(user,new UserSpamUtils(user,messages));
         }
         // On verrifie que l'uttilisateur n'est pas deja en spam
-        if(!MainBot.spamUtils.get(user.getUser()).isOnSpam())
+        if(!MainBot.spamUtils.get(user).isOnSpam())
         {
             //l'utilisateur n'est pas deja en spam
-            if(MainBot.spamUtils.get(user.getUser()).getMultip() != 0)
+            if(MainBot.spamUtils.get(user).getMultip() != 0)
             {
-                if(MainBot.spamUtils.get(user.getUser()).getMultip()<45 && incrMulti)
+                if(MainBot.spamUtils.get(user).getMultip()<45 && incrMulti)
                 {
-                    MainBot.spamUtils.get(user.getUser()).setMultip(MainBot.spamUtils.get(user.getUser()).getMultip()*2);
+                    MainBot.spamUtils.get(user).setMultip(MainBot.spamUtils.get(user).getMultip()*2);
                 }
             }
             else
-                MainBot.spamUtils.get(user.getUser()).setMultip(1);
+                MainBot.spamUtils.get(user).setMultip(1);
 
-           logger.info("Punition de "+user.getEffectiveName()+" avec un multiplicateur de "+MainBot.spamUtils.get(user.getUser()));
+           logger.info("Punition de "+user.getEffectiveName()+" avec un multiplicateur de "+MainBot.spamUtils.get(user));
 
-            if(!MainBot.spamUtils.get(user.getUser()).isOnSpam())
+            if(!MainBot.spamUtils.get(user).isOnSpam())
             {
-                MainBot.spamUtils.get(user.getUser()).setOnSpam(true);
+                MainBot.spamUtils.get(user).setOnSpam(true);
                 List<Role> spm = guild.getRolesByName("Spammer", false);
                 try{
                     move.exc(user, spm, true, guild, guildManager);
-                    MainBot.spamUtils.get(user.getUser()).addMessage(event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamExtermine(user,MainBot.spamUtils.get(user.getUser()).getMultip())).complete());
-                    MainBot.spamUtils.get(user.getUser()).setMinuteur(new Minuteur(MainBot.spamUtils.get(user.getUser()).getMultip(), move.user, move.saveRoleUser, move.serveur, move.serveurManager,event));
-                    MainBot.spamUtils.get(user.getUser()).launchMinuteur();
+                    MainBot.spamUtils.get(user).addMessage(event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamExtermine(user,MainBot.spamUtils.get(user.getUser()).getMultip())).complete());
+                    MainBot.spamUtils.get(user).setMinuteur(new Minuteur(MainBot.spamUtils.get(user).getMultip(), move.user, move.saveRoleUser, move.serveur, move.serveurManager,event));
+                    MainBot.spamUtils.get(user).launchMinuteur();
                 }catch (HierarchyException e){
                     Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("Impossible de déplacer un "+user.getRoles().get(0).getAsMention())).complete();
                     List<Message> messages = new ArrayList<Message>(){{
@@ -81,7 +81,7 @@ public class AntiSpam {
                         add(event.getMessage());
                     }};
                     new MessageTimeOut(messages,MainBot.messageTimeOut).start();
-                    MainBot.spamUtils.get(user.getUser()).setOnSpam(false);
+                    MainBot.spamUtils.get(user).setOnSpam(false);
                 }
 
             }

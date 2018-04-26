@@ -10,6 +10,7 @@ import net.Broken.audio.Youtube.YoutubeTools;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.ChannelType;
+import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
@@ -33,10 +34,10 @@ import java.util.HashMap;
 public class MainBot {
 
     public static HashMap<String, Commande> commandes = new HashMap<>();
-    public static HashMap<User, ArrayList<Message>> historique =new HashMap<>();
-    public static HashMap<User, Integer> message_compteur =new HashMap<>();
+    public static HashMap<Member, ArrayList<Message>> historique =new HashMap<>();
+    public static HashMap<Member, Integer> message_compteur =new HashMap<>();
     public static boolean roleFlag = false;
-    public static HashMap<User, UserSpamUtils> spamUtils = new HashMap<>();
+    public static HashMap<Member, UserSpamUtils> spamUtils = new HashMap<>();
     public static JDA jda;
     public static boolean ready = false;
 

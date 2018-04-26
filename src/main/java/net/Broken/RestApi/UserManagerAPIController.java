@@ -64,7 +64,6 @@ public class UserManagerAPIController {
 
     @RequestMapping(value = "/confirmAccount", method = RequestMethod.POST)
     public ResponseEntity<UserConnectionData> confirAccount(@RequestBody ConfirmData data){
-        //TODO move pending user to accepted and return right things
         try {
             PendingUserEntity pUser = userUtils.confirmCheckToken(pendingUserRepository, Integer.parseInt(data.id), data.checkToken);
             UserEntity user = new UserEntity(pUser, userUtils.generateApiToken());
