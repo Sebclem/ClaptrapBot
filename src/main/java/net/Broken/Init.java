@@ -50,10 +50,9 @@ public class Init {
 
                 logger.info("Connecting to Discord api...");
                 //connection au bot
-                jda = new JDABuilder(AccountType.BOT).addEventListener(new BotListener()).setToken(token).setBulkDeleteSplittingEnabled(false).buildBlocking();
+                jda = new JDABuilder(AccountType.BOT).setToken(token).setBulkDeleteSplittingEnabled(false).buildBlocking();
                 MainBot.jda = jda;
                 jda.setAutoReconnect(true);
-                jda.addEventListener();
 
                 /*************************************
                  *      Definition des commande      *
@@ -116,6 +115,7 @@ public class Init {
     static void polish(JDA jda){
         CommandLoader.load();
         ApiCommandLoader.load();
+        jda.addEventListener(new BotListener());
         jda.getPresence().setPresence(OnlineStatus.ONLINE, Game.playing("bot.seb6596.ovh"));
 
 

@@ -1,5 +1,6 @@
 package net.Broken.Tools;
 
+import net.Broken.DB.Entity.GuildPreferenceEntity;
 import net.Broken.MainBot;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Member;
@@ -104,6 +105,22 @@ public class EmbedMessageUtils {
         message = message.replace("@list", list);
         return new EmbedBuilder().setTitle("Command du bot ("+role+")").setDescription(message).setFooter("Utilise '//help <commande>' pour plus de détails.",MainBot.jda.getSelfUser().getAvatarUrl()).setTimestamp(Instant.now()).setColor(Color.green).setThumbnail(MainBot.jda.getSelfUser().getAvatarUrl()).build();
     }
+
+    public static MessageEmbed getPref(GuildPreferenceEntity guildPref){
+        EmbedBuilder messageB = new EmbedBuilder()
+                .setColor(Color.green)
+                .setTitle("**Guild config**")
+                .setDescription("_This is the current config of bot for this Guild_")
+                .addField("> Guild ID", "This is the curent guild ID\n```java\n" + guildPref.getGuildId() + "```Edit: :lock:", false)
+                .addField("> Anti Spam", "Activate Spam hunter\n```java\n" + String.valueOf(guildPref.isAntiSpam()) + "```Edit: :unlock:\nKey: anti_spam", false)
+                .addField("> Default Role", "Activate auto move to default role\n```java\n" + String.valueOf(guildPref.isDefaultRole()) + "```Edit: :unlock:\nKey: default_role", false)
+                .addField("> Default Role ID", "Role id for auto move\n```java\n" + guildPref.getDefaultRoleId() + "```Edit: :unlock:\nKey: default_role_id", false)
+                .addField("> Welcome", "Activate welcome message\n```java\n" + String.valueOf(guildPref.isWelcome()) + "```Edit: :unlock:\nKey: welcome", false)
+                .addField("> Welcome chanel ID", "Chane id for welcome message\n```" + guildPref.getWelcomeChanelID() + "```Edit: :unlock:\nKey: welcome_chanel_id", false)
+                .addField("> Welcome message", "Welcome message (@name for mention)\n```markdown\n" + guildPref.getWelcomeMessage() + "```Edit: :unlock:\nKey: welcome_message", false);
+        return buildStandar(messageB);
+    }
+
 
 
 

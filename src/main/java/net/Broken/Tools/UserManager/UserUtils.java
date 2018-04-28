@@ -66,7 +66,7 @@ public class UserUtils {
         PendingUserEntity pendingUserEntity = null;
         String token = "";
 
-        //Test if exist on register user
+        //Preference if exist on register user
         if(userRepository.findByJdaId(user.getId()).size() > 0){
             logger.warn("User already registered!");
             throw new UserAlreadyRegistered();
