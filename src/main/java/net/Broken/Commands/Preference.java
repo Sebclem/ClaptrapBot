@@ -204,7 +204,11 @@ public class Preference implements Commande {
                 Message sended = event.getTextChannel().sendMessage(EmbedMessageUtils.buildStandar(eb)).complete();
                 new MessageTimeOut(MainBot.messageTimeOut, sended, event.getMessage()).start();
                 break;
-
+            default:
+                MessageEmbed msg2 = EmbedMessageUtils.buildStandar(EmbedMessageUtils.getError("\nUnknown id.\n\nUse `//preference` to see list"));
+                Message sended2 = event.getTextChannel().sendMessage(msg2).complete();
+                new MessageTimeOut(MainBot.messageTimeOut, sended2, event.getMessage()).start();
+                break;
         }
 
 
