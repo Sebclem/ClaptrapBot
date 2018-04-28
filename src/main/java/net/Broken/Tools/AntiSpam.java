@@ -10,6 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,20 +70,27 @@ public class AntiSpam {
             {
                 MainBot.spamUtils.get(user).setOnSpam(true);
                 List<Role> spm = guild.getRolesByName("Spammer", false);
-                try{
-                    move.exc(user, spm, true, guild, guildManager);
-                    MainBot.spamUtils.get(user).addMessage(event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamExtermine(user,MainBot.spamUtils.get(user.getUser()).getMultip())).complete());
-                    MainBot.spamUtils.get(user).setMinuteur(new Minuteur(MainBot.spamUtils.get(user).getMultip(), move.user, move.saveRoleUser, move.serveur, move.serveurManager,event));
-                    MainBot.spamUtils.get(user).launchMinuteur();
-                }catch (HierarchyException e){
-                    Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("Impossible de déplacer un "+user.getRoles().get(0).getAsMention())).complete();
-                    List<Message> messages = new ArrayList<Message>(){{
-                        add(rest);
-                        add(event.getMessage());
-                    }};
-                    new MessageTimeOut(messages,MainBot.messageTimeOut).start();
-                    MainBot.spamUtils.get(user).setOnSpam(false);
+                if(spm.size() != 0){
+                    try{
+                        move.exc(user, spm, true, guild, guildManager);
+                        MainBot.spamUtils.get(user).addMessage(event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamExtermine(user,MainBot.spamUtils.get(user.getUser()).getMultip())).complete());
+                        MainBot.spamUtils.get(user).setMinuteur(new Minuteur(MainBot.spamUtils.get(user).getMultip(), move.user, move.saveRoleUser, move.serveur, move.serveurManager,event));
+                        MainBot.spamUtils.get(user).launchMinuteur();
+                    }catch (HierarchyException e){
+                        Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("Impossible de déplacer un "+user.getRoles().get(0).getAsMention())).complete();
+                        List<Message> messages = new ArrayList<Message>(){{
+                            add(rest);
+                            add(event.getMessage());
+                        }};
+                        new MessageTimeOut(messages,MainBot.messageTimeOut).start();
+                        MainBot.spamUtils.get(user).setOnSpam(false);
+                    }
                 }
+                else {
+                    MessageEmbed msg = EmbedMessageUtils.buildStandar(EmbedMessageUtils.getError("\nSpam role not found, you need to create it!"));
+                    event.getTextChannel().sendMessage(msg).complete();
+                }
+
 
             }
         }
@@ -122,7 +130,7 @@ public class AntiSpam {
         @Override
         public void run() {
             logger.info("["+user.getEffectiveName()+"] Démarage pour "+multip+"min");
-            while (MainBot.spamUtils.get(user.getUser()).isOnSpam())
+            while (MainBot.spamUtils.get(user).isOnSpam())
             {
                 try {
                 sleep(1000);
@@ -148,15 +156,17 @@ public class AntiSpam {
                 logger.error("Hierarchy error");
             }
             logger.info("["+user.getEffectiveName()+"] Fin des "+multip+"min");
-            new MessageTimeOut(new ArrayList<>(MainBot.spamUtils.get(user.getUser()).getMessages()),0).start();
-            MainBot.spamUtils.get(user.getUser()).clearAndAdd(chanel.sendMessage(EmbedMessageUtils.getSpamPardon(user)).complete());
-            new MessageTimeOut(MainBot.spamUtils.get(user.getUser()).getMessages(),60).start();
+            new MessageTimeOut(new ArrayList<>(MainBot.spamUtils.get(user).getMessages()),0).start();
+            MainBot.spamUtils.get(user).clearAndAdd(chanel.sendMessage(EmbedMessageUtils.getSpamPardon(user)).complete());
+            new MessageTimeOut(MainBot.spamUtils.get(user).getMessages(),60).start();
 
             //                                                                                                                                                                                        #-----------------------------------------------#
 
 
         }
     }
+
+
 
 
 

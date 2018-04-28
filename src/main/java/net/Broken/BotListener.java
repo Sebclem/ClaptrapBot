@@ -118,7 +118,6 @@ public class BotListener extends ListenerAdapter {
     }
 
 
-
     @Override
     public void onGuildVoiceLeave(GuildVoiceLeaveEvent event) {
         super.onGuildVoiceLeave(event);
