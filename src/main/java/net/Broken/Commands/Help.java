@@ -37,8 +37,10 @@ public class Help implements Commande {
             //System.out.println(argsString);
             if (MainBot.commandes.containsKey(argsString))
             {
+
+
                 Commande cmdObj = MainBot.commandes.get(argsString);
-                if(!cmdObj.isAdminCmd() || event.getMember().hasPermission(Permission.ADMINISTRATOR))
+                if(!cmdObj.isAdminCmd() || isAdmin(event))
                 {
                     logger.info("Aide demmander pour la cmd "+argsString+" par "+event.getAuthor().getName());
                     MessageEmbed messageEmbed;
@@ -119,25 +121,8 @@ public class Help implements Commande {
             nsfwTable.setHeader("NSFW Only\u00A0", "PU");
             List<String> noPu = new ArrayList<>();
 
-            boolean isAdmin;
-            if(event.isFromType(ChannelType.PRIVATE)){
-                isAdmin = false;
-                List<Guild> guilds = event.getAuthor().getMutualGuilds();
-                for(Guild iterator : guilds){
-                    if(iterator.getMember(event.getAuthor()).hasPermission(Permission.ADMINISTRATOR)){
-                        isAdmin = true;
-                        break;
-                    }
-
-                }
-
-            }
-            else
-                isAdmin = event.getMember().hasPermission(Permission.ADMINISTRATOR);
-
-
             for (Map.Entry<String, Commande> e : MainBot.commandes.entrySet()) {
-                if(!e.getValue().isAdminCmd() || isAdmin){
+                if(!e.getValue().isAdminCmd() || isAdmin(event)){
                     if(e.getValue().isPrivateUsable())
                         table.addRow(e.getKey(), "XX");
                     else if(e.getValue().isNSFW())
@@ -163,7 +148,7 @@ public class Help implements Commande {
 
 
             String role;
-            if(isAdmin)
+            if(isAdmin(event))
                 role = "Admin";
             else
                 role = "Non Admin";
@@ -194,6 +179,24 @@ public class Help implements Commande {
 
     @Override
     public boolean isNSFW() {
+        return false;
+    }
+
+
+    public boolean isAdmin(MessageReceivedEvent event){
+
+        if(event.isFromType(ChannelType.PRIVATE)){
+            List<Guild> guilds = event.getAuthor().getMutualGuilds();
+            for(Guild iterator : guilds){
+                if(iterator.getMember(event.getAuthor()).hasPermission(Permission.ADMINISTRATOR)){
+                    return true;
+                }
+
+            }
+
+        }
+        else
+            return event.getMember().hasPermission(Permission.ADMINISTRATOR);
         return false;
     }
 }
