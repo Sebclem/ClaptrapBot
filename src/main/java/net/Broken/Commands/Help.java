@@ -9,6 +9,7 @@ import net.Broken.Tools.TableRenderer;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.ChannelType;
+import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.MessageEmbed;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
@@ -119,8 +120,18 @@ public class Help implements Commande {
             List<String> noPu = new ArrayList<>();
 
             boolean isAdmin;
-            if(event.isFromType(ChannelType.PRIVATE))
-                isAdmin = event.getGuild().getMember(event.getAuthor()).hasPermission(Permission.ADMINISTRATOR);
+            if(event.isFromType(ChannelType.PRIVATE)){
+                isAdmin = false;
+                List<Guild> guilds = event.getAuthor().getMutualGuilds();
+                for(Guild iterator : guilds){
+                    if(iterator.getMember(event.getAuthor()).hasPermission(Permission.ADMINISTRATOR)){
+                        isAdmin = true;
+                        break;
+                    }
+
+                }
+
+            }
             else
                 isAdmin = event.getMember().hasPermission(Permission.ADMINISTRATOR);
 
