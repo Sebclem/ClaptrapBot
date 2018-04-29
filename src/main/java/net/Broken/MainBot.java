@@ -112,7 +112,7 @@ public class MainBot {
             Commande cmdObj = commandes.get(cmd.commande);
             boolean isAdmin;
             if(cmd.event.isFromType(ChannelType.PRIVATE)){
-                isAdmin = cmd.event.getGuild().getMember(cmd.event.getAuthor()).hasPermission(Permission.ADMINISTRATOR);
+                isAdmin = false;
             }
             else
                 isAdmin = cmd.event.getMember().hasPermission(Permission.ADMINISTRATOR);
