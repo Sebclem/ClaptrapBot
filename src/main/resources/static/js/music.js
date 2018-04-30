@@ -41,12 +41,6 @@ $(document).ready(function() {
             dismissible: false
         });
 
-        $('.button-collapse-1').sideNav({
-            menuWidth: 400, // Default is 300
-            edge: 'right', // Choose the horizontal origin
-            closeOnClick: false, // Closes side-nav on <a> clicks, useful for Angular/Meteor
-            draggable: true // Choose whether you can drag to open on touch screens,
-        });
 
         $('.dropdown-button').dropdown({
             inDuration: 300,
@@ -202,6 +196,7 @@ function getPlayList() {
                     template.html(content);
 
                     $('#playlist_list').append(template);
+                    $('.collapsible').collapsible();
 
                 });
                 $(".btn_dell_playlist").click(function () {
@@ -270,7 +265,8 @@ function updateModal(data){
     $('#modal_title').text("Title: "+ data.info.audioTrackInfo.title);
     $('#modal_author').text("Author: "+ data.info.audioTrackInfo.author);
     $('#modal_lenght').text("Duration: "+ msToTime(data.info.audioTrackInfo.length));
-    $('#modal_url').text("URL: "+ data.info.audioTrackInfo.uri);
+    $('#modal_url').html("<div>URL:  <a target=\"_blank\"  href=\""+ data.info.audioTrackInfo.uri + "\">" + data.info.audioTrackInfo.uri + "</a></div>");
+    //
     $('#modal_submit').text("Submitted by: "+ data.info.user);
 
 

@@ -1,5 +1,5 @@
 var nav_bar_account_link;
-var connected_link = "<a class=\"dropdown-account\" data-activates=\"dropdown_connected\"><i class=\"material-icons green-text\">account_box</i></a>";
+var connected_link = "<a class=\"dropdown-account dropdown-trigger\" data-target=\"dropdown_connected\"><i class=\"material-icons green-text\">account_box</i></a>";
 var disconnected_link = "<a class=\"waves-effect waves-light modal-trigger\" href=\"#modal_connection\"><i class=\"material-icons red-text\">account_box</i></a>";
 var input_name;
 var input_psw;
@@ -8,8 +8,10 @@ var btn_disconnect;
 var nav_name;
 
 
+
+
 $(document).ready(function() {
-    $('.button-navbar-mobile').sideNav({
+    $('#nav-mobile').sidenav({
         menuWidth: 400, // Default is 300
         edge: 'right', // Choose the horizontal origin
         closeOnClick: false, // Closes side-nav on <a> clicks, useful for Angular/Meteor
@@ -27,7 +29,7 @@ $(document).ready(function() {
     btn_submit = $("#btn-submit-connect");
     btn_disconnect = $(".nav-disconnect");
     nav_name = $("#nav-name");
-
+    navListeners();
     if(Cookies.get('token') === undefined){
         disconnected()
     }
@@ -35,7 +37,7 @@ $(document).ready(function() {
         connected();
     }
 
-    navListeners();
+
 });
 
 
@@ -60,7 +62,7 @@ function connected(){
     nav_bar_account_link.html(connected_link);
     $('.dropdown-account').dropdown({
             constrainWidth: false, // Does not change width of dropdown to that of the activator
-            belowOrigin: true, // Displays dropdown below the button
+            coverTrigger: false, // Displays dropdown below the button
             alignment: 'left', // Displays dropdown with edge aligned to the left of button
             stopPropagation: false // Stops event propagation
         }
