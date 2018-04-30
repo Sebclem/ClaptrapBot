@@ -316,7 +316,6 @@ function updateControl(data){
 
 function sendCommand(command){
     modal_loading.modal('open');
-    command["token"] = Cookies.get('token');
     console.log(command)
     $.ajax({
         type: "POST",

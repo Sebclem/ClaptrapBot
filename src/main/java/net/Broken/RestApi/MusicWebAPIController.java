@@ -84,18 +84,18 @@ public class MusicWebAPIController {
 
 //    TODO change token to cookie
     @RequestMapping(value = "/command", method = RequestMethod.POST)
-    public ResponseEntity<CommandResponseData> command(@RequestBody CommandPostData data, HttpServletRequest request, @RequestParam(value = "guild") String guildId){
+    public ResponseEntity<CommandResponseData> command(@RequestBody CommandPostData data, HttpServletRequest request, @RequestParam(value = "guild") String guildId, @CookieValue("token") String token){
 
         if(data.command != null) {
-            if(data.token != null) {
+            if(token != null) {
                 Guild guild = MainBot.jda.getGuildById(guildId);
                 if(guild == null ){
                     logger.warn("Request whit no guild!");
-                    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                    return new ResponseEntity<>(new CommandResponseData(data.command,"Missing Guild!\nPlease Re-connect.","token"), HttpStatus.UNAUTHORIZED);
                 }
 
                 try {
-                    UserEntity user = userUtils.getUserWithApiToken(userRepository, data.token);
+                    UserEntity user = userUtils.getUserWithApiToken(userRepository, token);
                     logger.info("Receive command " + data.command + " from " + request.getRemoteAddr() + " USER: " + user.getName() + " GUILD: " + guild.getName());
 
                     if (ApiCommandLoader.apiCommands.containsKey(data.command))

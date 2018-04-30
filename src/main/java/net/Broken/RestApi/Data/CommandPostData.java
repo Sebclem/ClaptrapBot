@@ -10,5 +10,4 @@ public class CommandPostData {
     public int playlistLimit;
     public String chanelId;
     public String name;
-    public String token;
 }
