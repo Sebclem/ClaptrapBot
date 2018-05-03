@@ -11,9 +11,11 @@ import net.Broken.Tools.EmbedMessageUtils;
 import net.Broken.Tools.Moderateur;
 import net.Broken.Tools.PrivateMessage;
 import net.Broken.audio.AudioM;
+import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.*;
 import net.dv8tion.jda.core.events.ExceptionEvent;
 import net.dv8tion.jda.core.events.ReadyEvent;
+import net.dv8tion.jda.core.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.core.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.core.events.guild.member.GuildMemberRoleRemoveEvent;
 import net.dv8tion.jda.core.events.guild.voice.GuildVoiceLeaveEvent;
@@ -24,6 +26,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -189,7 +192,19 @@ public class BotListener extends ListenerAdapter {
 
     }
 
+    @Override
+    public void onGuildJoin(GuildJoinEvent event) {
+        logger.info("Join new guild! (" + event.getGuild().getName() + ")");
+        super.onGuildJoin(event);
+        getPreference(event.getGuild());
+        EmbedBuilder eb = new EmbedBuilder().setColor(Color.GREEN)
+                .setTitle("Hello there !")
+                .setDescription("Allow me to introduce myself -- I am a CL4P-TP the discord bot, but my friends call me Claptrap ! Or they would, if any of them were real...\n"+
+                        "\nYou can access to my web UI with: https://bot.seb6596.ovh")
+                .setImage("https://i.imgur.com/Anf1Srg.gif");
 
+        event.getGuild().getDefaultChannel().sendMessage(EmbedMessageUtils.buildStandar(eb)).complete();
+    }
 
     private GuildPreferenceEntity getPreference(Guild guild){
         List<GuildPreferenceEntity> guildPrefList = guildPreferenceRepository.findByGuildId(guild.getId());
