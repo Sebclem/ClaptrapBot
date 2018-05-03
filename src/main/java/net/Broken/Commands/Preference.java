@@ -140,6 +140,7 @@ public class Preference implements Commande {
                 break;
             case "default_role_id":
                 try{
+                    value = value.replaceAll(" ", "");
                     Role role = event.getGuild().getRoleById(value);
                     if(role != null){
                         pref.setDefaultRoleId(role.getId());
@@ -177,6 +178,7 @@ public class Preference implements Commande {
                 break;
             case  "welcome_chanel_id":
                 try{
+                    value = value.replaceAll(" ", "");
                     TextChannel chanel = event.getGuild().getTextChannelById(value);
                     if(chanel != null){
                         pref.setWelcomeChanelID(chanel.getId());
