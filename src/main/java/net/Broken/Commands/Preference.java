@@ -192,7 +192,7 @@ public class Preference implements Commande {
                         throw  new NumberFormatException();
                     }
                 }catch (NumberFormatException e){
-                    MessageEmbed msg = EmbedMessageUtils.buildStandar(EmbedMessageUtils.getError("\nRole not found!\n\nUse `//listroles` to get roles id"));
+                    MessageEmbed msg = EmbedMessageUtils.buildStandar(EmbedMessageUtils.getError("\nText channel not found!\n\nUse `//listroles` to get roles id"));
                     Message sended = event.getTextChannel().sendMessage(msg).complete();
                     new MessageTimeOut(MainBot.messageTimeOut, sended, event.getMessage()).start();
                 }
