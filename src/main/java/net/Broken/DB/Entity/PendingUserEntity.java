@@ -33,6 +33,8 @@ public class PendingUserEntity {
         this.password = password;
     }
 
+
+
     public String getPassword() {
         return password;
     }

@@ -5,9 +5,9 @@ import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import net.Broken.Commands.Music;
 import net.Broken.RestApi.Data.CommandPostData;
 import net.Broken.RestApi.Data.CommandResponseData;
+import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -18,47 +18,53 @@ import org.springframework.http.ResponseEntity;
  * Interface between WebApi and Music bot for submitting track
  */
 public class WebLoadUtils {
-    ResponseEntity<CommandResponseData> response;
-    Logger logger = LogManager.getLogger();
+    private ResponseEntity<CommandResponseData> response;
+    private Logger logger = LogManager.getLogger();
+    public UserAudioTrack userAudioTrack;
 
     /**
      * Submit a track or playlist to Music bot
-     * @param musicCommand The current guild music command.
      * @param data Received data from API
      * @param user User who submit the track
+     * @param guild
      */
-    public WebLoadUtils(Music musicCommand, CommandPostData data, User user){
-        AudioPlayerManager playerM = musicCommand.getAudioManager().getPlayerManager();
+    public WebLoadUtils(CommandPostData data, User user, Guild guild, boolean submit){
+        AudioPlayerManager playerM = AudioM.getInstance(guild).getPlayerManager();
+
         try {
 
-            AudioM audioM = AudioM.getInstance(null);
-            playerM.loadItemOrdered(musicCommand.getAudioManager().getGuildMusicManager(), data.url, new AudioLoadResultHandler() {
+            AudioM audioM = AudioM.getInstance(guild);
+            playerM.loadItemOrdered(audioM.getGuildMusicManager(), data.url, new AudioLoadResultHandler() {
                 @Override
                 public void trackLoaded(AudioTrack track) {
                     logger.info("Single Track detected from web!");
 
-                    try {
-                        UserAudioTrack userAudioTrack = new UserAudioTrack(user, track); //TODO
+                    userAudioTrack = new UserAudioTrack(user, track);
+                    if(submit)
                         audioM.play(audioM.getGuild(), audioM.getPlayedChanel(), audioM.getGuildMusicManager(), userAudioTrack, data.onHead);
-                        response = new ResponseEntity<>(new CommandResponseData("ADD", "Loaded"), HttpStatus.OK);
-                    } catch (NullMusicManager | NotConnectedException nullMusicManager) {
-                        nullMusicManager.printStackTrace();
-                    }
+                    response = new ResponseEntity<>(new CommandResponseData("ADD", "Loaded"), HttpStatus.OK);
 
                 }
 
                 @Override
                 public void playlistLoaded(AudioPlaylist playlist) {
 
-                    logger.info("Playlist detected from web! Limit: " + data.playlistLimit);
-                    audioM.playListLoader(playlist, data.playlistLimit, user, data.onHead);
-                    response = new ResponseEntity<>(new CommandResponseData("ADD", "Loaded"), HttpStatus.OK);
+                    if(submit)
+                    {
+                        logger.info("Playlist detected from web! Limit: " + data.playlistLimit);
+                        audioM.playListLoader(playlist, data.playlistLimit, user, data.onHead);
+                        response = new ResponseEntity<>(new CommandResponseData("ADD", "Loaded"), HttpStatus.OK);
+                    }else
+                    {
+                        response = new ResponseEntity<>(new CommandResponseData("ADD", "Adding a list on saved playlist is currently not supported"), HttpStatus.NOT_ACCEPTABLE);
+
+                    }
 
                 }
 
                 @Override
                 public void noMatches() {
-                    logger.warn("Cant find media ! (web)");
+                    logger.warn("Cant find media ! (web) url: "+ data.url);
                     response = new ResponseEntity<>(new CommandResponseData("ADD", "Can't find media!"), HttpStatus.NOT_FOUND);
 
                 }
@@ -73,7 +79,7 @@ public class WebLoadUtils {
             while(response == null)
                 Thread.sleep(10);
 
-        } catch (NullMusicManager | NotConnectedException | InterruptedException nullMusicManager) {
+        } catch (InterruptedException nullMusicManager) {
             nullMusicManager.printStackTrace();
         }
     }

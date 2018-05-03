@@ -3,13 +3,7 @@ var ok_passwrd = false;
 $(document).ready(function() {
     var baseUrl = window.location.protocol + "//" +window.location.host + window.location.pathname;
     console.log(baseUrl);
-    $('.button-collapse-1').sideNav({
-        menuWidth: 400, // Default is 300
-        edge: 'right', // Choose the horizontal origin
-        closeOnClick: false, // Closes side-nav on <a> clicks, useful for Angular/Meteor
-        draggable: true // Choose whether you can drag to open on touch screens,
-    });
-
+    
     var sendBtn = $('#sendBtn');
 
 

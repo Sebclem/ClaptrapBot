@@ -12,56 +12,53 @@ var btn_flush;
 var btn_add;
 var switchAutoFlow;
 var loadingFlag = false;
+var guild;
 
 $(document).ready(function() {
+    if(Cookies.get('guild') != undefined) {
 
-    btn_play = $('#btn_play');
-    btn_stop = $('#btn_stop');
-    btn_next = $('#btn_next');
-    btn_info = $('#btn_info');
-    btn_disconnect = $('#btn_disconnect');
-    btn_flush = $('#flush_btn');
-    btn_add = $('#add_btn');
-    switchAutoFlow = $("#autoflow");
+        guild = Cookies.get('guild')
+        btn_play = $('#btn_play');
+        btn_stop = $('#btn_stop');
+        btn_next = $('#btn_next');
+        btn_info = $('#btn_info');
+        btn_disconnect = $('#btn_disconnect');
+        btn_flush = $('#flush_btn');
+        btn_add = $('#add_btn');
+        switchAutoFlow = $("#autoflow");
 
-    setInterval("getCurentMusic()",1000);
-    $('#modalAdd').modal();
-    
-    $('#modal_current_info').modal();
+        setInterval("getCurentMusic()", 1000);
+        $('#modalAdd').modal();
 
-    $('#modalChanels').modal({
-        dismissible: false // Modal can be dismissed by clicking outside of the modal
-    });
-    
-    modal_loading = $('#modal_loading');
-    modal_loading.modal({
-        dismissible: false
-    });
-    
-    $('.button-collapse-1').sideNav({
-        menuWidth: 400, // Default is 300
-        edge: 'right', // Choose the horizontal origin
-        closeOnClick: false, // Closes side-nav on <a> clicks, useful for Angular/Meteor
-        draggable: true // Choose whether you can drag to open on touch screens,
-    });
+        $('#modal_current_info').modal();
 
-    $('.dropdown-button').dropdown({
-        inDuration: 300,
-        outDuration: 225,
-        constrainWidth: false, // Does not change width of dropdown to that of the activator
-        hover: false, // Activate on hover
-        gutter: 0, // Spacing from edge
-        belowOrigin: false, // Displays dropdown below the button
-        alignment: 'left', // Displays dropdown with edge aligned to the left of button
-        stopPropagation: false // Stops event propagation
-    });
+        $('#modalChanels').modal({
+            dismissible: false // Modal can be dismissed by clicking outside of the modal
+        });
 
-    listeners();
+        modal_loading = $('#modal_loading');
+        modal_loading.modal({
+            dismissible: false
+        });
 
+
+        $('.dropdown-button').dropdown({
+            inDuration: 300,
+            outDuration: 225,
+            constrainWidth: false, // Does not change width of dropdown to that of the activator
+            hover: false, // Activate on hover
+            gutter: 0, // Spacing from edge
+            belowOrigin: false, // Displays dropdown below the button
+            alignment: 'left', // Displays dropdown with edge aligned to the left of button
+            stopPropagation: false // Stops event propagation
+        });
+
+        listeners();
+    }
 });
 
 function getCurentMusic() {
-    $.get("api/music/currentMusicInfo", function (data) {
+    $.get("api/music/currentMusicInfo?guild=" + guild, function (data) {
     }).done(function (data) {
 
         state = data.state;
@@ -176,7 +173,7 @@ function getCurentMusic() {
 }
 
 function getPlayList() {
-    $.get("api/music/getPlaylist", function (data) {
+    $.get("api/music/getPlaylist?guild=" + guild, function (data) {
     }).done(function (data) {
         data = data.list;
         if(data != null && data.length != 0){
@@ -199,6 +196,7 @@ function getPlayList() {
                     template.html(content);
 
                     $('#playlist_list').append(template);
+                    $('.collapsible').collapsible();
 
                 });
                 $(".btn_dell_playlist").click(function () {
@@ -237,7 +235,7 @@ function getPlayList() {
 }
 
 function getChannels(){
-    $.get("api/music/getChanel", function (data) {
+    $.get("api/music/getChanel?guild=" + guild, function (data) {
     }).done(function (data) {
         console.log(data);
         $('#channelForm').empty();
@@ -267,7 +265,8 @@ function updateModal(data){
     $('#modal_title').text("Title: "+ data.info.audioTrackInfo.title);
     $('#modal_author').text("Author: "+ data.info.audioTrackInfo.author);
     $('#modal_lenght').text("Duration: "+ msToTime(data.info.audioTrackInfo.length));
-    $('#modal_url').text("URL: "+ data.info.audioTrackInfo.uri);
+    $('#modal_url').html("<div>URL:  <a target=\"_blank\"  href=\""+ data.info.audioTrackInfo.uri + "\">" + data.info.audioTrackInfo.uri + "</a></div>");
+    //
     $('#modal_submit').text("Submitted by: "+ data.info.user);
 
 
@@ -313,13 +312,12 @@ function updateControl(data){
 
 function sendCommand(command){
     modal_loading.modal('open');
-    command["token"] = Cookies.get('token');
     console.log(command)
     $.ajax({
         type: "POST",
         dataType: 'json',
         contentType: 'application/json',
-        url: "/api/music/command",
+        url: "/api/music/command?guild=" + guild,
         data:  JSON.stringify(command),
         success: function (data) {
             console.log(data);

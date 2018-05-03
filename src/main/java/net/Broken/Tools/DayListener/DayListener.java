@@ -65,8 +65,8 @@ public class DayListener extends Thread {
     @Override
     public void run() {
         while(true)
-        {   calendar = Calendar.getInstance();
-            logger.debug(calendar.get(GregorianCalendar.DAY_OF_MONTH)+"/"+previousDay);
+        {
+            calendar = Calendar.getInstance();
             if(calendar.get(GregorianCalendar.DAY_OF_MONTH) != previousDay)
             {
                 LogManager.getLogger().info("New day triggered!");

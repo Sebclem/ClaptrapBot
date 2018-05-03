@@ -1,9 +1,11 @@
 package net.Broken.DB.Entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Entity for DB. Represent confirmed user account.
@@ -20,7 +22,11 @@ public class UserEntity {
 
     private String apiToken;
 
+    @JsonIgnore
     private String password;
+
+    @OneToMany(mappedBy = "user")
+    private List<PlaylistEntity> playlists;
 
     public UserEntity() {
     }
@@ -70,5 +76,20 @@ public class UserEntity {
 
     public void setApiToken(String apiToken) {
         this.apiToken = apiToken;
+    }
+
+    public List<PlaylistEntity> getPlaylists() {
+        return playlists;
+    }
+
+    public void setPlaylists(List<PlaylistEntity> playlists) {
+        this.playlists = playlists;
+    }
+
+    public void addPlaylist(PlaylistEntity... playlists){
+        if(this.playlists == null)
+            this.playlists = new ArrayList<>();
+
+        this.playlists.addAll(Arrays.asList(playlists));
     }
 }

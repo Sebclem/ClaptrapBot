@@ -8,6 +8,7 @@ import net.Broken.Tools.PrivateMessage;
 import net.Broken.Tools.UserSpamUtils;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.ChannelType;
+import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.Message;
 import net.dv8tion.jda.core.entities.User;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
@@ -24,41 +25,41 @@ import java.util.concurrent.TimeUnit;
  * Spam Info Command
  */
 public class SpamInfo implements Commande{
-    private HashMap<User,MessageUpdater> threadHashMap = new HashMap<>();
+    private HashMap<Member,MessageUpdater> threadHashMap = new HashMap<>();
 
     Logger logger = LogManager.getLogger();
 
     @Override
     public void action(String[] args, MessageReceivedEvent event) {
-        User user;
+        Member user;
         if(event.getMessage().getMentionedUsers().size() == 0){
-            user = event.getAuthor();
+            user = event.getMember();
         }
         else {
-            user = event.getMessage().getMentionedUsers().get(0);
+            user = event.getMessage().getMentionedMembers().get(0);
         }
 
 
         Message message = null;
         if(!MainBot.spamUtils.containsKey(user)){
             if(!event.isFromType(ChannelType.PRIVATE))
-                message = event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamInfo(user.getName()+":\n\t- Multiplicateur: `1`\n\t- En spam: `Non`")).complete();
+                message = event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamInfo(user.getEffectiveName() + ":\n\t- Multiplicateur: `1`\n\t- En spam: `Non`")).complete();
             else
-                PrivateMessage.send(event.getAuthor(),EmbedMessageUtils.getSpamInfo(user.getName()+":\n\t- Multiplicateur: `1`\n\t- En spam: `Non`"),logger);
+                PrivateMessage.send(event.getAuthor(),EmbedMessageUtils.getSpamInfo(user.getEffectiveName()+":\n\t- Multiplicateur: `1`\n\t- En spam: `Non`"),logger);
         }
         else{
             UserSpamUtils util = MainBot.spamUtils.get(user);
             if(!util.isOnSpam()){
                 if(!event.isFromType(ChannelType.PRIVATE))
-                    message = event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamInfo(user.getName()+"\n\t- Multiplicateur: `"+util.getMultip()+"`\n\t- En spam: `Non`")).complete();
+                    message = event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamInfo(user.getEffectiveName()+"\n\t- Multiplicateur: `"+util.getMultip()+"`\n\t- En spam: `Non`")).complete();
                 else
-                    PrivateMessage.send(event.getAuthor(),EmbedMessageUtils.getSpamInfo(user.getName()+":\n\t- Multiplicateur: `"+util.getMultip()+"`\n\t- En spam: `Non`"),logger);
+                    PrivateMessage.send(event.getAuthor(),EmbedMessageUtils.getSpamInfo(user.getEffectiveName()+":\n\t- Multiplicateur: `"+util.getMultip()+"`\n\t- En spam: `Non`"),logger);
             }
             else{
                 if(!event.isFromType(ChannelType.PRIVATE))
-                    message = event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamInfo(user.getName()+":\n\t- Multiplicateur: `"+util.getMultip()+"`\n\t- En spam: `Oui`\n\t- Temps restant: `"+formatSecond(util.getTimeLeft())+"`")).complete();
+                    message = event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamInfo(user.getEffectiveName()+":\n\t- Multiplicateur: `"+util.getMultip()+"`\n\t- En spam: `Oui`\n\t- Temps restant: `"+formatSecond(util.getTimeLeft())+"`")).complete();
                 else
-                    message = PrivateMessage.send(event.getAuthor(),EmbedMessageUtils.getSpamInfo(user.getName()+"\n\t- Multiplicateur: `"+util.getMultip()+"`\n\t- En spam: `Oui`\n\t- Temps restant: `"+formatSecond(util.getTimeLeft())+"`"),logger);
+                    message = PrivateMessage.send(event.getAuthor(),EmbedMessageUtils.getSpamInfo(user.getEffectiveName()+"\n\t- Multiplicateur: `"+util.getMultip()+"`\n\t- En spam: `Oui`\n\t- Temps restant: `"+formatSecond(util.getTimeLeft())+"`"),logger);
                 }
         }
         if(message != null){
@@ -139,9 +140,9 @@ public class SpamInfo implements Commande{
         public UserSpamUtils util;
         public boolean stop;
         private int oldValue;
-        private User user;
+        private Member user;
 
-        public MessageUpdater(Message message,Message command, UserSpamUtils util,User user) {
+        public MessageUpdater(Message message,Message command, UserSpamUtils util, Member user) {
             this.message = message;
             this.util = util;
             this.user = user;
@@ -151,14 +152,14 @@ public class SpamInfo implements Commande{
 
         @Override
         public void run() {
-            logger.debug("Start "+user.getName()+" theard!");
+            logger.debug("Start "+user.getEffectiveName()+" theard!");
             if(util != null){
                 oldValue = util.getTimeLeft();
                 while (util.getTimeLeft()!=0 && !stop && util.isOnSpam()){
                     try {
                         Thread.sleep(500);
                         if(util.getTimeLeft()%5 == 0 && oldValue - util.getTimeLeft() >= 5){
-                            message.editMessage(EmbedMessageUtils.getSpamInfo(user.getName()+":\n\t- Multiplicateur: `"+util.getMultip()+"`\n\t- En spam: `Oui`\n\t- Temps restant: `"+formatSecond(util.getTimeLeft())+"`")).complete();
+                            message.editMessage(EmbedMessageUtils.getSpamInfo(user.getEffectiveName()+":\n\t- Multiplicateur: `"+util.getMultip()+"`\n\t- En spam: `Oui`\n\t- Temps restant: `"+formatSecond(util.getTimeLeft())+"`")).complete();
                             oldValue = util.getTimeLeft();
                         }
 
@@ -166,14 +167,14 @@ public class SpamInfo implements Commande{
                         e.printStackTrace();
                     }
                 }
-                logger.debug("Kill "+user.getName()+" theard!");
+                logger.debug("Kill "+user.getEffectiveName()+" theard!");
                 if(stop)
                     message.editMessage(new EmbedBuilder().setColor(Color.RED).setTitle("Aborted").build()).complete();
                 else
-                    message.editMessage(EmbedMessageUtils.getSpamInfo(user.getName()+"\n\t- Multiplicateur: `"+util.getMultip()+"`\n\t- En spam: `Non`")).complete();
+                    message.editMessage(EmbedMessageUtils.getSpamInfo(user.getEffectiveName()+"\n\t- Multiplicateur: `"+util.getMultip()+"`\n\t- En spam: `Non`")).complete();
 
             }
-            logger.debug("Timer for message deletion of "+user.getName()+" stated...");
+            logger.debug("Timer for message deletion of "+user.getEffectiveName()+" stated...");
             threadHashMap.remove(user);
             List<Message> messages = new ArrayList<>();
             messages.add(command);

@@ -20,18 +20,16 @@ public class YoutubeTools {
 
     private Logger logger = LogManager.getLogger();
 
-    private Guild guild;
 
     private static YoutubeTools INSTANCE ;
 
-    private YoutubeTools(Guild guild){
+    private YoutubeTools(){
 
-        this.guild = guild;
     }
 
-    public static YoutubeTools getInstance(Guild guild){
+    public static YoutubeTools getInstance(){
         if(INSTANCE == null)
-            INSTANCE = new YoutubeTools(guild);
+            INSTANCE = new YoutubeTools();
         return INSTANCE;
     }
 

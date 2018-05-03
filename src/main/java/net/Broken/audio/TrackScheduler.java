@@ -9,6 +9,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import net.Broken.MainBot;
 import net.Broken.RestApi.Data.UserAudioTrackData;
 import net.Broken.audio.Youtube.YoutubeTools;
+import net.dv8tion.jda.core.entities.Guild;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,19 +24,22 @@ import java.util.concurrent.LinkedBlockingDeque;
 public class TrackScheduler extends AudioEventAdapter {
     private final AudioPlayer player;
     private final BlockingDeque<UserAudioTrack> queue;
+    private final Guild guild;
+
     private UserAudioTrack currentPlayingTrack;
     private boolean autoFlow = false;
     private ArrayList<String> history = new ArrayList<>();
-    Logger logger = LogManager.getLogger();
+    private Logger logger = LogManager.getLogger();
 
     /**
      * @param player The audio player this scheduler uses
      */
-    public TrackScheduler(AudioPlayer player) {
+    public TrackScheduler(AudioPlayer player, Guild guild) {
         this.player = player;
         player.setVolume(25);
         this.queue = new LinkedBlockingDeque<>();
         this.currentPlayingTrack = null;
+        this.guild = guild;
     }
 
     /**
@@ -177,8 +181,8 @@ public class TrackScheduler extends AudioEventAdapter {
     private void needAutoPlay(){
         if((queue.size() < 1) && autoFlow && currentPlayingTrack != null){
             logger.debug("Auto add needed!");
-            AudioM audioM = AudioM.getInstance(null);
-            YoutubeTools youtubeTools = YoutubeTools.getInstance(null);
+            AudioM audioM = AudioM.getInstance(guild);
+            YoutubeTools youtubeTools = YoutubeTools.getInstance();
             try {
                 String id =  youtubeTools.getRelatedVideo(currentPlayingTrack.getAudioTrack().getInfo().identifier, history);
                 logger.debug("Related id: "+id);

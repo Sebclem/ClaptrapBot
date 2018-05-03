@@ -9,19 +9,16 @@ import net.Broken.MainBot;
 import net.Broken.RestApi.Data.*;
 import net.Broken.Tools.UserManager.Exceptions.UnknownTokenException;
 import net.Broken.Tools.UserManager.UserUtils;
+import net.Broken.audio.AudioM;
 import net.Broken.audio.FindGeneral;
-import net.Broken.audio.NotConnectedException;
-import net.Broken.audio.NullMusicManager;
+import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.VoiceChannel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -42,52 +39,67 @@ public class MusicWebAPIController {
 
 
     @RequestMapping("/currentMusicInfo")
-    public CurrentMusicData getCurrentM(){
+    public ResponseEntity<CurrentMusicData> getCurrentM(@RequestParam(value = "guild") String guildId){
+        Guild guild = MainBot.jda.getGuildById(guildId);
+        if(guild == null ){
+            logger.warn("Request whit no guild!");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        else{
+            logger.trace("currentMusicInfo for " + guild.getName());
+        }
+
         Music musicCommande = (Music) MainBot.commandes.get("music");
 
-        if(musicCommande.audio.getGuild().getAudioManager().isConnected()){
-            try {
-                AudioPlayer player = musicCommande.audio.getGuildMusicManager().player;
-                AudioTrack currentTrack = player.getPlayingTrack();
-                if(currentTrack == null)
-                {
-                    return new CurrentMusicData(null,0, "STOP",false, musicCommande.audio.getGuildMusicManager().scheduler.isAutoFlow());
-                }
-                UserAudioTrackData uat = new UserAudioTrackData(musicCommande.audio.getGuildMusicManager().scheduler.getCurrentPlayingTrack());
-                return new CurrentMusicData(uat, currentTrack.getPosition(), currentTrack.getState().toString(), player.isPaused(), musicCommande.audio.getGuildMusicManager().scheduler.isAutoFlow());
-            } catch (NullMusicManager | NotConnectedException nullMusicManager) {
-                return new CurrentMusicData(null,0, "STOP",false, false);
+        if(guild.getAudioManager().isConnected()){
+            AudioPlayer player = AudioM.getInstance(guild).getGuildMusicManager().player;
+            AudioTrack currentTrack = player.getPlayingTrack();
+            if(currentTrack == null)
+            {
+                return new ResponseEntity<>(new CurrentMusicData(null,0, "STOP",false, AudioM.getInstance(guild).getGuildMusicManager().scheduler.isAutoFlow()),HttpStatus.OK);
             }
+            UserAudioTrackData uat = new UserAudioTrackData(AudioM.getInstance(guild).getGuildMusicManager().scheduler.getCurrentPlayingTrack());
+            return new ResponseEntity<>(new CurrentMusicData(uat, currentTrack.getPosition(), currentTrack.getState().toString(), player.isPaused(), AudioM.getInstance(guild).getGuildMusicManager().scheduler.isAutoFlow()),HttpStatus.OK);
         }else
         {
-            return new CurrentMusicData(null,0, "DISCONNECTED",false, false);
+            return new ResponseEntity<>(new CurrentMusicData(null,0, "DISCONNECTED",false, false),HttpStatus.OK);
         }
     }
 
     @RequestMapping("/getPlaylist")
-    public PlaylistData getPlaylist(){
-        Music musicCommande = (Music) MainBot.commandes.get("music");
-        List<UserAudioTrackData> list = null;
-        try {
-            list = musicCommande.getAudioManager().getGuildMusicManager().scheduler.getList();
-            return new PlaylistData(list);
-        } catch (NullMusicManager | NotConnectedException nullMusicManager) {
-            return new PlaylistData(list);
+    public ResponseEntity<PlaylistData> getPlaylist(@RequestParam(value = "guild") String guildId){
+        Guild guild = MainBot.jda.getGuildById(guildId);
+        if(guild == null ){
+            logger.warn("Request whit no guild!");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+        else{
+            logger.trace("getPlaylist for " + guild.getName());
+        }
+
+        List<UserAudioTrackData> list = null;
+        list = AudioM.getInstance(guild).getGuildMusicManager().scheduler.getList();
+        return new ResponseEntity<>(new PlaylistData(list), HttpStatus.OK);
     }
 
+//    TODO change token to cookie
     @RequestMapping(value = "/command", method = RequestMethod.POST)
-    public ResponseEntity<CommandResponseData> command(@RequestBody CommandPostData data, HttpServletRequest request){
+    public ResponseEntity<CommandResponseData> command(@RequestBody CommandPostData data, HttpServletRequest request, @RequestParam(value = "guild") String guildId, @CookieValue("token") String token){
 
         if(data.command != null) {
-            if(data.token != null) {
+            if(token != null) {
+                Guild guild = MainBot.jda.getGuildById(guildId);
+                if(guild == null ){
+                    logger.warn("Request whit no guild!");
+                    return new ResponseEntity<>(new CommandResponseData(data.command,"Missing Guild!\nPlease Re-connect.","token"), HttpStatus.UNAUTHORIZED);
+                }
+
                 try {
-                    UserEntity user = userUtils.getUserWithApiToken(userRepository, data.token);
-                    logger.info("receive command " + data.command + " from " + request.getRemoteAddr() + " USER: " + user.getName());
-                    Music musicCommande = (Music) MainBot.commandes.get("music");
+                    UserEntity user = userUtils.getUserWithApiToken(userRepository, token);
+                    logger.info("Receive command " + data.command + " from " + request.getRemoteAddr() + " USER: " + user.getName() + " GUILD: " + guild.getName());
 
                     if (ApiCommandLoader.apiCommands.containsKey(data.command))
-                        return ApiCommandLoader.apiCommands.get(data.command).action(musicCommande, data, MainBot.jda.getUserById(user.getJdaId()));
+                        return ApiCommandLoader.apiCommands.get(data.command).action(data, MainBot.jda.getUserById(user.getJdaId()), guild);
                     else
                         return new ResponseEntity<>(new CommandResponseData(data.command, "Unknown Command", "command"), HttpStatus.BAD_REQUEST);
 
@@ -110,12 +122,20 @@ public class MusicWebAPIController {
     }
 
     @RequestMapping(value = "/getChanel", method = RequestMethod.GET)
-    public List<ChanelData> getChanel(){
+    public ResponseEntity<List<ChanelData>> getChanel(@RequestParam(value = "guild") String guildId){
+        Guild guild = MainBot.jda.getGuildById(guildId);
+        if(guild == null ){
+            logger.warn("Request whit no guild!");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        else{
+            logger.trace("getPlaylist for " + guild.getName());
+        }
         List<ChanelData> temp = new ArrayList<>();
-        for(VoiceChannel aChanel : FindGeneral.find(MainBot.jda.getGuilds().get(0)).getVoiceChannels()){
+        for(VoiceChannel aChanel : FindGeneral.find(guild).getVoiceChannels()){
             temp.add(new ChanelData(aChanel.getName(),aChanel.getId(),aChanel.getPosition()));
         }
-        return temp;
+        return new ResponseEntity<>(temp, HttpStatus.OK);
     }
 
 

@@ -25,7 +25,7 @@ import java.util.Objects;
  * Spam admin command
  */
 public class Spam implements Commande {
-    Logger logger = LogManager.getLogger();
+    private Logger logger = LogManager.getLogger();
 
     @Override
     public void action(String[] args, MessageReceivedEvent event)
@@ -97,7 +97,7 @@ public class Spam implements Commande {
             /****************************
              * On recupere l'utilisateur et le role cible
              ****************************/
-            List<User> userL = event.getMessage().getMentionedUsers();
+            List<Member> userL = event.getMessage().getMentionedMembers();
 
 
             /****************************
@@ -114,14 +114,14 @@ public class Spam implements Commande {
                 new MessageTimeOut(messages,MainBot.messageTimeOut).start();
             }
             else {
-                Member user = serveur.getMember(userL.get(0));
+                Member user = userL.get(0);
                 logger.info("Tentative de pardon de " + user.getEffectiveName() + " par l'utilisateur " + event.getMember().getEffectiveName());
             /****************************
                  * virif si en spammer    *
                  ****************************/
-                if (MainBot.spamUtils.containsKey(user.getUser())) {
-                    if (MainBot.spamUtils.get(user.getUser()).isOnSpam()) {
-                        MainBot.spamUtils.get(user.getUser()).setOnSpam(false);
+                if (MainBot.spamUtils.containsKey(user)) {
+                    if (MainBot.spamUtils.get(user).isOnSpam()) {
+                        MainBot.spamUtils.get(user).setOnSpam(false);
                     } else {
                         logger.warn("Utilisateur pas en spam.");
                         Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError(":arrow_right: Utilisateur non spammeur.","pardon")).complete();
@@ -192,9 +192,9 @@ public class Spam implements Commande {
                 /****************************
                  * virif pas deja en spammer    *
                  ****************************/
-                if(MainBot.spamUtils.containsKey(user.getUser()))
+                if(MainBot.spamUtils.containsKey(user))
                 {
-                    if(!MainBot.spamUtils.get(user.getUser()).isOnSpam())
+                    if(!MainBot.spamUtils.get(user).isOnSpam())
                     {
                         this.goSpam(user,multiStr,serveur,event);
                     }
@@ -242,7 +242,7 @@ public class Spam implements Commande {
                 /****************************
                  * On recupere l'utilisateur et le role cible
                  ****************************/
-                List<User> userL = event.getMessage().getMentionedUsers();
+                List<Member> userL = event.getMessage().getMentionedMembers();
 
 
                 /****************************
@@ -260,14 +260,14 @@ public class Spam implements Commande {
 
                 }
                 else {
-                    Member user = serveur.getMember(userL.get(0));
+                    Member user = userL.get(0);
                     logger.info("Tentative de reset de " + user.getEffectiveName() + " par l'utilisateur " + event.getMember().getEffectiveName());
 
 
                     /****************************
                      * verif utilisteur trouver *
                      ****************************/
-                    if (MainBot.spamUtils.containsKey(user.getUser())) {
+                    if (MainBot.spamUtils.containsKey(user)) {
                         logger.info("Reset du multiplicateur de " + user.getEffectiveName() + " réussi");
                         Message rest = event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n *Le multiplcicateur de " + user.getEffectiveName() + " a été remit a zéro.*").complete();
                         List<Message> messages = new ArrayList<Message>(){{
@@ -275,7 +275,7 @@ public class Spam implements Commande {
                             add(event.getMessage());
                         }};
                         new MessageTimeOut(messages,MainBot.messageTimeOut).start();
-                        MainBot.spamUtils.remove(user.getUser());
+                        MainBot.spamUtils.remove(user);
 
                     }
 
@@ -297,7 +297,7 @@ public class Spam implements Commande {
             if (args[0].equals("all"))
             {
                 logger.info("Reset automatique des multiplicateur.");
-                for (User unUser: MainBot.spamUtils.keySet() )         //=for(int i=0; i<saveRoleUser.size(); i++)
+                for (Member unUser: MainBot.spamUtils.keySet() )         //=for(int i=0; i<saveRoleUser.size(); i++)
                 {
                     MainBot.message_compteur.remove(unUser);
                 }
@@ -327,8 +327,8 @@ public class Spam implements Commande {
             }
             else
             {
-                MainBot.spamUtils.put(user.getUser(),new UserSpamUtils(user,new ArrayList<>()));
-                MainBot.spamUtils.get(user.getUser()).setMultip(multi);
+                MainBot.spamUtils.put(user,new UserSpamUtils(user,new ArrayList<>()));
+                MainBot.spamUtils.get(user).setMultip(multi);
             }
 
             new AntiSpam().extermine(user,serveur,serveur.getManager(),false,event);

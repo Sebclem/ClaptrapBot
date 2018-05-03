@@ -13,9 +13,12 @@ import net.dv8tion.jda.core.OnlineStatus;
 import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
+import net.dv8tion.jda.core.entities.RichPresence;
+import net.dv8tion.jda.core.entities.impl.JDAImpl;
 import net.dv8tion.jda.core.exceptions.RateLimitedException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.json.JSONObject;
 
 import javax.security.auth.login.LoginException;
 import java.io.IOException;
@@ -45,49 +48,49 @@ public class Init {
             try
             {
 
-                logger.info("Connection au serveur...");
+                logger.info("Connecting to Discord api...");
                 //connection au bot
-                jda = new JDABuilder(AccountType.BOT).addEventListener(new BotListener()).setToken(token).setBulkDeleteSplittingEnabled(false).buildBlocking();
+                jda = new JDABuilder(AccountType.BOT).setToken(token).setBulkDeleteSplittingEnabled(false).buildBlocking();
                 MainBot.jda = jda;
                 jda.setAutoReconnect(true);
-                jda.addEventListener();
 
                 /*************************************
                  *      Definition des commande      *
                  *************************************/
-                jda.getPresence().setGame(Game.of("Statut: Loading..."));
+                jda.getPresence().setPresence(OnlineStatus.DO_NOT_DISTURB, Game.playing("Loading..."));
                 jda.getTextChannels().forEach(textChannel -> textChannel.sendTyping().queue());
 
 
                 //On recupere le l'id serveur
-                Guild serveur = jda.getGuilds().get(0);
+                for( Guild server : jda.getGuilds()){
+                    //on recupere les utilisateur
+                    List<Member> utilisateurCo = server.getMembers();
 
-                //on recupere les utilisateur
-                List<Member> utilisateurCo = serveur.getMembers();
+                    logger.info("Online users: "+utilisateurCo.size());
+                    for (Member anUtilisateurCo : utilisateurCo)
+                    {
+                        if (anUtilisateurCo.getOnlineStatus().equals(OnlineStatus.ONLINE))
+                            logger.debug("\t*" + anUtilisateurCo.getEffectiveName());
+                    }
 
-                logger.info("Utilisatieur connecté: "+utilisateurCo.size());
-                for (Member anUtilisateurCo : utilisateurCo)
-                {
-                    if (anUtilisateurCo.getOnlineStatus().equals(OnlineStatus.ONLINE))
-                        logger.debug("\t*" + anUtilisateurCo.getEffectiveName());
+                    logger.debug("Do not disturb users: ");
+                    for (Member anUtilisateurCo : utilisateurCo)
+                    {
+                        if (anUtilisateurCo.getOnlineStatus().equals(OnlineStatus.DO_NOT_DISTURB))
+                            logger.debug("\t*" + anUtilisateurCo.getEffectiveName());
+                    }
+
+                    logger.debug("Offline users: ");
+                    for (Member anUtilisateurCo : utilisateurCo)
+                    {
+                        if (anUtilisateurCo.getOnlineStatus().equals(OnlineStatus.OFFLINE))
+                            logger.debug("\t*" + anUtilisateurCo.getEffectiveName());
+                    }
                 }
 
-                logger.debug("Utilisatieur absent: ");
-                for (Member anUtilisateurCo : utilisateurCo)
-                {
-                    if (anUtilisateurCo.getOnlineStatus().equals(OnlineStatus.DO_NOT_DISTURB))
-                        logger.debug("\t*" + anUtilisateurCo.getEffectiveName());
-                }
 
-                logger.debug("Utilisatieur hors ligne: ");
-                for (Member anUtilisateurCo : utilisateurCo)
-                {
-                    if (anUtilisateurCo.getOnlineStatus().equals(OnlineStatus.OFFLINE))
-                        logger.debug("\t*" + anUtilisateurCo.getEffectiveName());
-                }
 
-                MainBot.ModoTimer modotimer = new MainBot.ModoTimer();
-                modotimer.start();
+
 
                 DayListener dayListener = DayListener.getInstance();
                 dayListener.addListener(new ResetSpam());
@@ -99,7 +102,7 @@ public class Init {
 
 
             }
-            catch (LoginException | InterruptedException | RateLimitedException e)
+            catch (LoginException | InterruptedException e)
             {
                 logger.catching(e);
             }
@@ -112,7 +115,9 @@ public class Init {
     static void polish(JDA jda){
         CommandLoader.load();
         ApiCommandLoader.load();
-        jda.getPresence().setGame(Game.of("bot.seb6596.ovh"));
+        jda.addEventListener(new BotListener());
+        jda.getPresence().setPresence(OnlineStatus.ONLINE, Game.playing("bot.seb6596.ovh"));
+
 
     }
 }
