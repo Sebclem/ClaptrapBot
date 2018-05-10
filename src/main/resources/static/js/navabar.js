@@ -174,7 +174,7 @@ function getGuild(){
         $('#guild_form').empty();
 
         if(data.length === 1){
-            Cookies.set('guild', data.id, { expires: 31 });
+            Cookies.set('guild', data[0].id, { expires: 31 });
             return;
         }
         data.forEach(function(element){

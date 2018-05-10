@@ -108,6 +108,7 @@ public class Preference implements Commande {
         GuildPreferenceEntity pref = getPreference(event.getGuild());
         switch (key){
             case "anti_spam":
+                value = value.replaceAll(" ", "");
                 if(value.toLowerCase().equals("true") || value.toLowerCase().equals("false")){
                     boolean result = Boolean.parseBoolean(value);
                     pref.setAntiSpam(result);
@@ -125,6 +126,7 @@ public class Preference implements Commande {
 
 
             case "default_role":
+                value = value.replaceAll(" ", "");
                 if(value.toLowerCase().equals("true") || value.toLowerCase().equals("false")){
                     boolean result = Boolean.parseBoolean(value);
                     pref.setDefaultRole(result);
@@ -140,6 +142,7 @@ public class Preference implements Commande {
                 break;
             case "default_role_id":
                 try{
+                    value = value.replaceAll(" ", "");
                     Role role = event.getGuild().getRoleById(value);
                     if(role != null){
                         pref.setDefaultRoleId(role.getId());
@@ -162,6 +165,7 @@ public class Preference implements Commande {
 
                 break;
             case "welcome":
+                value = value.replaceAll(" ", "");
                 if(value.toLowerCase().equals("true") || value.toLowerCase().equals("false")){
                     boolean result = Boolean.parseBoolean(value);
                     pref.setWelcome(result);
@@ -177,6 +181,7 @@ public class Preference implements Commande {
                 break;
             case  "welcome_chanel_id":
                 try{
+                    value = value.replaceAll(" ", "");
                     TextChannel chanel = event.getGuild().getTextChannelById(value);
                     if(chanel != null){
                         pref.setWelcomeChanelID(chanel.getId());
@@ -192,7 +197,7 @@ public class Preference implements Commande {
                         throw  new NumberFormatException();
                     }
                 }catch (NumberFormatException e){
-                    MessageEmbed msg = EmbedMessageUtils.buildStandar(EmbedMessageUtils.getError("\nRole not found!\n\nUse `//listroles` to get roles id"));
+                    MessageEmbed msg = EmbedMessageUtils.buildStandar(EmbedMessageUtils.getError("\nText channel not found!\n\nUse `//listroles` to get roles id"));
                     Message sended = event.getTextChannel().sendMessage(msg).complete();
                     new MessageTimeOut(MainBot.messageTimeOut, sended, event.getMessage()).start();
                 }
