@@ -39,6 +39,11 @@ public class GeneralWebView {
         return "loading";
     }
 
+    @RequestMapping("/forgetPass")
+    public String forgetPass(Model model){
+        return CheckPage.getPageIfReady("forgetPass");
+    }
+
 
 
 
