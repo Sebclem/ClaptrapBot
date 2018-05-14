@@ -20,17 +20,20 @@ public class DailyMadame implements NewDayListener{
     @Override
     public void onNewDay() {
         Redirection redirect = new Redirection();
-        boolean success=false;
-        boolean error=false;
-        int errorCp=0;
+
         List<Guild> guilds = MainBot.jda.getGuilds();
 
         for(Guild guild : guilds){
             TextChannel chanel = null;
+            boolean success=false;
+            boolean error=false;
+            int errorCp=0;
+            logger.debug(guild.getName());
             for(TextChannel iterator : guild.getTextChannels())
             {
                 if(iterator.isNSFW()){
                     chanel = iterator;
+                    logger.debug("break: " + chanel.getName());
                     break;
                 }
             }
