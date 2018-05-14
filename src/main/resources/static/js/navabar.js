@@ -79,7 +79,9 @@ function disconnected() {
     console.log("Disconnected");
     nav_bar_account_link.html(disconnected_link);
     var modalConnection = $('#modal_connection');
-    modalConnection.modal();
+    modalConnection.modal({
+        dismissible: false // Modal can be dismissed by clicking outside of the modal
+    });
     if (typeof needLogin !== 'undefined'){
         modalConnection.modal('open');
     }

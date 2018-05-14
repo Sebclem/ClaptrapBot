@@ -22,7 +22,9 @@ public class Redirection {
      * @throws IOException
      */
     public String get(String urlString) throws IOException {
+        System.setProperty("http.agent","Googlebot");
         URLConnection con = new URL(urlString).openConnection();
+        con.setRequestProperty("User-Agent","Googlebot");
         //System.out.println( "orignal url: " + con.getURL() );
         con.connect();
         //System.out.println( "connected url: " + con.getURL() );

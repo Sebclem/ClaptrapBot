@@ -16,6 +16,7 @@ public  class FindContentOnWebPage {
      * @throws IOException
      */
     public static String doYourJob(String url, String divClass, String htmlType) throws IOException {
+//        System.out.println(url);
         String source = getSourceUrl(url);
         int divIndex = source.indexOf(divClass);
         String sub = source.substring(divIndex);
@@ -38,6 +39,7 @@ public  class FindContentOnWebPage {
     public static String getSourceUrl(String url) throws IOException {
         URL urlC = new URL(url);
         URLConnection yc = urlC.openConnection();
+        yc.setRequestProperty("User-Agent","Googlebot");
         BufferedReader in = new BufferedReader(new InputStreamReader(
                 yc.getInputStream(), "UTF-8"));
         String inputLine;
