@@ -32,10 +32,15 @@ import java.util.List;
 @RequestMapping("/api/music/")
 public class MusicWebAPIController {
     Logger logger = LogManager.getLogger();
-    @Autowired
+    private final
     UserRepository userRepository;
 
     UserUtils userUtils = UserUtils.getInstance();
+
+    @Autowired
+    public MusicWebAPIController(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
 
     @RequestMapping("/currentMusicInfo")
