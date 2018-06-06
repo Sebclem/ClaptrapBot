@@ -29,16 +29,22 @@ import java.util.List;
 @RequestMapping("/api/userManagement")
 public class UserManagerAPIController {
     Logger logger = LogManager.getLogger();
-    @Autowired
+    final
     PendingUserRepository pendingUserRepository;
 
-    @Autowired
+    final
     UserRepository userRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     UserUtils userUtils = UserUtils.getInstance();
+
+    @Autowired
+    public UserManagerAPIController(PendingUserRepository pendingUserRepository, UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.pendingUserRepository = pendingUserRepository;
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
 
     @RequestMapping(value = "/preRegister", method = RequestMethod.POST)
@@ -112,6 +118,8 @@ public class UserManagerAPIController {
         }
 
     }
+
+
 
 
 }
