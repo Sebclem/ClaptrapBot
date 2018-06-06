@@ -209,6 +209,23 @@ public class Preference implements Commande {
                 Message sended = event.getTextChannel().sendMessage(EmbedMessageUtils.buildStandar(eb)).complete();
                 new MessageTimeOut(MainBot.messageTimeOut, sended, event.getMessage()).start();
                 break;
+
+            case "daily_madame":
+                value = value.replaceAll(" ", "");
+                if(value.toLowerCase().equals("true") || value.toLowerCase().equals("false")){
+                    boolean result = Boolean.parseBoolean(value);
+                    pref.setDailyMadame(result);
+                    pref = guildPreferenceRepository.save(pref);
+                    EmbedBuilder ebd = new EmbedBuilder().addField(":ok: Ok :ok:","",false).addField("> Daily Madame", "Activate daily madame message\n```java\n" + String.valueOf(value) + "```", false).setColor(Color.green);
+                    Message sendedm = event.getTextChannel().sendMessage(EmbedMessageUtils.buildStandar(ebd)).complete();
+                    new MessageTimeOut(MainBot.messageTimeOut, sendedm, event.getMessage()).start();
+                }else{
+                    MessageEmbed msg = EmbedMessageUtils.buildStandar(EmbedMessageUtils.getError("\nWrong value, expect `true` or `false`\n\nMore info with `//help preference`"));
+                    Message sendedm = event.getTextChannel().sendMessage(msg).complete();
+                    new MessageTimeOut(MainBot.messageTimeOut, sendedm, event.getMessage()).start();
+                }
+                break;
+
             default:
                 MessageEmbed msg2 = EmbedMessageUtils.buildStandar(EmbedMessageUtils.getError("\nUnknown id.\n\nUse `//preference` to see list"));
                 Message sended2 = event.getTextChannel().sendMessage(msg2).complete();
