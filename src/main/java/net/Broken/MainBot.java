@@ -63,15 +63,13 @@ public class MainBot {
             logger.debug(aArg);
             if(aArg.startsWith("--") || aArg.startsWith("-")){
                 aArg = aArg.replaceAll("-","");
-                if(aArg.equals("token") || aArg.equals("t")){
-                    token = args[i+1];
-                }
-                else if(aArg.equals("dev") || aArg.equals("d")){
+                if(aArg.equals("dev") || aArg.equals("d")){
                     dev = true;
                 }
             }
             i++;
         }
+        token = System.getenv("TOKEN");
 
         jda = Init.initJda(token, dev);
         ConfigurableApplicationContext ctx = SpringApplication.run(MainBot.class, args);
