@@ -7,7 +7,9 @@ import net.Broken.Tools.MessageTimeOut;
 import net.Broken.Tools.PrivateMessage;
 import net.Broken.Tools.UserSpamUtils;
 import net.Broken.audio.Youtube.YoutubeTools;
+import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
+import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.entities.Member;
@@ -40,6 +42,7 @@ public class MainBot {
     public static HashMap<Member, UserSpamUtils> spamUtils = new HashMap<>();
     public static JDA jda;
     public static boolean ready = false;
+    public static boolean dev = false;
 
 
 
@@ -56,24 +59,24 @@ public class MainBot {
         logger.info("--------------Starting Bot-------------");
         logger.info("=======================================");
 
-        boolean dev = false;
+
         String token = null;
         int i = 0;
         for(String aArg: args){
             logger.debug(aArg);
             if(aArg.startsWith("--") || aArg.startsWith("-")){
                 aArg = aArg.replaceAll("-","");
-                if(aArg.equals("token") || aArg.equals("t")){
-                    token = args[i+1];
-                }
-                else if(aArg.equals("dev") || aArg.equals("d")){
+                if(aArg.equals("dev") || aArg.equals("d")){
                     dev = true;
                 }
             }
             i++;
         }
-
+        token = System.getenv("TOKEN");
         jda = Init.initJda(token, dev);
+
+
+
         ConfigurableApplicationContext ctx = SpringApplication.run(MainBot.class, args);
         if(jda == null) {
             System.exit(SpringApplication.exit(ctx, (ExitCodeGenerator) () -> {
@@ -84,6 +87,8 @@ public class MainBot {
 
         Init.polish(jda);
         ready = true;
+
+
 
 
 

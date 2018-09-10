@@ -12,7 +12,7 @@
 <!--                          LOGIN                           -->
 <!--__________________________________________________________-->
 <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
-<div th:fragment="header (page, guild_name)">
+<div th:fragment="header (page, guild_name, redirect_url)">
     <nav class="blue-grey darken-4 z-depth-3" role="navigation" >
     <div class="nav-wrapper container">
         <a id="logo-container" href="/" class="brand-logo">Claptrap Bot</a>
@@ -90,9 +90,20 @@
     <!--________________________________________-->
     <div id="modal_connection" class="modal">
         <div class="modal-content">
+
             <div class="row center">
                 <div class="col s12">
                     <h3 class="" style="font-weight: bold">Sign in</h3>
+                </div>
+            </div>
+            <div class="row center">
+                <a class="btn waves-effect waves-light" style="background-color: #7289DA" th:href="${redirect_url}">
+                    Sign in with discord <i class="fab fa-discord fa-lg" style="margin-left: 2px"></i>
+                </a>
+            </div>
+            <div class="row center">
+                <div class="col s12">
+                    <h3 style="font-weight: bold">Or</h3>
                 </div>
             </div>
             <div class="row center" style="margin-bottom: 0px">

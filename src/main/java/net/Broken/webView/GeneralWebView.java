@@ -31,12 +31,24 @@ public class GeneralWebView {
             model.addAttribute("guild_name", guild.getName());
         else
             model.addAttribute("guild_name", "");
+        model.addAttribute("redirect_url", System.getenv("OAUTH_URL"));
+
 
         return CheckPage.getPageIfReady("index");
     }
     @RequestMapping("/loading")
     public String loading(Model model){
         return "loading";
+    }
+
+    @RequestMapping("/forgetPass")
+    public String forgetPass(Model model){
+        return CheckPage.getPageIfReady("forgetPass");
+    }
+
+    @RequestMapping("/oauthCallback")
+    public String oauthCallback(Model model){
+        return "oauthCallback";
     }
 
 

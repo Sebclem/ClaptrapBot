@@ -7,6 +7,7 @@ import net.Broken.DB.Repository.UserRepository;
 import net.Broken.MainBot;
 import net.Broken.RestApi.Data.UserManager.*;
 import net.Broken.Tools.UserManager.Exceptions.*;
+import net.Broken.Tools.UserManager.Oauth;
 import net.Broken.Tools.UserManager.UserUtils;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.User;
@@ -29,16 +30,22 @@ import java.util.List;
 @RequestMapping("/api/userManagement")
 public class UserManagerAPIController {
     Logger logger = LogManager.getLogger();
-    @Autowired
+    final
     PendingUserRepository pendingUserRepository;
 
-    @Autowired
+    final
     UserRepository userRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
     UserUtils userUtils = UserUtils.getInstance();
+
+    @Autowired
+    public UserManagerAPIController(PendingUserRepository pendingUserRepository, UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.pendingUserRepository = pendingUserRepository;
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
 
     @RequestMapping(value = "/preRegister", method = RequestMethod.POST)
@@ -112,6 +119,22 @@ public class UserManagerAPIController {
         }
 
     }
+
+
+
+
+    @RequestMapping(value = "/oauthLogin", method = RequestMethod.POST)
+    public ResponseEntity<UserConnectionData> oauthLogin(@RequestParam(value = "token") String discordToken){
+        logger.debug(discordToken);
+        UserEntity user = Oauth.getInstance().getUserEntity(discordToken, userRepository);
+        logger.debug(user.getName());
+        return new ResponseEntity<>(new UserConnectionData(true, user.getName(), user.getApiToken(), ""), HttpStatus.OK);
+
+
+
+    }
+
+
 
 
 }

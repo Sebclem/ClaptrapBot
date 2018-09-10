@@ -13,6 +13,7 @@ import java.net.URL;
 /**
  * Abstact class used for all command that need to find the max number of page on a web site.
  */
+@Ignore
 public abstract class NumberedCommande implements Commande{
     private Logger logger = LogManager.getLogger();
     private int minNumber = 1;
@@ -35,9 +36,9 @@ public abstract class NumberedCommande implements Commande{
         this.divClass = divClass;
         this.htmlType = htmlType;
         try {
-            logger.info("Checking max...");
+            logger.debug("Checking max...");
             maxNumber = LimitChecker.doYourJob(baseURL, minNumber);
-            logger.info("New limit is "+maxNumber);
+            logger.info("Limit is "+maxNumber);
         } catch (IOException e) {
             logger.catching(e);
         }

@@ -54,6 +54,7 @@ public class Init {
                 MainBot.jda = jda;
                 jda.setAutoReconnect(true);
 
+
                 /*************************************
                  *      Definition des commande      *
                  *************************************/
@@ -91,13 +92,6 @@ public class Init {
 
 
 
-
-                DayListener dayListener = DayListener.getInstance();
-                dayListener.addListener(new ResetSpam());
-                dayListener.addListener(new DailyMadame());
-                dayListener.start();
-
-
                 logger.debug("-----------------FIN INITIALISATION-----------------");
 
 
@@ -115,6 +109,10 @@ public class Init {
     static void polish(JDA jda){
         CommandLoader.load();
         ApiCommandLoader.load();
+        DayListener dayListener = DayListener.getInstance();
+        dayListener.addListener(new ResetSpam());
+        dayListener.addListener(new DailyMadame());
+        dayListener.start();
         jda.addEventListener(new BotListener());
         jda.getPresence().setPresence(OnlineStatus.ONLINE, Game.playing("bot.seb6596.ovh"));
 

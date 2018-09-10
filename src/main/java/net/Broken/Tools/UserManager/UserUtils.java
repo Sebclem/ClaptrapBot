@@ -201,7 +201,7 @@ public class UserUtils {
      * Generate short check token
      * @return check token as string
      */
-    private String generateCheckToken(){
+    public String generateCheckToken(){
         SecureRandom random = new SecureRandom();
         long longToken = Math.abs( random.nextLong() );
         String randomStr = Long.toString( longToken, 16 );

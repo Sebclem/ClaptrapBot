@@ -19,6 +19,8 @@ public class MusicWebView {
             model.addAttribute("guild_name", guild.getName());
         else
             model.addAttribute("guild_name", "");
+        model.addAttribute("redirect_url", System.getenv("OAUTH_URL"));
+
 
         return CheckPage.getPageIfReady("music");
     }

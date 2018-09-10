@@ -1,11 +1,13 @@
 package net.Broken.Commands.Over18;
 
+import net.Broken.Tools.Command.NoDev;
 import net.Broken.Tools.Command.NumberedCommande;
 import org.apache.logging.log4j.LogManager;
 
 /**
  * Boobs command, return random picture from lesaintdesseins.fr
  */
+@NoDev()
 public class Boobs extends NumberedCommande {
 
     public Boobs() {

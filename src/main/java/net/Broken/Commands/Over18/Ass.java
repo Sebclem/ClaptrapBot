@@ -1,11 +1,14 @@
 package net.Broken.Commands.Over18;
 
+import net.Broken.Tools.Command.NoDev;
 import net.Broken.Tools.Command.NumberedCommande;
 import org.apache.logging.log4j.LogManager;
 
 /**
  * Ass command, return random picture from les400culs.com
  */
+
+@NoDev()
 public class Ass  extends NumberedCommande {
 
     public Ass() {

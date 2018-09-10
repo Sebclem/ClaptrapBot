@@ -27,8 +27,11 @@ public class GuildPreferenceEntity {
 
     private String defaultRoleId;
 
+    private boolean dailyMadame;
 
-    public GuildPreferenceEntity(String guildId, boolean antiSpam, boolean welcome, String welcomeMessage, String welcomeChanelID, boolean defaultRole, String defaultRoleId) {
+
+
+    public GuildPreferenceEntity(String guildId, boolean antiSpam, boolean welcome, String welcomeMessage, String welcomeChanelID, boolean defaultRole, String defaultRoleId, boolean dailyMadame) {
         this.guildId = guildId;
         this.antiSpam = antiSpam;
         this.welcome = welcome;
@@ -36,13 +39,14 @@ public class GuildPreferenceEntity {
         this.welcomeChanelID = welcomeChanelID;
         this.defaultRole = defaultRole;
         this.defaultRoleId = defaultRoleId;
+        this.dailyMadame = dailyMadame;
     }
 
     public GuildPreferenceEntity(){}
 
 
     public static GuildPreferenceEntity getDefault(Guild guild){
-        return new GuildPreferenceEntity(guild.getId(), false, false, "Welcome to this awesome server @name! ", " ", false, " ");
+        return new GuildPreferenceEntity(guild.getId(), false, false, "Welcome to this awesome server @name! ", " ", false, " ", true);
     }
 
     public Integer getId() {
@@ -107,5 +111,13 @@ public class GuildPreferenceEntity {
 
     public void setDefaultRole(boolean defaultRole) {
         this.defaultRole = defaultRole;
+    }
+
+    public boolean isDailyMadame() {
+        return dailyMadame;
+    }
+
+    public void setDailyMadame(boolean dailyMadame) {
+        this.dailyMadame = dailyMadame;
     }
 }

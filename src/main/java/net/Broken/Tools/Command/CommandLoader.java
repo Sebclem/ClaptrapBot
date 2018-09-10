@@ -20,7 +20,7 @@ public class CommandLoader {
     /**
      * Search all implemented Command interface class and add it to MainBot.commands HashMap
      */
-    public static void load(){
+    public static void load() {
         logger.info("Loading Command...");
         Reflections reflections = new Reflections(new ConfigurationBuilder().setUrls(ClasspathHelper.forPackage(
                 "net.Broken.Commands",
@@ -34,13 +34,23 @@ public class CommandLoader {
 
             String reference = command.getName();
             String[] splited = reference.split("\\.");
-            String name = splited[splited.length-1].toLowerCase();
+            String name = splited[splited.length - 1].toLowerCase();
+            if (!command.isAnnotationPresent(Ignore.class)) {
+                logger.info("..." + name);
 
-            logger.info("..." + name);
-            try {
-                MainBot.commandes.put(name, command.newInstance());
-            } catch (InstantiationException | IllegalAccessException e) {
-                logger.error("Failed to load " + name + "!");
+                if (command.isAnnotationPresent(NoDev.class) && MainBot.dev) {
+                    logger.warn("Command disable in dev mode");
+                }else{
+                    try {
+                        MainBot.commandes.put(name, command.newInstance());
+                    } catch (InstantiationException | IllegalAccessException e) {
+                        logger.error("Failed to load " + name + "!");
+                    }
+                    
+                }
+
+            } else {
+                logger.trace("Ignored command: " + name);
             }
 
         }

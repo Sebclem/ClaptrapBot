@@ -50,7 +50,7 @@ pipeline {
                     sh 'docker login -u $USERNAME -p $PASSWORD'
                     script {
                         if (env.BRANCH_NAME == 'master') {
-                            app.push()
+                            app.push("master")
                         } else {
                             app.push("devel")
                         }
