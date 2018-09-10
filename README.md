@@ -15,7 +15,7 @@ Docker:<br/>
 > 
 > services:
 >   botdiscord:
->     image: brokenfire/brokendiscordbot:latest
+>     image: brokenfire/brokendiscordbot:master
 >     networks:
 >       - proxy
 >       - internal
