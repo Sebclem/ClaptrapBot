@@ -38,14 +38,15 @@ public class CommandLoader {
             if (!command.isAnnotationPresent(Ignore.class)) {
                 logger.info("..." + name);
 
-                if (!command.isAnnotationPresent(NoDev.class) && MainBot.dev) {
+                if (command.isAnnotationPresent(NoDev.class) && MainBot.dev) {
+                    logger.warn("Command disable in dev mode");
+                }else{
                     try {
                         MainBot.commandes.put(name, command.newInstance());
                     } catch (InstantiationException | IllegalAccessException e) {
                         logger.error("Failed to load " + name + "!");
                     }
-                }else{
-                    logger.warn("Command disable in dev mode");
+                    
                 }
 
             } else {
