@@ -34,13 +34,13 @@ public class LimitChecker {
             huc.setRequestMethod ("GET");
             huc.connect ();
             result = huc.getResponseCode();
-            logger.debug("URL: "+u.toString()+" Result: "+result);
+            logger.trace("URL: "+u.toString()+" Result: "+result);
             if(result!=404)
                 number += 500;
         }
         number-=400;
         result = -1;
-        logger.debug("First pass: "+number);
+        logger.trace("First pass: "+number);
         while(result != 404 )
         {
             u = new URL( baseURL+number+"-2/");
@@ -48,13 +48,13 @@ public class LimitChecker {
             huc.setRequestMethod ("GET");
             huc.connect ();
             result = huc.getResponseCode();
-            logger.debug("URL: "+u.toString()+" Result: "+result);
+            logger.trace("URL: "+u.toString()+" Result: "+result);
             if(result!=404)
                 number += 100;
         }
         number-=90;
         result = -1;
-        logger.debug("Second pass: "+number);
+        logger.trace("Second pass: "+number);
         while(result != 404 )
         {
             u = new URL( baseURL+number+"-2/");
@@ -62,13 +62,13 @@ public class LimitChecker {
             huc.setRequestMethod ("GET");
             huc.connect ();
             result = huc.getResponseCode();
-            logger.debug("URL: "+u.toString()+" Result: "+result);
+            logger.trace("URL: "+u.toString()+" Result: "+result);
             if(result!=404)
                 number += 10;
         }
         number-=9;
         result = -1;
-        logger.debug("Third pass: "+number);
+        logger.trace("Third pass: "+number);
         while(result != 404 )
         {
             u = new URL( baseURL+number+"-2/");
@@ -76,12 +76,12 @@ public class LimitChecker {
             huc.setRequestMethod ("GET");
             huc.connect ();
             result = huc.getResponseCode();
-            logger.debug("URL: "+u.toString()+" Result: "+result);
+            logger.trace("URL: "+u.toString()+" Result: "+result);
             if(result!=404)
                 number += 1;
         }
         number-=1;
-        logger.debug("Final pass: "+number);
+        logger.trace("Final pass: "+number);
         return number;
 
 
