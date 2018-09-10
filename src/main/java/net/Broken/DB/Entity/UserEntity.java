@@ -1,6 +1,8 @@
 package net.Broken.DB.Entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import net.Broken.Tools.UserManager.UserUtils;
+import net.dv8tion.jda.core.entities.User;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -36,6 +38,12 @@ public class UserEntity {
         this.jdaId = pendingUserEntity.getJdaId();
         this.password = pendingUserEntity.getPassword();
         this.apiToken = apiToken;
+    }
+
+    public UserEntity(User user){
+        this.name = user.getName();
+        this.jdaId = user.getId();
+        this.apiToken = UserUtils.getInstance().generateApiToken();
     }
 
     public String getPassword() {

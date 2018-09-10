@@ -54,6 +54,7 @@ public class Init {
                 MainBot.jda = jda;
                 jda.setAutoReconnect(true);
 
+
                 /*************************************
                  *      Definition des commande      *
                  *************************************/
