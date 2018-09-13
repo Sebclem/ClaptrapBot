@@ -1,0 +1,20 @@
+{
+  "short_name": "Claptrap",
+  "name": "Claptrap Bot",
+  "icons": [
+    {
+      "src": "/img/icon_192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/img/icon_512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#263238",
+  "background_color": "#263238"
+}
