@@ -165,7 +165,7 @@ function getCurentMusic() {
     })
     .fail(function (data) {
         if(!error){
-            alert("Connection lost, I keep trying to refresh!");
+            console.error("Connection lost, I keep trying to refresh!");
             error = true;
         }
 
@@ -250,6 +250,7 @@ function getChannels(){
 
             $('#channelForm').append(template);
         });
+        $('#btn_ok_channel').addClass("disabled");
         $('#modalChanels').modal('open');
 
     }).fail(function (data) {
@@ -312,7 +313,7 @@ function updateControl(data){
 
 function sendCommand(command){
     modal_loading.modal('open');
-    console.log(command)
+    console.log(command);
     $.ajax({
         type: "POST",
         dataType: 'json',
@@ -371,6 +372,8 @@ function msToTime(duration) {
 }
 
 function listeners() {
+
+
     $('#btn_play').click(function () {
         switch (state){
             case "PLAYING":
