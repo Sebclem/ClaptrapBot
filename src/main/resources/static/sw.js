@@ -4,7 +4,11 @@ var urlsToCache = [
     '/',
     '/music',
     '/register',
-    '/oauthCallback'
+    '/oauthCallback',
+    '/css/materialize.css',
+    '/js/navabar.js',
+    '/manifest.json'
+
 ];
 
 
