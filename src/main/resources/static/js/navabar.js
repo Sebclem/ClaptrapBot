@@ -22,6 +22,13 @@ $(document).ready(function() {
         dismissible: false // Modal can be dismissed by clicking outside of the modal
     });
 
+    $('#modal_internet').modal({
+        dismissible: false // Modal can be dismissed by clicking outside of the modal
+    });
+
+
+
+
 
     nav_bar_account_link = $("#nav-bar-account");
     input_name = $("#user_input");
@@ -36,6 +43,8 @@ $(document).ready(function() {
     else{
         connected();
     }
+
+    checkConnection();
 
 
 });
@@ -197,6 +206,22 @@ function getGuild(){
             alert("Com error, please refresh.");
             error = true;
         }
+
+    });
+}
+
+
+function checkConnection() {
+    $.ajax({
+        type: "GET",
+        url: "/api/isReady",
+        success: function (data) {
+            console.log("Connection Ok");
+        }
+
+    }).fail(function (data) {
+        console.error("Connection fail!");
+        $('#modal_internet').modal('open');
 
     });
 }

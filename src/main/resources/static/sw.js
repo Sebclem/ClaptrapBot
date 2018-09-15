@@ -1,5 +1,4 @@
-
-var CACHE_NAME = 'Clap-Trap-Bot-V1';
+var CACHE_NAME = 'Clap-Trap-Bot-V0.1';
 var urlsToCache = [
     '/',
     '/music',
@@ -12,23 +11,22 @@ var urlsToCache = [
 ];
 
 
-
-
-self.addEventListener('install', function(event) {
+self.addEventListener('install', function (event) {
     // Perform install steps
     event.waitUntil(
         caches.open(CACHE_NAME)
-            .then(function(cache) {
+            .then(function (cache) {
                 console.log('Opened cache');
                 return cache.addAll(urlsToCache);
             })
     );
 });
 
-self.addEventListener('fetch', function(event) {
+self.addEventListener('fetch', function (event) {
+    console.log("fetch");
     event.respondWith(
         caches.match(event.request)
-            .then(function(response) {
+            .then(function (response) {
                     // Cache hit - return response
                     if (response) {
                         return response;
@@ -37,4 +35,46 @@ self.addEventListener('fetch', function(event) {
                 }
             )
     );
+
+    event.waitUntil(
+        update(event.request)
+            .then(refresh)
+    );
+
+    function update(request) {
+        console.log(request);
+        console.log(caches.match(request));
+        return caches.match(request).then(
+            function (response) {
+                if (response) {
+                    return caches.open(CACHE_NAME).then(function (cache) {
+                        return fetch(request).then(function (response) {
+                            return cache.put(request, response.clone()).then(function () {
+                                return response;
+                            });
+                        });
+                    });
+                }
+            }
+        );
+    }
+
+    function refresh(response) {
+        if(response){
+            console.log("refresh");
+            return self.clients.matchAll().then(function (clients) {
+                clients.forEach(function (client) {
+                    var message = {
+                        type: 'refresh',
+                        url: response.url,
+                        eTag: response.headers.get('eTag')
+                    };
+                    client.postMessage(JSON.stringify(message));
+                });
+            });
+        }
+
+    }
+
+
 });
