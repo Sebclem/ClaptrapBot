@@ -13,7 +13,7 @@ var nav_name;
 $(document).ready(function() {
     $('#nav-mobile').sidenav({
         menuWidth: 400, // Default is 300
-        edge: 'right', // Choose the horizontal origin
+        edge: 'left', // Choose the horizontal origin
         closeOnClick: false, // Closes side-nav on <a> clicks, useful for Angular/Meteor
         draggable: true // Choose whether you can drag to open on touch screens,
     });
@@ -21,6 +21,13 @@ $(document).ready(function() {
     $('#modal_guild').modal({
         dismissible: false // Modal can be dismissed by clicking outside of the modal
     });
+
+    $('#modal_internet').modal({
+        dismissible: false // Modal can be dismissed by clicking outside of the modal
+    });
+
+
+
 
 
     nav_bar_account_link = $("#nav-bar-account");
@@ -36,6 +43,8 @@ $(document).ready(function() {
     else{
         connected();
     }
+
+    checkConnection();
 
 
 });
@@ -197,6 +206,22 @@ function getGuild(){
             alert("Com error, please refresh.");
             error = true;
         }
+
+    });
+}
+
+
+function checkConnection() {
+    $.ajax({
+        type: "GET",
+        url: "/api/isReady",
+        success: function (data) {
+            console.log("Connection Ok");
+        }
+
+    }).fail(function (data) {
+        console.error("Connection fail!");
+        $('#modal_internet').modal('open');
 
     });
 }

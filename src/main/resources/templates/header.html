@@ -109,7 +109,7 @@
             <div class="row center" style="margin-bottom: 0px">
                 <form name="login_form" id="login_form" action="javascript:void(0);" onsubmit="tryConnection()">
                     <div class="row" style="margin-bottom: 0px">
-                        <div class="input-field col s6 offset-s3">
+                        <div class="input-field col l6 offset-l3 m10 offset-m1 s10 offset-s1">
                             <i class="material-icons prefix">account_box</i>
                             <input name="username" id="user_input" type="text" class="validate"/>
                             <label for="user_input" >User Name</label>
@@ -117,7 +117,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="input-field col s6 offset-s3">
+                        <div class="input-field col l6 offset-l3 m10 offset-m1 s10 offset-s1">
                             <i class="material-icons prefix">security</i>
                             <input name="password" id="password_input" type="password" class="validate"/>
                             <label for="password_input">Password</label>
@@ -161,6 +161,24 @@
             <a href="#" id="btn_ok_guild" class="modal-action modal-close waves-effect waves-green btn-flat disabled">Ok</a>
         </div>
     </div>
+
+
+
+    <div id="modal_internet" class="modal">
+        <div class="modal-content" style="padding-bottom: 0px">
+            <div class="row" style="margin-bottom: 0px">
+                <h3 class="col l12 m 12 s12 center red-text">Can't connect to server!</h3>
+                <div class="col l6 offset-l3 offset-m1 m10 offset-s1 s10 center">
+                    <p> Please check your connection and reload the app!</p>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+        </div>
+    </div>
+
+
+
 
     <p id="radioTemplateGuild" class="" style="visibility: hidden; display: none ">
         <label>

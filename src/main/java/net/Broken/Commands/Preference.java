@@ -57,14 +57,13 @@ public class Preference implements Commande {
 
                         MessageEmbed msg = EmbedMessageUtils.buildStandar(EmbedMessageUtils.getError("Missing argument.\n:arrow_right: Please use `//help preference`"));
                         Message sended = event.getTextChannel().sendMessage(msg).complete();
-                        new MessageTimeOut(MainBot.messageTimeOut, sended, event.getMessage()).start();
                     }
                     break;
 
                 default:
                     MessageEmbed msg = EmbedMessageUtils.buildStandar(EmbedMessageUtils.getError("\nUnknown argument`\n\nMore info with `//help preference`"));
                     Message sended = event.getTextChannel().sendMessage(msg).complete();
-                    new MessageTimeOut(MainBot.messageTimeOut, sended, event.getMessage()).start();
+
                     break;
 
             }
@@ -115,11 +114,9 @@ public class Preference implements Commande {
                     pref = guildPreferenceRepository.save(pref);
                     EmbedBuilder eb = new EmbedBuilder().addField(":ok: Ok :ok:","",false).addField("> Anti Spam", "```java\n" + String.valueOf(pref.isAntiSpam()) + "```", false).setColor(Color.green);
                     Message sended = event.getTextChannel().sendMessage(EmbedMessageUtils.buildStandar(eb)).complete();
-                    new MessageTimeOut(MainBot.messageTimeOut, sended, event.getMessage()).start();
                 }else{
                     MessageEmbed msg = EmbedMessageUtils.buildStandar(EmbedMessageUtils.getError("\nWrong value, expect `true` or `false`\n\nMore info with `//help preference`"));
                     Message sended = event.getTextChannel().sendMessage(msg).complete();
-                    new MessageTimeOut(MainBot.messageTimeOut, sended, event.getMessage()).start();
                 }
 
                 break;
@@ -133,11 +130,9 @@ public class Preference implements Commande {
                     pref = guildPreferenceRepository.save(pref);
                     EmbedBuilder eb = new EmbedBuilder().addField(":ok: Ok :ok:","",false).addField("> Default Role", "```java\n" + String.valueOf(pref.isDefaultRole()) + "```", false).setColor(Color.green);
                     Message sended = event.getTextChannel().sendMessage(EmbedMessageUtils.buildStandar(eb)).complete();
-                    new MessageTimeOut(MainBot.messageTimeOut, sended, event.getMessage()).start();
                 }else{
                     MessageEmbed msg = EmbedMessageUtils.buildStandar(EmbedMessageUtils.getError("\nWrong value, expect `true` or `false`\n\nMore info with `//help preference`"));
                     Message sended = event.getTextChannel().sendMessage(msg).complete();
-                    new MessageTimeOut(MainBot.messageTimeOut, sended, event.getMessage()).start();
                 }
                 break;
             case "default_role_id":
@@ -150,7 +145,6 @@ public class Preference implements Commande {
                         pref = guildPreferenceRepository.save(pref);
                         EmbedBuilder eb = new EmbedBuilder().addField(":ok: Ok :ok:","",false).addField("> Default Role ID", "```java\n" + pref.getDefaultRoleId()+ "```", false).setColor(Color.green);
                         Message sended = event.getTextChannel().sendMessage(EmbedMessageUtils.buildStandar(eb)).complete();
-                        new MessageTimeOut(MainBot.messageTimeOut, sended, event.getMessage()).start();
 
                     }
                     else
@@ -160,7 +154,6 @@ public class Preference implements Commande {
                 }catch (NumberFormatException e){
                     MessageEmbed msg = EmbedMessageUtils.buildStandar(EmbedMessageUtils.getError("\nRole not found!\n\nUse `//listroles` to get roles id"));
                     Message sended = event.getTextChannel().sendMessage(msg).complete();
-                    new MessageTimeOut(MainBot.messageTimeOut, sended, event.getMessage()).start();
                 }
 
                 break;
@@ -172,11 +165,9 @@ public class Preference implements Commande {
                     pref = guildPreferenceRepository.save(pref);
                     EmbedBuilder eb = new EmbedBuilder().addField(":ok: Ok :ok:","",false).addField("> Welcome", "```java\n" + String.valueOf(pref.isWelcome()) + "```", false).setColor(Color.green);
                     Message sended = event.getTextChannel().sendMessage(EmbedMessageUtils.buildStandar(eb)).complete();
-                    new MessageTimeOut(MainBot.messageTimeOut, sended, event.getMessage()).start();
                 }else{
                     MessageEmbed msg = EmbedMessageUtils.buildStandar(EmbedMessageUtils.getError("\nWrong value, expect `true` or `false`\n\nMore info with `//help preference`"));
                     Message sended = event.getTextChannel().sendMessage(msg).complete();
-                    new MessageTimeOut(MainBot.messageTimeOut, sended, event.getMessage()).start();
                 }
                 break;
             case  "welcome_chanel_id":
@@ -189,7 +180,6 @@ public class Preference implements Commande {
                         pref = guildPreferenceRepository.save(pref);
                         EmbedBuilder eb = new EmbedBuilder().addField(":ok: Ok :ok:","",false).addField("> Welcome chanel ID", "```java\n" + pref.getWelcomeChanelID() + "```", false).setColor(Color.green);
                         Message sended = event.getTextChannel().sendMessage(EmbedMessageUtils.buildStandar(eb)).complete();
-                        new MessageTimeOut(MainBot.messageTimeOut, sended, event.getMessage()).start();
 
                     }
                     else
@@ -199,7 +189,6 @@ public class Preference implements Commande {
                 }catch (NumberFormatException e){
                     MessageEmbed msg = EmbedMessageUtils.buildStandar(EmbedMessageUtils.getError("\nText channel not found!\n\nUse `//listroles` to get roles id"));
                     Message sended = event.getTextChannel().sendMessage(msg).complete();
-                    new MessageTimeOut(MainBot.messageTimeOut, sended, event.getMessage()).start();
                 }
                 break;
             case "welcome_message":
@@ -207,7 +196,6 @@ public class Preference implements Commande {
                 pref = guildPreferenceRepository.save(pref);
                 EmbedBuilder eb = new EmbedBuilder().addField(":ok: Ok :ok:","",false).addField("> Welcome message", "```java\n" + pref.getWelcomeMessage() + "```", false).setColor(Color.green);
                 Message sended = event.getTextChannel().sendMessage(EmbedMessageUtils.buildStandar(eb)).complete();
-                new MessageTimeOut(MainBot.messageTimeOut, sended, event.getMessage()).start();
                 break;
 
             case "daily_madame":
@@ -218,18 +206,15 @@ public class Preference implements Commande {
                     pref = guildPreferenceRepository.save(pref);
                     EmbedBuilder ebd = new EmbedBuilder().addField(":ok: Ok :ok:","",false).addField("> Daily Madame", "Activate daily madame message\n```java\n" + String.valueOf(value) + "```", false).setColor(Color.green);
                     Message sendedm = event.getTextChannel().sendMessage(EmbedMessageUtils.buildStandar(ebd)).complete();
-                    new MessageTimeOut(MainBot.messageTimeOut, sendedm, event.getMessage()).start();
                 }else{
                     MessageEmbed msg = EmbedMessageUtils.buildStandar(EmbedMessageUtils.getError("\nWrong value, expect `true` or `false`\n\nMore info with `//help preference`"));
                     Message sendedm = event.getTextChannel().sendMessage(msg).complete();
-                    new MessageTimeOut(MainBot.messageTimeOut, sendedm, event.getMessage()).start();
                 }
                 break;
 
             default:
                 MessageEmbed msg2 = EmbedMessageUtils.buildStandar(EmbedMessageUtils.getError("\nUnknown id.\n\nUse `//preference` to see list"));
                 Message sended2 = event.getTextChannel().sendMessage(msg2).complete();
-                new MessageTimeOut(MainBot.messageTimeOut, sended2, event.getMessage()).start();
                 break;
         }
 

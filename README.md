@@ -25,6 +25,8 @@ Docker:<br/>
 >       - DB_URL=jdbc:mysql://database/botdiscord 
 >       - DB_USER=root 
 >       - DB_PWD=ogahxu1eigohN2Eok0xoawae #CHANGE ME!
+>       - OAUTH_URL= #discord generated, change "response_type=code" to "response_type=token"
+>       - LOG_LEVEL=info
 >     labels:
 >       - "traefik.frontend.rule=Host:exemple.com" #CHANGE ME!
 >       - "traefik.docker.network=proxy"
