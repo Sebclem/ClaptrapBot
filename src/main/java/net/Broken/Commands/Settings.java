@@ -22,13 +22,13 @@ import java.awt.*;
 import java.io.IOException;
 import java.util.List;
 
-public class Preference implements Commande {
+public class Settings implements Commande {
 
     private Logger logger = LogManager.getLogger();
 
     private GuildPreferenceRepository guildPreferenceRepository;
 
-    public Preference() {
+    public Settings() {
 
         ApplicationContext context = SpringContext.getAppContext();
         guildPreferenceRepository = (GuildPreferenceRepository) context.getBean("guildPreferenceRepository");

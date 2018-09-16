@@ -118,7 +118,7 @@ public class EmbedMessageUtils {
                 .addField("> Welcome", "Activate welcome message\n```java\n" + String.valueOf(guildPref.isWelcome()) + "```Edit: :unlock:\nKey: welcome", false)
                 .addField("> Welcome chanel ID", "Chane id for welcome message\n```" + guildPref.getWelcomeChanelID() + "```Edit: :unlock:\nKey: welcome_chanel_id", false)
                 .addField("> Welcome message", "Welcome message (@name for mention)\n```markdown\n" + guildPref.getWelcomeMessage() + "```Edit: :unlock:\nKey: welcome_message", false)
-                .addField("> Daily Madame", "Activate daily madame message\n```java\n" + String.valueOf(guildPref.isWelcome()) + "```Edit: :unlock:\nKey: daily_madame", false);
+                .addField("> Daily Madame", "Activate daily madame message\n```java\n" + String.valueOf(guildPref.isDailyMadame()) + "```Edit: :unlock:\nKey: daily_madame", false);
 
         return buildStandar(messageB);
     }
