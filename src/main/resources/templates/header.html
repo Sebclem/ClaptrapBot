@@ -40,6 +40,15 @@
     </nav>
 
     <ul id="nav-mobile" class="sidenav">
+        <li class="center">
+            <a class="brand-logo" href="/" style="font-weight: bold"><h3 class="blue-grey-text text-darken-4" style="font-weight: bold">Claptrap Bot</h3></a>
+        </li>
+        <li><div class="divider"></div></li>
+        <li class="center ">
+            <a class="nav-change-guild truncate waves-effect waves-light btn grey lighten-2 black-text " th:text="${guild_name}" style=""></a>
+        </li>
+        <li><div class="divider"></div></li>
+
         <li class="center" th:classappend="(${page} == 'home')? 'active' : ''">
             <a class="waves-effect waves-light sidenav-trigger" href="/" data-target="slide-out">Home</a>
         </li>
