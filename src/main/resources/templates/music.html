@@ -88,7 +88,7 @@
                                 <a class="waves-effect waves-light btn modal-trigger green darken-4" id="add_btn" href="#modalAdd"><i class="material-icons">add_circle_outline</i></a>
 
                                 <!-- Modal Structure -->
-                                <div id="modalAdd" class="modal disabled">
+                                <div id="modalAdd" class="modal modal ">
                                     <div class="modal-content" style="padding-bottom: 0px">
                                         <div class="row" style="margin-bottom: 0px">
                                             <h3 class="col l12 m12 s12"> Add Music</h3>
@@ -105,18 +105,40 @@
                                                         Playlist Limit
                                                     </div>
                                                 </div>
+
                                                 <div class="row" style="margin-bottom: 0px">
                                                     <p class="range-field">
                                                         <input type="range" id="limit_range" min="1" max="300" step="1" value="30" />
                                                     </p>
+                                                </div>
+                                                <div class="row" style="margin-bottom: 0px">
+                                                    <div class="col l12 m12 s12 center">
+                                                        Add on
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col l4 offset-l4 m4 offset-m4 s4 offset-s4 left-align ">
+                                                        <p>
+                                                            <label>
+                                                                <input name="group1" type="radio" checked="checked" id="bottom"/>
+                                                                <span>Bottom</span>
+                                                            </label>
+                                                        </p>
+                                                        <p>
+                                                            <label>
+                                                                <input name="group1" type="radio" />
+                                                                <span>Top</span>
+                                                            </label>
+                                                        </p>
+                                                    </div>
                                                 </div>
                                             </form>
                                         </div>
                                     </div>
                                     <div class="modal-footer">
                                         <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
-                                        <a href="#!" id="btn_add_top" class="modal-action modal-close waves-effect waves-green btn-flat disabled">Add On Top</a>
-                                        <a href="#!" id="btn_add_bottom" class="modal-action modal-close waves-effect waves-green btn-flat disabled">Add On Bottom</a>
+
+                                        <a href="#!" id="btn_add" class="modal-action modal-close waves-effect waves-green btn-flat disabled">Add</a>
                                     </div>
                                 </div>
                             </div>
