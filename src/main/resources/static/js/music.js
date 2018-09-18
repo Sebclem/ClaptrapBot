@@ -27,6 +27,7 @@ $(document).ready(function() {
         btn_add = $('#add_btn');
         switchAutoFlow = $("#autoflow");
 
+        $('.tooltipped').tooltip();
         setInterval("getCurentMusic()", 1000);
         $('#modalAdd').modal();
 
@@ -398,12 +399,10 @@ function listeners() {
 
     $('#input_link').on("input", function () {
         if($('#input_link').val() == ""){
-            disableBtn($('#btn_add_bottom'));
-            disableBtn($('#btn_add_top'));
+            disableBtn($('#btn_add'));
         }
         else{
-            enableBtn($('#btn_add_bottom'));
-            enableBtn($('#btn_add_top'));
+            enableBtn($('#btn_add'));
         }
     });
 
@@ -420,24 +419,13 @@ function listeners() {
         sendCommand(command);
     });
 
-    $('#btn_add_top').click(function () {
+    $('#btn_add').click(function () {
+        console.log(!$('#bottom').is(':checked'));
         var command = {
             command: "ADD",
             url: $('#input_link').val(),
             playlistLimit: $('#limit_range').val(),
-            onHead: true
-        };
-        $('#input_link').val('');
-        sendCommand(command);
-    });
-
-    $('#btn_add_bottom').click(function () {
-
-        var command = {
-            command: "ADD",
-            url: $('#input_link').val(),
-            playlistLimit: $('#limit_range').val(),
-            onHead: false
+            onHead: !$('#bottom').is(':checked')
         };
         $('#input_link').val('');
         sendCommand(command);
