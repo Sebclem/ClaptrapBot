@@ -42,8 +42,6 @@ self.addEventListener('fetch', function (event) {
     );
 
     function update(request) {
-        console.log(request);
-        console.log(caches.match(request));
         return caches.match(request).then(
             function (response) {
                 if (response) {
@@ -61,7 +59,6 @@ self.addEventListener('fetch', function (event) {
 
     function refresh(response) {
         if(response){
-            console.log("refresh");
             return self.clients.matchAll().then(function (clients) {
                 clients.forEach(function (client) {
                     var message = {
