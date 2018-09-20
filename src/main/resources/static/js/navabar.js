@@ -11,6 +11,7 @@ var nav_name;
 
 
 $(document).ready(function() {
+    $('.tooltipped').tooltip();
     $('#nav-mobile').sidenav({
         menuWidth: 400, // Default is 300
         edge: 'left', // Choose the horizontal origin
