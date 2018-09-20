@@ -27,7 +27,6 @@ $(document).ready(function() {
         btn_add = $('#add_btn');
         switchAutoFlow = $("#autoflow");
 
-        $('.tooltipped').tooltip();
         setInterval("getCurentMusic()", 1000);
         $('#modalAdd').modal();
 

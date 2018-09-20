@@ -11,6 +11,7 @@ var nav_name;
 
 
 $(document).ready(function() {
+    $('.tooltipped').tooltip();
     $('#nav-mobile').sidenav({
         menuWidth: 400, // Default is 300
         edge: 'left', // Choose the horizontal origin
@@ -111,7 +112,7 @@ function tryConnection() {
             Cookies.set('token',data.token, { expires: 31 });
             Cookies.set('name', data.name, { expires: 31 });
             debugger;
-            location.reload();
+            window.location.reload(true);
         }
 
     }).fail(function (data) {
@@ -156,7 +157,7 @@ function navListeners() {
        Cookies.remove('token');
        Cookies.remove('name');
        Cookies.remove('guild');
-       location.reload();
+       window.location.reload(true);
     });
 
     $('#guild_form').change(function () {
@@ -168,13 +169,12 @@ function navListeners() {
     $('#btn_ok_guild').click(function () {
         guild = $('input[name=guildRadio]:checked').val();
         Cookies.set('guild', guild, { expires: 31 });
-        location.reload();
-
+        window.location.reload(true);
     });
 
     $('.nav-change-guild').click(function () {
         Cookies.remove('guild');
-        location.reload();
+        window.location.reload(true);
     })
 }
 
