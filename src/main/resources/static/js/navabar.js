@@ -169,8 +169,7 @@ function navListeners() {
     $('#btn_ok_guild').click(function () {
         guild = $('input[name=guildRadio]:checked').val();
         Cookies.set('guild', guild, { expires: 31 });
-        location.reload();
-
+        window.location.reload(true);
     });
 
     $('.nav-change-guild').click(function () {
