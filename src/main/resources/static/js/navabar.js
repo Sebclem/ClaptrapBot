@@ -112,7 +112,7 @@ function tryConnection() {
             Cookies.set('token',data.token, { expires: 31 });
             Cookies.set('name', data.name, { expires: 31 });
             debugger;
-            location.reload();
+            window.location.reload(true);
         }
 
     }).fail(function (data) {
@@ -157,7 +157,7 @@ function navListeners() {
        Cookies.remove('token');
        Cookies.remove('name');
        Cookies.remove('guild');
-       location.reload();
+       window.location.reload(true);
     });
 
     $('#guild_form').change(function () {
@@ -174,7 +174,7 @@ function navListeners() {
 
     $('.nav-change-guild').click(function () {
         Cookies.remove('guild');
-        location.reload();
+        window.location.reload(true);
     })
 }
 
