@@ -6,6 +6,9 @@ var urlsToCache = [
     '/oauthCallback',
     '/css/materialize.css',
     '/js/navabar.js',
+    '/js/materialize.js',
+    '/js/jquery-3.3.1.min.js',
+    '/js/js.cookie.js',
     '/manifest.json'
 
 ];
@@ -23,7 +26,6 @@ self.addEventListener('install', function (event) {
 });
 
 self.addEventListener('fetch', function (event) {
-    console.log("fetch");
     event.respondWith(
         caches.match(event.request)
             .then(function (response) {
