@@ -9,6 +9,7 @@ import net.Broken.RestApi.Data.UserManager.*;
 import net.Broken.Tools.UserManager.Exceptions.*;
 import net.Broken.Tools.UserManager.Oauth;
 import net.Broken.Tools.UserManager.UserUtils;
+import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.User;
 import org.apache.logging.log4j.LogManager;
@@ -108,7 +109,8 @@ public class UserManagerAPIController {
             List<GuildInfo> temp = new ArrayList<>();
 
             for (Guild guild : user.getMutualGuilds()){
-                temp.add(new GuildInfo(guild.getName(), guild.getId()));
+
+                temp.add(new GuildInfo(guild.getName(), guild.getId(), guild.getMember(user).hasPermission(Permission.ADMINISTRATOR)));
             }
             return new ResponseEntity<>(temp, HttpStatus.OK);
 
