@@ -15,6 +15,8 @@ public class RegisterWebView {
     public String music(@RequestParam(value="id", required = true, defaultValue = "") String id, Model model){
         model.addAttribute("id", id);
         model.addAttribute("redirect_url", System.getenv("OAUTH_URL"));
+        model.addAttribute("isAdmin",false);
+
         return CheckPage.getPageIfReady("register");
     }
 }
