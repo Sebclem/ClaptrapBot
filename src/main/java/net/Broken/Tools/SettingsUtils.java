@@ -7,6 +7,7 @@ import net.Broken.DB.Repository.PendingPwdResetRepository;
 import net.Broken.DB.Repository.UserRepository;
 import net.Broken.MainBot;
 import net.Broken.RestApi.Data.Settings.GetSettingsData;
+import net.Broken.RestApi.Data.Settings.PostSetSettings;
 import net.Broken.RestApi.Data.Settings.Value;
 import net.Broken.SpringContext;
 import net.Broken.Tools.UserManager.Exceptions.UnknownTokenException;
@@ -29,7 +30,7 @@ import java.util.List;
 public class SettingsUtils {
 
     private static SettingsUtils INSTANCE;
-    Logger logger = LogManager.getLogger();
+    private Logger logger = LogManager.getLogger();
 
     public static SettingsUtils getInstance(){
         return (INSTANCE == null) ? new SettingsUtils() : INSTANCE;
@@ -152,6 +153,106 @@ public class SettingsUtils {
     }
 
 
+    public boolean setSettings(Guild guild, List<PostSetSettings> settings){
+        GuildPreferenceEntity pref = getPreference(guild);
+        for (PostSetSettings setting : settings){
+            String value = setting.val;
+            logger.debug(setting.id + " : " + value);
+            switch (setting.id) {
+                case "anti_spam":
+                    if (value.toLowerCase().equals("true") || value.toLowerCase().equals("false")) {
+                        boolean result = Boolean.parseBoolean(value);
+                        pref.setAntiSpam(result);
+                        pref = guildPreferenceRepository.save(pref);
+                    } else {
+                        logger.error("anti_spam error. Key: " + setting.id + " Val: " + setting.val);
+                        return false;
+                    }
+
+                    break;
+
+
+                case "default_role":
+                    if (value.toLowerCase().equals("true") || value.toLowerCase().equals("false")) {
+                        boolean result = Boolean.parseBoolean(value);
+                        pref.setDefaultRole(result);
+                        pref = guildPreferenceRepository.save(pref);
+                    } else {
+                        logger.error("default_role error. Key: " + setting.id + " Val: " + setting.val);
+
+                        return false;
+                    }
+
+                    break;
+                case "default_role_id":
+                    try {
+                        Role role = guild.getRoleById(value);
+                        if (role != null) {
+                            pref.setDefaultRoleId(role.getId());
+
+                            pref = guildPreferenceRepository.save(pref);
+
+                        } else {
+                            throw new NumberFormatException();
+                        }
+                    } catch (NumberFormatException e) {
+                        logger.error("default_role_id error. Key: " + setting.id + " Val: " + setting.val);
+
+                        return false;
+                    }
+
+                    break;
+                case "welcome":
+                    if (value.toLowerCase().equals("true") || value.toLowerCase().equals("false")) {
+                        boolean result = Boolean.parseBoolean(value);
+                        pref.setWelcome(result);
+                        pref = guildPreferenceRepository.save(pref);
+                    } else {
+                        logger.error("welcome error. Key: " + setting.id + " Val: " + setting.val);
+                        return false;
+                    }
+                    break;
+                case "welcome_chanel_id":
+                    try {
+                        TextChannel chanel = guild.getTextChannelById(value);
+                        if (chanel != null) {
+                            pref.setWelcomeChanelID(chanel.getId());
+
+                            pref = guildPreferenceRepository.save(pref);
+
+                        } else {
+                            throw new NumberFormatException();
+                        }
+                    } catch (NumberFormatException e) {
+                        logger.error("welcome_chanel_id error. Key: " + setting.id + " Val: " + setting.val);
+
+                        return false;
+                    }
+                    break;
+                case "welcome_message":
+                    pref.setWelcomeMessage(value);
+                    pref = guildPreferenceRepository.save(pref);
+
+                    break;
+
+                case "daily_madame":
+                    if (value.toLowerCase().equals("true") || value.toLowerCase().equals("false")) {
+                        boolean result = Boolean.parseBoolean(value);
+                        pref.setDailyMadame(result);
+                        pref = guildPreferenceRepository.save(pref);
+
+                    } else {
+                        logger.error("daily_madame error. Key: " + setting.id + " Val: " + setting.val);
+
+                        return false;
+                    }
+                    break;
+            }
+        }
+        return true;
+
+    }
+
 
     private List<Value> getTextChannels(Guild guild){
         List<Value> channels = new ArrayList<>();
@@ -167,5 +268,18 @@ public class SettingsUtils {
             roles.add(new Value(role.getName(), role.getId()));
         }
         return roles;
+    }
+
+    public GuildPreferenceEntity getPreference(Guild guild){
+        List<GuildPreferenceEntity> guildPrefList = guildPreferenceRepository.findByGuildId(guild.getId());
+        GuildPreferenceEntity guildPref;
+        if(guildPrefList.isEmpty()){
+            logger.info("Generate default pref for " + guild.getName());
+            guildPref = GuildPreferenceEntity.getDefault(guild);
+            guildPreferenceRepository.save(guildPref);
+        }
+        else
+            guildPref = guildPrefList.get(0);
+        return guildPref;
     }
 }

@@ -7,6 +7,7 @@ import net.Broken.MainBot;
 import net.Broken.SpringContext;
 import net.Broken.Tools.EmbedMessageUtils;
 import net.Broken.Tools.MessageTimeOut;
+import net.Broken.Tools.SettingsUtils;
 import net.Broken.audio.AudioM;
 import net.Broken.audio.NotConnectedException;
 import net.Broken.audio.NullMusicManager;
@@ -37,7 +38,7 @@ public class Settings implements Commande {
     @Override
     public void action(String[] args, MessageReceivedEvent event) {
         if(args.length == 0){
-            GuildPreferenceEntity guildPref = getPreference(event.getGuild());
+            GuildPreferenceEntity guildPref = SettingsUtils.getInstance().getPreference(event.getGuild());
             MessageEmbed message = EmbedMessageUtils.getPref(guildPref);
             event.getTextChannel().sendMessage(message).complete();
 
@@ -89,22 +90,8 @@ public class Settings implements Commande {
     }
 
 
-    private GuildPreferenceEntity getPreference(Guild guild){
-        List<GuildPreferenceEntity> guildPrefList = guildPreferenceRepository.findByGuildId(guild.getId());
-        GuildPreferenceEntity guildPref;
-        if(guildPrefList.isEmpty()){
-            logger.info("Generate default pref for " + guild.getName());
-            guildPref = GuildPreferenceEntity.getDefault(guild);
-            guildPreferenceRepository.save(guildPref);
-        }
-        else
-            guildPref = guildPrefList.get(0);
-        return guildPref;
-    }
-
-
     private void set(MessageReceivedEvent event, String key, String value){
-        GuildPreferenceEntity pref = getPreference(event.getGuild());
+        GuildPreferenceEntity pref = SettingsUtils.getInstance().getPreference(event.getGuild());
         switch (key){
             case "anti_spam":
                 value = value.replaceAll(" ", "");
