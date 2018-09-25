@@ -26,26 +26,32 @@ self.addEventListener('install', function (event) {
 });
 
 self.addEventListener('fetch', function (event) {
-    event.respondWith(
-        caches.match(event.request)
-            .then(function (response) {
-                    // Cache hit - return response
-                    if (response) {
-                        return response;
-                    }
-                    return fetch(event.request);
-                }
-            )
-    );
+
+
+    var request = event.request;
+
+    event.respondWith(fetch(request).catch( function (reason) {
+        console.error(
+            '[onfetch] Failed. Serving cached offline fallback ' +
+            reason
+        );
+        return caches.open(CACHE_NAME).then(function(cache){
+            return cache.match(request);
+        })
+    }));
+
 
     event.waitUntil(
         update(event.request)
-            .then(refresh)
+            .then(refresh, function (reason) {
+                console.log("Update fail");
+                console.log(event.request)
+
+            })
     );
 
     function update(request) {
-        return caches.match(request).then(
-            function (response) {
+        return caches.match(request).then(function (response) {
                 if (response) {
                     return caches.open(CACHE_NAME).then(function (cache) {
                         return fetch(request).then(function (response) {
@@ -60,7 +66,7 @@ self.addEventListener('fetch', function (event) {
     }
 
     function refresh(response) {
-        if(response){
+        if (response) {
             return self.clients.matchAll().then(function (clients) {
                 clients.forEach(function (client) {
                     var message = {
