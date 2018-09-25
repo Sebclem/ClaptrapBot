@@ -20,7 +20,6 @@ if(discordToken !== ""){
             console.log(data);
             Cookies.set('token',data.token, { expires: 31 });
             Cookies.set('name', data.name, { expires: 31 });
-            debugger;
             window.location = "/";
         }
 

@@ -14,10 +14,10 @@ var switchAutoFlow;
 var loadingFlag = false;
 var guild;
 
-$(document).ready(function() {
-    if(Cookies.get('guild') != undefined) {
+$(document).ready(function () {
+    if (Cookies.get('guild') != undefined) {
 
-        guild = Cookies.get('guild')
+        guild = Cookies.get('guild');
         btn_play = $('#btn_play');
         btn_stop = $('#btn_stop');
         btn_next = $('#btn_next');
@@ -60,7 +60,10 @@ $(document).ready(function() {
 function getCurentMusic() {
     $.get("api/music/currentMusicInfo?guild=" + guild, function (data) {
     }).done(function (data) {
-
+        if (error) {
+            error = false;
+            M.Toast.dismissAll();
+        }
         state = data.state;
         switch (data.state) {
             case "STOP":
@@ -72,7 +75,7 @@ function getCurentMusic() {
                     $('#btn_info').addClass("determinate").removeClass("indeterminate");
                 }
                 $('#music_progress').width("0%");
-                if(Cookies.get('token') != undefined){
+                if (Cookies.get('token') != undefined) {
                     disableBtn(btn_stop);
                     disableBtn(btn_info);
                     enableBtn(btn_add);
@@ -81,7 +84,7 @@ function getCurentMusic() {
                     enableBtn(btn_next);
                     enableBtn(btn_disconnect);
                 }
-                else{
+                else {
                     disableBtn(btn_play);
                     disableBtn(btn_stop);
                     disableBtn(btn_info);
@@ -91,7 +94,7 @@ function getCurentMusic() {
                     disableBtn(btn_disconnect);
                 }
                 btn_play.children().text("play_arrow");
-                $('#music_img').attr("src","/img/no_music.jpg");
+                $('#music_img').attr("src", "/img/no_music.jpg");
                 $('#total_time').text("00:00");
                 $('#current_time').text("00:00");
                 btn_play.removeClass("amber");
@@ -145,45 +148,49 @@ function getCurentMusic() {
                 disableBtn(btn_next);
                 disableBtn(btn_disconnect);
 
-                $('#music_img').attr("src","/img/disconnected.png");
-                if(Cookies.get('token') != undefined){
-                    if(!disconected){
+                $('#music_img').attr("src", "/img/disconnected.png");
+                if (Cookies.get('token') != undefined) {
+                    if (!disconected) {
                         getChannels();
                         disconected = true;
                     }
                 }
 
 
-
-
                 break;
         }
-        if(switchAutoFlow.is(':checked') != data.autoflow)
+        if (switchAutoFlow.is(':checked') != data.autoflow)
             switchAutoFlow.prop('checked', data.autoflow);
         getPlayList();
 
     })
-    .fail(function (data) {
-        if(!error){
-            console.error("Connection lost, I keep trying to refresh!");
-            error = true;
-        }
+        .fail(function (data) {
+            if (!error) {
+                error = true;
+                console.error("Connection lost, I keep trying to refresh!");
+                M.toast({
+                    html: " <i class=\"material-icons\" style='margin-right: 10px'>warning</i> Connection Lost!",
+                    classes: 'red',
+                    displayLength: 99999999
+                });
 
-    })
+            }
+
+        })
 }
 
 function getPlayList() {
     $.get("api/music/getPlaylist?guild=" + guild, function (data) {
     }).done(function (data) {
         data = data.list;
-        if(data != null && data.length != 0){
+        if (data != null && data.length != 0) {
             var noUpdate = comparePlaylist(data, savedPlaylist);
             // console.log("List up to date : "+noUpdate);
-            if(!noUpdate){
+            if (!noUpdate) {
                 savedPlaylist = data;
                 $('#playlist_list').empty();
 
-                data.forEach(function(element){
+                data.forEach(function (element) {
                     var template = $('#playlist_template').clone();
                     template.removeAttr("id");
                     template.removeAttr("style");
@@ -210,22 +217,26 @@ function getPlayList() {
                 });
             }
         }
-        else{
+        else {
             $('#playlist_list').empty();
             savedPlaylist = {};
         }
-        if(loadingFlag){
+        if (loadingFlag) {
             modal_loading.modal('close');
             loadingFlag = false;
         }
 
 
     }).fail(function (data) {
-        if(!error){
-            alert("Comunication error, please refresh.");
+        if (!error) {
+            M.toast({
+                html: " <i class=\"material-icons\" style='margin-right: 10px'>warning</i> Connection Lost!",
+                classes: 'red',
+                displayLength: 99999999
+            });
             error = true;
         }
-        if(loadingFlag){
+        if (loadingFlag) {
             modal_loading.modal('close');
             loadingFlag = false;
         }
@@ -234,12 +245,12 @@ function getPlayList() {
 
 }
 
-function getChannels(){
+function getChannels() {
     $.get("api/music/getChanel?guild=" + guild, function (data) {
     }).done(function (data) {
         console.log(data);
         $('#channelForm').empty();
-        data.forEach(function(element){
+        data.forEach(function (element) {
             var template = $('#radioTemplate').clone();
             template.removeAttr("id");
             template.removeAttr("style");
@@ -254,27 +265,31 @@ function getChannels(){
         $('#modalChanels').modal('open');
 
     }).fail(function (data) {
-        if(!error){
-            alert("Com error, please refresh.");
+        if (!error) {
+            M.toast({
+                html: " <i class=\"material-icons\" style='margin-right: 10px'>warning</i> Connection Lost!",
+                classes: 'red',
+                displayLength: 99999999
+            });
+
             error = true;
         }
 
     });
 }
 
-function updateModal(data){
-    $('#modal_title').text("Title: "+ data.info.audioTrackInfo.title);
-    $('#modal_author').text("Author: "+ data.info.audioTrackInfo.author);
-    $('#modal_lenght').text("Duration: "+ msToTime(data.info.audioTrackInfo.length));
-    $('#modal_url').html("<div>URL:  <a target=\"_blank\"  href=\""+ data.info.audioTrackInfo.uri + "\">" + data.info.audioTrackInfo.uri + "</a></div>");
+function updateModal(data) {
+    $('#modal_title').text("Title: " + data.info.audioTrackInfo.title);
+    $('#modal_author').text("Author: " + data.info.audioTrackInfo.author);
+    $('#modal_lenght').text("Duration: " + msToTime(data.info.audioTrackInfo.length));
+    $('#modal_url').html("<div>URL:  <a target=\"_blank\"  href=\"" + data.info.audioTrackInfo.uri + "\">" + data.info.audioTrackInfo.uri + "</a></div>");
     //
-    $('#modal_submit').text("Submitted by: "+ data.info.user);
-
+    $('#modal_submit').text("Submitted by: " + data.info.user);
 
 
 }
 
-function updateControl(data){
+function updateControl(data) {
     $('#music_text').text(data.info.audioTrackInfo.title);
     var percent = (data.currentPos / data.info.audioTrackInfo.length) * 100;
     // console.log(percent)
@@ -283,7 +298,7 @@ function updateControl(data){
     }
     $('#music_progress').width(percent + "%");
 
-    if(Cookies.get('token') != undefined){
+    if (Cookies.get('token') != undefined) {
         enableBtn(btn_play);
         enableBtn(btn_stop);
         enableBtn(btn_info);
@@ -292,8 +307,7 @@ function updateControl(data){
         enableBtn(btn_next);
         enableBtn(btn_disconnect);
     }
-    else
-    {
+    else {
         disableBtn(btn_play);
         disableBtn(btn_stop);
         disableBtn(btn_info);
@@ -304,14 +318,14 @@ function updateControl(data){
     }
 
 
-    $('#music_img').attr("src","https://img.youtube.com/vi/"+data.info.audioTrackInfo.identifier+"/hqdefault.jpg");
+    $('#music_img').attr("src", "https://img.youtube.com/vi/" + data.info.audioTrackInfo.identifier + "/hqdefault.jpg");
     // console.log(data);
     $('#total_time').text(msToTime(data.info.audioTrackInfo.length));
     $('#current_time').text(msToTime(data.currentPos));
     updateModal(data);
 }
 
-function sendCommand(command){
+function sendCommand(command) {
     modal_loading.modal('open');
     console.log(command);
     $.ajax({
@@ -319,7 +333,7 @@ function sendCommand(command){
         dataType: 'json',
         contentType: 'application/json',
         url: "/api/music/command?guild=" + guild,
-        data:  JSON.stringify(command),
+        data: JSON.stringify(command),
         success: function (data) {
             console.log(data);
             loadingFlag = true;
@@ -331,7 +345,7 @@ function sendCommand(command){
         console.log(data);
         alert(data.responseJSON.Message);
         modal_loading.modal('close');
-        if(data.responseJSON.error === "token"){
+        if (data.responseJSON.error === "token") {
             Cookies.remove('token');
             Cookies.remove('name');
             location.reload();
@@ -339,33 +353,33 @@ function sendCommand(command){
     });
 }
 
-function comparePlaylist(list1, list2){
-    if(list1 == null || list2 == null){
+function comparePlaylist(list1, list2) {
+    if (list1 == null || list2 == null) {
         return false;
     }
 
-    if(list1.length != list2.length){
+    if (list1.length != list2.length) {
         return false;
     }
 
 
-    for(var i = 0; i++; i < list1.length){
-        if(list1[i].uri != list2[i].uri)
+    for (var i = 0; i++; i < list1.length) {
+        if (list1[i].uri != list2[i].uri)
             return false
     }
     return true;
 }
 
 function msToTime(duration) {
-    var milliseconds = parseInt((duration%1000)/100)
-        , seconds = parseInt((duration/1000)%60)
-        , minutes = parseInt((duration/(1000*60))%60)
-        , hours = parseInt((duration/(1000*60*60))%24);
+    var milliseconds = parseInt((duration % 1000) / 100)
+        , seconds = parseInt((duration / 1000) % 60)
+        , minutes = parseInt((duration / (1000 * 60)) % 60)
+        , hours = parseInt((duration / (1000 * 60 * 60)) % 24);
 
     hours = (hours < 10) ? "0" + hours : hours;
     minutes = (minutes < 10) ? "0" + minutes : minutes;
     seconds = (seconds < 10) ? "0" + seconds : seconds;
-    if(hours > 0 )
+    if (hours > 0)
         return hours + ":" + minutes + ":" + seconds;
     else
         return minutes + ":" + seconds;
@@ -375,32 +389,32 @@ function listeners() {
 
 
     $('#btn_play').click(function () {
-        switch (state){
+        switch (state) {
             case "PLAYING":
-                sendCommand({ command: "PAUSE"})
+                sendCommand({command: "PAUSE"});
                 break;
 
             case "PAUSE":
-                sendCommand({ command: "PLAY"})
+                sendCommand({command: "PLAY"});
                 break;
             default:
-                sendCommand({command: "PLAY"})
+                sendCommand({command: "PLAY"});
         }
 
     });
 
     $('#btn_next').click(function () {
-        sendCommand({ command: "NEXT"});
+        sendCommand({command: "NEXT"});
     });
     $('#btn_stop').click(function () {
-        sendCommand({ command: "STOP"});
+        sendCommand({command: "STOP"});
     });
 
     $('#input_link').on("input", function () {
-        if($('#input_link').val() == ""){
+        if ($('#input_link').val() == "") {
             disableBtn($('#btn_add'));
         }
-        else{
+        else {
             enableBtn($('#btn_add'));
         }
     });
@@ -440,12 +454,12 @@ function listeners() {
     });
 
     $('#btn_disconnect').click(function () {
-        sendCommand({command : "DISCONNECT"})
+        sendCommand({command: "DISCONNECT"})
     });
 
     switchAutoFlow.click(function () {
         console.log(switchAutoFlow.is(':checked'))
-        if(switchAutoFlow.is(':checked')){
+        if (switchAutoFlow.is(':checked')) {
             sendCommand({command: 'AUTOFLOWON'})
         }
         else
@@ -459,7 +473,7 @@ function disableBtn(btn) {
     }
 }
 
-function enableBtn(btn){
+function enableBtn(btn) {
     if (btn.hasClass("disabled")) {
         btn.removeClass("disabled");
     }
