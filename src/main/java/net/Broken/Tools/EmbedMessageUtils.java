@@ -2,6 +2,7 @@ package net.Broken.Tools;
 
 import net.Broken.DB.Entity.GuildPreferenceEntity;
 import net.Broken.MainBot;
+import net.Broken.audio.Youtube.SearchResult;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.MessageEmbed;
@@ -121,6 +122,16 @@ public class EmbedMessageUtils {
                 .addField("> Daily Madame", "Activate daily madame message\n```java\n" + String.valueOf(guildPref.isDailyMadame()) + "```Edit: :unlock:\nKey: daily_madame", false);
 
         return buildStandar(messageB);
+    }
+
+    public static MessageEmbed searchResult(SearchResult result){
+        EmbedBuilder builder = new EmbedBuilder()
+                .setColor(Color.CYAN)
+                .setTitle(result.title)
+                .setImage(result.imageUrl)
+                .addField("URL:","https://www.youtube.com/watch?v="+result.id,false)
+                .addField("Chanel:", result.channelTittle, false);
+        return buildStandar(builder);
     }
 
 

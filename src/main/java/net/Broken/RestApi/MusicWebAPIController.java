@@ -1,5 +1,6 @@
 package net.Broken.RestApi;
 
+import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.Broken.Commands.Music;
@@ -7,10 +8,13 @@ import net.Broken.DB.Entity.UserEntity;
 import net.Broken.DB.Repository.UserRepository;
 import net.Broken.MainBot;
 import net.Broken.RestApi.Data.*;
+import net.Broken.Tools.EmbedMessageUtils;
 import net.Broken.Tools.UserManager.Exceptions.UnknownTokenException;
 import net.Broken.Tools.UserManager.UserUtils;
 import net.Broken.audio.AudioM;
 import net.Broken.audio.FindGeneral;
+import net.Broken.audio.Youtube.SearchResult;
+import net.Broken.audio.Youtube.YoutubeTools;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.VoiceChannel;
 import org.apache.logging.log4j.LogManager;
@@ -21,6 +25,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +49,7 @@ public class MusicWebAPIController {
 
 
     @RequestMapping("/currentMusicInfo")
-    public ResponseEntity<CurrentMusicData> getCurrentM(@RequestParam(value = "guild") String guildId){
+    public ResponseEntity<CurrentMusicData> getCurrentM(@RequestParam(value = "guild") String guildId){ //TODO security issue ???!!!
         Guild guild = MainBot.jda.getGuildById(guildId);
         if(guild == null ){
             logger.warn("Request whit no guild!");
@@ -72,7 +77,7 @@ public class MusicWebAPIController {
     }
 
     @RequestMapping("/getPlaylist")
-    public ResponseEntity<PlaylistData> getPlaylist(@RequestParam(value = "guild") String guildId){
+    public ResponseEntity<PlaylistData> getPlaylist(@RequestParam(value = "guild") String guildId){ //TODO security issue ???!!!
         Guild guild = MainBot.jda.getGuildById(guildId);
         if(guild == null ){
             logger.warn("Request whit no guild!");
@@ -127,7 +132,7 @@ public class MusicWebAPIController {
     }
 
     @RequestMapping(value = "/getChanel", method = RequestMethod.GET)
-    public ResponseEntity<List<ChanelData>> getChanel(@RequestParam(value = "guild") String guildId){
+    public ResponseEntity<List<ChanelData>> getChanel(@RequestParam(value = "guild") String guildId){  //TODO security issue ???!!!
         Guild guild = MainBot.jda.getGuildById(guildId);
         if(guild == null ){
             logger.warn("Request whit no guild!");
@@ -141,6 +146,33 @@ public class MusicWebAPIController {
             temp.add(new ChanelData(aChanel.getName(),aChanel.getId(),aChanel.getPosition()));
         }
         return new ResponseEntity<>(temp, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/search", method = RequestMethod.GET)
+    public ResponseEntity<List<SearchResult>> search(@CookieValue("token") String token, @RequestParam(value = "query") String query ){
+        if(token != null) {
+            try {
+                UserEntity user = userUtils.getUserWithApiToken(userRepository, token);
+                YoutubeTools youtubeTools = YoutubeTools.getInstance();
+                ArrayList<SearchResult> result = youtubeTools.search(query, 25);
+                return new ResponseEntity<>(result, HttpStatus.OK);
+
+            }catch (UnknownTokenException e){
+                logger.warn("Search without token!");
+                return new ResponseEntity<>( HttpStatus.UNAUTHORIZED);
+            } catch (GoogleJsonResponseException e) {
+                logger.error("There was a service error: " + e.getDetails().getCode() + " : " + e.getDetails().getMessage());
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            } catch (IOException e) {
+                logger.catching(e);
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+            }
+        }else{
+            logger.warn("Search without token!");
+            return new ResponseEntity<>( HttpStatus.UNAUTHORIZED);
+
+        }
     }
 
 
