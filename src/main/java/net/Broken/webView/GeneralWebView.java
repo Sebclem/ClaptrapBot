@@ -82,6 +82,11 @@ public class GeneralWebView {
 
     }
 
+    @RequestMapping("/500")
+    public String errorTest(Model model){
+        return "error/500";
+    }
+
 
 
 
