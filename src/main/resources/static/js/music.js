@@ -15,7 +15,7 @@ var loadingFlag = false;
 var guild;
 
 $(document).ready(function () {
-    if (Cookies.get('guild') != undefined) {
+    if (Cookies.get('guild') !== undefined) {
 
         guild = Cookies.get('guild');
         btn_play = $('#btn_play');
@@ -28,7 +28,8 @@ $(document).ready(function () {
         switchAutoFlow = $("#autoflow");
 
         setInterval("getCurentMusic()", 1000);
-        $('#modalAdd').modal();
+
+        M.Modal.init($('#modalAdd').get(0));
 
         $('#modal_current_info').modal();
 
@@ -75,7 +76,7 @@ function getCurentMusic() {
                     $('#btn_info').addClass("determinate").removeClass("indeterminate");
                 }
                 $('#music_progress').width("0%");
-                if (Cookies.get('token') != undefined) {
+                if (Cookies.get('token') !== undefined) {
                     disableBtn(btn_stop);
                     disableBtn(btn_info);
                     enableBtn(btn_add);
@@ -298,7 +299,7 @@ function updateControl(data) {
     }
     $('#music_progress').width(percent + "%");
 
-    if (Cookies.get('token') != undefined) {
+    if (Cookies.get('token') !== undefined) {
         enableBtn(btn_play);
         enableBtn(btn_stop);
         enableBtn(btn_info);
@@ -327,7 +328,7 @@ function updateControl(data) {
 
 function sendCommand(command) {
     modal_loading.modal('open');
-    console.log(command);
+    // console.log(command);
     $.ajax({
         type: "POST",
         dataType: 'json',
@@ -343,12 +344,18 @@ function sendCommand(command) {
 
     }).fail(function (data) {
         console.log(data);
-        alert(data.responseJSON.Message);
         modal_loading.modal('close');
         if (data.responseJSON.error === "token") {
             Cookies.remove('token');
             Cookies.remove('name');
             location.reload();
+        }
+        else{
+            M.toast({
+                html: " <i class=\"material-icons\" style='margin-right: 10px'>warning</i> Command fail!",
+                classes: 'red',
+                displayLength: 99999999
+            });
         }
     });
 }
@@ -358,17 +365,115 @@ function comparePlaylist(list1, list2) {
         return false;
     }
 
-    if (list1.length != list2.length) {
+    if (list1.length !== list2.length) {
         return false;
     }
 
 
     for (var i = 0; i++; i < list1.length) {
-        if (list1[i].uri != list2[i].uri)
+        if (list1[i].uri !== list2[i].uri)
             return false
     }
     return true;
 }
+
+
+
+function search() {
+    let query = $('#input_search').val();
+    let list = $("#search_result");
+    let load = $("#search_load");
+    disableBtn($('#btn_search'));
+    // list.addClass("hide");
+    list.removeClass("scale-in");
+    load.removeClass("hide");
+    load.addClass("scale-in");
+
+    $.get("/api/music/search?query=" + query, (data) => {
+        // console.log(data);
+        list.empty();
+        data.forEach((item)=>{
+
+            let html =
+                "<li class=\"collection-item avatar\">" +
+                "   <img src=\""+item["imageUrl"]+"\" alt=\"\" class=\"\">" +
+                "   <a class=\"title truncate\" href='https://youtube.com/watch?v="+item["id"]+"' target=\"_blank\"><b>"+item["title"]+"</b></a>" +
+                "   <p class='truncate grey-text text-darken-1'>"+item["channelTittle"]+ " &#9553 "+ item["publishedAt"].substr(0, item["publishedAt"].indexOf('T'))+" <br>" + ytTimeToTime(item["duration"])  +
+                "   </p>" +
+                "   <a href=\"#!\" class=\"secondary-content btn waves-effect waves-light green add-btn-list scale-transition\" id='"+item["id"]+"'><i class=\"material-icons \">add_circle_outline</i></a>" +
+                "   </div>" +
+                "</li>";
+
+
+
+            list.append(html)
+        });
+
+        $(".add-btn-list").click(addListClick);
+        // list.removeClass("hide");
+
+        load.removeClass("scale-in");
+        load.addClass("hide");
+        list.addClass("scale-in");
+        enableBtn($('#btn_search'));
+
+
+    });
+
+
+}
+
+
+function addListClick(event){
+    let button;
+    if(event.target.nodeName === "I"){
+        button = event.target.parentNode;
+    }
+    else
+        button = event.target;
+    button.classList.add("scale-out");
+
+    let command = {
+        command: "ADD",
+        url: button.id,
+        playlistLimit: $('#limit_range').val(),
+        onHead: !$('#bottom').is(':checked')
+    };
+    sendCommand(command);
+}
+
+function ytTimeToTime(duration) {
+    let hours;
+    let minutes;
+    let seconds;
+    if(duration === "PT0S")
+        return "&#x1F534 LIVE";
+    if(duration.includes("H"))
+        hours = parseInt(duration.match(/\d*H/)[0].replace("H",""), 10);
+    else
+        hours = 0;
+
+    if(duration.includes("M"))
+        minutes = parseInt(duration.match(/\d*M/)[0].replace("M",""), 10);
+    else
+        minutes = 0;
+
+    if(duration.includes("S"))
+        seconds = parseInt(duration.match(/\d*S/)[0].replace("S",""), 10);
+    else
+        seconds = 0;
+
+    hours = (hours < 10) ? "0" + hours : hours;
+    minutes = (minutes < 10) ? "0" + minutes : minutes;
+    seconds = (seconds < 10) ? "0" + seconds : seconds;
+    if (hours > 0)
+        return hours + ":" + minutes + ":" + seconds;
+    else
+        return minutes + ":" + seconds;
+}
+
+
+
 
 function msToTime(duration) {
     var milliseconds = parseInt((duration % 1000) / 100)
@@ -403,6 +508,8 @@ function listeners() {
 
     });
 
+    $('#btn_search').click(search);
+
     $('#btn_next').click(function () {
         sendCommand({command: "NEXT"});
     });
@@ -419,6 +526,26 @@ function listeners() {
         }
     });
 
+    $('#input_search').on("input", function () {
+        if ($('#input_search').val() == "") {
+            disableBtn($('#btn_search'));
+        }
+        else {
+            enableBtn($('#btn_search'));
+        }
+    });
+
+    $('#add_btn').click(function () {
+        if ($('#input_search').val() == "") {
+            disableBtn($('#btn_search'));
+        }
+        else {
+            enableBtn($('#btn_search'));
+        }
+    });
+
+
+
     $('#modalChanels').change(function () {
         if ($('#btn_ok_channel').hasClass("disabled")) {
             $('#btn_ok_channel').removeClass("disabled");
@@ -429,18 +556,6 @@ function listeners() {
         var command = {
             command: "FLUSH"
         };
-        sendCommand(command);
-    });
-
-    $('#btn_add').click(function () {
-        console.log(!$('#bottom').is(':checked'));
-        var command = {
-            command: "ADD",
-            url: $('#input_link').val(),
-            playlistLimit: $('#limit_range').val(),
-            onHead: !$('#bottom').is(':checked')
-        };
-        $('#input_link').val('');
         sendCommand(command);
     });
 
@@ -458,7 +573,7 @@ function listeners() {
     });
 
     switchAutoFlow.click(function () {
-        console.log(switchAutoFlow.is(':checked'))
+        // console.log(switchAutoFlow.is(':checked'));
         if (switchAutoFlow.is(':checked')) {
             sendCommand({command: 'AUTOFLOWON'})
         }
