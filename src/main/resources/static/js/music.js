@@ -26,6 +26,9 @@ $(document).ready(function () {
         btn_flush = $('#flush_btn');
         btn_add = $('#add_btn');
         switchAutoFlow = $("#autoflow");
+        $("form").submit(function(e) {
+            e.preventDefault();
+        });
 
         setInterval("getCurentMusic()", 1000);
 
