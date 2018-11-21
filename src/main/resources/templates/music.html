@@ -10,10 +10,42 @@
 
     <!-- CSS  -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
-    <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
-    <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+    <link href="/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+    <link href="/css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
     <link rel="manifest" href="/manifest.json"/>
     <meta name="theme-color" content="#263238"/>
+    <style>
+        @media only screen and (max-width: 1200px) {
+            #modalAdd{
+                width: 95%;
+            }
+        }
+        @media only screen and (min-width: 1200px) {
+            #modalAdd{
+                width: 80%;
+            }
+        }
+
+        #modalAdd{
+            height: 85% !important;
+            max-height: 100% !important;
+        }
+
+        .avatar>img{
+            position: absolute;
+            width: 80px;
+            height: auto;
+            overflow: hidden;
+            left: 15px;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        .collection-item.avatar{
+            padding-left: 105px !important;
+            padding-right: 75px;
+        }
+
+    </style>
 
 </head>
 
@@ -89,60 +121,7 @@
                                 <!-- Modal Trigger -->
                                 <a class="waves-effect waves-light btn modal-trigger green darken-4" id="add_btn" href="#modalAdd"><i class="material-icons">add_circle_outline</i></a>
 
-                                <!-- Modal Structure -->
-                                <div id="modalAdd" class="modal modal ">
-                                    <div class="modal-content" style="padding-bottom: 0px">
-                                        <div class="row" style="margin-bottom: 0px">
-                                            <h3 class="col l12 m12 s12"> Add Music</h3>
-                                            <form class="col l12 m12 s12">
-                                                <div class="row" style="margin-bottom: 0px">
-                                                    <div class="input-field col l12 m12 s12" style="padding-left: 0px; padding-right: 0px">
-                                                        <!--<i class="material-icons prefix">link</i>-->
-                                                        <input id="input_link" type="text" class="validate"/>
-                                                        <label for="input_link">Link</label>
-                                                    </div>
-                                                </div>
-                                                <div class="row" style="margin-bottom: 0px">
-                                                    <div class="col l12 m12 s12 center">
-                                                        Playlist Limit
-                                                    </div>
-                                                </div>
 
-                                                <div class="row" style="margin-bottom: 0px">
-                                                    <p class="range-field">
-                                                        <input type="range" id="limit_range" min="1" max="300" step="1" value="30" />
-                                                    </p>
-                                                </div>
-                                                <div class="row" style="margin-bottom: 0px">
-                                                    <div class="col l12 m12 s12 center">
-                                                        Add on
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col l4 offset-l4 m4 offset-m4 s4 offset-s4 left-align ">
-                                                        <p>
-                                                            <label>
-                                                                <input name="group1" type="radio" checked="checked" id="bottom"/>
-                                                                <span>Bottom</span>
-                                                            </label>
-                                                        </p>
-                                                        <p>
-                                                            <label>
-                                                                <input name="group1" type="radio" />
-                                                                <span>Top</span>
-                                                            </label>
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
-
-                                        <a href="#!" id="btn_add" class="modal-action modal-close waves-effect waves-green btn-flat disabled">Add</a>
-                                    </div>
-                                </div>
                             </div>
                             <div class="col l3 m2 s2 center " style="padding-left: 0px">
                                 <div class="row switch  blue-grey-text text-darken-3" style="margin-bottom: 0px">
@@ -198,6 +177,74 @@
 
 </div>
 
+<!--Add Modal-->
+<div id="modalAdd" class="modal modal-fixed-footer ">
+    <div class="modal-content" style="padding-bottom: 0px">
+        <div class="row valign-wrapper">
+            <h3 class="col l12 m12 s12 center"> Add Music</h3>
+        </div>
+        <div class="row" style="margin-bottom: 0px">
+
+            <form class="col l12 m12 s12">
+                <div class="row" style="margin-bottom: 0">
+                    <div class="input-field col offset-l1 l9 m10 s10" style="padding-left: 0px; padding-right: 0px">
+                        <!--<i class="material-icons prefix">link</i>-->
+                        <input id="input_search" type="text" class="validate"/>
+                        <label for="input_search">Search</label>
+                    </div>
+                    <div class="input-field col l2 m2 s2" style="margin-top: 22px">
+                        <button class="btn waves-effect waves-light green darken-4 white-text" id="btn_search"><i class="material-icons">search</i></button>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col s12 m12 l12 center scale-transition scale-out hide" id="search_load" style="margin-top: 25px">
+                        <div class="preloader-wrapper big active">
+                            <div class="spinner-layer spinner-blue-only">
+                                <div class="circle-clipper left">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="gap-patch">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="circle-clipper right">
+                                    <div class="circle"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <ul class="collection col l12 m12 s12 scale-transition scale-out" id="search_result" style="padding: 0">
+
+                    </ul>
+
+
+
+
+
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <span style="margin-right: 10px">
+            <label>
+                <input name="group1" type="radio" checked="checked" id="bottom"/>
+                <span>Bottom</span>
+            </label>
+        </span>
+        <span style="margin-right: 10px">
+            <label>
+                <input name="group1" type="radio" />
+                <span>Top</span>
+            </label>
+        </span>
+        <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">Close</a>
+    </div>
+</div>
+
+
+
+
 <!-- Playlist template-->
 <li id="playlist_template" style="visibility: hidden">
     <div class="collapsible-header"><i class="material-icons">drag_handle</i>@title</div>
@@ -216,7 +263,7 @@
     </div>
 </li>
 
-<!-- Modal Structure -->
+<!-- Modal Chanels -->
 <div id="modalChanels" class="modal">
     <div class="modal-content" style="padding-bottom: 0px">
         <div class="row" style="margin-bottom: 0px">
@@ -235,6 +282,8 @@
 </div>
 
 
+
+<!--Loading Modal-->
 <div id="modal_loading" class="modal valign-wrapper">
     <div class="modal-content" >
         <div class="row center">
