@@ -27,6 +27,7 @@ $(document).ready(function () {
         btn_add = $('#add_btn');
         switchAutoFlow = $("#autoflow");
 
+
         setInterval("getCurentMusic()", 1000);
 
         M.Modal.init($('#modalAdd').get(0));
@@ -509,6 +510,10 @@ function listeners() {
     });
 
     $('#btn_search').click(search);
+    $("form").submit(function(e) {
+        e.preventDefault();
+        search();
+    });
 
     $('#btn_next').click(function () {
         sendCommand({command: "NEXT"});

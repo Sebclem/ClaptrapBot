@@ -68,6 +68,9 @@ public class MainBot {
         }
         token = System.getenv("TOKEN");
         jda = Init.initJda(token, dev);
+        if(System.getenv("dev")!= null){
+            dev = true;
+        }
 
 
 
