@@ -3,6 +3,7 @@ package net.Broken.DB.Entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import net.Broken.Tools.UserManager.UserUtils;
 import net.dv8tion.jda.core.entities.User;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -40,10 +41,11 @@ public class UserEntity {
         this.apiToken = apiToken;
     }
 
-    public UserEntity(User user){
+    public UserEntity(User user, PasswordEncoder passwordEncoder){
         this.name = user.getName();
         this.jdaId = user.getId();
         this.apiToken = UserUtils.getInstance().generateApiToken();
+        this.password = passwordEncoder.encode(UserUtils.getInstance().generateCheckToken());
     }
 
     public String getPassword() {

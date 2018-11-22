@@ -34,7 +34,7 @@ public class Init {
      * @param dev dev Mode or not
      * @return JDA object
      */
-    static JDA initJda(String token, boolean dev){
+    static JDA initJda(String token){
         JDA jda = null;
         logger.debug("-------------------INITIALISATION-------------------");
 

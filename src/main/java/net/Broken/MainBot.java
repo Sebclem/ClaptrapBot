@@ -53,25 +53,12 @@ public class MainBot {
         logger.info("--------------Starting Bot-------------");
         logger.info("=======================================");
 
-
-        String token = null;
-        int i = 0;
-        for(String aArg: args){
-            logger.debug(aArg);
-            if(aArg.startsWith("--") || aArg.startsWith("-")){
-                aArg = aArg.replaceAll("-","");
-                if(aArg.equals("dev") || aArg.equals("d")){
-                    dev = true;
-                }
-            }
-            i++;
+        if(System.getenv("DEV")!= null){
+            dev = Boolean.parseBoolean(System.getenv("DEV"));
         }
-        token = System.getenv("TOKEN");
-        jda = Init.initJda(token, dev);
-        if(System.getenv("dev")!= null){
-            dev = true;
-        }
+        String token = System.getenv("TOKEN");
 
+        jda = Init.initJda(token);
 
 
         ConfigurableApplicationContext ctx = SpringApplication.run(MainBot.class, args);
@@ -84,14 +71,6 @@ public class MainBot {
 
         Init.polish(jda);
         ready = true;
-
-
-
-
-
-
-
-
 
     }
 
