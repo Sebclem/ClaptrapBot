@@ -109,7 +109,7 @@ public class YoutubeTools {
         }
         ArrayList<net.Broken.audio.Youtube.SearchResult> finalResult = new ArrayList<>();
         for(SearchResult item : response.getItems()){
-            logger.debug(item.getSnippet().getTitle());
+            logger.trace(item.getSnippet().getTitle());
             finalResult.add(new net.Broken.audio.Youtube.SearchResult(item, videoHashMap.get(item.getId().getVideoId()).getContentDetails().getDuration()));
         }
 
@@ -138,7 +138,7 @@ public class YoutubeTools {
         }
         else
             hours = 0;
-        logger.debug(time);
+        logger.trace(time);
 
         if(time.contains("M")) {
 
@@ -148,7 +148,7 @@ public class YoutubeTools {
         }
         else
             minutes = 0;
-        logger.debug(time);
+        logger.trace(time);
         if(time.contains("S")) {
 
             String matched = time.substring(0, time.indexOf("S")+1);
@@ -157,7 +157,7 @@ public class YoutubeTools {
         }
         else
             seconds = 0;
-        logger.debug(time);
+        logger.trace(time);
 
         String hoursStr = (hours < 10) ? "0" + hours : String.valueOf(hours);
         String minutesStr = (minutes < 10) ? "0" + minutes : String.valueOf(minutes);
