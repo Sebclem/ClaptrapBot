@@ -435,8 +435,6 @@ function search() {
         list.addClass("scale-in");
         enableBtn($('#btn_search'));
         input_search.removeAttr("disabled");
-        input_search.focus();
-
 
     }).fail( (data)=>{
         if(data.status === 401){
