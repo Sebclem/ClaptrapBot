@@ -40,7 +40,7 @@ public class LimitChecker {
         }
         number-=400;
         redirected = false;
-        logger.trace("First pass: "+number);
+        logger.debug("First pass: "+number);
         while(!redirected )
         {
             String origin = baseURL+number+"-2/";
@@ -53,7 +53,7 @@ public class LimitChecker {
         }
         number-=90;
         redirected = false;
-        logger.trace("Second pass: "+number);
+        logger.debug("Second pass: "+number);
         while(!redirected )
         {
             String origin = baseURL+number+"-2/";
@@ -66,7 +66,7 @@ public class LimitChecker {
         }
         number-=9;
         redirected = false;
-        logger.trace("Third pass: "+number);
+        logger.debug("Third pass: "+number);
         while(!redirected )
         {
             String origin = baseURL+number+"-2/";
@@ -78,7 +78,7 @@ public class LimitChecker {
                 redirected = true;
         }
         number-=1;
-        logger.trace("Final pass: "+number);
+        logger.debug("Final pass: "+number);
         return number;
 
 
