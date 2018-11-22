@@ -128,7 +128,7 @@ public class UserManagerAPIController {
     @RequestMapping(value = "/oauthLogin", method = RequestMethod.POST)
     public ResponseEntity<UserConnectionData> oauthLogin(@RequestParam(value = "token") String discordToken){
         logger.debug(discordToken);
-        UserEntity user = Oauth.getInstance().getUserEntity(discordToken, userRepository);
+        UserEntity user = Oauth.getInstance().getUserEntity(discordToken, userRepository, passwordEncoder);
         logger.info("OAuth login for " + user.getName());
         return new ResponseEntity<>(new UserConnectionData(true, user.getName(), user.getApiToken(), ""), HttpStatus.OK);
 

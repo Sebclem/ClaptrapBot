@@ -6,6 +6,7 @@ import net.Broken.MainBot;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -53,13 +54,13 @@ public class Oauth {
     }
 
 
-    public UserEntity getUserEntity(String token, UserRepository userRepository){
+    public UserEntity getUserEntity(String token, UserRepository userRepository, PasswordEncoder passwordEncoder){
         String discorId = getUserId(token);
         List<UserEntity> userEntitys = userRepository.findByJdaId(discorId);
         if(userEntitys.size() != 0){
             return userEntitys.get(0);
         }else{
-            UserEntity user = new UserEntity(MainBot.jda.getUserById(discorId));
+            UserEntity user = new UserEntity(MainBot.jda.getUserById(discorId), passwordEncoder);
             user = userRepository.save(user);
             return user;
         }
