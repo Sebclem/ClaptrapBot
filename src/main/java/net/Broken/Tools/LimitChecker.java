@@ -25,60 +25,57 @@ public class LimitChecker {
     public static int doYourJob(String baseURL, int minNumber) throws IOException {
         int number = minNumber;
         URL u = null;
-        int result = -1;
+        boolean redirected = false;
+        Redirection redirection = new Redirection();
 
-        while(result != 404 )
+        while(!redirected )
         {
-            u = new URL( baseURL+number+"-2/");
-            HttpURLConnection huc = (HttpURLConnection)u.openConnection ();
-            huc.setRequestMethod ("GET");
-            huc.connect ();
-            result = huc.getResponseCode();
-            logger.trace("URL: "+u.toString()+" Result: "+result);
-            if(result!=404)
+            String origin = baseURL+number+"-2/";
+            String newUrl = redirection.get(origin);
+            logger.trace("Origin URL: "+origin+" Result: "+newUrl);
+            if(newUrl.equals(origin))
                 number += 500;
+            else
+                redirected = true;
         }
         number-=400;
-        result = -1;
+        redirected = false;
         logger.trace("First pass: "+number);
-        while(result != 404 )
+        while(!redirected )
         {
-            u = new URL( baseURL+number+"-2/");
-            HttpURLConnection huc = (HttpURLConnection)u.openConnection ();
-            huc.setRequestMethod ("GET");
-            huc.connect ();
-            result = huc.getResponseCode();
-            logger.trace("URL: "+u.toString()+" Result: "+result);
-            if(result!=404)
+            String origin = baseURL+number+"-2/";
+            String newUrl = redirection.get(origin);
+            logger.trace("Origin URL: "+origin+" Result: "+newUrl);
+            if(newUrl.equals(origin))
                 number += 100;
+            else
+                redirected = true;
         }
         number-=90;
-        result = -1;
+        redirected = false;
         logger.trace("Second pass: "+number);
-        while(result != 404 )
+        while(!redirected )
         {
-            u = new URL( baseURL+number+"-2/");
-            HttpURLConnection huc = (HttpURLConnection)u.openConnection ();
-            huc.setRequestMethod ("GET");
-            huc.connect ();
-            result = huc.getResponseCode();
-            logger.trace("URL: "+u.toString()+" Result: "+result);
-            if(result!=404)
+            String origin = baseURL+number+"-2/";
+            String newUrl = redirection.get(origin);
+            logger.trace("Origin URL: "+origin+" Result: "+newUrl);
+            if(newUrl.equals(origin))
                 number += 10;
+            else
+                redirected = true;
         }
         number-=9;
-        result = -1;
+        redirected = false;
         logger.trace("Third pass: "+number);
-        while(result != 404 )
+        while(!redirected )
         {
-            u = new URL( baseURL+number+"-2/");
-            HttpURLConnection huc = (HttpURLConnection)u.openConnection ();
-            huc.setRequestMethod ("GET");
-            huc.connect ();
-            result = huc.getResponseCode();
-            logger.trace("URL: "+u.toString()+" Result: "+result);
-            if(result!=404)
+            String origin = baseURL+number+"-2/";
+            String newUrl = redirection.get(origin);
+            logger.trace("Origin URL: "+origin+" Result: "+newUrl);
+            if(newUrl.equals(origin))
                 number += 1;
+            else
+                redirected = true;
         }
         number-=1;
         logger.trace("Final pass: "+number);
