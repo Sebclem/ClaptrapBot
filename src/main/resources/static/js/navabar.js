@@ -100,6 +100,7 @@ function disconnected() {
 
 
 function tryConnection() {
+
     var request = { name: input_name.val(), password: input_psw.val()};
     $.ajax({
         type: "POST",
@@ -175,7 +176,12 @@ function navListeners() {
     $('.nav-change-guild').click(function () {
         Cookies.remove('guild');
         window.location.reload(true);
-    })
+    });
+
+    $("#login_form").submit(function(e){
+        e.preventDefault();
+        tryConnection();
+    });
 }
 
 function getGuild(){

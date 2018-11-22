@@ -403,7 +403,7 @@ function search() {
     let list = $("#search_result");
     let load = $("#search_load");
     disableBtn($('#btn_search'));
-    disableBtn(input_search);
+    input_search.attr('disabled', 'disabled');
     list.removeClass("scale-in");
     load.removeClass("hide");
     load.addClass("scale-in");
@@ -434,7 +434,8 @@ function search() {
         load.addClass("hide");
         list.addClass("scale-in");
         enableBtn($('#btn_search'));
-        enableBtn(input_search);
+        input_search.removeAttr("disabled");
+        input_search.focus();
 
 
     }).fail( (data)=>{
