@@ -167,7 +167,14 @@ function getCurentMusic() {
         }
         if (switchAutoFlow.is(':checked') != data.autoflow)
             switchAutoFlow.prop('checked', data.autoflow);
-        getPlayList();
+        if(data.state !== "DISCONNECTED" && data.state !== "STOP")
+            getPlayList();
+        else{
+            if (loadingFlag) {
+                modal_loading.close();
+                loadingFlag = false;
+            }
+        }
 
     })
         .fail(function (data) {
