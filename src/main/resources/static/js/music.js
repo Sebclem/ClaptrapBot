@@ -105,6 +105,10 @@ function getCurentMusic() {
                 $('#current_time').text("00:00");
                 btn_play.removeClass("amber");
                 btn_play.addClass("green");
+                if(savedPlaylist != null){
+                    $('#playlist_list').empty();
+                    savedPlaylist = null;
+                }
 
                 break;
 
@@ -163,6 +167,10 @@ function getCurentMusic() {
                 }
 
                 clearInterval(interval);
+                if(savedPlaylist != null){
+                    $('#playlist_list').empty();
+                    savedPlaylist = null;
+                }
                 break;
         }
         if (switchAutoFlow.is(':checked') != data.autoflow)
@@ -533,14 +541,14 @@ function listeners() {
     $('#btn_play').click(function () {
         switch (state) {
             case "PLAYING":
-                sendCommand({command: "PAUSE"}, true);
+                sendCommand({command: "PAUSE"}, false);
                 break;
 
             case "PAUSE":
-                sendCommand({command: "PLAY"}, true);
+                sendCommand({command: "PLAY"}, false);
                 break;
             default:
-                sendCommand({command: "PLAY"},true);
+                sendCommand({command: "PLAY"}, false);
         }
 
     });
@@ -553,10 +561,10 @@ function listeners() {
     });
 
     $('#btn_next').click(function () {
-        sendCommand({command: "NEXT"},true);
-    });
+        sendCommand({command: "NEXT"}, false);
+    })
     $('#btn_stop').click(function () {
-        sendCommand({command: "STOP"}, true);
+        sendCommand({command: "STOP"}, false);
     });
 
 
@@ -582,7 +590,7 @@ function listeners() {
         var command = {
             command: "FLUSH"
         };
-        sendCommand(command, true);
+        sendCommand(command, false);
     });
 
     $('#btn_ok_channel').click(function () {
