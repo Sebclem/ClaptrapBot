@@ -31,7 +31,7 @@ public class YtSearch implements Commande {
             new MessageTimeOut(MainBot.messageTimeOut, message, event.getMessage()).start();
         }else {
             try {
-                ArrayList<SearchResult> result = youtubeT.search(args[0], 5);
+                ArrayList<SearchResult> result = youtubeT.search(args[0], 5, false);
                 for(SearchResult item : result){
                     event.getChannel().sendMessage(EmbedMessageUtils.searchResult(item)).queue();
                 }

@@ -41,6 +41,7 @@ $(document).ready(function () {
 
         modal_loading = M.Modal.init($('#modal_loading').get(0), {dismissible: false});
         modal_loading.open();
+        $('#tabs-swipe-demo').tabs();
 
 
         $('.dropdown-button').dropdown({
@@ -171,7 +172,6 @@ function getCurentMusic() {
                     }
                 }
 
-                clearInterval(interval);
                 if (savedPlaylist != null) {
                     $('#playlist_list').empty();
                     savedPlaylist = null;
@@ -431,14 +431,21 @@ function search() {
     load.removeClass("hide");
     load.addClass("scale-in");
 
-    $.get("/api/music/search?query=" + input_search.val(), (data) => {
+    $.get("/api/music/search?query=" + input_search.val() + "&playlist=" + $("#playlistSearch").is(':checked'), (data) => {
         list.empty();
+        let url;
+        if($("#playlistSearch").is(':checked')){
+            url = "https://www.youtube.com/playlist?list="
+        }
+        else
+            url = "https://youtube.com/watch?v=";
+
         data.forEach((item) => {
 
             let html =
                 "<li class=\"collection-item avatar\">" +
                 "   <img src=\"" + item["imageUrl"] + "\" alt=\"\" class=\"\">" +
-                "   <a class=\"title truncate\" href='https://youtube.com/watch?v=" + item["id"] + "' target=\"_blank\"><b>" + item["title"] + "</b></a>" +
+                "   <a class=\"title truncate\" href='" + url + item["id"] + "' target=\"_blank\"><b>" + item["title"] + "</b></a>" +
                 "   <p class='truncate grey-text text-darken-1'>" + item["channelTittle"] + " &#9553 " + item["publishedAt"].substr(0, item["publishedAt"].indexOf('T')) + " <br>" + ytTimeToTime(item["duration"]) +
                 "   </p>" +
                 "   <a href=\"#!\" class=\"secondary-content btn waves-effect waves-light green add-btn-list scale-transition\" id='" + item["id"] + "'><i class=\"material-icons \">add_circle_outline</i></a>" +
@@ -495,7 +502,7 @@ function addListClick(event) {
     let command = {
         command: "ADD",
         url: button.id,
-        playlistLimit: $('#limit_range').val(),
+        playlistLimit: "300",
         onHead: !$('#bottom').is(':checked')
     };
     sendCommand(command, false);
@@ -507,6 +514,8 @@ function ytTimeToTime(duration) {
     let seconds;
     if (duration === "PT0S")
         return "&#x1F534 LIVE";
+    if(duration.endsWith("Video(s)"))
+        return duration;
     if (duration.includes("H"))
         hours = parseInt(duration.match(/\d*H/)[0].replace("H", ""), 10);
     else
