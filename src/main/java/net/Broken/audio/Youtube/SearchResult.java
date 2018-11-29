@@ -11,7 +11,10 @@ public class SearchResult {
     public String duration;
 
     public SearchResult(com.google.api.services.youtube.model.SearchResult result, String duration){
-        id = result.getId().getVideoId();
+        if(result.getId().getVideoId() == null)
+            id = result.getId().getPlaylistId();
+        else
+            id = result.getId().getVideoId();
         title = result.getSnippet().getTitle();
         description = result.getSnippet().getDescription();
         publishedAt = result.getSnippet().getPublishedAt().toString();
