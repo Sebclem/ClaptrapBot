@@ -17,6 +17,7 @@ import net.Broken.audio.Youtube.SearchResult;
 import net.Broken.audio.Youtube.YoutubeTools;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.VoiceChannel;
+import org.apache.http.HttpResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +60,6 @@ public class MusicWebAPIController {
             logger.trace("currentMusicInfo for " + guild.getName());
         }
 
-        Music musicCommande = (Music) MainBot.commandes.get("music");
 
         if(guild.getAudioManager().isConnected()){
             AudioPlayer player = AudioM.getInstance(guild).getGuildMusicManager().player;
@@ -92,7 +92,58 @@ public class MusicWebAPIController {
         return new ResponseEntity<>(new PlaylistData(list), HttpStatus.OK);
     }
 
-//    TODO change token to cookie
+
+
+
+    @RequestMapping("/getAllInfo")
+    public ResponseEntity<AllMusicInfoData> getAllInfo(@RequestParam(value = "guild") String guildId, @CookieValue("token") String token){
+        if(token != null) {
+            Guild guild = MainBot.jda.getGuildById(guildId);
+            if(guild == null ){
+
+                logger.warn("All info without guild!");
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            }
+
+            try {
+                UserEntity user = userUtils.getUserWithApiToken(userRepository, token);
+                logger.trace("All info from USER: " + user.getName() + " GUILD: " + guild.getName());
+
+                PlaylistData list = new PlaylistData(AudioM.getInstance(guild).getGuildMusicManager().scheduler.getList());
+                CurrentMusicData musicData;
+                if(guild.getAudioManager().isConnected()){
+                    AudioPlayer player = AudioM.getInstance(guild).getGuildMusicManager().player;
+                    AudioTrack currentTrack = player.getPlayingTrack();
+                    if(currentTrack == null)
+                    {
+                        musicData = new CurrentMusicData(null,0, "STOP",false, AudioM.getInstance(guild).getGuildMusicManager().scheduler.isAutoFlow());
+                    }
+                    else{
+                        UserAudioTrackData uat = new UserAudioTrackData(AudioM.getInstance(guild).getGuildMusicManager().scheduler.getCurrentPlayingTrack());
+                        musicData = new CurrentMusicData(uat, currentTrack.getPosition(), currentTrack.getState().toString(), player.isPaused(), AudioM.getInstance(guild).getGuildMusicManager().scheduler.isAutoFlow());
+                    }
+
+                }else
+                {
+                    musicData = new CurrentMusicData(null,0, "DISCONNECTED",false, false);
+                }
+                return new ResponseEntity<>(new AllMusicInfoData(musicData, list),HttpStatus.OK);
+
+
+            } catch (UnknownTokenException e) {
+                logger.warn("All info with unknown token");
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+
+            }
+
+        }
+        else{
+            logger.warn("All Info without token!");
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+
+        }
+    }
+
     @RequestMapping(value = "/command", method = RequestMethod.POST)
     public ResponseEntity<CommandResponseData> command(@RequestBody CommandPostData data, HttpServletRequest request, @RequestParam(value = "guild") String guildId, @CookieValue("token") String token){
 
