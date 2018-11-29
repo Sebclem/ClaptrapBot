@@ -245,6 +245,7 @@ function getPlayList() {
             modal_loading.close();
             loadingFlag = false;
         }
+        $(".ctl-btn").removeClass("disabled");
 
 
     }).fail(function (data) {
@@ -343,12 +344,13 @@ function updateControl(data) {
     updateModal(data);
 }
 
-function sendCommand(command, stopRefresh) {
-    if(stopRefresh){
-        clearInterval(interval);
+function sendCommand(command, modal) {
+    clearInterval(interval);
+    if(modal){
         modal_loading.open();
 
     }
+    $(".ctl-btn").addClass("disabled");
 
     $.ajax({
         type: "POST",
@@ -358,8 +360,8 @@ function sendCommand(command, stopRefresh) {
         data: JSON.stringify(command),
         success: function (data) {
             loadingFlag = true;
-            if(stopRefresh)
-                interval = setInterval("getCurentMusic()", 1000);
+            interval = setInterval("getCurentMusic()", 1000);
+
             if(command.command === "ADD"){
                 M.toast({
                     html: " <i class=\"material-icons\" style='margin-right: 10px'>check_circle</i> Video added to playlist!",
@@ -367,6 +369,7 @@ function sendCommand(command, stopRefresh) {
                     displayLength: 5000
                 });
             }
+
 
         }
 
@@ -385,6 +388,7 @@ function sendCommand(command, stopRefresh) {
                 displayLength: 99999999
             });
         }
+        $(".ctl-btn").removeClass("disabled");
     });
 }
 
