@@ -19,12 +19,14 @@
             .row.valign-wrapper {
                 display: inherit;
             }
-            img{
+
+            img {
                 margin-top: 10px;
             }
         }
+
         @media only screen and (min-width: 992px) {
-            img{
+            img {
                 width: 70%;
             }
         }
@@ -35,40 +37,43 @@
 
 </head>
 
-<body class="blue-grey lighten-5" >
+<body class="blue-grey lighten-5">
 
-<div th:replace="header :: header ('home',${guild_name},${redirect_url}, ${isAdmin})">...</div>
-
-
-
-
-
-<div class="section no-pad-bot main" id="index-banner">
-
-    <div class="center row " >
-        <div class="row center valign-wrapper ">
-            <div class="col l6 m12 s12">
-                <h2 class="red-text text-darken-2" style="font-weight: 1000">STOP !</h2>
-                <h3 class=" blue-grey-text "><b>Who are you ??? Why are you here ???</b></h3>
+<header>
+    <div th:replace="header :: header ('home',${guild_name},${redirect_url}, ${isAdmin})">...</div>
+</header>
 
 
-                <a class="btn btn-large light-green darken-3 waves-effect" href="/">
-                    <i class="large material-icons">home</i>
-                </a>
-                <h6 class=" blue-grey-text ">403 – Forbidden</h6>
+<main>
+    <div class="section no-pad-bot main" id="index-banner">
+
+        <div class="center row ">
+            <div class="row center valign-wrapper ">
+                <div class="col l6 m12 s12">
+                    <h2 class="red-text text-darken-2" style="font-weight: 1000">STOP !</h2>
+                    <h3 class=" blue-grey-text "><b>Who are you ??? Why are you here ???</b></h3>
+
+
+                    <a class="btn btn-large light-green darken-3 waves-effect" href="/">
+                        <i class="large material-icons">home</i>
+                    </a>
+                    <h6 class=" blue-grey-text ">403 – Forbidden</h6>
+                </div>
+                <div class="col l6 m12 s12">
+                    <img class="" src="/img/403.gif" style="border:none;outline: none"/>
+                </div>
             </div>
-            <div class="col l6 m12 s12">
-                <img class="" src="/img/403.gif" style="border:none;outline: none"/>
+            <div class="row">
+
             </div>
-        </div>
-        <div class="row">
 
         </div>
-
     </div>
-</div>
+</main>
 
-
+<footer class="page-footer" style="padding: 0">
+    <div th:replace="footer :: footer">...</div>
+</footer>
 
 <!--  Scripts-->
 <script th:src="@{/js/jquery-3.3.1.min.js}"></script>

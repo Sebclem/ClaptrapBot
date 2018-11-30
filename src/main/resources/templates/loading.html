@@ -15,18 +15,20 @@
     <meta name="theme-color" content="#263238"/>
 </head>
 
-<body class="blue-grey lighten-5" >
+<body class="blue-grey lighten-5">
 
 <!--__________________________________________________________-->
 <!--                         NAV BAR                          -->
 <!--                           AND                            -->
 <!--                          LOGIN                           -->
 <!--__________________________________________________________-->
-<nav class="blue-grey darken-4 z-depth-3" role="navigation">
-    <div class="nav-wrapper container">
-        <a id="logo-container" href="/" class="brand-logo">Claptrap Bot</a>
-    </div>
-</nav>
+<header>
+    <nav class="brown darken-4 z-depth-3" role="navigation">
+        <div class="nav-wrapper container">
+            <a id="logo-container" href="/" class="brand-logo center">Claptrap Bot</a>
+        </div>
+    </nav>
+</header>
 
 <!--__________________________________________________________-->
 <!--                                                          -->
@@ -34,30 +36,36 @@
 <!--                                                          -->
 <!--__________________________________________________________-->
 
-<div class="section no-pad-bot main" id="index-banner">
-    <div class="row center center-align">
-        <h3 class="">Bot is starting</h3>
-    </div>
-    <div class="row center" >
-        <div class="preloader-wrapper big active">
-            <div class="spinner-layer spinner-blue-only">
-                <div class="circle-clipper left">
-                    <div class="circle"></div>
-                </div>
-                <div class="gap-patch">
-                    <div class="circle"></div>
-                </div>
-                <div class="circle-clipper right">
-                    <div class="circle"></div>
+<main>
+    <div class="section no-pad-bot main" id="index-banner">
+        <div class="row center center-align">
+            <h3 class="">Bot is starting</h3>
+        </div>
+        <div class="row center">
+            <div class="preloader-wrapper big active">
+                <div class="spinner-layer spinner-blue-only">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="gap-patch">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="circle-clipper right">
+                        <div class="circle"></div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="row center center-align">
-        <h3>Please wait</h3>
-    </div>
+        <div class="row center center-align">
+            <h3>Please wait</h3>
+        </div>
 
-</div>
+    </div>
+</main>
+
+<footer class="page-footer" style="padding: 0">
+    <div th:replace="footer :: footer">...</div>
+</footer>
 
 <!--  Scripts-->
 <script th:src="@{/js/jquery-3.3.1.min.js}"></script>

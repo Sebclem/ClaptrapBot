@@ -14,12 +14,14 @@
     <meta name="theme-color" content="#263238"/>
 </head>
 
-<body class="blue-grey lighten-5" >
+<body class="blue-grey lighten-5">
 
+<header>
     <div th:replace="header :: header ('','',${redirect_url},${isAdmin})">...</div>
+</header>
 
 
-
+<main>
     <div class="section no-pad-bot main" id="index-banner">
         <div class="row center">
             <div class="row">
@@ -53,12 +55,11 @@
                 </div>
             </div>
             <div class="col s12">
-                <a id="sendBtn" class="waves-effect waves-light btn scale-transition scale-out">Send<i class="material-icons left">send</i></a>
+                <a id="sendBtn" class="waves-effect waves-light btn scale-transition scale-out">Send<i
+                        class="material-icons left">send</i></a>
             </div>
         </div>
     </div>
-
-
 
 
     <!-- Modal Structure -->
@@ -90,30 +91,30 @@
             <a href="#" id="preTokenSend" class="modal-action waves-effect waves-green btn scale-transition scale-out">Send</a>
         </div>
     </div>
+</main>
 
 
+<footer class="page-footer" style="padding: 0">
+    <div th:replace="footer :: footer">...</div>
+</footer>
 
 
-
-    <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
-    <script th:src="@{/js/materialize.js}"></script>
-    <script th:src="@{/js/register.js}"></script>
-    <script th:src="@{/js/navabar.js}"></script>
-    <script th:src="@{/js/js.cookie.js}"></script>
-    <script th:src="@{/js/workerRegister.js}"></script>
-    <script th:src="@{/js/fontawesome.js}"></script>
-
+<script th:src="@{/js/jquery-3.3.1.min.js}"></script>
+<script th:src="@{/js/materialize.js}"></script>
+<script th:src="@{/js/register.js}"></script>
+<script th:src="@{/js/navabar.js}"></script>
+<script th:src="@{/js/js.cookie.js}"></script>
+<script th:src="@{/js/workerRegister.js}"></script>
+<script th:src="@{/js/fontawesome.js}"></script>
 
 
+<script th:inline="javascript">
+    /*<![CDATA[*/
 
+    var id = [[${id}]];
+    console.log(id);
 
-    <script th:inline="javascript">
-        /*<![CDATA[*/
-
-        var id = [[${id}]];
-        console.log(id);
-
-        /*]]>*/
-    </script>
+    /*]]>*/
+</script>
 </body>
 </html>

@@ -11,11 +11,12 @@
 <!--                           AND                            -->
 <!--                          LOGIN                           -->
 <!--__________________________________________________________-->
-<link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+<link href="../static/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+
 <div th:fragment="header (page, guild_name, redirect_url, isAdmin)">
-    <nav class="blue-grey darken-4 z-depth-3" role="navigation" >
+    <nav class="brown darken-4 z-depth-3" role="navigation" >
     <div class="nav-wrapper container">
-        <a id="logo-container" href="/" class="brand-logo" style="white-space: nowrap">Claptrap Bot</a>
+        <b><a id="logo-container" href="/" class="brand-logo" style="white-space: nowrap">Claptrap Bot</a></b>
         <ul class="right hide-on-med-and-down">
             <li>
                 <a class="nav-change-guild truncate waves-effect waves-light btn-flat grey-text text-darken-1" th:text="${guild_name}" style="margin-top: 2px;margin-right: 0px;"></a>
