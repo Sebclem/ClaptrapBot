@@ -38,12 +38,7 @@ $(document).ready(function() {
     btn_disconnect = $(".nav-disconnect");
     nav_name = $("#nav-name");
     navListeners();
-    if(Cookies.get('token') === undefined){
-        disconnected()
-    }
-    else{
-        connected();
-    }
+
 
     checkConnection();
 
@@ -69,20 +64,16 @@ function popInSubmit(){
 
 function connected(){
     console.log("Connected!");
-    nav_bar_account_link.html(connected_link);
-    $('.dropdown-account').dropdown({
-            constrainWidth: false, // Does not change width of dropdown to that of the activator
-            coverTrigger: false, // Displays dropdown below the button
-            alignment: 'left', // Displays dropdown with edge aligned to the left of button
-            stopPropagation: false // Stops event propagation
-        }
-    );
-    nav_name.text(Cookies.get('name'));
-    if (typeof needLogin !== 'undefined') {
-        if (Cookies.get('guild') === undefined) {
-            getGuild()
-        }
+    console.log("Checking token...");
+    console.log(window.location.href);
+    if(!window.location.href.includes("oauthCallback")){
+        checkToken();
     }
+    else{
+        console.log("Oauth page skip check token");
+    }
+
+
 }
 
 function disconnected() {
@@ -112,7 +103,7 @@ function tryConnection() {
             console.log(data);
             Cookies.set('token',data.token, { expires: 31 });
             Cookies.set('name', data.name, { expires: 31 });
-            debugger;
+
             window.location.reload(true);
         }
 
@@ -223,6 +214,15 @@ function checkConnection() {
         url: "/api/isReady",
         success: function (data) {
             console.log("Connection Ok");
+            console.log(Cookies.get('token'));
+
+            if(Cookies.get('token') === undefined){
+                disconnected()
+            }
+            else{
+                connected();
+            }
+
         }
 
     }).fail(function (data) {
@@ -230,4 +230,44 @@ function checkConnection() {
         $('#modal_internet').modal('open');
 
     });
+}
+
+
+function checkToken() {
+    $.ajax({
+        type: "GET",
+        url: "/api/userManagement/checkToken",
+        success: function (data) {
+            console.debug("...token is valid.");
+            nav_bar_account_link.html(connected_link);
+            $('.dropdown-account').dropdown({
+                    constrainWidth: false, // Does not change width of dropdown to that of the activator
+                    coverTrigger: false, // Displays dropdown below the button
+                    alignment: 'left', // Displays dropdown with edge aligned to the left of button
+                    stopPropagation: false // Stops event propagation
+                }
+            );
+            nav_name.text(Cookies.get('name'));
+            if (typeof needLogin !== 'undefined') {
+                if (Cookies.get('guild') === undefined) {
+                    getGuild()
+                }
+            }
+
+        }
+
+    }).fail(function (data) {
+        console.error("...token is invalid !");
+        console.log(data);
+
+        Cookies.remove('token');
+        Cookies.remove('name');
+        Cookies.remove('guild');
+        window.location.reload(true);
+
+    });
+
+
+
+
 }

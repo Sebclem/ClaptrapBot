@@ -12,6 +12,7 @@ import net.Broken.Tools.UserManager.UserUtils;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.User;
+import org.apache.http.HttpResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -134,6 +135,18 @@ public class UserManagerAPIController {
 
 
 
+    }
+
+
+    @RequestMapping(value = "/checkToken", method = RequestMethod.GET)
+    public ResponseEntity checkToken(@CookieValue(value = "token") String token){
+        try{
+            userUtils.getUserWithApiToken(userRepository,token);
+            return new ResponseEntity(HttpStatus.OK);
+        } catch (UnknownTokenException e) {
+            logger.info("Token check fail");
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        }
     }
 
 
