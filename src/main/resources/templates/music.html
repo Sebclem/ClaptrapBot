@@ -56,318 +56,333 @@
 <!--/*@thymesVar id="guild_name" type="java.lang.String"*/-->
 <!--/*@thymesVar id="redirect_url" type="java.lang.String"*/-->
 <!--/*@thymesVar id="isAdmin" type="java.lang.Boolean"*/-->
-<div th:replace="header :: header ('music',${guild_name},${redirect_url}, ${isAdmin})">...</div>
-<div class="section no-pad-bot main" id="index-banner">
-    <div class="row">
-        <div class="col l8 s12 m12">
-            <div class="row center">
-                <img class="responsive-img z-depth-3" id="music_img" style="max-width: 30%"
-                     src="/img/disconnected.png"/>
-            </div>
-            <h4 class="center" id="music_text"></h4>
-            <div class="row center" style="margin-bottom: 0px">
-                <div class="progress col l6 offset-l3 m10 offset-m1 s10 offset-s1 z-depth-3">
-                    <div class="determinate" id="music_progress" style="width: 0%"></div>
+<header>
+    <div th:replace="header :: header ('music',${guild_name},${redirect_url}, ${isAdmin})">...</div>
+</header>
+<main>
+    <div class="section no-pad-bot main" id="index-banner">
+        <div class="row">
+            <div class="col l8 s12 m12">
+                <div class="row center">
+                    <img class="responsive-img z-depth-3" id="music_img" style="max-width: 30%"
+                         src="/img/disconnected.png"/>
                 </div>
-            </div>
-            <div class="row center">
-                <div class="col l2 offset-l3 m2 offset-m1 s2 offset-s1 left-align" style="padding: 0px"
-                     id="current_time">0:00
+                <h4 class="center" id="music_text"></h4>
+                <div class="row center" style="margin-bottom: 0px">
+                    <div class="progress col l6 offset-l3 m10 offset-m1 s10 offset-s1 z-depth-3">
+                        <div class="determinate" id="music_progress" style="width: 0%"></div>
+                    </div>
                 </div>
-                <div class="col l2 offset-l2 m2 offset-m6 s2 offset-s6 right-align " style="padding: 0px"
-                     id="total_time">0:00
+                <div class="row center">
+                    <div class="col l2 offset-l3 m2 offset-m1 s2 offset-s1 left-align" style="padding: 0px"
+                         id="current_time">0:00
+                    </div>
+                    <div class="col l2 offset-l2 m2 offset-m6 s2 offset-s6 right-align " style="padding: 0px"
+                         id="total_time">0:00
+                    </div>
                 </div>
-            </div>
-            <div class="row center">
-                <div class="col l2 offset-l3 m4 s4 center">
-                    <a class="btn-large red darken-4 z-depth-3 waves-effect waves-light ctl-btn" id="btn_stop">
-                        <i class="material-icons medium">stop</i>
-                    </a>
+                <div class="row center">
+                    <div class="col l2 offset-l3 m4 s4 center">
+                        <a class="btn-large red darken-4 z-depth-3 waves-effect waves-light ctl-btn" id="btn_stop">
+                            <i class="material-icons medium">stop</i>
+                        </a>
+                    </div>
+                    <div class="col l2 m4 s4 center">
+                        <a class="btn-large green darken-4 z-depth-3 waves-effect waves-light ctl-btn" id="btn_play">
+                            <i class="material-icons medium">play_arrow</i>
+                        </a>
+                    </div>
+                    <div class="col l2 m4 s4 center">
+                        <a class="btn-large light-blue darken-4 z-depth-3 waves-effect waves-light ctl-btn"
+                           id="btn_next">
+                            <i class="material-icons">skip_next</i>
+                        </a>
+                    </div>
                 </div>
-                <div class="col l2 m4 s4 center">
-                    <a class="btn-large green darken-4 z-depth-3 waves-effect waves-light ctl-btn" id="btn_play">
-                        <i class="material-icons medium">play_arrow</i>
-                    </a>
-                </div>
-                <div class="col l2 m4 s4 center">
-                    <a class="btn-large light-blue darken-4 z-depth-3 waves-effect waves-light ctl-btn" id="btn_next">
-                        <i class="material-icons">skip_next</i>
-                    </a>
-                </div>
-            </div>
-            <div class="row center">
+                <div class="row center">
 
-                <div class="col offset-l5 l2 m2 offset-m5 s2 offset-s5 center">
-                    <a class="btn black z-depth-3 waves-effect waves-light modal-trigger" href="#modal_current_info"
-                       id="btn_info">
-                        <i class="material-icons">info</i>
-                    </a>
-                </div>
+                    <div class="col offset-l5 l2 m2 offset-m5 s2 offset-s5 center">
+                        <a class="btn black z-depth-3 waves-effect waves-light modal-trigger" href="#modal_current_info"
+                           id="btn_info">
+                            <i class="material-icons">info</i>
+                        </a>
+                    </div>
 
+
+                </div>
+                <div class="row center">
+                    <div class="col offset-l5 l2 m4 offset-m4 s4 offset-s4 center">
+                        <a class="btn-large red accent-4 z-depth-3 waves-effect waves-light ctl-btn"
+                           id="btn_disconnect">
+                            <i class="material-icons">call_end</i>
+                        </a>
+                    </div>
+                </div>
 
             </div>
-            <div class="row center">
-                <div class="col offset-l5 l2 m4 offset-m4 s4 offset-s4 center">
-                    <a class="btn-large red accent-4 z-depth-3 waves-effect waves-light ctl-btn" id="btn_disconnect">
-                        <i class="material-icons">call_end</i>
-                    </a>
-                </div>
+            <div class="col l4 m12 s12">
+                <table>
+                    <thead>
+                    <tr>
+                        <th style="padding: 0px;">
+                            <div class="row center valign-wrapper" style="margin: 0px">
+                                <div class="col l3 m5 s5 center blue-grey-text text-darken-3"><h5><b>Playlist</b></h5>
+                                </div>
+                                <div class="col l3 m2 s2 center" style="padding-right: 0px; padding-left: 0px">
+                                    <a class="waves-effect waves-light btn modal-trigger red darken-4 ctl-btn"
+                                       id="flush_btn"><i class="material-icons">delete_sweep</i></a>
+                                </div>
+                                <div class="col l3 m2 s2 center" style="padding-right: 0px; padding-left: 0px">
+                                    <!-- Modal Trigger -->
+                                    <a class="waves-effect waves-light btn modal-trigger green darken-4" id="add_btn"
+                                       href="#modalAdd"><i class="material-icons">add_circle_outline</i></a>
+                                </div>
+                                <div class="col l3 m2 s2 center " style="padding-left: 0px">
+                                    <div class="row switch  blue-grey-text text-darken-3" style="margin-bottom: 0px">
+                                        AutoFlow
+                                    </div>
+                                    <div class="row switch tooltipped ctl-btn" data-position="bottom" data-delay="50"
+                                         data-tooltip="Experimental!">
+                                        <label>
+                                            <input type="checkbox" id="autoflow"/>
+                                            <span class="lever"></span>
+                                        </label>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr>
+                        <td>
+                            <ul id="playlist_list" class="collapsible popout" data-collapsible="accordion"
+                                style="margin: 0px">
+
+                            </ul>
+                        </td>
+                    </tr>
+
+                    </tbody>
+                </table>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- Music  -->
+        <div id="modal_current_info" class="modal bottom-sheet">
+            <div class="modal-content">
+                <ul class="collection">
+                    <li class="collection-item " id="modal_title"></li>
+                    <li class="collection-item " id="modal_author"></li>
+                    <li class="collection-item " id="modal_lenght"></li>
+                    <li class="collection-item " id="modal_url"></li>
+                    <li class="collection-item " id="modal_submit"></li>
+                </ul>
             </div>
 
         </div>
-        <div class="col l4 m12 s12">
-            <table>
-                <thead>
-                <tr>
-                    <th style="padding: 0px;">
-                        <div class="row center valign-wrapper" style="margin: 0px">
-                            <div class="col l3 m5 s5 center blue-grey-text text-darken-3"><h5><b>Playlist</b></h5></div>
-                            <div class="col l3 m2 s2 center" style="padding-right: 0px; padding-left: 0px">
-                                <a class="waves-effect waves-light btn modal-trigger red darken-4 ctl-btn"
-                                   id="flush_btn"><i class="material-icons">delete_sweep</i></a>
+
+
+    </div>
+
+    <!--Add Modal-->
+    <div id="modalAdd" class="modal modal-fixed-footer ">
+        <div class="modal-content" style="padding-bottom: 0px">
+            <div class="row valign-wrapper">
+                <h3 class="col l12 m12 s12 center"> Add Music</h3>
+            </div>
+            <div class="row" id="musicSearch" style="margin-bottom: 0px">
+                <div class="row">
+                    <form class="col l12 m12 s12">
+                        <div class="row" style="margin-bottom: 0">
+                            <div class="input-field col offset-l1 l9 m9 s7"
+                                 style="padding-left: 0px; padding-right: 0px">
+                                <!--<i class="material-icons prefix">link</i>-->
+                                <input id="input_search" type="text" class="validate"/>
+                                <label for="input_search">Search</label>
                             </div>
-                            <div class="col l3 m2 s2 center" style="padding-right: 0px; padding-left: 0px">
-                                <!-- Modal Trigger -->
-                                <a class="waves-effect waves-light btn modal-trigger green darken-4" id="add_btn"
-                                   href="#modalAdd"><i class="material-icons">add_circle_outline</i></a>
+                            <div class="input-field col l1 m2 s3" style="margin-top: 22px">
+                                <button class="btn waves-effect waves-light green darken-4 white-text" id="btn_search"
+                                        type="button"><i class="material-icons">search</i></button>
                             </div>
-                            <div class="col l3 m2 s2 center " style="padding-left: 0px">
+                            <div class="col l1 m1 s2 center" style="padding: 0; margin-top: 15px;">
                                 <div class="row switch  blue-grey-text text-darken-3" style="margin-bottom: 0px">
-                                    AutoFlow
+                                    Playlist
                                 </div>
-                                <div class="row switch tooltipped ctl-btn" data-position="bottom" data-delay="50"
-                                     data-tooltip="Experimental!">
+                                <div class="row switch">
                                     <label>
-                                        <input type="checkbox" id="autoflow"/>
+                                        <input type="checkbox" id="playlistSearch"/>
                                         <span class="lever"></span>
                                     </label>
                                 </div>
                             </div>
-
                         </div>
-                    </th>
-                </tr>
-                </thead>
 
-                <tbody>
-                <tr>
-                    <td>
-                        <ul id="playlist_list" class="collapsible popout" data-collapsible="accordion"
-                            style="margin: 0px">
-
-                        </ul>
-                    </td>
-                </tr>
-
-                </tbody>
-            </table>
-
-        </div>
-
-
-    </div>
-
-
-    <!-- Music  -->
-    <div id="modal_current_info" class="modal bottom-sheet">
-        <div class="modal-content">
-            <ul class="collection">
-                <li class="collection-item " id="modal_title"></li>
-                <li class="collection-item " id="modal_author"></li>
-                <li class="collection-item " id="modal_lenght"></li>
-                <li class="collection-item " id="modal_url"></li>
-                <li class="collection-item " id="modal_submit"></li>
-            </ul>
-        </div>
-
-    </div>
-
-
-</div>
-
-<!--Add Modal-->
-<div id="modalAdd" class="modal modal-fixed-footer ">
-    <div class="modal-content" style="padding-bottom: 0px">
-        <div class="row valign-wrapper">
-            <h3 class="col l12 m12 s12 center"> Add Music</h3>
-        </div>
-        <div class="row" id="musicSearch" style="margin-bottom: 0px">
-            <div class="row">
-                <form class="col l12 m12 s12">
-                    <div class="row" style="margin-bottom: 0">
-                        <div class="input-field col offset-l1 l9 m9 s7" style="padding-left: 0px; padding-right: 0px">
-                            <!--<i class="material-icons prefix">link</i>-->
-                            <input id="input_search" type="text" class="validate"/>
-                            <label for="input_search">Search</label>
-                        </div>
-                        <div class="input-field col l1 m2 s3" style="margin-top: 22px">
-                            <button class="btn waves-effect waves-light green darken-4 white-text" id="btn_search"
-                                    type="button"><i class="material-icons">search</i></button>
-                        </div>
-                        <div class="col l1 m1 s2 center" style="padding: 0; margin-top: 15px;">
-                            <div class="row switch  blue-grey-text text-darken-3" style="margin-bottom: 0px">
-                                Playlist
-                            </div>
-                            <div class="row switch">
-                                <label>
-                                    <input type="checkbox" id="playlistSearch"/>
-                                    <span class="lever"></span>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col s12 m12 l12 center scale-transition scale-out hide" id="search_load"
-                             style="margin-top: 25px">
-                            <div class="preloader-wrapper big active">
-                                <div class="spinner-layer spinner-blue-only">
-                                    <div class="circle-clipper left">
-                                        <div class="circle"></div>
-                                    </div>
-                                    <div class="gap-patch">
-                                        <div class="circle"></div>
-                                    </div>
-                                    <div class="circle-clipper right">
-                                        <div class="circle"></div>
+                        <div class="row">
+                            <div class="col s12 m12 l12 center scale-transition scale-out hide" id="search_load"
+                                 style="margin-top: 25px">
+                                <div class="preloader-wrapper big active">
+                                    <div class="spinner-layer spinner-blue-only">
+                                        <div class="circle-clipper left">
+                                            <div class="circle"></div>
+                                        </div>
+                                        <div class="gap-patch">
+                                            <div class="circle"></div>
+                                        </div>
+                                        <div class="circle-clipper right">
+                                            <div class="circle"></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                            <ul class="collection col l12 m12 s12 scale-transition scale-out" id="search_result"
+                                style="padding: 0">
+
+                            </ul>
+
                         </div>
-                        <ul class="collection col l12 m12 s12 scale-transition scale-out" id="search_result"
-                            style="padding: 0">
+                    </form>
+                </div>
 
-                        </ul>
-
-                    </div>
-                </form>
             </div>
-
         </div>
-    </div>
-    <div class="modal-footer">
+        <div class="modal-footer">
         <span style="margin-right: 10px">
             <label>
                 <input name="group1" type="radio" checked="checked" id="bottom"/>
                 <span>Bottom</span>
             </label>
         </span>
-        <span style="margin-right: 10px">
+            <span style="margin-right: 10px">
             <label>
                 <input name="group1" type="radio"/>
                 <span>Top</span>
             </label>
         </span>
-        <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">Close</a>
-    </div>
-</div>
-
-
-<!-- Playlist template-->
-<li id="playlist_template" style="visibility: hidden">
-    <div class="collapsible-header"><i class="material-icons">drag_handle</i>@title</div>
-    <div class="collapsible-body">
-        <ul class="collection">
-            <li class="collection-item">Author: @author</li>
-            <li class="collection-item">Duration: @lenght</li>
-            <li class="collection-item">URL: <a target="_blank" href="@url">@url</a></li>
-            <li class="collection-item">Submitted by: @user</li>
-            <li class="collection-item center">
-                <a class="btn red darken-4 z-depth-3 waves-effect waves-light btn_dell_playlist" data_url="@url">
-                    <i class="material-icons medium">delete</i>
-                </a>
-            </li>
-        </ul>
-    </div>
-</li>
-
-<!-- Modal Chanels -->
-<div id="modalChanels" class="modal">
-    <div class="modal-content" style="padding-bottom: 0px">
-        <div class="row" style="margin-bottom: 0px">
-            <h3 class="col l12 m12 s12 center">Vocal Channels</h3>
-            <div class="col offset-l4 l4 m4 offset-m4 s8 offset-s2 center">
-                <form id="channelForm" action="#" class="left-align">
-                </form>
-            </div>
+            <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">Close</a>
         </div>
     </div>
-    <div class="modal-footer">
-        <a href="/" class="modal-action modal-close waves-effect waves-red btn-flat ">Cancel</a>
-        <a href="#!" id="btn_ok_channel" class="modal-action modal-close waves-effect waves-green btn-flat disabled">Connect</a>
-
-    </div>
-</div>
 
 
-<!--Loading Modal-->
-<div id="modal_loading" class="modal valign-wrapper">
-    <div class="modal-content">
-        <div class="row center">
-            <h3 class="col l12 m12 s12 center">Please wait</h3>
+    <!-- Playlist template-->
+    <li id="playlist_template" style="visibility: hidden">
+        <div class="collapsible-header"><i class="material-icons">drag_handle</i>@title</div>
+        <div class="collapsible-body">
+            <ul class="collection">
+                <li class="collection-item">Author: @author</li>
+                <li class="collection-item">Duration: @lenght</li>
+                <li class="collection-item">URL: <a target="_blank" href="@url">@url</a></li>
+                <li class="collection-item">Submitted by: @user</li>
+                <li class="collection-item center">
+                    <a class="btn red darken-4 z-depth-3 waves-effect waves-light btn_dell_playlist" data_url="@url">
+                        <i class="material-icons medium">delete</i>
+                    </a>
+                </li>
+            </ul>
         </div>
-        <div class="row center">
-            <div class="preloader-wrapper big active">
-                <div class="spinner-layer spinner-blue">
-                    <div class="circle-clipper left">
-                        <div class="circle"></div>
-                    </div>
-                    <div class="gap-patch">
-                        <div class="circle"></div>
-                    </div>
-                    <div class="circle-clipper right">
-                        <div class="circle"></div>
-                    </div>
-                </div>
+    </li>
 
-                <div class="spinner-layer spinner-red">
-                    <div class="circle-clipper left">
-                        <div class="circle"></div>
-                    </div>
-                    <div class="gap-patch">
-                        <div class="circle"></div>
-                    </div>
-                    <div class="circle-clipper right">
-                        <div class="circle"></div>
-                    </div>
-                </div>
-
-                <div class="spinner-layer spinner-yellow">
-                    <div class="circle-clipper left">
-                        <div class="circle"></div>
-                    </div>
-                    <div class="gap-patch">
-                        <div class="circle"></div>
-                    </div>
-                    <div class="circle-clipper right">
-                        <div class="circle"></div>
-                    </div>
-                </div>
-
-                <div class="spinner-layer spinner-green">
-                    <div class="circle-clipper left">
-                        <div class="circle"></div>
-                    </div>
-                    <div class="gap-patch">
-                        <div class="circle"></div>
-                    </div>
-                    <div class="circle-clipper right">
-                        <div class="circle"></div>
-                    </div>
+    <!-- Modal Chanels -->
+    <div id="modalChanels" class="modal">
+        <div class="modal-content" style="padding-bottom: 0px">
+            <div class="row" style="margin-bottom: 0px">
+                <h3 class="col l12 m12 s12 center">Vocal Channels</h3>
+                <div class="col offset-l4 l4 m4 offset-m4 s8 offset-s2 center">
+                    <form id="channelForm" action="#" class="left-align">
+                    </form>
                 </div>
             </div>
         </div>
+        <div class="modal-footer">
+            <a href="/" class="modal-action modal-close waves-effect waves-red btn-flat ">Cancel</a>
+            <a href="#!" id="btn_ok_channel"
+               class="modal-action modal-close waves-effect waves-green btn-flat disabled">Connect</a>
+
+        </div>
     </div>
-</div>
 
 
-<p id="radioTemplate" class="" style="visibility: hidden">
-    <label>
-        <input name="vocalRadio" class="with-gap" type="radio" value="@id" id="@id"/>
-        <span for="@id">@name</span>
-    </label>
+    <!--Loading Modal-->
+    <div id="modal_loading" class="modal valign-wrapper">
+        <div class="modal-content">
+            <div class="row center">
+                <h3 class="col l12 m12 s12 center">Please wait</h3>
+            </div>
+            <div class="row center">
+                <div class="preloader-wrapper big active">
+                    <div class="spinner-layer spinner-blue">
+                        <div class="circle-clipper left">
+                            <div class="circle"></div>
+                        </div>
+                        <div class="gap-patch">
+                            <div class="circle"></div>
+                        </div>
+                        <div class="circle-clipper right">
+                            <div class="circle"></div>
+                        </div>
+                    </div>
 
-</p>
+                    <div class="spinner-layer spinner-red">
+                        <div class="circle-clipper left">
+                            <div class="circle"></div>
+                        </div>
+                        <div class="gap-patch">
+                            <div class="circle"></div>
+                        </div>
+                        <div class="circle-clipper right">
+                            <div class="circle"></div>
+                        </div>
+                    </div>
+
+                    <div class="spinner-layer spinner-yellow">
+                        <div class="circle-clipper left">
+                            <div class="circle"></div>
+                        </div>
+                        <div class="gap-patch">
+                            <div class="circle"></div>
+                        </div>
+                        <div class="circle-clipper right">
+                            <div class="circle"></div>
+                        </div>
+                    </div>
+
+                    <div class="spinner-layer spinner-green">
+                        <div class="circle-clipper left">
+                            <div class="circle"></div>
+                        </div>
+                        <div class="gap-patch">
+                            <div class="circle"></div>
+                        </div>
+                        <div class="circle-clipper right">
+                            <div class="circle"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <p id="radioTemplate" class="" style="visibility: hidden">
+        <label>
+            <input name="vocalRadio" class="with-gap" type="radio" value="@id" id="@id"/>
+            <span for="@id">@name</span>
+        </label>
+
+    </p>
+</main>
+
+
+<footer class="page-footer" style="padding: 0">
+    <div th:replace="footer :: footer">...</div>
+</footer>
+
 
 <!--  Scripts-->
 <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
