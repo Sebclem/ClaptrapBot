@@ -193,7 +193,7 @@ public class MusicWebAPIController {
             logger.trace("getPlaylist for " + guild.getName());
         }
         List<ChanelData> temp = new ArrayList<>();
-        for(VoiceChannel aChanel : FindGeneral.find(guild).getVoiceChannels()){
+        for(VoiceChannel aChanel : FindGeneral.find(guild)){
             temp.add(new ChanelData(aChanel.getName(),aChanel.getId(),aChanel.getPosition()));
         }
         return new ResponseEntity<>(temp, HttpStatus.OK);
