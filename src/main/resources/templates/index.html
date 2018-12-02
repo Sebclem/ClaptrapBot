@@ -13,23 +13,74 @@
     <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
     <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
     <link rel="manifest" href="/manifest.json"/>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/octicons/2.0.2/octicons.min.css"/>
+    <link rel="stylesheet" href="css/github-activity.css"/>
     <meta name="theme-color" content="#263238"/>
+    <style>
+        @media only screen and (max-width: 992px) {
+            .row.valign-wrapper {
+                display: inherit;
+            }
+        }
+
+
+    </style>
 
 
 </head>
 
 <body class="blue-grey lighten-5">
 <header>
-    <div th:replace="header :: header ('home',${guild_name},${redirect_url}, ${isAdmin})">...</div>
+    <div th:replace="header :: header ('home',${guild_name}, ${isAdmin})">...</div>
 </header>
 
 <main>
-    <div class="section no-pad-bot main" id="index-banner">
-        <div class="center center-align">
-            <h2>Home Page</h2>
-            <h1>Coming Soon</h1>
-            <img src="/favicon.png" class="responsive-img"/>
+    <div class="section no-pad-bot container main" id="index-banner"><div th:if="${isLogged} == false">
+
+            <div class="row valign-wrapper">
+                <div class="col m6 offset-s3 s6">
+                    <img src="/favicon.png" class="responsive-img"/>
+                </div>
+                <div class="col m6 s12 center flow-text">
+                    <h2>Hello you !</h2>
+                    <h4>Please log in to have access to you'r server</h4>
+                    <a class="btn green pulse" style="margin-top: 10px" href="/login">Log in / Register</a>
+                </div>
+
+            </div>
+
+
         </div>
+        <div th:if="${isLogged} == true">
+            <div th:if="${noMutualGuilds} == true">
+                <div class="row valign-wrapper">
+                    <div class="col m6 offset-s3 s6">
+                        <img src="/favicon.png" class="responsive-img"/>
+                    </div>
+                    <div class="col m6 s12 center flow-text">
+                        <h2>Oh no !</h2>
+                        <h4>We don't have any mutual server !</h4>
+                        <h5>You can chance this by inviting me with this button !</h5>
+                        <a th:href="${inviteLink}" class="btn blue pulse" style="margin-top: 10px" href="/login" target="_blank">Invite me !</a>
+                    </div>
+
+                </div>
+            </div>
+            <div th:if="${noMutualGuilds} == false">
+                <div class="row">
+                    <div class="col m6 offset-s3 s6 center">
+                        <img src="/favicon.png" class="responsive-img"/>
+                        <h2 class="flow-text">Home Page Comming soon!</h2>
+                    </div>
+                    <div class="col m6 s12">
+
+                        <div id="feed" style="height: 80vh"></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
 
     </div>
 </main>
@@ -37,9 +88,6 @@
 <footer class="page-footer" style="padding: 0">
     <div th:replace="footer :: footer">...</div>
 </footer>
-<script>
-    var needLogin = true;
-</script>
 <!--  Scripts-->
 <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
 <script th:src="@{/js/materialize.js}"></script>
@@ -47,6 +95,16 @@
 <script th:src="@{/js/js.cookie.js}"></script>
 <script th:src="@{/js/fontawesome.js}"></script>
 <script th:src="@{/js/workerRegister.js}"></script>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mustache.js/0.7.2/mustache.min.js"></script>
+<script th:src="@{/js/github-activity.js}"></script>
+<script>
+    GitHubActivity.feed({
+        username: "BrokenFire",
+        repository: "ClaptrapBot", // optional
+        selector: "#feed",
+        limit: 20 // optional
+    });
+</script>
 
 
 </body>

@@ -108,11 +108,13 @@ public class UserManagerAPIController {
             UserEntity userE = userUtils.getUserWithApiToken(userRepository, token);
             User user = MainBot.jda.getUserById(userE.getJdaId());
             List<GuildInfo> temp = new ArrayList<>();
+            if(user != null){
+                for (Guild guild : user.getMutualGuilds()){
 
-            for (Guild guild : user.getMutualGuilds()){
-
-                temp.add(new GuildInfo(guild.getName(), guild.getId(), guild.getMember(user).hasPermission(Permission.ADMINISTRATOR)));
+                    temp.add(new GuildInfo(guild.getName(), guild.getId(), guild.getMember(user).hasPermission(Permission.ADMINISTRATOR)));
+                }
             }
+
             return new ResponseEntity<>(temp, HttpStatus.OK);
 
 

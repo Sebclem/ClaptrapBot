@@ -57,7 +57,7 @@
 <!--/*@thymesVar id="redirect_url" type="java.lang.String"*/-->
 <!--/*@thymesVar id="isAdmin" type="java.lang.Boolean"*/-->
 <header>
-    <div th:replace="header :: header ('music',${guild_name},${redirect_url}, ${isAdmin})">...</div>
+    <div th:replace="header :: header ('music',${guild_name}, ${isAdmin})">...</div>
 </header>
 <main>
     <div class="section no-pad-bot main" id="index-banner">
@@ -386,10 +386,6 @@
 
 <!--  Scripts-->
 <script th:src="@{/js/jquery-3.3.1.min.js}"></script>
-
-<script>
-    var needLogin = true;
-</script>
 <script th:src="@{/js/materialize.js}"></script>
 <script th:src="@{/js/music.js}"></script>
 <script th:src="@{/js/navabar.js}"></script>
