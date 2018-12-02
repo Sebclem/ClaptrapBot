@@ -53,7 +53,7 @@ public class GeneralWebView {
             model.addAttribute("isLogged", false);
             model.addAttribute("guild_name", "");
             model.addAttribute("isAdmin", false);
-            return "index";
+            return CheckPage.getPageIfReady("index");
         }
 
         try {
@@ -85,7 +85,7 @@ public class GeneralWebView {
                 response.addCookie(cookie);
             }
             model.addAttribute("redirect_url", System.getenv("OAUTH_URL"));
-            return "login";
+            return CheckPage.getPageIfReady("login");
 
         } catch (NumberFormatException e){
             logger.debug("Unknown guild, flush cookies");
@@ -93,7 +93,7 @@ public class GeneralWebView {
             cookie.setPath("/");
             cookie.setMaxAge(0);
             response.addCookie(cookie);
-            return "redirect:index";
+            return "redirect:/";
         }
 
 

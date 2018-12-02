@@ -96,10 +96,10 @@ function getGuild(){
     }).done(function (data) {
         console.log(data);
         $('#guild_form').empty();
-        if(data.length === 0)
+        if(data.length === 0 && location.pathname !== "/")
             window.location.replace("/");
 
-        if(data.length === 1){
+        else if(data.length === 1){
             Cookies.set('guild', data[0].id, { expires: 31 });
             window.location.reload(true);
         }
@@ -172,7 +172,7 @@ function checkToken() {
                 closeOnClick: false, // Closes side-nav on <a> clicks, useful for Angular/Meteor
                 draggable: true // Choose whether you can drag to open on touch screens,
             });
-            if (Cookies.get('guild') === undefined && location.pathname !== "/") {
+            if (Cookies.get('guild') === undefined ) {
                 getGuild()
             }
 
