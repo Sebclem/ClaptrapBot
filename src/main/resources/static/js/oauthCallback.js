@@ -2,6 +2,7 @@
 var hash = window.location.hash.replace("#","").split("&");
 var discordToken = "";
 
+debugger;
 
 hash.forEach(function (value) {
     if(value.indexOf("access_token") !== -1){
