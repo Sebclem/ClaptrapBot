@@ -3,6 +3,7 @@ package net.Broken.audio;
 import net.dv8tion.jda.core.entities.Category;
 import net.dv8tion.jda.core.entities.Channel;
 import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.core.entities.VoiceChannel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -19,7 +20,7 @@ public class FindGeneral {
      * @param guild Current guild
      * @return General Category
      */
-    public static Category find(Guild guild){
+    public static List<VoiceChannel> find(Guild guild){
         List<Category> categories = guild.getCategories();
         Category finded = null;
         for(Category cat : categories){
@@ -29,9 +30,9 @@ public class FindGeneral {
             }
         }
         if(finded == null)
-            finded = create(guild);
+            return guild.getVoiceChannels();
 
-        return finded;
+        return finded.getVoiceChannels();
 
     }
 
