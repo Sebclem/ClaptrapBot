@@ -138,15 +138,10 @@ public class SettingsUtils {
                     return false;
                 }
 
-
-
-
-
-
                 return true;
 
             } catch (Exception e) {
-                logger.warn("Unknown Token! " + token);
+                logger.debug("Unknown Token or user :" + token);
                 return false;
             }
         }

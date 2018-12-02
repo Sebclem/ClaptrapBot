@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+    <title>Claptrap Bot</title>
+    <link rel="icon"
+          type="image/x-icon"
+          href="/favicon.png"/>
+
+    <!-- CSS  -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+    <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+    <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+    <meta name="theme-color" content="#263238"/>
+</head>
+
+<body class="blue-grey lighten-4">
+
+<!--__________________________________________________________-->
+<!--                         NAV BAR                          -->
+<!--                           AND                            -->
+<!--                          LOGIN                           -->
+<!--__________________________________________________________-->
+<header>
+    <nav class="brown darken-4 z-depth-3" role="navigation">
+        <div class="nav-wrapper container">
+            <a id="logo-container" href="/" class="brand-logo center">Claptrap Bot</a>
+        </div>
+    </nav>
+</header>
+
+<!--__________________________________________________________-->
+<!--                                                          -->
+<!--                           END                            -->
+<!--                                                          -->
+<!--__________________________________________________________-->
+
+<main>
+    <div class="section main" id="index-banner">
+        <div class="row">
+            <div class="card-panel col xl8 offset-xl2 l10 offset-l1 m10 offset-m1 s10 offset-s1">
+                <div class="row center">
+                    <div class="col s12">
+                        <h3 class="" style="font-weight: bold">Sign in</h3>
+                    </div>
+                </div>
+                <div class="row center">
+                    <a class="btn waves-effect waves-light" style="background-color: #7289DA" th:href="${redirect_url}">
+                        Sign in with discord <i class="fab fa-discord fa-lg" style="margin-left: 2px"></i>
+                    </a>
+                </div>
+                <div class="row center">
+                    <div class="col s12">
+                        <h3 style="font-weight: bold">Or</h3>
+                    </div>
+                </div>
+                <div class="row center" style="margin-bottom: 0px">
+                    <form name="login_form" id="login_form">
+                        <div class="row" style="margin-bottom: 0px">
+                            <div class="input-field col l6 offset-l3 m10 offset-m1 s10 offset-s1">
+                                <i class="material-icons prefix">account_box</i>
+                                <input name="username" id="user_input" type="text" class="validate" autocomplete="username"/>
+                                <label for="user_input" >User Name</label>
+                                <span class="helper-text" data-error="User not registered!"></span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col l6 offset-l3 m10 offset-m1 s10 offset-s1">
+                                <i class="material-icons prefix">security</i>
+                                <input name="password" id="password_input" type="password" class="validate" autocomplete="current-password"/>
+                                <label for="password_input">Password</label>
+                                <span class="helper-text" data-error="Wrong password!"></span>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-bottom: 10px">
+                            <button id="btn-submit-connect" class="btn waves-effect waves-light light-green darken-1 scale-transition scale-out" type="submit" name="action" >
+                                Submit<i class="material-icons right">send</i>
+                            </button>
+                        </div>
+
+                        <div class="row">
+                            <a class="btn waves-effect waves-light brown" href="/register">
+                                Create account<i class="material-icons right">person_add</i>
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</main>
+
+<footer class="page-footer" style="padding: 0">
+    <div th:replace="footer :: footer">...</div>
+</footer>
+
+<!--  Scripts-->
+<script th:src="@{/js/jquery-3.3.1.min.js}"></script>
+
+<script th:src="@{/js/materialize.js}"></script>
+<script th:src="@{/js/login.js}"></script>
+<script th:src="@{/js/js.cookie.js}"></script>
+<script src="https://use.fontawesome.com/releases/v5.3.1/js/all.js" crossorigin="anonymous"></script>
+
+
+</body>
+</html>

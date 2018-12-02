@@ -13,7 +13,7 @@
 <!--__________________________________________________________-->
 <link href="../static/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
 
-<div th:fragment="header (page, guild_name, redirect_url, isAdmin)">
+<div th:fragment="header (page, guild_name, isAdmin)">
     <nav class="brown darken-4 z-depth-3" role="navigation" >
     <div class="nav-wrapper container">
         <b><a id="logo-container" href="/" class="brand-logo" style="white-space: nowrap">Claptrap Bot</a></b>
@@ -59,7 +59,7 @@
 
 
         <li><div class="divider"></div></li>
-        <li><a class="center nav-change-guild">Change Guild</a></li>
+        <li><a class="center nav-change-guild">Change Server</a></li>
         <li class="center bot-settings" th:classappend="(${page} == 'settings')? 'active' : ''" th:style="${isAdmin} ? '' : 'visibility: hidden; display: none;'">
             <a class="waves-effect waves-light" href="/settings">Bot Settings</a>
         </li>
@@ -86,7 +86,7 @@
             <a class="center blue-grey-text text-darken-4 tooltipped" data-position="left" data-delay="50" data-tooltip="It's you !" id="nav-name" style="font-weight: bold"></a>
         </li>
         <li class="divider"></li>
-        <li><a class="center nav-change-guild" >Change Guild</a></li>
+        <li><a class="center nav-change-guild" >Change Server</a></li>
         <li class="bot-settings" th:style="${isAdmin} ? '' : 'visibility: hidden; display: none;'">
             <a class=" center waves-effect waves-light " href="/settings" >Bot Settings</a>
         </li>
@@ -102,63 +102,6 @@
     </ul>
 
 
-    <!--________________________________________-->
-    <!--            Connection modal            -->
-    <!--________________________________________-->
-    <div id="modal_connection" class="modal">
-        <div class="modal-content">
-
-            <div class="row center">
-                <div class="col s12">
-                    <h3 class="" style="font-weight: bold">Sign in</h3>
-                </div>
-            </div>
-            <div class="row center">
-                <a class="btn waves-effect waves-light" style="background-color: #7289DA" th:href="${redirect_url}">
-                    Sign in with discord <i class="fab fa-discord fa-lg" style="margin-left: 2px"></i>
-                </a>
-            </div>
-            <div class="row center">
-                <div class="col s12">
-                    <h3 style="font-weight: bold">Or</h3>
-                </div>
-            </div>
-            <div class="row center" style="margin-bottom: 0px">
-                <form name="login_form" id="login_form">
-                    <div class="row" style="margin-bottom: 0px">
-                        <div class="input-field col l6 offset-l3 m10 offset-m1 s10 offset-s1">
-                            <i class="material-icons prefix">account_box</i>
-                            <input name="username" id="user_input" type="text" class="validate"/>
-                            <label for="user_input" >User Name</label>
-                            <span class="helper-text" data-error="User not registered!"></span>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-field col l6 offset-l3 m10 offset-m1 s10 offset-s1">
-                            <i class="material-icons prefix">security</i>
-                            <input name="password" id="password_input" type="password" class="validate"/>
-                            <label for="password_input">Password</label>
-                            <span class="helper-text" data-error="Wrong password!"></span>
-                        </div>
-                    </div>
-                    <div class="row" style="margin-bottom: 10px">
-                        <button id="btn-submit-connect" class="btn waves-effect waves-light light-green darken-1 scale-transition scale-out" type="submit" name="action" >
-                            Submit<i class="material-icons right">send</i>
-                        </button>
-                    </div>
-
-                    <div class="row">
-                        <a class="btn waves-effect waves-light brown" href="/register">
-                            Create account<i class="material-icons right">person_add</i>
-                        </a>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-
-
-
 
     <!--________________________________________-->
     <!--            Guild modal                 -->
@@ -167,7 +110,7 @@
     <div id="modal_guild" class="modal">
         <div class="modal-content" style="padding-bottom: 0px">
             <div class="row" style="margin-bottom: 0px">
-                <h3 class="col l12 m12 s12 center">Guild Selection</h3>
+                <h3 class="col l12 m12 s12 center">Server Selection</h3>
                 <div class="col l4 offset-l4 m8 offset-m4 offset-s3 s8 center">
                     <form id="guild_form" action="#" class="left-align">
                     </form>
