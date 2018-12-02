@@ -26,6 +26,12 @@
                 width: 80%;
             }
         }
+        @media only screen and (min-width: 993px) {
+            #playlist_list {
+                max-height: 74vh;
+                overflow-y: scroll;
+            }
+        }
 
         #modalAdd {
             height: 85% !important;
@@ -45,6 +51,20 @@
         .collection-item.avatar {
             padding-left: 105px !important;
             padding-right: 75px;
+        }
+
+        .scroll4::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        .scroll4::-webkit-scrollbar-thumb {
+            background: #666;
+            border-radius: 20px;
+        }
+
+        .scroll4::-webkit-scrollbar-track {
+            background: #ddd;
+            border-radius: 20px;
         }
 
     </style>
@@ -158,7 +178,7 @@
                     <tbody>
                     <tr>
                         <td>
-                            <ul id="playlist_list" class="collapsible popout" data-collapsible="accordion"
+                            <ul id="playlist_list" class="collapsible popout scroll4" data-collapsible="accordion"
                                 style="margin: 0px">
 
                             </ul>
@@ -271,7 +291,7 @@
 
 
     <!-- Playlist template-->
-    <li id="playlist_template" style="visibility: hidden">
+    <li id="playlist_template" style="visibility: hidden; display: none">
         <div class="collapsible-header"><i class="material-icons">drag_handle</i>@title</div>
         <div class="collapsible-body">
             <ul class="collection">
@@ -369,7 +389,7 @@
     </div>
 
 
-    <p id="radioTemplate" class="" style="visibility: hidden">
+    <p id="radioTemplate" class="" style="visibility: hidden; display: none">
         <label>
             <input name="vocalRadio" class="with-gap" type="radio" value="@id" id="@id"/>
             <span for="@id">@name</span>
