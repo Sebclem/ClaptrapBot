@@ -24,7 +24,7 @@ public class GetSettingsData {
     }
 
     public enum TYPE{
-        BOOL,LIST,STRING
+        BOOL,LIST,STRING,SELECT_LIST
     }
 }
 

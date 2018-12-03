@@ -22,6 +22,17 @@ $(document).ready(function(){
 
         });
 
+
+        var select_multi = $('.collect-select-multiple');
+        select_multi.each(function(){
+            var instance = M.FormSelect.getInstance($(this).find("select")[0]);
+
+            var id = $(this).attr("id");
+            post_json["settings"].push({"id" : id, "vals" : instance.getSelectedValues()});
+
+
+        });
+
         var switch_collected = $('.collect-switch');
         switch_collected.each(function(){
             var val = $(this).is(':checked').toString();

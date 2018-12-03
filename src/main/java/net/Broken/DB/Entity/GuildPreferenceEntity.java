@@ -1,11 +1,11 @@
 package net.Broken.DB.Entity;
 
 import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.core.entities.VoiceChannel;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class GuildPreferenceEntity {
@@ -29,9 +29,12 @@ public class GuildPreferenceEntity {
 
     private boolean dailyMadame;
 
+    @ElementCollection
+    private List<String> visibleVoiceChanel;
 
 
-    public GuildPreferenceEntity(String guildId, boolean antiSpam, boolean welcome, String welcomeMessage, String welcomeChanelID, boolean defaultRole, String defaultRoleId, boolean dailyMadame) {
+
+    public GuildPreferenceEntity(String guildId, boolean antiSpam, boolean welcome, String welcomeMessage, String welcomeChanelID, boolean defaultRole, String defaultRoleId, boolean dailyMadame, ArrayList<String> visibleVoiceChanel) {
         this.guildId = guildId;
         this.antiSpam = antiSpam;
         this.welcome = welcome;
@@ -40,13 +43,19 @@ public class GuildPreferenceEntity {
         this.defaultRole = defaultRole;
         this.defaultRoleId = defaultRoleId;
         this.dailyMadame = dailyMadame;
+        this.visibleVoiceChanel = visibleVoiceChanel;
     }
 
     public GuildPreferenceEntity(){}
 
 
     public static GuildPreferenceEntity getDefault(Guild guild){
-        return new GuildPreferenceEntity(guild.getId(), false, false, "Welcome to this awesome server @name! ", " ", false, " ", true);
+        ArrayList<String> voice = new ArrayList<>();
+        for(VoiceChannel voiceChannel : guild.getVoiceChannels()){
+            voice.add(voiceChannel.getId());
+        }
+
+        return new GuildPreferenceEntity(guild.getId(), false, false, "Welcome to this awesome server @name! ", " ", false, " ", true, voice);
     }
 
     public Integer getId() {
@@ -119,5 +128,13 @@ public class GuildPreferenceEntity {
 
     public void setDailyMadame(boolean dailyMadame) {
         this.dailyMadame = dailyMadame;
+    }
+
+    public List<String> getVisibleVoiceChanel() {
+        return visibleVoiceChanel;
+    }
+
+    public void setVisibleVoiceChanel(List<String> visibleVoiceChanel) {
+        this.visibleVoiceChanel = visibleVoiceChanel;
     }
 }

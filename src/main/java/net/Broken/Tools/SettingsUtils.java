@@ -13,10 +13,7 @@ import net.Broken.SpringContext;
 import net.Broken.Tools.UserManager.Exceptions.UnknownTokenException;
 import net.Broken.Tools.UserManager.UserUtils;
 import net.dv8tion.jda.core.Permission;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.Role;
-import net.dv8tion.jda.core.entities.TextChannel;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.core.entities.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.context.ApplicationContext;
@@ -36,8 +33,8 @@ public class SettingsUtils {
         return (INSTANCE == null) ? new SettingsUtils() : INSTANCE;
     }
 
-    GuildPreferenceRepository guildPreferenceRepository;
-    UserRepository userRepository;
+    private GuildPreferenceRepository guildPreferenceRepository;
+    private UserRepository userRepository;
 
 
     private SettingsUtils() {
@@ -60,7 +57,13 @@ public class SettingsUtils {
         else
             guildPref = guildPrefList.get(0);
 
-
+        list.add(new GetSettingsData(
+                "Visible Voices Channels",
+                "voices_channels",
+                GetSettingsData.TYPE.SELECT_LIST,
+                getVoiceChanels(guild, guildPref),
+                null
+        ));
 
         list.add(new GetSettingsData(
                 "Enable Welcome Message",
@@ -117,6 +120,9 @@ public class SettingsUtils {
                 Boolean.toString(guildPref.isDailyMadame())
         ));
 
+
+
+
         return list;
 
     }
@@ -154,11 +160,26 @@ public class SettingsUtils {
             String value = setting.val;
             logger.debug(setting.id + " : " + value);
             switch (setting.id) {
+
+                case "voices_channels":
+
+                    List<String> list = checkVoiceChanel(guild, setting.vals);
+                    if(list == null){
+                        logger.error("voices_channels error, bad ID.");
+                        return false;
+                    }
+                    else{
+                        pref.setVisibleVoiceChanel(list);
+                    }
+
+                    break;
+
+
+
                 case "anti_spam":
                     if (value.toLowerCase().equals("true") || value.toLowerCase().equals("false")) {
                         boolean result = Boolean.parseBoolean(value);
                         pref.setAntiSpam(result);
-                        pref = guildPreferenceRepository.save(pref);
                     } else {
                         logger.error("anti_spam error. Key: " + setting.id + " Val: " + setting.val);
                         return false;
@@ -201,7 +222,6 @@ public class SettingsUtils {
                     if (value.toLowerCase().equals("true") || value.toLowerCase().equals("false")) {
                         boolean result = Boolean.parseBoolean(value);
                         pref.setWelcome(result);
-                        pref = guildPreferenceRepository.save(pref);
                     } else {
                         logger.error("welcome error. Key: " + setting.id + " Val: " + setting.val);
                         return false;
@@ -212,8 +232,6 @@ public class SettingsUtils {
                         TextChannel chanel = guild.getTextChannelById(value);
                         if (chanel != null) {
                             pref.setWelcomeChanelID(chanel.getId());
-
-                            pref = guildPreferenceRepository.save(pref);
 
                         } else {
                             throw new NumberFormatException();
@@ -226,7 +244,6 @@ public class SettingsUtils {
                     break;
                 case "welcome_message":
                     pref.setWelcomeMessage(value);
-                    pref = guildPreferenceRepository.save(pref);
 
                     break;
 
@@ -234,7 +251,6 @@ public class SettingsUtils {
                     if (value.toLowerCase().equals("true") || value.toLowerCase().equals("false")) {
                         boolean result = Boolean.parseBoolean(value);
                         pref.setDailyMadame(result);
-                        pref = guildPreferenceRepository.save(pref);
 
                     } else {
                         logger.error("daily_madame error. Key: " + setting.id + " Val: " + setting.val);
@@ -244,6 +260,7 @@ public class SettingsUtils {
                     break;
             }
         }
+        guildPreferenceRepository.save(pref);
         return true;
 
     }
@@ -263,6 +280,72 @@ public class SettingsUtils {
             roles.add(new Value(role.getName(), role.getId()));
         }
         return roles;
+    }
+
+
+    private List<Value> getVoiceChanels(Guild guild, GuildPreferenceEntity guildPref){
+
+
+        List<String> prefVoice = new ArrayList<>(guildPref.getVisibleVoiceChanel());
+        if(prefVoice.size() == 0){
+            guildPref = setDefaultVoiceChanels(guild, guildPref);
+        }
+
+        List<Value> chanels = new ArrayList<>();
+        for(VoiceChannel voiceChannel : guild.getVoiceChannels()){
+            chanels.add(new Value(voiceChannel.getName(), voiceChannel.getId(), prefVoice.contains(voiceChannel.getId())));
+            prefVoice.remove(voiceChannel.getId());
+        }
+
+        if(prefVoice.size() != 0){
+            List<String> edit = guildPref.getVisibleVoiceChanel();
+            for(String prefVoiceItem : prefVoice){
+                edit.remove(prefVoiceItem);
+            }
+            guildPref.setVisibleVoiceChanel(edit);
+            guildPreferenceRepository.save(guildPref);
+        }
+
+        return chanels;
+
+    }
+
+    private List<String> checkVoiceChanel(Guild guild, List<String> values){
+        List<String> list = new ArrayList<>();
+        for(String value : values){
+
+            if (guild.getVoiceChannelById(value) != null) {
+                list.add(value);
+            } else {
+                logger.error("Unknown voice chanel id: " + value);
+                list = null;
+                break;
+            }
+        }
+        return list;
+    }
+
+    public GuildPreferenceEntity cleanVoicePref(Guild guild, GuildPreferenceEntity guildPref){
+        List<String> voice = guildPref.getVisibleVoiceChanel();
+        for(String prefVoice : guildPref.getVisibleVoiceChanel()){
+            if(guild.getVoiceChannelById(prefVoice) == null)
+                voice.remove(prefVoice);
+        }
+        guildPref.setVisibleVoiceChanel(voice);
+        return guildPreferenceRepository.save(guildPref);
+    }
+
+
+    public GuildPreferenceEntity setDefaultVoiceChanels(Guild guild, GuildPreferenceEntity guildPref){
+        List<String> prefVoice = guildPref.getVisibleVoiceChanel();
+        if(prefVoice == null)
+            prefVoice = new ArrayList<>();
+        for(VoiceChannel voiceChannel : guild.getVoiceChannels()){
+            prefVoice.add(voiceChannel.getId());
+        }
+        guildPref.setVisibleVoiceChanel(prefVoice);
+        return guildPreferenceRepository.save(guildPref);
+
     }
 
     public GuildPreferenceEntity getPreference(Guild guild){
