@@ -31,12 +31,11 @@ public class Init {
     /**
      * Initialize all bot functionality
      * @param token bot user token
-     * @param dev dev Mode or not
      * @return JDA object
      */
     static JDA initJda(String token){
         JDA jda = null;
-        logger.debug("-------------------INITIALISATION-------------------");
+        logger.info("-----------------------INIT-----------------------");
 
         //Bot démarrer sans token
         if (token == null) {
@@ -63,36 +62,13 @@ public class Init {
 
 
                 //On recupere le l'id serveur
+
+                logger.info("Connected on " + jda.getGuilds().size() + " Guilds:");
+
                 for( Guild server : jda.getGuilds()){
                     //on recupere les utilisateur
-                    List<Member> utilisateurCo = server.getMembers();
-
-                    logger.info("Online users: "+utilisateurCo.size());
-                    for (Member anUtilisateurCo : utilisateurCo)
-                    {
-                        if (anUtilisateurCo.getOnlineStatus().equals(OnlineStatus.ONLINE))
-                            logger.debug("\t*" + anUtilisateurCo.getEffectiveName());
-                    }
-
-                    logger.debug("Do not disturb users: ");
-                    for (Member anUtilisateurCo : utilisateurCo)
-                    {
-                        if (anUtilisateurCo.getOnlineStatus().equals(OnlineStatus.DO_NOT_DISTURB))
-                            logger.debug("\t*" + anUtilisateurCo.getEffectiveName());
-                    }
-
-                    logger.debug("Offline users: ");
-                    for (Member anUtilisateurCo : utilisateurCo)
-                    {
-                        if (anUtilisateurCo.getOnlineStatus().equals(OnlineStatus.OFFLINE))
-                            logger.debug("\t*" + anUtilisateurCo.getEffectiveName());
-                    }
+                    logger.info("... " + server.getName() + " " + server.getMembers().size() + " Members");
                 }
-
-
-
-
-                logger.debug("-----------------FIN INITIALISATION-----------------");
 
 
             }
@@ -115,6 +91,7 @@ public class Init {
         dayListener.start();
         jda.addEventListener(new BotListener());
         jda.getPresence().setPresence(OnlineStatus.ONLINE, Game.playing("bot.seb6596.ovh"));
+        logger.info("-----------------------END INIT-----------------------");
 
 
     }

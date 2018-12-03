@@ -194,7 +194,7 @@ public class BotListener extends ListenerAdapter {
 
     @Override
     public void onGuildJoin(GuildJoinEvent event) {
-        logger.info("Join new guild! (" + event.getGuild().getName() + ")");
+        logger.info("Join new guild! (" + event.getGuild().getName() + " " +event.getGuild().getMembers().size() + " Members)");
         super.onGuildJoin(event);
         getPreference(event.getGuild());
         EmbedBuilder eb = new EmbedBuilder().setColor(Color.GREEN)
