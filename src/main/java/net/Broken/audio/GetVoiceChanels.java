@@ -14,6 +14,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -53,6 +54,8 @@ public class GetVoiceChanels {
             settingsUtils.cleanVoicePref(guild, pref);
 
         }
+
+        list.sort(Comparator.comparingInt(Channel::getPositionRaw));
 
         return list;
 
