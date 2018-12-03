@@ -98,6 +98,9 @@ function getGuild(){
         $('#guild_form').empty();
         if(data.length === 0 && location.pathname !== "/")
             window.location.replace("/");
+        if(data.length === 0){
+            return;
+        }
 
         else if(data.length === 1){
             Cookies.set('guild', data[0].id, { expires: 31 });
