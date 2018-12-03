@@ -53,6 +53,8 @@ public class GeneralWebView {
             model.addAttribute("isLogged", false);
             model.addAttribute("guild_name", "");
             model.addAttribute("isAdmin", false);
+            model.addAttribute("inviteLink", "https://discordapp.com/oauth2/authorize?client_id=" + MainBot.jda.getSelfUser().getId() + "&scope=bot&permissions=8");
+
             return CheckPage.getPageIfReady("index");
         }
 
