@@ -48,6 +48,13 @@ public class UserEntity {
         this.password = passwordEncoder.encode(UserUtils.getInstance().generateCheckToken());
     }
 
+    public UserEntity(String name, String id, PasswordEncoder passwordEncoder){
+        this.name = name;
+        this.jdaId = id;
+        this.apiToken = UserUtils.getInstance().generateApiToken();
+        this.password = passwordEncoder.encode(UserUtils.getInstance().generateCheckToken());
+    }
+
     public String getPassword() {
         return password;
     }

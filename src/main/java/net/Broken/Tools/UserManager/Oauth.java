@@ -1,8 +1,10 @@
 package net.Broken.Tools.UserManager;
 
+import jdk.nashorn.internal.parser.JSONParser;
 import net.Broken.DB.Entity.UserEntity;
 import net.Broken.DB.Repository.UserRepository;
 import net.Broken.MainBot;
+import net.dv8tion.jda.core.entities.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
@@ -25,7 +27,7 @@ public class Oauth {
 
 
 
-    private String getUserId(String token){
+    private JSONObject getUserId(String token){
         StringBuffer content = new StringBuffer();
         try {
             String httpsURL = baseUrl+mePath;
@@ -48,19 +50,25 @@ public class Oauth {
             e.printStackTrace();
         }
         JSONObject json = new JSONObject(content.toString());
+        logger.debug(json);
 
 
-        return json.getString("id");
+        return json;
     }
 
 
     public UserEntity getUserEntity(String token, UserRepository userRepository, PasswordEncoder passwordEncoder){
-        String discorId = getUserId(token);
-        List<UserEntity> userEntitys = userRepository.findByJdaId(discorId);
+        JSONObject discorResponse = getUserId(token);
+        List<UserEntity> userEntitys = userRepository.findByJdaId(discorResponse.getString("id"));
         if(userEntitys.size() != 0){
             return userEntitys.get(0);
         }else{
-            UserEntity user = new UserEntity(MainBot.jda.getUserById(discorId), passwordEncoder);
+            User jdaUser = MainBot.jda.getUserById(discorResponse.getString("id"));
+            UserEntity user;
+            if( jdaUser == null)
+                user = new UserEntity(discorResponse.getString("username"), discorResponse.getString("id"), passwordEncoder);
+            else
+                user = new UserEntity(MainBot.jda.getUserById(discorResponse.getString("id")), passwordEncoder);
             user = userRepository.save(user);
             return user;
         }
