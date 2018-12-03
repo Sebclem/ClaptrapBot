@@ -90,7 +90,7 @@ public class Init {
         dayListener.addListener(new DailyMadame());
         dayListener.start();
         jda.addEventListener(new BotListener());
-        jda.getPresence().setPresence(OnlineStatus.ONLINE, Game.playing("bot.seb6596.ovh"));
+        jda.getPresence().setPresence(OnlineStatus.ONLINE, Game.playing(MainBot.url));
         logger.info("-----------------------END INIT-----------------------");
 
 

@@ -38,6 +38,8 @@ public class MainBot {
     public static boolean ready = false;
     public static boolean dev = false;
 
+    public static String url= "claptrapbot.com";
+
 
 
 

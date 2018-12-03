@@ -32,7 +32,7 @@ public class Oauth {
             URL myUrl = new URL(httpsURL);
             HttpURLConnection con = (HttpURLConnection)myUrl.openConnection();
             con.setRequestProperty("Authorization", "Bearer "+token);
-            con.setRequestProperty("User-Agent", "DiscordBot (bot.seb6596.ovh, 0.1)");
+            con.setRequestProperty("User-Agent", "DiscordBot (claptrapbot.com, 0.1)");
             con.setRequestMethod("GET");
             logger.debug("Response code: " + con.getResponseCode());
             BufferedReader in = new BufferedReader(

@@ -200,7 +200,7 @@ public class BotListener extends ListenerAdapter {
         EmbedBuilder eb = new EmbedBuilder().setColor(Color.GREEN)
                 .setTitle("Hello there !")
                 .setDescription("Allow me to introduce myself -- I am a CL4P-TP the discord bot, but my friends call me Claptrap ! Or they would, if any of them were real...\n"+
-                        "\nYou can access to my web UI with: https://bot.seb6596.ovh")
+                        "\nYou can access to my web UI with: " + MainBot.url)
                 .setImage("https://i.imgur.com/Anf1Srg.gif");
 
         event.getGuild().getDefaultChannel().sendMessage(EmbedMessageUtils.buildStandar(eb)).complete();

@@ -19,7 +19,7 @@ import java.time.format.DateTimeFormatter;
  */
 public class EmbedMessageUtils {
     public static MessageEmbed getUnknowCommand() {
-        return new EmbedBuilder().setTitle(":warning: Commande inconnue! :warning:").setDescription(":arrow_right: Utilisez `//help` pour voirs les commandes disponible.").setColor(Color.orange).setFooter("bot.seb6596.ovh", MainBot.jda.getSelfUser().getAvatarUrl()).setTimestamp(Instant.now()).build();
+        return new EmbedBuilder().setTitle(":warning: Commande inconnue! :warning:").setDescription(":arrow_right: Utilisez `//help` pour voirs les commandes disponible.").setColor(Color.orange).setFooter(MainBot.url, MainBot.jda.getSelfUser().getAvatarUrl()).setTimestamp(Instant.now()).build();
 
     }
 
@@ -36,7 +36,7 @@ public class EmbedMessageUtils {
     }
 
     public static MessageEmbed getMusicError(String message){
-        return new EmbedBuilder().setTitle(":warning: Musique Error :warning:").setDescription(":arrow_right: "+message).setFooter("'//help music' pour plus d'info",MainBot.jda.getSelfUser().getAvatarUrl()).setTimestamp(Instant.now()).setColor(Color.red).setFooter("bot.seb6596.ovh", MainBot.jda.getSelfUser().getAvatarUrl()).build();
+        return new EmbedBuilder().setTitle(":warning: Musique Error :warning:").setDescription(":arrow_right: "+message).setFooter("'//help music' pour plus d'info",MainBot.jda.getSelfUser().getAvatarUrl()).setTimestamp(Instant.now()).setColor(Color.red).setFooter(MainBot.url, MainBot.jda.getSelfUser().getAvatarUrl()).build();
 
     }
 
@@ -95,7 +95,7 @@ public class EmbedMessageUtils {
     }
 
     public static MessageEmbed buildStandar(EmbedBuilder embedBuilder){
-        return embedBuilder.setFooter("bot.seb6596.ovh", MainBot.jda.getSelfUser().getAvatarUrl()).setThumbnail(MainBot.jda.getSelfUser().getAvatarUrl()).setTimestamp(Instant.now()).build();
+        return embedBuilder.setFooter(MainBot.url, MainBot.jda.getSelfUser().getAvatarUrl()).setThumbnail(MainBot.jda.getSelfUser().getAvatarUrl()).setTimestamp(Instant.now()).build();
     }
 
     public static MessageEmbed getUnautorized(){
