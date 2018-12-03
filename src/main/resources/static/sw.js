@@ -1,4 +1,4 @@
-var CACHE_NAME = 'Clap-Trap-Bot-V0.1';
+var CACHE_NAME = 'Clap-Trap-Bot-V0.2';
 var urlsToCache = [
     '/',
     '/music',
