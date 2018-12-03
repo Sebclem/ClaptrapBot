@@ -3,21 +3,18 @@ package net.Broken.RestApi;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import net.Broken.Commands.Music;
 import net.Broken.DB.Entity.UserEntity;
 import net.Broken.DB.Repository.UserRepository;
 import net.Broken.MainBot;
 import net.Broken.RestApi.Data.*;
-import net.Broken.Tools.EmbedMessageUtils;
 import net.Broken.Tools.UserManager.Exceptions.UnknownTokenException;
 import net.Broken.Tools.UserManager.UserUtils;
 import net.Broken.audio.AudioM;
-import net.Broken.audio.FindGeneral;
+import net.Broken.audio.GetVoiceChanels;
 import net.Broken.audio.Youtube.SearchResult;
 import net.Broken.audio.Youtube.YoutubeTools;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.VoiceChannel;
-import org.apache.http.HttpResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -193,7 +190,7 @@ public class MusicWebAPIController {
             logger.trace("getPlaylist for " + guild.getName());
         }
         List<ChanelData> temp = new ArrayList<>();
-        for(VoiceChannel aChanel : FindGeneral.find(guild)){
+        for(VoiceChannel aChanel : GetVoiceChanels.find(guild)){
             temp.add(new ChanelData(aChanel.getName(),aChanel.getId(),aChanel.getPosition()));
         }
         return new ResponseEntity<>(temp, HttpStatus.OK);
