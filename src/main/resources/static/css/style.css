@@ -18,3 +18,20 @@ body {
 main {
     flex: 1 0 auto;
 }
+
+@font-face {
+    font-family: "Norwester";
+    src: url("/css/font/norwester.ttf"),
+         url("/css/font/norwester.woff");
+}
+
+.brand-logo{
+    font-family: Norwester;
+    font-size: 45px !important;
+    font-weight: bold;
+    -webkit-text-fill-color: #fbcf40;
+    -webkit-text-stroke-color: black;
+    -webkit-text-stroke-width: 3px;
+
+
+}

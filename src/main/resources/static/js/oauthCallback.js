@@ -29,5 +29,4 @@ if(discordToken !== ""){
     });
 }else{
     window.location = "/";
-    debugger;
 }
