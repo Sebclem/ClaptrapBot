@@ -39,7 +39,7 @@ public  class FindContentOnWebPage {
     public static String getSourceUrl(String url) throws IOException {
         URL urlC = new URL(url);
         URLConnection yc = urlC.openConnection();
-        yc.setRequestProperty("User-Agent","Googlebot");
+        yc.setRequestProperty("User-Agent","Googlebot/2.1 (+http://www.googlebot.com/bot.html)");
         BufferedReader in = new BufferedReader(new InputStreamReader(
                 yc.getInputStream(), "UTF-8"));
         String inputLine;

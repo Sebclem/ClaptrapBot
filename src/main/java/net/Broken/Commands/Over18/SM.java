@@ -20,11 +20,12 @@ public class SM implements Commande {
         Redirection redirect= new Redirection();
         try {
             String redirectUrl = redirect.get("https://bonjourfetish.tumblr.com/random");
+            logger.debug(redirectUrl);
             String img = FindContentOnWebPage.doYourJob(redirectUrl, "article-picture center", "img");
             event.getTextChannel().sendMessage(img).queue();
         } catch (IOException e) {
-            logger.warn("Erreur de redirection.");
-            event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n:warning: **__Erreur de redirection (5 essais), Réessayez__**:warning: ").queue();
+            logger.warn("Redirection fail.");
+            event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n:warning: **__Redirection fail (5 attempt), Try again__**:warning: ").queue();
         }
 
     }
