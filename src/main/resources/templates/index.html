@@ -14,8 +14,12 @@
     <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
     <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
     <link rel="manifest" href="/manifest.json"/>
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/octicons/2.0.2/octicons.min.css"/>
-    <link rel="stylesheet" href="css/github-activity.css"/>
+
+    <th:block th:if="${isLogged} == true and ${noMutualGuilds} == false">
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/octicons/2.0.2/octicons.min.css"/>
+        <link rel="stylesheet" href="css/github-activity.css"/>
+    </th:block>
+
     <meta name="theme-color" content="#263238"/>
     <style>
         @media only screen and (max-width: 992px) {
@@ -114,16 +118,19 @@
 <script th:src="@{/js/js.cookie.js}"></script>
 <script th:src="@{/js/fontawesome.js}"></script>
 <script th:src="@{/js/workerRegister.js}"></script>
-<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/mustache.js/0.7.2/mustache.min.js"></script>
-<script th:src="@{/js/github-activity.js}"></script>
-<script>
-    GitHubActivity.feed({
-        username: "BrokenFire",
-        repository: "ClaptrapBot", // optional
-        selector: "#feed",
-        limit: 20 // optional
-    });
-</script>
+<th:block th:if="${isLogged} == true and ${noMutualGuilds} == false">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js"></script>
+    <script th:src="@{/js/github-activity.js}"></script>
+    <script>
+        GitHubActivity.feed({
+            username: "BrokenFire",
+            repository: "ClaptrapBot", // optional
+            selector: "#feed",
+            limit: 20 // optional
+        });
+    </script>
+</th:block>
+
 
 
 </body>
