@@ -2,7 +2,6 @@ package net.Broken.webView;
 
 import net.Broken.MainBot;
 import net.dv8tion.jda.core.entities.Guild;
-import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.boot.autoconfigure.web.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -11,6 +10,7 @@ import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.RequestDispatcher;
+import javax.servlet.http.HttpServletRequest;
 
 @Controller
 public class MyErrorController implements ErrorController {
