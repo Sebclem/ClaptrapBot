@@ -42,7 +42,7 @@ public class Help implements Commande {
                 Commande cmdObj = MainBot.commandes.get(argsString);
                 if(!cmdObj.isAdminCmd() || isAdmin(event))
                 {
-                    logger.info("Aide demmander pour la cmd "+argsString+" par "+event.getAuthor().getName());
+                    logger.debug("Help for "+argsString+" by "+event.getAuthor().getName());
                     MessageEmbed messageEmbed;
                     try {
                         messageEmbed = EmbedMessageUtils.getHelp(argsString);
@@ -55,24 +55,7 @@ public class Help implements Commande {
                         }
                     }
                     if(!event.isFromType(ChannelType.PRIVATE)) {
-                        Message rest = event.getTextChannel().sendMessage(messageEmbed).complete();
-                        if(args.length<=1)
-                        {
-                            Message finalRest = rest;
-                            List<Message> messages = new ArrayList<Message>(){{
-                                add(finalRest);
-                                add(event.getMessage());
-                            }};
-                            new MessageTimeOut(messages,MainBot.messageTimeOut).start();
-                        }
-                        else if(!args[1].toLowerCase().equals("true")){
-                            Message finalRest1 = rest;
-                            List<Message> messages = new ArrayList<Message>(){{
-                                add(finalRest1);
-                                add(event.getMessage());
-                            }};
-                            new MessageTimeOut(messages,MainBot.messageTimeOut).start();
-                        }
+                        event.getTextChannel().sendMessage(messageEmbed).queue();
 
                     } else{
                         PrivateMessage.send(event.getAuthor(), messageEmbed,logger);
@@ -109,7 +92,7 @@ public class Help implements Commande {
                 } else{
                     PrivateMessage.send(event.getAuthor(),EmbedMessageUtils.getUnknowCommand(),logger);
                 }
-                logger.info("Commande Inconnue!");
+                logger.debug("Unknown command!");
             }
         }
         else
@@ -142,7 +125,7 @@ public class Help implements Commande {
             txt += nsfwTable.build();
 
             if(!event.isFromType(ChannelType.PRIVATE)){
-                Message rest = event.getTextChannel().sendMessage(new EmbedBuilder().setTitle("Command envoyées par message privé").setColor(Color.green).build()).complete();
+                Message rest = event.getTextChannel().sendMessage(new EmbedBuilder().setTitle("Commands send by private message").setColor(Color.green).build()).complete();
                 new MessageTimeOut(MainBot.messageTimeOut, rest, event.getMessage()).start();
             }
 

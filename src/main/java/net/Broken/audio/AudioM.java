@@ -89,8 +89,7 @@ public class AudioM {
             public void trackLoaded(AudioTrack track) {
                 logger.info("Single Track detected!");
                 UserAudioTrack uat = new UserAudioTrack(event.getAuthor(), track);
-                Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicOk("Ajout de "+track.getInfo().title+" à la file d'attente!")).complete();
-                new MessageTimeOut(MainBot.messageTimeOut, message, event.getMessage()).start();
+                event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicOk("Add "+track.getInfo().title+" to playlist")).queue();
 
                 play(guild, voiceChannel, musicManager, uat, onHead);
             }
@@ -100,8 +99,8 @@ public class AudioM {
                 logger.info("Playlist detected! Limit: "+playlistLimit);
                 AudioTrack firstTrack = playlist.getSelectedTrack();
 
-                Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicOk("Ajout de "+firstTrack.getInfo().title+" et les 30 premiers titres à la file d'attente!")).complete();
-                new MessageTimeOut(MainBot.messageTimeOut, message, event.getMessage()).start();
+                event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicOk("Add "+firstTrack.getInfo().title+" and 30 first videos to playlist !")).queue();
+
 
                 playListLoader(playlist, playlistLimit ,event.getAuthor() , onHead);
 
@@ -112,24 +111,15 @@ public class AudioM {
             @Override
             public void noMatches() {
                 logger.warn("Cant find media!");
-                Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicError("Musique introuvable!")).complete();
-                List<Message> messages = new ArrayList<Message>(){{
-                    add(message);
-                    add(event.getMessage());
-                }};
-                new MessageTimeOut(messages, MainBot.messageTimeOut).start();
+                event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicError("Video not found !")).queue();
+
             }
 
             @Override
             public void loadFailed(FriendlyException exception) {
                 logger.error("Cant load media!");
                 logger.error(exception.getMessage());
-                Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicError("Erreur de lecture!")).complete();
-                List<Message> messages = new ArrayList<Message>(){{
-                    add(message);
-                    add(event.getMessage());
-                }};
-                new MessageTimeOut(messages, MainBot.messageTimeOut).start();
+                event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicError("Playback error !")).queue();
             }
         });
     }
@@ -222,8 +212,7 @@ public class AudioM {
     public void skipTrack(MessageReceivedEvent event) {
         GuildMusicManager musicManager = getGuildAudioPlayer();
         musicManager.scheduler.nextTrack();
-        Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicOk("Musique suivante!")).complete();
-        new MessageTimeOut(MainBot.messageTimeOut, message, event.getMessage()).start();
+        event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicOk("Next music!")).queue();
     }
 
     /**
@@ -234,8 +223,8 @@ public class AudioM {
         GuildMusicManager musicManager = getGuildAudioPlayer();
         musicManager.scheduler.pause();
 
-        Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicOk("Musique en pause !")).complete();
-        new MessageTimeOut(MainBot.messageTimeOut, event.getMessage(), message).start();
+        event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicOk("Music paused")).queue();
+
 
     }
 
@@ -247,8 +236,7 @@ public class AudioM {
         GuildMusicManager musicManager = getGuildAudioPlayer();
         musicManager.scheduler.resume();
 
-        Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicOk("Reprise de la piste en cour !")).complete();
-        new MessageTimeOut(MainBot.messageTimeOut, event.getMessage(), message).start();
+        event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicOk("Music resumed")).queue();
     }
 
     /**
@@ -260,15 +248,13 @@ public class AudioM {
         AudioTrackInfo info = musicManager.scheduler.getInfo();
         UserAudioTrack userAudioTrack = musicManager.scheduler.getCurrentPlayingTrack();
 
-        Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicOk(info.title + "\n" + info.uri + "\nSubmitted by: " + userAudioTrack.getSubmittedUser().getName())).complete();
-        new MessageTimeOut(MainBot.messageTimeOut, event.getMessage(), message).start();
+        event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicOk(info.title + "\n" + info.uri + "\nSubmitted by: " + userAudioTrack.getSubmittedUser().getName())).queue();
     }
 
         public void flush(MessageReceivedEvent event){
         GuildMusicManager musicManager = getGuildAudioPlayer();
         musicManager.scheduler.flush();
-        Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicOk("RAZ de la playlist!")).complete();
-        new MessageTimeOut(MainBot.messageTimeOut, event.getMessage(), message).start();
+        event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicOk("Flush playlist!")).queue();
     }
 
     /**
@@ -280,7 +266,7 @@ public class AudioM {
         List<UserAudioTrackData> list = musicManager.scheduler.getList();
         StringBuilder resp = new StringBuilder();
         if(list.size() == 0){
-            resp.append("Oh mon dieux!\nElle est vide! \n:astonished: ");
+            resp.append("Oh my god!\nThe playlist is empty ! \n:astonished: ");
         }
         else
         {
@@ -290,8 +276,7 @@ public class AudioM {
                 resp.append("\n");
             }
         }
-        Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicOk("Playlist:\n\n"+resp.toString())).complete();
-        new MessageTimeOut(MainBot.messageTimeOut, event.getMessage(), message).start();
+        event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicOk("Playlist:\n\n"+resp.toString())).queue();
     }
 
     /**
@@ -307,8 +292,7 @@ public class AudioM {
         }
         else
         {
-            Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicError("Aucune lecture en cour!")).complete();
-            new MessageTimeOut(MainBot.messageTimeOut, event.getMessage(), message).start();
+            event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicError("Not connected to vocal chanel !")).queue();
         }
     }
 
@@ -321,8 +305,7 @@ public class AudioM {
         musicManager.scheduler.flush();
 
         if (event != null) {
-            Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicOk("Arret de la musique!")).complete();
-            new MessageTimeOut(MainBot.messageTimeOut, event.getMessage(), message).start();
+            event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicOk("Music stopped")).queue();
         }
     }
 

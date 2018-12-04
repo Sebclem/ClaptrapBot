@@ -89,7 +89,6 @@ public class MainBot {
             return;
         }
 
-        //On verifie que la commande existe
         if (commandes.containsKey(cmd.commande))
         {
             Commande cmdObj = commandes.get(cmd.commande);
@@ -113,8 +112,7 @@ public class MainBot {
                         commandes.get(cmd.commande).action(cmd.args, cmd.event);
                     }
                     else{
-                        Message msg = cmd.event.getTextChannel().sendMessage(cmd.event.getAuthor().getAsMention() + "\n:warning: **__Channel règlementé! Go sur over18!__**:warning: ").complete();
-                        new MessageTimeOut(messageTimeOut, msg, cmd.event.getMessage()).start();
+                        cmd.event.getMessage().delete().queue();
                     }
 
                 }
@@ -130,36 +128,10 @@ public class MainBot {
                     new MessageTimeOut(gifMessageTimeOut, msg, cmd.event.getMessage()).start();
                 }
             }
-
-
-
-
         }
-        else
-        {
-            MessageReceivedEvent event = cmd.event;
-            if(commandes.size() == 0){
-                if(event.isFromType(ChannelType.PRIVATE))
-                    event.getPrivateChannel().sendMessage("Loading please wait...").queue();
-                else {
-                    Message message = event.getTextChannel().sendMessage("Loading please wait...").complete();
-                    new MessageTimeOut(messageTimeOut, message, event.getMessage());
-                }
-            }
-            else{
-
-                if(event.isFromType(ChannelType.PRIVATE))
-                    event.getPrivateChannel().sendMessage(EmbedMessageUtils.getUnknowCommand()).queue();
-                else {
-                    Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getUnknowCommand()).complete();
-                    new MessageTimeOut(messageTimeOut, message, event.getMessage());
-                }
-                logger.warn("Commande inconnue");
-            }
-
+        else{
+            logger.debug("Unknown command : " + cmd.commande);
         }
-
-
     }
 
 }

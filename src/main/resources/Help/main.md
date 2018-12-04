@@ -1,7 +1,7 @@
 ```
 @list
 ```
-_PU = Private Usable (Utilisable en Message Privée)_
+_PU = Private Usable 
 
-**>** __**[Web UI](https://claptrapbot.com )**__ :arrow_right:  Music control, General server info (Coming soon)
+**>** __**[Web UI](https://claptrapbot.com )**__ :arrow_right:  Music control, Settings, News
 
