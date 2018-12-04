@@ -29,16 +29,12 @@ public class Flush implements Commande{
         {
             if(event.getMember().hasPermission(Permission.ADMINISTRATOR)){
                 try {
-                    int limit = Integer.parseInt(args[0]);
+                    int limit = Integer.parseInt(args[0]) + 1;
                     MessageChannel chanel = event.getChannel();
-                    MessageHistory history = chanel.getHistoryAround(chanel.getLatestMessageIdLong(), 100).complete();
-                    List<Message> retrieved = history.getRetrievedHistory();
-                    if(limit > retrieved.size())
-                        limit = retrieved.size()-1;
-                    for(int i = 0; i<limit+1; i++){
-                        logger.debug(retrieved.get(i).getContentRaw());
-                        retrieved.get(i).delete().queue();
-                    }
+
+                    chanel.getIterableHistory().takeAsync(limit).thenAccept(chanel::purgeMessages);
+                    
+
                 }catch (NumberFormatException e){
                     event.getTextChannel().sendMessage(EmbedMessageUtils.getFlushError("L'argument n'est pas valide!")).queue();
                 }
