@@ -1,23 +1,22 @@
 package net.Broken;
 
 import net.Broken.Commands.Move;
-import net.Broken.Commands.Music;
 import net.Broken.DB.Entity.GuildPreferenceEntity;
 import net.Broken.DB.Repository.GuildPreferenceRepository;
-import net.Broken.DB.Repository.PlaylistRepository;
 import net.Broken.Tools.AntiSpam;
 import net.Broken.Tools.Command.CommandParser;
 import net.Broken.Tools.EmbedMessageUtils;
 import net.Broken.Tools.Moderateur;
 import net.Broken.Tools.PrivateMessage;
+import net.Broken.Tools.UserManager.UserStatsUtils;
 import net.Broken.audio.AudioM;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.*;
-import net.dv8tion.jda.core.events.ExceptionEvent;
 import net.dv8tion.jda.core.events.ReadyEvent;
 import net.dv8tion.jda.core.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.core.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.core.events.guild.member.GuildMemberRoleRemoveEvent;
+import net.dv8tion.jda.core.events.guild.voice.GuildVoiceJoinEvent;
 import net.dv8tion.jda.core.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.core.hooks.ListenerAdapter;
@@ -122,6 +121,13 @@ public class BotListener extends ListenerAdapter {
 
 
     @Override
+    public void onGuildVoiceJoin(GuildVoiceJoinEvent event) {
+        super.onGuildVoiceJoin(event);
+        if(!event.getMember().getUser().isBot())
+            new UserStatsUtils.VoicePresenceCompter(event.getMember()).start();
+    }
+
+    @Override
     public void onGuildVoiceLeave(GuildVoiceLeaveEvent event) {
         super.onGuildVoiceLeave(event);
         if(event.getGuild().getAudioManager().isConnected())
@@ -138,9 +144,9 @@ public class BotListener extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
-        //                                                      ----------------------Preference pour eviter eco de commande-------------------------
-
-
+        if(!event.getAuthor().isBot()){
+            UserStatsUtils.getINSTANCE().addMessageCount(event.getMember());
+        }
         try{
             if (event.getMessage().getContentRaw().startsWith("//") && !event.getMessage().getAuthor().getId().equals(event.getJDA().getSelfUser().getId())) {
                 //On a detecter que c'etait une commande

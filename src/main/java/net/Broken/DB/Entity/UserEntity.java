@@ -26,10 +26,16 @@ public class UserEntity {
     private String apiToken;
 
     @JsonIgnore
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
+    private List<UserStats> userStats;
+
+    @JsonIgnore
     private String password;
+
 
     @OneToMany(mappedBy = "user")
     private List<PlaylistEntity> playlists;
+
 
     public UserEntity() {
     }
@@ -54,6 +60,7 @@ public class UserEntity {
         this.apiToken = UserUtils.getInstance().generateApiToken();
         this.password = passwordEncoder.encode(UserUtils.getInstance().generateCheckToken());
     }
+
 
     public String getPassword() {
         return password;
@@ -108,5 +115,13 @@ public class UserEntity {
             this.playlists = new ArrayList<>();
 
         this.playlists.addAll(Arrays.asList(playlists));
+    }
+
+    public List<UserStats> getUserStats() {
+        return userStats;
+    }
+
+    public void setUserStats(List<UserStats> userStats) {
+        this.userStats = userStats;
     }
 }

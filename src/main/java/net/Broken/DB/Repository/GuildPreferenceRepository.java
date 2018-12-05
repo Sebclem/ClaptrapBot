@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface GuildPreferenceRepository extends CrudRepository<GuildPreferenceEntity, Integer> {
     List<GuildPreferenceEntity> findByGuildId(String id);
+
 }

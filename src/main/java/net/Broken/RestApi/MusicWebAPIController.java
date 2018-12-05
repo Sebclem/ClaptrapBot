@@ -4,10 +4,12 @@ import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.Broken.DB.Entity.UserEntity;
+import net.Broken.DB.Entity.UserStats;
 import net.Broken.DB.Repository.UserRepository;
 import net.Broken.MainBot;
 import net.Broken.RestApi.Data.*;
 import net.Broken.Tools.UserManager.Exceptions.UnknownTokenException;
+import net.Broken.Tools.UserManager.UserStatsUtils;
 import net.Broken.Tools.UserManager.UserUtils;
 import net.Broken.audio.AudioM;
 import net.Broken.audio.GetVoiceChanels;
@@ -156,8 +158,10 @@ public class MusicWebAPIController {
                     UserEntity user = userUtils.getUserWithApiToken(userRepository, token);
                     logger.info("Receive command " + data.command + " from " + request.getRemoteAddr() + " USER: " + user.getName() + " GUILD: " + guild.getName());
 
-                    if (ApiCommandLoader.apiCommands.containsKey(data.command))
+                    if (ApiCommandLoader.apiCommands.containsKey(data.command)) {
+                        UserStatsUtils.getINSTANCE().addApiCount(user, guildId);
                         return ApiCommandLoader.apiCommands.get(data.command).action(data, MainBot.jda.getUserById(user.getJdaId()), guild);
+                    }
                     else
                         return new ResponseEntity<>(new CommandResponseData(data.command, "Unknown Command", "command"), HttpStatus.BAD_REQUEST);
 

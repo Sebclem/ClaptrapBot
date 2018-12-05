@@ -1,10 +1,14 @@
 package net.Broken;
 
+import net.Broken.DB.Entity.UserEntity;
+import net.Broken.DB.Entity.UserStats;
+import net.Broken.DB.Repository.UserRepository;
 import net.Broken.RestApi.ApiCommandLoader;
 import net.Broken.Tools.Command.CommandLoader;
 import net.Broken.Tools.DayListener.DayListener;
 import net.Broken.Tools.DayListener.Listeners.DailyMadame;
 import net.Broken.Tools.DayListener.Listeners.ResetSpam;
+import net.Broken.Tools.UserManager.UserStatsUtils;
 import net.Broken.audio.Youtube.YoutubeTools;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
@@ -19,6 +23,7 @@ import net.dv8tion.jda.core.exceptions.RateLimitedException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
+import org.springframework.context.ApplicationContext;
 
 import javax.security.auth.login.LoginException;
 import java.io.IOException;
@@ -83,6 +88,8 @@ public class Init {
 
 
     static void polish(JDA jda){
+        logger.info("Check database...");
+        checkDatabase();
         CommandLoader.load();
         ApiCommandLoader.load();
         DayListener dayListener = DayListener.getInstance();
@@ -91,7 +98,25 @@ public class Init {
         dayListener.start();
         jda.addEventListener(new BotListener());
         jda.getPresence().setPresence(OnlineStatus.ONLINE, Game.playing(MainBot.url));
+
+
         logger.info("-----------------------END INIT-----------------------");
+
+
+    }
+
+
+    private static void checkDatabase(){
+        ApplicationContext context = SpringContext.getAppContext();
+        UserRepository userRepository = (UserRepository) context.getBean("userRepository");
+        List<UserEntity> users = (List<UserEntity>) userRepository.findAll();
+        UserStatsUtils userStatsUtils = UserStatsUtils.getINSTANCE();
+        logger.debug("Stats...");
+        for(UserEntity userEntity : users){
+            logger.debug("..." + userEntity.getName());
+            userStatsUtils.getUserStats(userEntity);
+
+        }
 
 
     }
