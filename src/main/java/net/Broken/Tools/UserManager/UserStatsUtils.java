@@ -45,6 +45,8 @@ public class UserStatsUtils {
     }
 
     public List<UserStats> getUserStats(UserEntity userEntity){
+        logger.debug(userEntity.getUserStats());
+        logger.debug(userEntity.getUserStats().size());
         if(userEntity.getUserStats() == null || userEntity.getUserStats().size() == 0){
             logger.debug("Stats not found for " + userEntity.getName());
             User user = MainBot.jda.getUserById(userEntity.getJdaId());
@@ -90,10 +92,12 @@ public class UserStatsUtils {
             userEntity = userEntityList.get(0);
 
         List<UserStats> userStatsList = userStatsRepository.findByUserAndGuildId(userEntity, member.getGuild().getId());
+        logger.debug("First: " + userStatsList.size());
         if(userStatsList.size() == 0){
             getUserStats(userEntity);
             userStatsList = userStatsRepository.findByUserAndGuildId(userEntity, member.getGuild().getId());
         }
+
         UserStats userStats = userStatsList.get(0);
         userStats.setMessageCount(userStats.getMessageCount() + 1);
         userStatsRepository.save(userStats);
@@ -105,6 +109,7 @@ public class UserStatsUtils {
 
 
         List<UserStats> userStatsList = userStatsRepository.findByUserAndGuildId(userEntity, guildId);
+        logger.debug("First: " + userStatsList.size());
         if(userStatsList.size() == 0){
             getUserStats(userEntity);
             userStatsList = userStatsRepository.findByUserAndGuildId(userEntity, guildId);

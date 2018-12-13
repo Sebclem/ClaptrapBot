@@ -159,7 +159,12 @@ public class MusicWebAPIController {
                     logger.info("Receive command " + data.command + " from " + request.getRemoteAddr() + " USER: " + user.getName() + " GUILD: " + guild.getName());
 
                     if (ApiCommandLoader.apiCommands.containsKey(data.command)) {
-                        UserStatsUtils.getINSTANCE().addApiCount(user, guildId);
+                        try {
+                            UserStatsUtils.getINSTANCE().addApiCount(user, guildId);
+
+                        }catch (IndexOutOfBoundsException e){
+                            logger.catching(e);
+                        }
                         return ApiCommandLoader.apiCommands.get(data.command).action(data, MainBot.jda.getUserById(user.getJdaId()), guild);
                     }
                     else
