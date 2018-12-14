@@ -168,7 +168,7 @@ public class UserStatsUtils {
             }
             ranked.add(temp);
         }
-        ranked.sort((guildStats, t1) -> (int) (guildStats.total - t1.total));
+        ranked.sort((guildStats, t1) -> (int) (t1.total - guildStats.total));
 
         return new GuildStatsPack(ranked.indexOf(selfGuildStats) + 1 , selfGuildStats, ranked);
 
