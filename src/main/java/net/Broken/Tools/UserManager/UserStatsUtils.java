@@ -12,7 +12,6 @@ import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.hibernate.Hibernate;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -45,15 +44,15 @@ public class UserStatsUtils {
     }
 
     public List<UserStats> getUserStats(UserEntity userEntity){
-        logger.debug(userEntity.getUserStats());
-        logger.debug(userEntity.getUserStats().size());
-        if(userEntity.getUserStats() == null || userEntity.getUserStats().size() == 0){
+        User jdaUser = MainBot.jda.getUserById(userEntity.getJdaId());
+        if(userEntity.getUserStats() == null || userEntity.getUserStats().size() == 0 || userEntity.getUserStats().size() != jdaUser.getMutualGuilds().size()){
             logger.debug("Stats not found for " + userEntity.getName());
             User user = MainBot.jda.getUserById(userEntity.getJdaId());
             if(user == null)
                 return null;
             List<UserStats> stats = new ArrayList<>();
             for(Guild guid : user.getMutualGuilds()){
+                logger.debug(guid.getName());
                 stats.add(new UserStats(guid.getId(), userEntity));
             }
             stats = (List<UserStats>) userStatsRepository.save(stats);
@@ -92,7 +91,6 @@ public class UserStatsUtils {
             userEntity = userEntityList.get(0);
 
         List<UserStats> userStatsList = userStatsRepository.findByUserAndGuildId(userEntity, member.getGuild().getId());
-        logger.debug("First: " + userStatsList.size());
         if(userStatsList.size() == 0){
             getUserStats(userEntity);
             userStatsList = userStatsRepository.findByUserAndGuildId(userEntity, member.getGuild().getId());
@@ -109,8 +107,7 @@ public class UserStatsUtils {
 
 
         List<UserStats> userStatsList = userStatsRepository.findByUserAndGuildId(userEntity, guildId);
-        logger.debug("First: " + userStatsList.size());
-        if(userStatsList.size() == 0){
+        if(userStatsRepository.findByUserAndGuildId(userEntity, guildId).size() == 0){
             getUserStats(userEntity);
             userStatsList = userStatsRepository.findByUserAndGuildId(userEntity, guildId);
         }
