@@ -5,9 +5,12 @@ import net.Broken.DB.Entity.UserEntity;
 import net.Broken.DB.Repository.PendingUserRepository;
 import net.Broken.DB.Repository.UserRepository;
 import net.Broken.MainBot;
+import net.Broken.RestApi.Data.CommandResponseData;
 import net.Broken.RestApi.Data.UserManager.*;
 import net.Broken.Tools.UserManager.Exceptions.*;
 import net.Broken.Tools.UserManager.Oauth;
+import net.Broken.Tools.UserManager.Stats.GuildStatsPack;
+import net.Broken.Tools.UserManager.Stats.UserStatsUtils;
 import net.Broken.Tools.UserManager.UserUtils;
 import net.dv8tion.jda.core.Permission;
 import net.dv8tion.jda.core.entities.Guild;
@@ -150,6 +153,27 @@ public class UserManagerAPIController {
             return new ResponseEntity(HttpStatus.UNAUTHORIZED);
         }
     }
+
+    @RequestMapping(value = "/getStatsPack", method = RequestMethod.GET)
+    public ResponseEntity<GuildStatsPack> getStatsPack(@CookieValue(value = "token") String token, @RequestParam(value = "guild") String guildID){
+        try{
+            UserEntity user = userUtils.getUserWithApiToken(userRepository, token);
+            Guild guild = MainBot.jda.getGuildById(guildID);
+            if(guild == null ){
+                logger.warn("Request whit no guild!");
+                return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            }
+
+            return new ResponseEntity<>(UserStatsUtils.getINSTANCE().getStatPack(user, guildID), HttpStatus.OK);
+
+
+
+        } catch (UnknownTokenException e) {
+            logger.info("Token check fail");
+            return new ResponseEntity(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
 
 
 

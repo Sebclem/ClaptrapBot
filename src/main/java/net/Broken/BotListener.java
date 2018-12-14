@@ -8,7 +8,7 @@ import net.Broken.Tools.Command.CommandParser;
 import net.Broken.Tools.EmbedMessageUtils;
 import net.Broken.Tools.Moderateur;
 import net.Broken.Tools.PrivateMessage;
-import net.Broken.Tools.UserManager.UserStatsUtils;
+import net.Broken.Tools.UserManager.Stats.UserStatsUtils;
 import net.Broken.audio.AudioM;
 import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.*;
@@ -78,7 +78,6 @@ public class BotListener extends ListenerAdapter {
                 String message = guildPref.getWelcomeMessage();
                 message = message.replaceAll("@name", event.getMember().getAsMention());
                 logger.debug(message);
-//                "Salut "+event.getUser().getAsMention()+"! Ecris ton nom, prénom, ta promotion et ton groupe ici! Un admin te donnera accées a ton groupe!"
                 chanel.sendMessage(message).complete();
             }
 
@@ -124,7 +123,7 @@ public class BotListener extends ListenerAdapter {
     public void onGuildVoiceJoin(GuildVoiceJoinEvent event) {
         super.onGuildVoiceJoin(event);
         if(!event.getMember().getUser().isBot())
-            new UserStatsUtils.VoicePresenceCompter(event.getMember()).start();
+            new UserStatsUtils.VoicePresenceCounter(event.getMember()).start();
     }
 
     @Override

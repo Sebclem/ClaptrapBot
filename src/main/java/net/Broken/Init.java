@@ -1,32 +1,24 @@
 package net.Broken;
 
 import net.Broken.DB.Entity.UserEntity;
-import net.Broken.DB.Entity.UserStats;
 import net.Broken.DB.Repository.UserRepository;
 import net.Broken.RestApi.ApiCommandLoader;
 import net.Broken.Tools.Command.CommandLoader;
 import net.Broken.Tools.DayListener.DayListener;
 import net.Broken.Tools.DayListener.Listeners.DailyMadame;
 import net.Broken.Tools.DayListener.Listeners.ResetSpam;
-import net.Broken.Tools.UserManager.UserStatsUtils;
-import net.Broken.audio.Youtube.YoutubeTools;
+import net.Broken.Tools.UserManager.Stats.UserStatsUtils;
 import net.dv8tion.jda.core.AccountType;
 import net.dv8tion.jda.core.JDA;
 import net.dv8tion.jda.core.JDABuilder;
 import net.dv8tion.jda.core.OnlineStatus;
 import net.dv8tion.jda.core.entities.Game;
 import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.RichPresence;
-import net.dv8tion.jda.core.entities.impl.JDAImpl;
-import net.dv8tion.jda.core.exceptions.RateLimitedException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.json.JSONObject;
 import org.springframework.context.ApplicationContext;
 
 import javax.security.auth.login.LoginException;
-import java.io.IOException;
 import java.util.List;
 
 
@@ -54,7 +46,8 @@ public class Init {
 
                 logger.info("Connecting to Discord api...");
                 //connection au bot
-                jda = new JDABuilder(AccountType.BOT).setToken(token).setBulkDeleteSplittingEnabled(false).buildBlocking();
+                jda = new JDABuilder(AccountType.BOT).setToken(token).setBulkDeleteSplittingEnabled(false).build();
+                jda = jda.awaitReady();
                 MainBot.jda = jda;
                 jda.setAutoReconnect(true);
 

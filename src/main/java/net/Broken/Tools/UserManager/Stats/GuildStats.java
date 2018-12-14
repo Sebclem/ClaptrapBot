@@ -1,0 +1,34 @@
+package net.Broken.Tools.UserManager.Stats;
+
+public class GuildStats{
+    public String userName;
+
+    public long voiceTime;
+    public long voiceXp;
+
+    public long messageCount;
+    public long messageXp;
+
+    public long apiCount;
+    public long apiXp;
+
+    public long total;
+
+
+    public GuildStats() {
+    }
+
+    public GuildStats(String userName,  long voiceTime, long messageCount, long apiCount) {
+        this.userName = userName;
+        this.voiceTime = voiceTime;
+        this.messageCount = messageCount;
+        this.apiCount = apiCount;
+
+
+        voiceXp = (long) (this.voiceTime * UserStatsUtils.XP_PER_VOICE_TIME);
+        messageXp = (long) (this.messageCount * UserStatsUtils.XP_PER_MESSAGE);
+        apiXp = (long) (this.apiCount * UserStatsUtils.XP_PER_API_COUNT);
+        total = voiceXp + messageXp + apiXp;
+
+    }
+}

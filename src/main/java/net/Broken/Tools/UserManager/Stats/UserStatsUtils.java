@@ -1,4 +1,4 @@
-package net.Broken.Tools.UserManager;
+package net.Broken.Tools.UserManager.Stats;
 
 import net.Broken.DB.Entity.UserEntity;
 import net.Broken.DB.Entity.UserStats;
@@ -7,6 +7,7 @@ import net.Broken.DB.Repository.UserStatsRepository;
 import net.Broken.MainBot;
 import net.Broken.SpringContext;
 import net.Broken.Tools.UserManager.Exceptions.UnknownTokenException;
+import net.Broken.Tools.UserManager.UserUtils;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
 import net.dv8tion.jda.core.entities.User;
@@ -16,9 +17,15 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class UserStatsUtils {
+
+    static double XP_PER_VOICE_TIME = 0.1;
+    static double XP_PER_MESSAGE    = 1;
+    static double XP_PER_API_COUNT  = 1;
+
 
 
     private static UserStatsUtils INSTANCE = new UserStatsUtils();
@@ -82,7 +89,9 @@ public class UserStatsUtils {
 
     }
 
-    public void addMessageCount(Member member){
+
+
+    public UserStats getGuildUserStats(Member member){
         List<UserEntity> userEntityList = userRepository.findByJdaId(member.getUser().getId());
         UserEntity userEntity;
         if( userEntityList.size() == 0)
@@ -96,7 +105,21 @@ public class UserStatsUtils {
             userStatsList = userStatsRepository.findByUserAndGuildId(userEntity, member.getGuild().getId());
         }
 
-        UserStats userStats = userStatsList.get(0);
+        return userStatsList.get(0);
+    }
+
+    public UserStats getGuildUserStats(UserEntity userEntity, String guildId){
+        List<UserStats> userStatsList = userStatsRepository.findByUserAndGuildId(userEntity, guildId);
+        if(userStatsRepository.findByUserAndGuildId(userEntity, guildId).size() == 0){
+            getUserStats(userEntity);
+            userStatsList = userStatsRepository.findByUserAndGuildId(userEntity, guildId);
+        }
+        return userStatsList.get(0);
+    }
+
+
+    public void addMessageCount(Member member){
+        UserStats userStats = getGuildUserStats(member);
         userStats.setMessageCount(userStats.getMessageCount() + 1);
         userStatsRepository.save(userStats);
 
@@ -106,12 +129,7 @@ public class UserStatsUtils {
     public void addApiCount(UserEntity userEntity, String guildId){
 
 
-        List<UserStats> userStatsList = userStatsRepository.findByUserAndGuildId(userEntity, guildId);
-        if(userStatsRepository.findByUserAndGuildId(userEntity, guildId).size() == 0){
-            getUserStats(userEntity);
-            userStatsList = userStatsRepository.findByUserAndGuildId(userEntity, guildId);
-        }
-        UserStats userStats = userStatsList.get(0);
+        UserStats userStats = getGuildUserStats(userEntity, guildId);
         userStats.setApiCommandCount(userStats.getApiCommandCount() + 1);
         userStatsRepository.save(userStats);
 
@@ -120,19 +138,7 @@ public class UserStatsUtils {
 
 
     private void addVocalCount(Member member){
-        List<UserEntity> userEntityList = userRepository.findByJdaId(member.getUser().getId());
-        UserEntity userEntity;
-        if( userEntityList.size() == 0)
-            userEntity = genUserEntity(member.getUser());
-        else
-            userEntity = userEntityList.get(0);
-
-        List<UserStats> userStatsList = userStatsRepository.findByUserAndGuildId(userEntity, member.getGuild().getId());
-        if(userStatsList.size() == 0){
-            getUserStats(userEntity);
-            userStatsList = userStatsRepository.findByUserAndGuildId(userEntity, member.getGuild().getId());
-        }
-        UserStats userStats = userStatsList.get(0);
+        UserStats userStats = getGuildUserStats(member);
         userStats.setVocalTime(userStats.getVocalTime() + 10);
         userStatsRepository.save(userStats);
 
@@ -149,9 +155,28 @@ public class UserStatsUtils {
 
 
 
-    public static class VoicePresenceCompter extends Thread{
+    public GuildStatsPack getStatPack(UserEntity userEntity, String guildId){
+        UserStats userStats = getGuildUserStats(userEntity, guildId);
+        GuildStats selfGuildStats = null;
+
+        List<UserStats> allStats = userStatsRepository.findByGuildId(guildId);
+        List<GuildStats> ranked = new ArrayList<>();
+        for(UserStats stats : allStats){
+            GuildStats temp = new GuildStats(stats.getUser().getName(), stats.getVocalTime(), stats.getMessageCount(), stats.getApiCommandCount());
+            if(stats.getUser().getId().equals(userEntity.getId())){
+                selfGuildStats = temp;
+            }
+            ranked.add(temp);
+        }
+        ranked.sort((guildStats, t1) -> (int) (guildStats.total - t1.total));
+
+        return new GuildStatsPack(ranked.indexOf(selfGuildStats) + 1 , selfGuildStats, ranked);
+
+    }
+
+    public static class VoicePresenceCounter extends Thread{
         private Member member;
-        public VoicePresenceCompter(Member member){
+        public VoicePresenceCounter(Member member){
             this.member = member;
         }
 
@@ -171,4 +196,7 @@ public class UserStatsUtils {
             }
         }
     }
+
+
+
 }
