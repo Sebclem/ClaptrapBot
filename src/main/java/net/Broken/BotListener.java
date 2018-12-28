@@ -122,8 +122,15 @@ public class BotListener extends ListenerAdapter {
     @Override
     public void onGuildVoiceJoin(GuildVoiceJoinEvent event) {
         super.onGuildVoiceJoin(event);
-        if(!event.getMember().getUser().isBot())
-            new UserStatsUtils.VoicePresenceCounter(event.getMember()).start();
+        if(!event.getMember().getUser().isBot()){
+            UserStatsUtils userStatsUtils = UserStatsUtils.getINSTANCE();
+            if(!userStatsUtils.runningCounters.containsKey(event.getMember())){
+                UserStatsUtils.VoicePresenceCounter temp = new UserStatsUtils.VoicePresenceCounter(event.getMember());
+                temp.start();
+                userStatsUtils.runningCounters.put(event.getMember(), temp);
+
+            }
+        }
     }
 
     @Override
@@ -131,7 +138,7 @@ public class BotListener extends ListenerAdapter {
         super.onGuildVoiceLeave(event);
         if(event.getGuild().getAudioManager().isConnected())
         {
-            logger.debug("User disconnected from voice channel.");
+            logger.trace("User disconnected from voice channel.");
 
             if(event.getGuild().getAudioManager().getConnectedChannel().getMembers().size() == 1){
                 logger.debug("I'm alone, close audio connection.");

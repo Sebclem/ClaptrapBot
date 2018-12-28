@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 
 public class UserStatsUtils {
@@ -33,6 +34,9 @@ public class UserStatsUtils {
     public static UserStatsUtils getINSTANCE() {
         return INSTANCE;
     }
+
+
+    public HashMap<Member, VoicePresenceCounter> runningCounters = new HashMap<>();
 
     private UserStatsRepository userStatsRepository;
     private UserRepository userRepository;
@@ -194,6 +198,7 @@ public class UserStatsUtils {
                     e.printStackTrace();
                 }
             }
+            UserStatsUtils.getINSTANCE().runningCounters.remove(member);
         }
     }
 
