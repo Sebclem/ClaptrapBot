@@ -16,7 +16,7 @@ public  class FindContentOnWebPage {
      * @throws IOException
      */
     public static String doYourJob(String url, String divClass, String htmlType) throws IOException {
-        System.out.println(url);
+//        System.out.println(url);
         String source = getSourceUrl(url);
         int divIndex = source.indexOf("class=\""+divClass);
         String sub = source.substring(divIndex);

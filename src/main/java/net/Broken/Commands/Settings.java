@@ -40,7 +40,7 @@ public class Settings implements Commande {
 
         EmbedBuilder builder = new EmbedBuilder()
                 .setTitle("Settings")
-                .setDescription("You can do all the configuration on this web ender the \"Bot Settings\" menu.\nhttps://"+MainBot.url).setColor(Color.green);
+                .setDescription("You can do all the configuration on this web in the \"Bot Settings\" menu.\nhttps://"+MainBot.url).setColor(Color.green);
         event.getTextChannel().sendMessage(EmbedMessageUtils.buildStandar(builder)).queue();
 
 
