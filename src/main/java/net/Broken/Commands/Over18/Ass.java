@@ -12,7 +12,7 @@ import org.apache.logging.log4j.LogManager;
 public class Ass  extends NumberedCommande {
 
     public Ass() {
-        super(LogManager.getLogger(), "http://les400culs.com/","featured-img","img");
+        super(LogManager.getLogger(), "http://les400culs.com/","-2/","featured-img","img");
     }
 
     @Override

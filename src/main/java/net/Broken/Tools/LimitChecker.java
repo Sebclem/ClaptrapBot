@@ -22,7 +22,7 @@ public class LimitChecker {
      * @return max Number
      * @throws IOException
      */
-    public static int doYourJob(String baseURL, int minNumber) throws IOException {
+    public static int doYourJob(String baseURL, int minNumber, String suffix) throws IOException {
         int number = minNumber;
         URL u = null;
         boolean redirected = false;
@@ -30,7 +30,7 @@ public class LimitChecker {
 
         while(!redirected )
         {
-            String origin = baseURL+number+"-2/";
+            String origin = baseURL+number+suffix;
             String newUrl = redirection.get(origin);
             logger.trace("Origin URL: "+origin+" Result: "+newUrl);
             if(newUrl.equals(origin))
@@ -43,7 +43,7 @@ public class LimitChecker {
         logger.debug("First pass: "+number);
         while(!redirected )
         {
-            String origin = baseURL+number+"-2/";
+            String origin = baseURL+number+suffix;
             String newUrl = redirection.get(origin);
             logger.trace("Origin URL: "+origin+" Result: "+newUrl);
             if(newUrl.equals(origin))
@@ -56,7 +56,7 @@ public class LimitChecker {
         logger.debug("Second pass: "+number);
         while(!redirected )
         {
-            String origin = baseURL+number+"-2/";
+            String origin = baseURL+number+suffix;
             String newUrl = redirection.get(origin);
             logger.trace("Origin URL: "+origin+" Result: "+newUrl);
             if(newUrl.equals(origin))
@@ -69,7 +69,7 @@ public class LimitChecker {
         logger.debug("Third pass: "+number);
         while(!redirected )
         {
-            String origin = baseURL+number+"-2/";
+            String origin = baseURL+number+suffix;
             String newUrl = redirection.get(origin);
             logger.trace("Origin URL: "+origin+" Result: "+newUrl);
             if(newUrl.equals(origin))

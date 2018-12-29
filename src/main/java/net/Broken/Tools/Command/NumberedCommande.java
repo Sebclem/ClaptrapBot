@@ -2,6 +2,7 @@ package net.Broken.Tools.Command;
 import net.Broken.Commande;
 import net.Broken.Tools.FindContentOnWebPage;
 import net.Broken.Tools.LimitChecker;
+import net.Broken.Tools.TrueRandom;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -9,6 +10,9 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Queue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Abstact class used for all command that need to find the max number of page on a web site.
@@ -16,12 +20,13 @@ import java.net.URL;
 @Ignore
 public abstract class NumberedCommande implements Commande{
     private Logger logger = LogManager.getLogger();
-    private int minNumber = 1;
-    private int maxNumber = -1;
-    private String baseURL;
-    private String divClass;
-    private String htmlType;
-
+    protected int minNumber = 1;
+    protected int maxNumber = -1;
+    protected String baseURL;
+    protected String divClass;
+    protected String htmlType;
+    protected String urlSuffix;
+    protected LinkedBlockingQueue<Integer> randomQueue = new LinkedBlockingQueue<>();
 
     /**
      * Default constructor
@@ -30,18 +35,24 @@ public abstract class NumberedCommande implements Commande{
      * @param divClass DivClass to search to extract image
      * @param htmlType HTML tag to extract image (img)
      */
-    public NumberedCommande(Logger logger, String baseURL, String divClass, String htmlType) {
+    public NumberedCommande(Logger logger, String baseURL, String urlSuffix, String divClass, String htmlType) {
         this.logger = logger;
         this.baseURL = baseURL;
         this.divClass = divClass;
         this.htmlType = htmlType;
+        this.urlSuffix = urlSuffix;
         try {
             logger.debug("Checking max...");
-            maxNumber = LimitChecker.doYourJob(baseURL, minNumber);
+            maxNumber = LimitChecker.doYourJob(baseURL, 2, urlSuffix);
             logger.info("Limit is "+maxNumber);
         } catch (IOException e) {
             logger.catching(e);
         }
+    }
+
+    public NumberedCommande(Logger logger, String baseURL, String urlSuffix){
+        this(logger, baseURL, urlSuffix, null, null);
+
     }
 
     @Override
@@ -50,9 +61,8 @@ public abstract class NumberedCommande implements Commande{
         {
             if(args.length == 0)
             {
-                int randomResult = (int) (minNumber + (Math.random() * (maxNumber - minNumber)));
-                String result = FindContentOnWebPage.doYourJob(baseURL + randomResult + "-2", divClass, htmlType);
-                event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n"+result).queue();
+               String result = poll();
+               event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n"+result).queue();
 
             }
             else
@@ -64,7 +74,7 @@ public abstract class NumberedCommande implements Commande{
 
                         int newNumber = maxNumber;
                         try {
-                            newNumber = LimitChecker.doYourJob(baseURL, maxNumber);
+                            newNumber = LimitChecker.doYourJob(baseURL, maxNumber, urlSuffix);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -89,7 +99,7 @@ public abstract class NumberedCommande implements Commande{
                                 huc.connect();
                                 int result = huc.getResponseCode();
                                 if (result == 200) {
-                                    event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n" + baseURL + number + "-2/").queue();
+                                    event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n" + baseURL + number + urlSuffix).queue();
                                 } else {
                                     event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n:warning: **__Erreur__** :warning:\n:arrow_right: Page introuvable (404)").queue();
                                 }
@@ -116,6 +126,29 @@ public abstract class NumberedCommande implements Commande{
         }
 
 
+    }
+
+
+    private void completeRandom() throws IOException {
+        TrueRandom trueRandom = TrueRandom.getINSTANCE();
+        ArrayList<Integer> numbers = trueRandom.getNumbers(minNumber, maxNumber);
+
+        randomQueue.addAll(numbers);
+
+    }
+
+    protected void checkRandom() throws IOException {
+        logger.trace("Queue size: " + randomQueue.size());
+        if(randomQueue.isEmpty()){
+            logger.debug("Queue empty, update it.");
+            completeRandom();
+        }
+    }
+
+    public String poll() throws IOException {
+        checkRandom();
+        int randomResult = randomQueue.poll();
+        return FindContentOnWebPage.doYourJob(baseURL + randomResult + urlSuffix, divClass, htmlType);
     }
 
 

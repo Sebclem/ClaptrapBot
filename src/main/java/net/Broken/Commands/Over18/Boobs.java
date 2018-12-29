@@ -11,7 +11,7 @@ import org.apache.logging.log4j.LogManager;
 public class Boobs extends NumberedCommande {
 
     public Boobs() {
-        super(LogManager.getLogger(), "http://lesaintdesseins.fr/","featured-img","img");
+        super(LogManager.getLogger(), "http://lesaintdesseins.fr/","-2/","featured-img","img");
     }
     @Override
     public String toString() {

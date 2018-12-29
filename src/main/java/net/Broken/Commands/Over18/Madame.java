@@ -1,9 +1,11 @@
 package net.Broken.Commands.Over18;
 
 import net.Broken.Commande;
+import net.Broken.Tools.Command.NumberedCommande;
 import net.Broken.Tools.EmbedMessageUtils;
 import net.Broken.Tools.FindContentOnWebPage;
 import net.Broken.Tools.Redirection;
+import net.Broken.Tools.TrueRandom;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,50 +16,15 @@ import java.io.IOException;
 /**
  * Madame command that return random picture from dites.bonjourmadame.fr
  */
-public class Madame implements Commande{
+public class Madame extends NumberedCommande {
     Logger logger = LogManager.getLogger();
     MessageReceivedEvent event;
-    public String HELP="T'es sérieux la?";
+    public String HELP = "T'es sérieux la?";
 
-    @Override
-    public void action(String[] args, MessageReceivedEvent event) {
-        this.event = event;
-        Redirection redirect = new Redirection();
-        boolean success=false;
-        boolean error=false;
-        int errorCp=0;
-        while(!success && !error)
-        {
-            try {
-
-                String url = redirect.get("http://dites.bonjourmadame.fr/random");
-                logger.debug("URL: "+url);
-                if(scanPageForTipeee(url, logger)){
-                    logger.debug("Advertisement detected! Retry! ("+url+")");
-                }
-                else{
-                    event.getTextChannel().sendMessage(url).queue();
-                    success=true;
-                }
-
-            } catch (IOException e) {
-                errorCp++;
-                logger.warn("Erreur de redirection. (Essais n°"+errorCp+")");
-                if(errorCp>5)
-                {
-                    logger.error("5 Erreur de redirection.");
-                    error=true;
-                    event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n:warning: **__Erreur de redirection (5 essais), Réessayez__**:warning: ").queue();
-
-                }
-
-            }catch (StringIndexOutOfBoundsException e){
-                logger.catching(e);
-                event.getTextChannel().sendMessage(EmbedMessageUtils.getInternalError()).queue();
-            }
-        }
-
+    public Madame() {
+        super(LogManager.getLogger(), "http://www.bonjourmadame.fr/page/", "/");
     }
+
 
     @Override
     public boolean isPrivateUsable() {
@@ -77,24 +44,47 @@ public class Madame implements Commande{
 
     /**
      * Detect if picture link go to Tepeee
+     *
      * @param url
      * @return true is Tepeee link is detected
      * @throws StringIndexOutOfBoundsException
      * @throws IOException
      */
-    public static boolean scanPageForTipeee(String url, Logger logger) throws StringIndexOutOfBoundsException, IOException{
-            String content = FindContentOnWebPage.getSourceUrl(url);
-            String imgClickLink = content.substring(content.indexOf("photo post"));
-            imgClickLink = imgClickLink.substring(imgClickLink.indexOf("<a"));
-            imgClickLink = imgClickLink.substring(imgClickLink.indexOf("\""));
-            imgClickLink = imgClickLink.substring(0, imgClickLink.indexOf("\">"));
-            imgClickLink = imgClickLink.substring(1);
-            logger.debug("Image link: " + imgClickLink);
-            if(imgClickLink.contains("tipeee")){
-                logger.debug("Detect tipeee link! ");
-                return true;
+    public static boolean scanPageForTipeee(String url, Logger logger) throws StringIndexOutOfBoundsException, IOException {
+        String content = FindContentOnWebPage.getSourceUrl(url);
+        String imgClickLink = content.substring(content.indexOf("class=\"post-content"));
+        imgClickLink = imgClickLink.substring(imgClickLink.indexOf("<a"));
+        imgClickLink = imgClickLink.substring(imgClickLink.indexOf("\""));
+        imgClickLink = imgClickLink.substring(0, imgClickLink.indexOf("\">"));
+        imgClickLink = imgClickLink.substring(1);
+        logger.trace("Image link: " + imgClickLink);
+        if (imgClickLink.contains("tipeee")) {
+            logger.trace("Detect tipeee link! ");
+            return true;
+        } else
+            return false;
+    }
+
+
+    @Override
+    public String poll() throws IOException {
+        boolean success = false;
+        String imgUrl = null;
+        while (!success ) {
+
+            checkRandom();
+            int randomResult = randomQueue.poll();
+            String url = baseURL + randomResult + urlSuffix;
+            logger.debug("URL: " + url);
+            if (scanPageForTipeee(url, logger)) {
+                logger.debug("Advertisement detected! Retry! (" + url + ")");
+            } else {
+                imgUrl = FindContentOnWebPage.doYourJob(url, "post-content", "img");
+
+                success = true;
             }
-            else
-                return false;
+
+        }
+        return imgUrl;
     }
 }
