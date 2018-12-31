@@ -15,10 +15,11 @@
     <link rel="manifest" href="/manifest.json"/>
     <meta name="theme-color" content="#263238"/>
     <style>
-        tr{
-           border-color: #fbcf40;
+        tr {
+            border-color: #fbcf40;
         }
-        h4 span{
+
+        h4 span {
             color: #fbcf40;
             font-size: 15px;
             font-weight: normal;
@@ -44,7 +45,8 @@
         <div class="card-panel col m6 offset-m3 s10 offset-s1 grey darken-4 white-text">
             <div class="row" style="margin-bottom: 0">
                 <div class="col s12 center" style="margin-top: 10px">
-                    <img class="circle" th:src="${stack.selfStats.avatarUrl}" style="border-color: green; border-style: solid;"/>
+                    <img class="circle" th:src="${stack.selfStats.avatarUrl}"
+                         style="border-color: green; border-style: solid;"/>
                 </div>
                 <div class="col s12 center">
                     <h4 style="font-weight: bold; margin: 0;" th:text="${stack.selfStats.userName}"></h4>
@@ -61,7 +63,9 @@
                         <tbody>
                         <tr>
                             <td>
-                                <h4 style="font-weight: bold; margin: 0"><span th:text="${stack.rank}" th:remove="tag"></span> <span th:text="${' / ' + stack.ranking.size()}">/ 50</span></h4>
+                                <h4 style="font-weight: bold; margin: 0"><span th:text="${stack.rank}"
+                                                                               th:remove="tag"></span> <span
+                                        th:text="${' / ' + stack.ranking.size()}">/ 50</span></h4>
                             </td>
                         </tr>
                         </tbody>
@@ -78,11 +82,57 @@
                         <tbody>
                         <tr>
                             <td>
-                                <h4 style="font-weight: bold; margin: 0"><span th:text="${stack.selfStats.total}" th:remove="tag"></span> <span>Xp</span></h4>
+                                <h4 style="font-weight: bold; margin: 0"><span th:text="${stack.selfStats.total}"
+                                                                               th:remove="tag"></span> <span>Xp</span>
+                                </h4>
                             </td>
                         </tr>
                         </tbody>
-                    </table>                </div>
+                    </table>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col s6 center">
+                    <table class="centered">
+                        <thead>
+                        <tr>
+                            <th>Vocal Time</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>
+                                <h4 style="font-weight: bold; margin: 0">
+                                    <span th:text="${T(net.Broken.Tools.TimeConvertor).sToTime(stack.selfStats.voiceTime).get(0)}" th:remove="tag"></span> <span>H</span>
+                                    <span th:text="${T(net.Broken.Tools.TimeConvertor).sToTime(stack.selfStats.voiceTime).get(1)}" th:remove="tag"></span> <span>M</span>
+                                    <span th:text="${T(net.Broken.Tools.TimeConvertor).sToTime(stack.selfStats.voiceTime).get(2)}" th:remove="tag"></span> <span>S</span>
+                                </h4>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+                <div class="col s6 center">
+                    <table class="centered">
+                        <thead>
+                        <tr>
+                            <th>Message count</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>
+                                <h4 style="font-weight: bold; margin: 0"><span th:text="${stack.selfStats.messageCount}"
+                                                                               th:remove="tag"></span> <span>msg</span>
+                                </h4>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
