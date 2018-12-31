@@ -1,6 +1,7 @@
 package net.Broken.Commands.Over18;
 
 import net.Broken.Commande;
+import net.Broken.Tools.Command.NoDev;
 import net.Broken.Tools.Command.NumberedCommande;
 import net.Broken.Tools.EmbedMessageUtils;
 import net.Broken.Tools.FindContentOnWebPage;
@@ -16,6 +17,7 @@ import java.io.IOException;
 /**
  * Madame command that return random picture from dites.bonjourmadame.fr
  */
+@NoDev
 public class Madame extends NumberedCommande {
     Logger logger = LogManager.getLogger();
     MessageReceivedEvent event;

@@ -5,6 +5,8 @@ import net.Broken.DB.Repository.UserRepository;
 import net.Broken.MainBot;
 import net.Broken.Tools.SettingsUtils;
 import net.Broken.Tools.UserManager.Exceptions.UnknownTokenException;
+import net.Broken.Tools.UserManager.Stats.GuildStatsPack;
+import net.Broken.Tools.UserManager.Stats.UserStatsUtils;
 import net.Broken.Tools.UserManager.UserUtils;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.User;
@@ -16,7 +18,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
+
+
+
+
+
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -66,11 +74,7 @@ public class GeneralWebView {
                 model.addAttribute("noMutualGuilds", true);
             else
                 model.addAttribute("noMutualGuilds", false);
-            Guild guild = MainBot.jda.getGuildById(guildId);
-            if(guild != null)
-                model.addAttribute("guild_name", guild.getName());
-            else
-                model.addAttribute("guild_name", "");
+            addGuildAndRedirect(model, guildId);
             model.addAttribute("isAdmin", SettingsUtils.getInstance().checkPermission(token, guildId));
             model.addAttribute("isLogged", true);
             model.addAttribute("inviteLink", "https://discordapp.com/oauth2/authorize?client_id=" + MainBot.jda.getSelfUser().getId() + "&scope=bot&permissions=8");
@@ -122,12 +126,8 @@ public class GeneralWebView {
     public String settings(Model model, @CookieValue(value = "guild", defaultValue = "") String guildId, @CookieValue(value = "token", defaultValue = "") String token){
         SettingsUtils settingsUtils = SettingsUtils.getInstance();
         if(settingsUtils.checkPermission(token, guildId)){
+            addGuildAndRedirect(model, guildId);
             Guild guild = MainBot.jda.getGuildById(guildId);
-            if(guild != null)
-                model.addAttribute("guild_name", guild.getName());
-            else
-                model.addAttribute("guild_name", "");
-            model.addAttribute("redirect_url", System.getenv("OAUTH_URL"));
             model.addAttribute("settings", SettingsUtils.getInstance().extractSettings(guild));
             model.addAttribute("isAdmin", SettingsUtils.getInstance().checkPermission(token, guildId));
 
@@ -152,12 +152,36 @@ public class GeneralWebView {
 
 
 
-    @RequestMapping("/500")
-    public String errorTest(Model model){
-        return "error/500";
+    @RequestMapping("/rank")
+    public String login(Model model, @CookieValue(value = "token") String token, @CookieValue(value = "guild", defaultValue = "") String cookieGuildId, @RequestParam(value = "guild", defaultValue = "") String praramGuildId){
+        model.addAttribute("redirect_url", System.getenv("OAUTH_URL"));
+        try {
+            UserEntity userEntity = userUtils.getUserWithApiToken(userRepository, token);
+            addGuildAndRedirect(model, cookieGuildId);
+
+            GuildStatsPack stack = UserStatsUtils.getINSTANCE().getStatPack(userEntity, cookieGuildId);
+            model.addAttribute("stack", stack);
+            return  CheckPage.getPageIfReady("rank");
+
+        } catch (UnknownTokenException e) {
+            return "login"; // TODO Public rank
+        }
+
     }
 
 
+
+
+
+    private Model addGuildAndRedirect(Model model, String guildId){
+        Guild guild = MainBot.jda.getGuildById(guildId);
+        if(guild != null)
+            model.addAttribute("guild_name", guild.getName());
+        else
+            model.addAttribute("guild_name", "");
+        model.addAttribute("redirect_url", System.getenv("OAUTH_URL"));
+        return model;
+    }
 
 
 }

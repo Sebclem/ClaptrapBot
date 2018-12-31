@@ -166,7 +166,8 @@ public class UserStatsUtils {
         List<UserStats> allStats = userStatsRepository.findByGuildId(guildId);
         List<GuildStats> ranked = new ArrayList<>();
         for(UserStats stats : allStats){
-            GuildStats temp = new GuildStats(stats.getUser().getName(), stats.getVocalTime(), stats.getMessageCount(), stats.getApiCommandCount());
+            String avatar = MainBot.jda.getUserById(stats.getUser().getJdaId()).getAvatarUrl();
+            GuildStats temp = new GuildStats(stats.getUser().getName(), avatar, stats.getVocalTime(), stats.getMessageCount(), stats.getApiCommandCount());
             if(stats.getUser().getId().equals(userEntity.getId())){
                 selfGuildStats = temp;
             }
