@@ -113,4 +113,58 @@ public class Init {
 
 
     }
+
+
+    public static boolean checkEnv(){
+        boolean ok = true;
+
+
+        if(System.getenv("PORT") == null){
+            logger.fatal("Missing PORT ENV variable.");
+            ok = false;
+        }
+
+        if(System.getenv("DB_URL") == null){
+            logger.fatal("Missing DB_URL ENV variable.");
+            ok = false;
+        }
+
+        if(System.getenv("DB_USER") == null){
+            logger.fatal("Missing DB_USER ENV variable.");
+            ok = false;
+        }
+
+
+        if(System.getenv("DB_PWD") == null){
+            logger.fatal("Missing DB_PWD ENV variable.");
+            ok = false;
+        }
+
+        if(System.getenv("OAUTH_URL") == null){
+            logger.fatal("Missing OAUTH_URL ENV variable.");
+            ok = false;
+        }
+
+        if(System.getenv("DISCORD_TOKEN") == null){
+            logger.fatal("Missing DISCORD_TOKEN ENV variable.");
+            ok = false;
+        }
+
+        if(System.getenv("GOOGLE_API_KEY") == null){
+            logger.fatal("Missing GOOGLE_API_KEY ENV variable.");
+            ok = false;
+        }
+
+        if(System.getenv("RANDOM_API_KEY") == null){
+            logger.fatal("Missing GOOGLE_API_KEY ENV variable.");
+            ok = false;
+        }
+
+        if(System.getenv("LOG_LEVEL") == null){
+            logger.fatal("Missing LOG_LEVEL ENV variable.");
+            ok = false;
+        }
+
+        return ok;
+    }
 }

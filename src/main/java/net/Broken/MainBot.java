@@ -51,14 +51,19 @@ public class MainBot {
 
     public static void main(String[] args) {
 
+
+        if(!Init.checkEnv())
+            System.exit(1);
+
         logger.info("=======================================");
         logger.info("--------------Starting Bot-------------");
         logger.info("=======================================");
-
         if(System.getenv("DEV")!= null){
             dev = Boolean.parseBoolean(System.getenv("DEV"));
         }
-        String token = System.getenv("TOKEN");
+
+
+        String token = System.getenv("DISCORD_TOKEN");
 
         jda = Init.initJda(token);
 
@@ -133,5 +138,7 @@ public class MainBot {
             logger.debug("Unknown command : " + cmd.commande);
         }
     }
+
+
 
 }
