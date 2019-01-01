@@ -2,6 +2,7 @@ package net.Broken.Tools.UserManager.Stats;
 
 public class GuildStats{
     public String userName;
+    public int rank;
     public String avatarUrl;
 
     public long voiceTime;
@@ -19,13 +20,13 @@ public class GuildStats{
     public GuildStats() {
     }
 
-    public GuildStats(String userName, String avatarUrl, long voiceTime, long messageCount, long apiCount) {
+    public GuildStats(String userName, int rank, String avatarUrl, long voiceTime, long messageCount, long apiCount) {
         this.userName = userName;
         this.avatarUrl = avatarUrl;
         this.voiceTime = voiceTime;
         this.messageCount = messageCount;
         this.apiCount = apiCount;
-
+        this.rank = rank;
 
         voiceXp = (long) (this.voiceTime * UserStatsUtils.XP_PER_VOICE_TIME);
         messageXp = (long) (this.messageCount * UserStatsUtils.XP_PER_MESSAGE);
