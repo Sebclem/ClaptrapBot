@@ -28,6 +28,9 @@
             <li class="disable" th:classappend="(${page} == 'music')? 'active' : ''">
                 <a class="waves-effect waves-light" href="/music">Music Control</a>
             </li>
+            <li class="disable" th:classappend="(${page} == 'rank')? 'active' : ''">
+                <a class="waves-effect waves-light" href="/rank">Stats</a>
+            </li>
 
 
             <li id="nav-bar-account">
@@ -56,6 +59,9 @@
         </li>
         <li class="center" th:classappend="(${page} == 'music')? 'active' : ''">
             <a class="waves-effect waves-light" href="/music">Music Control</a>
+        </li>
+        <li class="center" th:classappend="(${page} == 'rank')? 'active' : ''">
+            <a class="waves-effect waves-light" href="/rank">Stats</a>
         </li>
 
 
