@@ -153,7 +153,7 @@ public class GeneralWebView {
 
 
     @RequestMapping("/rank")
-    public String login(Model model, @CookieValue(value = "token") String token, @CookieValue(value = "guild", defaultValue = "") String cookieGuildId, @RequestParam(value = "guild", defaultValue = "") String praramGuildId){
+    public String login(Model model, @CookieValue(value = "token",defaultValue = "1") String token, @CookieValue(value = "guild", defaultValue = "") String cookieGuildId, @RequestParam(value = "guild", defaultValue = "") String praramGuildId){
         model.addAttribute("redirect_url", System.getenv("OAUTH_URL"));
         try {
             UserEntity userEntity = userUtils.getUserWithApiToken(userRepository, token);
