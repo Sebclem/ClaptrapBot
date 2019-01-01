@@ -46,148 +46,152 @@
 
 <main>
     <!--/*@thymesVar id="stack" type="net.Broken.Tools.UserManager.Stats.GuildStatsPack"*/-->
-    <div class="row">
-        <div class="card-panel col l6 offset-l3 m10 offset-m1 s10 offset-s1 grey darken-4 white-text">
-            <div class="row" style="margin-bottom: 0">
-                <div class="col s12 center" style="margin-top: 10px">
-                    <img class="circle" th:src="${stack.selfStats.avatarUrl}"
-                         style="border-color: green; border-style: solid;"/>
+    <th:block th:if="${stack != null}">
+        <div class="row">
+            <div class="card-panel col l6 offset-l3 m10 offset-m1 s10 offset-s1 grey darken-4 white-text">
+                <div class="row" style="margin-bottom: 0">
+                    <div class="col s12 center" style="margin-top: 10px">
+                        <img class="circle" th:src="${stack.selfStats.avatarUrl}"
+                             style="border-color: green; border-style: solid;"/>
+                    </div>
+                    <div class="col s12 center">
+                        <h4 style="font-weight: bold; margin: 0;" th:text="${stack.selfStats.userName}"></h4>
+                    </div>
                 </div>
-                <div class="col s12 center">
-                    <h4 style="font-weight: bold; margin: 0;" th:text="${stack.selfStats.userName}"></h4>
-                </div>
-            </div>
-            <div class="row" style="margin-bottom: 0">
-                <div class="col m6 s12 center">
-                    <table class="centered">
-                        <thead>
-                        <tr>
-                            <th>Rank</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>
-                                <h4 style="font-weight: bold; margin: 0"><span th:text="${stack.rank}"
-                                                                               th:remove="tag"></span> <span
-                                        th:text="${' / ' + stack.ranking.size()}">/ 50</span></h4>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
+                <div class="row" style="margin-bottom: 0">
+                    <div class="col m6 s12 center">
+                        <table class="centered">
+                            <thead>
+                            <tr>
+                                <th>Rank</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <h4 style="font-weight: bold; margin: 0"><span th:text="${stack.rank}"
+                                                                                   th:remove="tag"></span> <span
+                                            th:text="${' / ' + stack.ranking.size()}">/ 50</span></h4>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
 
+                    </div>
+                    <div class="col m6 s12 center">
+                        <table class="centered">
+                            <thead>
+                            <tr>
+                                <th>Experience</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <h4 style="font-weight: bold; margin: 0"><span th:text="${stack.selfStats.total}"
+                                                                                   th:remove="tag"></span>
+                                        <span>Xp</span>
+                                    </h4>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                <div class="col m6 s12 center">
-                    <table class="centered">
-                        <thead>
-                        <tr>
-                            <th>Experience</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>
-                                <h4 style="font-weight: bold; margin: 0"><span th:text="${stack.selfStats.total}"
-                                                                               th:remove="tag"></span> <span>Xp</span>
-                                </h4>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
 
 
-            <div class="row">
-                <div class="col m6 s12 center">
-                    <table class="centered">
-                        <thead>
-                        <tr>
-                            <th>Vocal Time</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>
-                                <h4 style="font-weight: bold; margin: 0">
+                <div class="row">
+                    <div class="col m6 s12 center">
+                        <table class="centered">
+                            <thead>
+                            <tr>
+                                <th>Vocal Time</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <h4 style="font-weight: bold; margin: 0">
                                     <span th:text="${T(net.Broken.Tools.TimeConvertor).sToTime(stack.selfStats.voiceTime).get(0)}"
                                           th:remove="tag"></span> <span>H</span>
-                                    <span th:text="${T(net.Broken.Tools.TimeConvertor).sToTime(stack.selfStats.voiceTime).get(1)}"
-                                          th:remove="tag"></span> <span>M</span>
-                                    <span th:text="${T(net.Broken.Tools.TimeConvertor).sToTime(stack.selfStats.voiceTime).get(2)}"
-                                          th:remove="tag"></span> <span>S</span>
-                                </h4>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
+                                        <span th:text="${T(net.Broken.Tools.TimeConvertor).sToTime(stack.selfStats.voiceTime).get(1)}"
+                                              th:remove="tag"></span> <span>M</span>
+                                        <span th:text="${T(net.Broken.Tools.TimeConvertor).sToTime(stack.selfStats.voiceTime).get(2)}"
+                                              th:remove="tag"></span> <span>S</span>
+                                    </h4>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
 
-                </div>
-                <div class="col m6 s12 center">
-                    <table class="centered">
-                        <thead>
-                        <tr>
-                            <th>Message count</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>
-                                <h4 style="font-weight: bold; margin: 0"><span th:text="${stack.selfStats.messageCount}"
-                                                                               th:remove="tag"></span> <span>msg</span>
-                                </h4>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
+                    </div>
+                    <div class="col m6 s12 center">
+                        <table class="centered">
+                            <thead>
+                            <tr>
+                                <th>Message count</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <h4 style="font-weight: bold; margin: 0"><span
+                                            th:text="${stack.selfStats.messageCount}"
+                                            th:remove="tag"></span> <span>msg</span>
+                                    </h4>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="row">
-        <div class="col l6 offset-l3 m10 offset-m1 hide-on-small-and-down card-panel grey darken-4 white-text">
-            <h3 class="center"><b>Ranking</b></h3>
+        <div class="row">
+            <div class="col l6 offset-l3 m10 offset-m1 hide-on-small-and-down card-panel grey darken-4 white-text">
+                <h3 class="center"><b>Ranking</b></h3>
 
-            <table class="centered">
-                <thead>
-                <tr>
-                    <th>Rank</th>
-                    <th></th>
-                    <th>Name</th>
-                    <th>Vocal Time</th>
-                    <th>Message Count</th>
-                    <th>Total XP</th>
-
-
-                </tr>
-                </thead>
-
-                <tbody>
-                <th:block th:each="stat : ${stack.ranking}">
+                <table class="centered">
+                    <thead>
                     <tr>
-                        <td th:text="${stat.rank}"></td>
-                        <td><img th:src="${stat.avatarUrl}" class="circle" style="max-height: 50px"/> </td>
-                        <td th:text="${stat.userName}"></td>
-                        <td> <span th:text="${T(net.Broken.Tools.TimeConvertor).sToTime(stat.voiceTime).get(0)}"
-                                   th:remove="tag"></span> <span>H</span>
-                            <span th:text="${T(net.Broken.Tools.TimeConvertor).sToTime(stat.voiceTime).get(1)}"
-                                  th:remove="tag"></span> <span>M</span>
-                            <span th:text="${T(net.Broken.Tools.TimeConvertor).sToTime(stat.voiceTime).get(2)}"
-                                  th:remove="tag"></span> <span>S</span></td>
-                        <td th:text="${stat.messageCount}"></td>
-                        <td th:text="${stat.total}"></td>
+                        <th>Rank</th>
+                        <th></th>
+                        <th>Name</th>
+                        <th>Vocal Time</th>
+                        <th>Message Count</th>
+                        <th>Total XP</th>
+
 
                     </tr>
-                </th:block>
+                    </thead>
 
-                </tbody>
-            </table>
+                    <tbody>
+                    <th:block th:each="stat : ${stack.ranking}">
+                        <tr>
+                            <td th:text="${stat.rank}"></td>
+                            <td><img th:src="${stat.avatarUrl}" class="circle" style="max-height: 50px"/></td>
+                            <td th:text="${stat.userName}"></td>
+                            <td> <span th:text="${T(net.Broken.Tools.TimeConvertor).sToTime(stat.voiceTime).get(0)}"
+                                       th:remove="tag"></span> <span>H</span>
+                                <span th:text="${T(net.Broken.Tools.TimeConvertor).sToTime(stat.voiceTime).get(1)}"
+                                      th:remove="tag"></span> <span>M</span>
+                                <span th:text="${T(net.Broken.Tools.TimeConvertor).sToTime(stat.voiceTime).get(2)}"
+                                      th:remove="tag"></span> <span>S</span></td>
+                            <td th:text="${stat.messageCount}"></td>
+                            <td th:text="${stat.total}"></td>
+
+                        </tr>
+                    </th:block>
+
+                    </tbody>
+                </table>
+
+            </div>
+
 
         </div>
-
-
-    </div>
+    </th:block>
 
 </main>
 

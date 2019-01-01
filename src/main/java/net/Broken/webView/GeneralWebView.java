@@ -157,9 +157,14 @@ public class GeneralWebView {
         model.addAttribute("redirect_url", System.getenv("OAUTH_URL"));
         try {
             UserEntity userEntity = userUtils.getUserWithApiToken(userRepository, token);
-            addGuildAndRedirect(model, cookieGuildId);
+            GuildStatsPack stack;
+            if(!cookieGuildId.equals("")){
+                stack = UserStatsUtils.getINSTANCE().getStatPack(userEntity, cookieGuildId);
+                addGuildAndRedirect(model, cookieGuildId);
 
-            GuildStatsPack stack = UserStatsUtils.getINSTANCE().getStatPack(userEntity, cookieGuildId);
+            }
+            else
+                stack = null;
             model.addAttribute("stack", stack);
             return  CheckPage.getPageIfReady("rank");
 
