@@ -56,16 +56,34 @@ public class UserStatsUtils {
 
     public List<UserStats> getUserStats(UserEntity userEntity){
         User jdaUser = MainBot.jda.getUserById(userEntity.getJdaId());
-        if(userEntity.getUserStats() == null || userEntity.getUserStats().size() == 0 || userEntity.getUserStats().size() != jdaUser.getMutualGuilds().size()){
+        if(userEntity.getUserStats() == null || userEntity.getUserStats().size() == 0 || userEntity.getUserStats().size() < jdaUser.getMutualGuilds().size()){
             logger.debug("Stats not found for " + userEntity.getName());
             User user = MainBot.jda.getUserById(userEntity.getJdaId());
             if(user == null)
                 return null;
-            List<UserStats> stats = new ArrayList<>();
-            for(Guild guid : user.getMutualGuilds()){
-                logger.debug(guid.getName());
-                stats.add(new UserStats(guid.getId(), userEntity));
+            List<UserStats> stats;
+            if(userEntity.getUserStats() == null || userEntity.getUserStats().size() == 0){
+                stats = new ArrayList<>();
+                for(Guild guid : user.getMutualGuilds()){
+                    logger.debug(guid.getName());
+                    stats.add(new UserStats(guid.getId(), userEntity));
+                }
             }
+            else{
+                stats = userEntity.getUserStats();
+                ArrayList<String> guildStat = new ArrayList<>();
+                for(UserStats stat : stats){
+                    guildStat.add(stat.getGuildId());
+                }
+                for(Guild guid : user.getMutualGuilds()){
+                    logger.debug(guid.getName());
+                    if(!guildStat.contains(guid.getId())){
+                        logger.debug("Guild " + guid.getName() + " stat don't exist");
+                        stats.add(new UserStats(guid.getId(), userEntity));
+                    }
+                }
+            }
+
             stats = (List<UserStats>) userStatsRepository.save(stats);
             userEntity.setUserStats(stats);
             userEntity = userRepository.save(userEntity);
