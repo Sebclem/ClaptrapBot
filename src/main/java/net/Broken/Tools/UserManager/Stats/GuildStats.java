@@ -22,7 +22,10 @@ public class GuildStats{
 
     public GuildStats(String userName, int rank, String avatarUrl, long voiceTime, long messageCount, long apiCount) {
         this.userName = userName;
-        this.avatarUrl = avatarUrl;
+        if(avatarUrl != null)
+            this.avatarUrl = avatarUrl;
+        else
+            this.avatarUrl = "https://discordapp.com/assets/dd4dbc0016779df1378e7812eabaa04d.png";
         this.voiceTime = voiceTime;
         this.messageCount = messageCount;
         this.apiCount = apiCount;
