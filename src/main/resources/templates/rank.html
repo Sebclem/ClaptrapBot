@@ -29,6 +29,14 @@
             color: #fbcf40;
             font-size: 12px;
         }
+        .collapsible{
+            border-color: #fbcf40;
+            border-left: none;
+            border-right: none;
+        }
+        .collapsible-header{
+            border-color: #fbcf40;
+        }
     </style>
 
 
@@ -47,6 +55,11 @@
 <main>
     <!--/*@thymesVar id="stack" type="net.Broken.Tools.UserManager.Stats.GuildStatsPack"*/-->
     <th:block th:if="${stack != null}">
+        <div class="row" style="margin-bottom: 0">
+            <div class="col l6 offset-l3 m10 offset-m1 s10 offset-s1 card-panel grey darken-4 white-text">
+                <h4 class="center" style="font-weight: bold"><span th:text="${guild_name}" th:remove="tag"></span><br/>Stats </h4>
+            </div>
+        </div>
         <div class="row">
             <div class="card-panel col l6 offset-l3 m10 offset-m1 s10 offset-s1 grey darken-4 white-text">
                 <div class="row" style="margin-bottom: 0">
@@ -190,6 +203,47 @@
             </div>
 
 
+            <div class="col s10 offset-s1 hide-on-med-and-up card-panel grey darken-4 white-text">
+                <h3 class="center"><b>Ranking</b></h3>
+
+                <ul class="collapsible popout" >
+                    <th:block th:each="stat : ${stack.ranking}">
+                        <li>
+                            <div class="collapsible-header grey darken-3 valign-wrapper">  <span th:text="${stat.rank + '. '}" style="font-weight: bold"></span><img th:src="${stat.avatarUrl}" class="circle" style="max-height: 40px; margin: 0 10px 0 10px"/>  <span th:text="${stat.userName}"></span><span class="badge new green" data-badge-caption="xp " th:text="${stat.total}">4</span></div>
+                            <div class="collapsible-body grey darken-2">
+                                <table class="centered">
+                                    <thead>
+                                    <tr>
+
+                                        <th>Vocal Time</th>
+                                        <th>Message Count</th>
+                                    </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <tr>
+                                            <td> <span th:text="${T(net.Broken.Tools.TimeConvertor).sToTime(stat.voiceTime).get(0)}"
+                                                       th:remove="tag"></span> <span>H</span>
+                                                <span th:text="${T(net.Broken.Tools.TimeConvertor).sToTime(stat.voiceTime).get(1)}"
+                                                      th:remove="tag"></span> <span>M</span>
+                                                <span th:text="${T(net.Broken.Tools.TimeConvertor).sToTime(stat.voiceTime).get(2)}"
+                                                      th:remove="tag"></span> <span>S</span></td>
+                                            <td th:text="${stat.messageCount}"></td>
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+
+                        </li>
+                    </th:block>
+
+                </ul>
+
+            </div>
+
+
         </div>
     </th:block>
 
@@ -204,6 +258,12 @@
 <script th:src="@{/js/materialize.js}"></script>
 <script th:src="@{/js/navabar.js}"></script>
 <script th:src="@{/js/js.cookie.js}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var elems = document.querySelectorAll('.collapsible');
+        var instances = M.Collapsible.init(elems);
+    });
+</script>
 <!--<script th:src="@{/js/rank.js}"></script>-->
 
 <script th:src="@{/js/fontawesome.js}"></script>
