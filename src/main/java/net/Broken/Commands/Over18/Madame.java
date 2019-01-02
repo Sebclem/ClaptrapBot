@@ -17,7 +17,7 @@ import java.io.IOException;
 /**
  * Madame command that return random picture from dites.bonjourmadame.fr
  */
-@NoDev
+//@NoDev
 public class Madame extends NumberedCommande {
     Logger logger = LogManager.getLogger();
     MessageReceivedEvent event;
@@ -52,7 +52,7 @@ public class Madame extends NumberedCommande {
      * @throws StringIndexOutOfBoundsException
      * @throws IOException
      */
-    public static boolean scanPageForTipeee(String url, Logger logger) throws StringIndexOutOfBoundsException, IOException {
+    private boolean scanPageForTipeee(String url, Logger logger) throws StringIndexOutOfBoundsException, IOException {
         String content = FindContentOnWebPage.getSourceUrl(url);
         String imgClickLink = content.substring(content.indexOf("class=\"post-content"));
         imgClickLink = imgClickLink.substring(imgClickLink.indexOf("<a"));
@@ -67,6 +67,14 @@ public class Madame extends NumberedCommande {
             return false;
     }
 
+    private String removeParams(String url){
+        int par = url.indexOf('?');
+        if(par != -1){
+            url = url.substring(0,par);
+        }
+        return url;
+    }
+
 
     @Override
     public String poll() throws IOException {
@@ -77,7 +85,10 @@ public class Madame extends NumberedCommande {
             checkRandom();
             int randomResult = randomQueue.poll();
             String url = baseURL + randomResult + urlSuffix;
+
             logger.debug("URL: " + url);
+
+
             if (scanPageForTipeee(url, logger)) {
                 logger.debug("Advertisement detected! Retry! (" + url + ")");
             } else {
@@ -87,6 +98,7 @@ public class Madame extends NumberedCommande {
             }
 
         }
+        imgUrl = removeParams(imgUrl);
         return imgUrl;
     }
 }
