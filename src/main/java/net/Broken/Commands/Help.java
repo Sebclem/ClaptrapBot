@@ -125,7 +125,7 @@ public class Help implements Commande {
             txt += nsfwTable.build();
 
             if(!event.isFromType(ChannelType.PRIVATE)){
-                Message rest = event.getTextChannel().sendMessage(new EmbedBuilder().setTitle("Commands send by private message").setColor(Color.green).build()).complete();
+                Message rest = event.getTextChannel().sendMessage(new EmbedBuilder().setTitle("Commands sent by private message").setColor(Color.green).build()).complete();
                 new MessageTimeOut(MainBot.messageTimeOut, rest, event.getMessage()).start();
             }
 

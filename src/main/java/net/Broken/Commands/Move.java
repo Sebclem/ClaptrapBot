@@ -23,7 +23,7 @@ import java.util.List;
 public class Move implements Commande {
 
     Logger logger = LogManager.getLogger();
-    private String HELP="`//move <@utilisateur> <@rôleCible>`\n:arrow_right:\t*Deplacement d'un utilisateur vers un rôle cible, attention à bien faire des montions.*";
+    private String HELP="`//move <@utilisateur> <@rôleCible>`\n:arrow_right:\t*Deplacement d'un utilisateur vers un rôle cible, attention à bien faire les mentions.*";
     public List<Role> saveRoleUser;
     public Member user;
     public Guild serveur;
@@ -90,7 +90,7 @@ public class Move implements Commande {
 
                 if(userL.size()<1 ||roleL.size()<1)
                 {
-                    logger.warn("Mentionnement Incorect.");
+                    logger.warn("Mention Incorect.");
                     Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("Utilisateur ou Role mal mentioner.")).complete();
                     List<Message> messages = new ArrayList<Message>(){{
                         add(rest);
@@ -159,8 +159,8 @@ public class Move implements Commande {
             }
             else
             {
-                logger.warn("Arguments maquant.");
-                Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("Arguments manquant.")).complete();
+                logger.warn("Arguments maquants.");
+                Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("Arguments manquants.")).complete();
                 List<Message> messages = new ArrayList<Message>(){{
                     add(rest);
                     add(event.getMessage());
