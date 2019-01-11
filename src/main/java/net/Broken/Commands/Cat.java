@@ -43,7 +43,7 @@ public class Cat implements Commande {
             }
         }
         else
-            event.getPrivateChannel().sendMessage("\n:warning: **__Commande non disponible en priver!__** :warning:");
+            event.getPrivateChannel().sendMessage("\n:warning: **__Commande non disponible en privée!__** :warning:");
 
     }
 

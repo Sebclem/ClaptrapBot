@@ -135,7 +135,7 @@ public class Music implements Commande {
                     break;
 
                 default:
-                    Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicError("Arguments inconu!")).complete();
+                    Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicError("Arguments inconnus!")).complete();
                     List<Message> messagess = new ArrayList<Message>(){{
                         add(message);
                         add(event.getMessage());
@@ -146,7 +146,7 @@ public class Music implements Commande {
             }
         }
         else{
-            Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicError("Arguments manquant!")).complete();
+            Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicError("Arguments manquants!")).complete();
             List<Message> messages = new ArrayList<Message>(){{
                 add(message);
                 add(event.getMessage());
