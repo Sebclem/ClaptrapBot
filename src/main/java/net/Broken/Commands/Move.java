@@ -23,7 +23,7 @@ import java.util.List;
 public class Move implements Commande {
 
     Logger logger = LogManager.getLogger();
-    private String HELP="`//move <@utilisateur> <@rôleCible>`\n:arrow_right:\t*Deplacement d'un utilisateur vers un rôle cible, attention à bien faire les mentions.*";
+    private String HELP="`//move <@user> <@Role>`\n:arrow_right:\t*Move a user to a specified role.*";
     public List<Role> saveRoleUser;
     public Member user;
     public Guild serveur;
@@ -91,7 +91,7 @@ public class Move implements Commande {
                 if(userL.size()<1 ||roleL.size()<1)
                 {
                     logger.warn("Mention Incorect.");
-                    Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("Utilisateur ou Role mal mentioner.")).complete();
+                    Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("Error, please check if the user and/or the role are existing.")).complete();
                     List<Message> messages = new ArrayList<Message>(){{
                         add(rest);
                         add(event.getMessage());
@@ -110,7 +110,7 @@ public class Move implements Commande {
                         boolean erreur=this.exc(user,roleL,true,serveur,serveur.getManager());
                         if(erreur)
                         {
-                            Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("Verifier le rôle cible. ")).complete();
+                            Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("Check the targeted role. ")).complete();
                             List<Message> messages = new ArrayList<Message>(){{
                                 add(rest);
                                 add(event.getMessage());
@@ -135,7 +135,7 @@ public class Move implements Commande {
                             }
 
 
-                            Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveOk("Déplacement de "+user.getEffectiveName()+" vers "+roleStr.toString()+" reussi.")).complete();
+                            Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveOk("User "+user.getEffectiveName()+" as been successfully moved to "+roleStr.toString())).complete();
                             List<Message> messages = new ArrayList<Message>(){{
                                 add(rest);
                                 add(event.getMessage());
@@ -143,7 +143,7 @@ public class Move implements Commande {
                             new MessageTimeOut(messages,MainBot.messageTimeOut).start();
                         }
                     }catch (HierarchyException e){
-                        Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("Impossible de déplacer un "+user.getRoles().get(0).getAsMention())).complete();
+                        Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("You cannot move "+user.getRoles().get(0).getAsMention())).complete();
                         List<Message> messages = new ArrayList<Message>(){{
                             add(rest);
                             add(event.getMessage());
@@ -160,7 +160,7 @@ public class Move implements Commande {
             else
             {
                 logger.warn("Arguments maquants.");
-                Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("Arguments manquants.")).complete();
+                Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("Missing argument.")).complete();
                 List<Message> messages = new ArrayList<Message>(){{
                     add(rest);
                     add(event.getMessage());

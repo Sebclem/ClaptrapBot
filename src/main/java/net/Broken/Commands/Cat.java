@@ -42,7 +42,7 @@ public class Cat implements Commande {
             }
         }
         else
-            event.getPrivateChannel().sendMessage("\n:warning: **__Commande non disponible en privee!__** :warning:").queue();
+            event.getPrivateChannel().sendMessage("\n:warning: **__This command cannot be used there !__** :warning:").queue();
 
     }
 

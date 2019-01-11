@@ -22,7 +22,7 @@ public class Flush implements Commande{
     @Override
     public void action(String[] args, MessageReceivedEvent event) {
         if(args.length<1){
-            event.getTextChannel().sendMessage(EmbedMessageUtils.getFlushError("Argument manquant!")).queue();
+            event.getTextChannel().sendMessage(EmbedMessageUtils.getFlushError("Missing argument!")).queue();
 
         }
         else
@@ -36,12 +36,12 @@ public class Flush implements Commande{
                     
 
                 }catch (NumberFormatException e){
-                    event.getTextChannel().sendMessage(EmbedMessageUtils.getFlushError("L'argument n'est pas valide!")).queue();
+                    event.getTextChannel().sendMessage(EmbedMessageUtils.getFlushError("Argument unknown!")).queue();
                 }
             }
             else
             {
-                event.getTextChannel().sendMessage(EmbedMessageUtils.getFlushError("Vous n'avez pas l'autorisation de faire ça!")).queue();
+                event.getTextChannel().sendMessage(EmbedMessageUtils.getFlushError("You are not a supreme being, you cannot do that !")).queue();
             }
 
 

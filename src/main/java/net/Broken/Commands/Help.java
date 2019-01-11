@@ -134,7 +134,7 @@ public class Help implements Commande {
             if(isAdmin(event))
                 role = "Admin";
             else
-                role = "Non Admin";
+                role = "No Admin";
 
             try {
                 PrivateMessage.send(event.getAuthor(), EmbedMessageUtils.getHelpList(role, txt),logger);

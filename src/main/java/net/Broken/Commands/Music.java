@@ -49,7 +49,7 @@ public class Music implements Commande {
                             }
                         }
                         else{
-                            Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicError("Non connecté sur un chanel vocal!")).complete();
+                            Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicError("You are not in a voice channel !")).complete();
                             List<Message> messages = new ArrayList<Message>(){{
                                 add(message);
                                 add(event.getMessage());
@@ -58,7 +58,7 @@ public class Music implements Commande {
                         }
                     }
                     else{
-                        Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicError("Arguments manquant!")).complete();
+                        Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicError("Missing argument!")).complete();
                         List<Message> messages = new ArrayList<Message>(){{
                             add(message);
                             add(event.getMessage());
@@ -102,7 +102,7 @@ public class Music implements Commande {
                         }
                     }
                     else{
-                        Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicError("Arguments manquant!")).complete();
+                        Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicError("Missing argument!")).complete();
                         List<Message> messages = new ArrayList<Message>(){{
                             add(message);
                             add(event.getMessage());
@@ -117,7 +117,7 @@ public class Music implements Commande {
                         audio.add(event,args[1],1,true);
                     }
                     else{
-                        Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicError("Arguments manquant!")).complete();
+                        Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicError("Missing argument!")).complete();
                         List<Message> messages = new ArrayList<Message>(){{
                             add(message);
                             add(event.getMessage());
@@ -135,7 +135,7 @@ public class Music implements Commande {
                     break;
 
                 default:
-                    Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicError("Arguments inconnus!")).complete();
+                    Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicError("Unknown argument!")).complete();
                     List<Message> messagess = new ArrayList<Message>(){{
                         add(message);
                         add(event.getMessage());
@@ -146,7 +146,7 @@ public class Music implements Commande {
             }
         }
         else{
-            Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicError("Arguments manquants!")).complete();
+            Message message = event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicError("Missing argument!")).complete();
             List<Message> messages = new ArrayList<Message>(){{
                 add(message);
                 add(event.getMessage());

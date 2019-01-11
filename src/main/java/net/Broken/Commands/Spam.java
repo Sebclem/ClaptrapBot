@@ -106,7 +106,7 @@ public class Spam implements Commande {
             if(userL.size()<1)
             {
                 logger.error("Utilisateur introuvable.");
-                Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError(":arrow_right: Utilisateur introuvable. ","pardon")).complete();
+                Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError(":arrow_right: User not found. ","pardon")).complete();
                 List<Message> messages = new ArrayList<Message>(){{
                     add(rest);
                     add(event.getMessage());
@@ -124,7 +124,7 @@ public class Spam implements Commande {
                         MainBot.spamUtils.get(user).setOnSpam(false);
                     } else {
                         logger.warn("Utilisateur pas en spam.");
-                        Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError(":arrow_right: Utilisateur non spammeur.","pardon")).complete();
+                        Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError(":arrow_right: This user is not in spam.","pardon")).complete();
                         List<Message> messages = new ArrayList<Message>(){{
                             add(rest);
                             add(event.getMessage());
@@ -135,7 +135,7 @@ public class Spam implements Commande {
 
                 } else {
                     logger.warn("Utilisateur pas en spam.");
-                    Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError(":arrow_right: Utilisateur non spammeur.","pardon")).complete();
+                    Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError(":arrow_right: This user is not in spam.","pardon")).complete();
                     List<Message> messages = new ArrayList<Message>(){{
                         add(rest);
                         add(event.getMessage());
@@ -147,7 +147,7 @@ public class Spam implements Commande {
         else
         {
             logger.warn("Argument manquant.");
-            Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError("Argument manquant!","pardon")).complete();
+            Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError("Missing argument!","pardon")).complete();
             List<Message> messages = new ArrayList<Message>(){{
                 add(rest);
                 add(event.getMessage());
@@ -176,14 +176,14 @@ public class Spam implements Commande {
             if(userL.size()<1)
             {
                 logger.warn("Mentionnement Incorect (Spam).");
-                Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError("Utilisateur mal mentioner. ","extermine")).complete();
+                Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError("Bad mention. ","extermine")).complete();
             }
             else{
 
 
                 Guild serveur = event.getGuild();
                 Member user = serveur.getMember(userL.get(0));
-                logger.info("Tentative d'extermination de "+user.getEffectiveName()+" par l'utilisateur "+event.getAuthor().getName());
+                logger.info("Starting protocol 66 on "+user.getEffectiveName()+" by the command of "+event.getAuthor().getName());
 
 
                 String multiStr =args[2];
@@ -201,7 +201,7 @@ public class Spam implements Commande {
                     else
                     {
                         logger.warn("Utilisateur deja en spam.");
-                        Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError("Utilisateur déjà spammeur.","extermine")).complete();
+                        Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError("User already in spam.","extermine")).complete();
                         List<Message> messages = new ArrayList<Message>(){{
                             add(rest);
                             add(event.getMessage());
@@ -223,7 +223,7 @@ public class Spam implements Commande {
         else
         {
             logger.warn("Argument manquant.");
-            Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError("Argument manquant!","extermine")).complete();
+            Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError("Missing argument!","extermine")).complete();
             List<Message> messages = new ArrayList<Message>(){{
                 add(rest);
                 add(event.getMessage());
@@ -251,7 +251,7 @@ public class Spam implements Commande {
                 if(userL.size()<1)
                 {
                     logger.warn("Utilisateur introuvable.");
-                    Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError("Utilisateur introuvable.","reset")).complete();
+                    Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError("User not found.","reset")).complete();
                     List<Message> messages = new ArrayList<Message>(){{
                         add(rest);
                         add(event.getMessage());
@@ -269,7 +269,7 @@ public class Spam implements Commande {
                      ****************************/
                     if (MainBot.spamUtils.containsKey(user)) {
                         logger.info("Reset du multiplicateur de " + user.getEffectiveName() + " réussi");
-                        Message rest = event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n *Le multiplcicateur de " + user.getEffectiveName() + " a été remit a zéro.*").complete();
+                        Message rest = event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n *The multiplicator of " + user.getEffectiveName() + " is now down to zero.*").complete();
                         List<Message> messages = new ArrayList<Message>(){{
                             add(rest);
                             add(event.getMessage());
@@ -284,7 +284,7 @@ public class Spam implements Commande {
             else
             {
                 logger.warn("Argument manquant.");
-                Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError("Argument manquant!","reset")).complete();
+                Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamError("Missing argument!","reset")).complete();
                 List<Message> messages = new ArrayList<Message>(){{
                     add(rest);
                     add(event.getMessage());

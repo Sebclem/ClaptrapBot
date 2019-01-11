@@ -21,7 +21,7 @@ import java.io.IOException;
 public class Madame extends NumberedCommande {
     Logger logger = LogManager.getLogger();
     MessageReceivedEvent event;
-    public String HELP = "T'es sérieux la?";
+    public String HELP = "Yo really? Just type Madame to see some :cat:";
 
     public Madame() {
         super(LogManager.getLogger(), "http://www.bonjourmadame.fr/page/", "/");

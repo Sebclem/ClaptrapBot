@@ -43,23 +43,23 @@ public class SpamInfo implements Commande{
         Message message = null;
         if(!MainBot.spamUtils.containsKey(user)){
             if(!event.isFromType(ChannelType.PRIVATE))
-                message = event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamInfo(user.getEffectiveName() + ":\n\t- Multiplicateur: `1`\n\t- En spam: `Non`")).complete();
+                message = event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamInfo(user.getEffectiveName() + ":\n\t- Multiplicator: `1`\n\t- In spam: `No`")).complete();
             else
-                PrivateMessage.send(event.getAuthor(),EmbedMessageUtils.getSpamInfo(user.getEffectiveName()+":\n\t- Multiplicateur: `1`\n\t- En spam: `Non`"),logger);
+                PrivateMessage.send(event.getAuthor(),EmbedMessageUtils.getSpamInfo(user.getEffectiveName()+":\n\t- Multiplicator: `1`\n\t- In spam: `No`"),logger);
         }
         else{
             UserSpamUtils util = MainBot.spamUtils.get(user);
             if(!util.isOnSpam()){
                 if(!event.isFromType(ChannelType.PRIVATE))
-                    message = event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamInfo(user.getEffectiveName()+"\n\t- Multiplicateur: `"+util.getMultip()+"`\n\t- En spam: `Non`")).complete();
+                    message = event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamInfo(user.getEffectiveName()+"\n\t- Multiplicator: `"+util.getMultip()+"`\n\t- In spam: `No`")).complete();
                 else
-                    PrivateMessage.send(event.getAuthor(),EmbedMessageUtils.getSpamInfo(user.getEffectiveName()+":\n\t- Multiplicateur: `"+util.getMultip()+"`\n\t- En spam: `Non`"),logger);
+                    PrivateMessage.send(event.getAuthor(),EmbedMessageUtils.getSpamInfo(user.getEffectiveName()+":\n\t- Multiplicator: `"+util.getMultip()+"`\n\t- In spam: `No`"),logger);
             }
             else{
                 if(!event.isFromType(ChannelType.PRIVATE))
-                    message = event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamInfo(user.getEffectiveName()+":\n\t- Multiplicateur: `"+util.getMultip()+"`\n\t- En spam: `Oui`\n\t- Temps restant: `"+formatSecond(util.getTimeLeft())+"`")).complete();
+                    message = event.getTextChannel().sendMessage(EmbedMessageUtils.getSpamInfo(user.getEffectiveName()+":\n\t- Multiplicator: `"+util.getMultip()+"`\n\t- In spam: `Yes`\n\t- Time remaining: `"+formatSecond(util.getTimeLeft())+"`")).complete();
                 else
-                    message = PrivateMessage.send(event.getAuthor(),EmbedMessageUtils.getSpamInfo(user.getEffectiveName()+"\n\t- Multiplicateur: `"+util.getMultip()+"`\n\t- En spam: `Oui`\n\t- Temps restant: `"+formatSecond(util.getTimeLeft())+"`"),logger);
+                    message = PrivateMessage.send(event.getAuthor(),EmbedMessageUtils.getSpamInfo(user.getEffectiveName()+"\n\t- Multiplicator: `"+util.getMultip()+"`\n\t- In spam: `Yes`\n\t- Time remaining: `"+formatSecond(util.getTimeLeft())+"`"),logger);
                 }
         }
         if(message != null){
@@ -122,7 +122,7 @@ public class SpamInfo implements Commande{
         logger.debug(""+days+":"+hours+":"+minutes+":"+seconds);
         String finalText = "";
         if(days!=0)
-            finalText += days+" jour(s) ";
+            finalText += days+" day(s) ";
         if(hours!=0)
             finalText += hours+"h ";
         if(minutes!=0)
@@ -159,7 +159,7 @@ public class SpamInfo implements Commande{
                     try {
                         Thread.sleep(500);
                         if(util.getTimeLeft()%5 == 0 && oldValue - util.getTimeLeft() >= 5){
-                            message.editMessage(EmbedMessageUtils.getSpamInfo(user.getEffectiveName()+":\n\t- Multiplicateur: `"+util.getMultip()+"`\n\t- En spam: `Oui`\n\t- Temps restant: `"+formatSecond(util.getTimeLeft())+"`")).complete();
+                            message.editMessage(EmbedMessageUtils.getSpamInfo(user.getEffectiveName()+":\n\t- Multiplicator: `"+util.getMultip()+"`\n\t- In spam: `Yes`\n\t- Time remaining: `"+formatSecond(util.getTimeLeft())+"`")).complete();
                             oldValue = util.getTimeLeft();
                         }
 
@@ -171,7 +171,7 @@ public class SpamInfo implements Commande{
                 if(stop)
                     message.editMessage(new EmbedBuilder().setColor(Color.RED).setTitle("Aborted").build()).complete();
                 else
-                    message.editMessage(EmbedMessageUtils.getSpamInfo(user.getEffectiveName()+"\n\t- Multiplicateur: `"+util.getMultip()+"`\n\t- En spam: `Non`")).complete();
+                    message.editMessage(EmbedMessageUtils.getSpamInfo(user.getEffectiveName()+"\n\t- Multiplicator: `"+util.getMultip()+"`\n\t- In spam: `No`")).complete();
 
             }
             logger.debug("Timer for message deletion of "+user.getEffectiveName()+" stated...");
