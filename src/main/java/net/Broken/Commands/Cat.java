@@ -2,7 +2,6 @@ package net.Broken.Commands;
 
 
 import net.Broken.Commande;
-import net.Broken.Tools.Redirection;
 import net.dv8tion.jda.core.entities.ChannelType;
 import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
 import org.json.JSONObject;
@@ -43,7 +42,7 @@ public class Cat implements Commande {
             }
         }
         else
-            event.getPrivateChannel().sendMessage("\n:warning: **__Commande non disponible en privee!__** :warning:");
+            event.getPrivateChannel().sendMessage("\n:warning: **__Commande non disponible en privee!__** :warning:").queue();
 
     }
 
