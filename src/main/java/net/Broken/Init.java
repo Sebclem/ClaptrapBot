@@ -36,7 +36,7 @@ public class Init {
 
         //Bot démarrer sans token
         if (token == null) {
-            logger.fatal("Veuilliez indiquer le token du bot en argument...");
+            logger.fatal("Please enter bot token as an argument.");
         }
         else
         {

@@ -52,7 +52,7 @@ public class Move implements Commande {
 
         List<Role> roleUserList = user.getRoles();
 
-        logger.info("Roles de " + user.getEffectiveName() + ":");
+        logger.info("Roles of " + user.getEffectiveName() + ":");
 
         //On les save
         saveRoleUser = roleUserList;
@@ -65,7 +65,7 @@ public class Move implements Commande {
         //on fait ensuite les modif
         guildController.modifyMemberRoles(user,cible).complete();
 
-        logger.info("Role " + cible + " attribuer a " + user.getEffectiveName());
+        logger.info("Give " + cible + " role to " + user.getEffectiveName());
 
         this.user=user;
         this.serveur=serveur;
@@ -90,7 +90,7 @@ public class Move implements Commande {
 
                 if(userL.size()<1 ||roleL.size()<1)
                 {
-                    logger.warn("Mention Incorect.");
+                    logger.warn("Wrong mention.");
                     Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("Error, please check if the user and/or the role are existing.")).complete();
                     List<Message> messages = new ArrayList<Message>(){{
                         add(rest);
@@ -102,10 +102,10 @@ public class Move implements Commande {
                 {
                     user = serveur.getMember(userL.get(0));
                     serveur=event.getGuild();
-                    logger.info("Tentative de déplacement de "+user.getEffectiveName()+" vers "+roleL+" par l'utilisateur "+event.getAuthor().getName());
+                    logger.info("Attempting role assignement for "+user.getEffectiveName()+" to "+roleL+" by "+event.getAuthor().getName());
 
-                    logger.info("Autorisation suffisante, deplacement autorisé");
-                    logger.debug("Utilisateur trouvée");
+                    logger.info("Permission granted, role assignement authorized");
+                    logger.debug("User found");
                     try {
                         boolean erreur=this.exc(user,roleL,true,serveur,serveur.getManager());
                         if(erreur)
@@ -159,7 +159,7 @@ public class Move implements Commande {
             }
             else
             {
-                logger.warn("Arguments maquants.");
+                logger.warn("Missing argument.");
                 Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("Missing argument.")).complete();
                 List<Message> messages = new ArrayList<Message>(){{
                     add(rest);
