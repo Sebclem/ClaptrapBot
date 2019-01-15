@@ -50,7 +50,7 @@ public class EmbedMessageUtils {
     }
 
     public static MessageEmbed getSpamPardon(Member autor) {
-        return new EmbedBuilder().setTitle(":mute: Spam Hunter :mute:").setDescription(autor.getAsMention() + " is back retour, watch out!\nI'm watching you!").setImage("https://media.giphy.com/media/3o7TKwBctlv08kY08M/giphy.gif").setFooter("Spam info available with '//spaminfo' in private.", MainBot.jda.getSelfUser().getAvatarUrl()).setTimestamp(Instant.now()).setColor(Color.orange).build();
+        return new EmbedBuilder().setTitle(":mute: Spam Hunter :mute:").setDescription(autor.getAsMention() + " is back , watch out!\nI'm watching you!").setImage("https://media.giphy.com/media/3o7TKwBctlv08kY08M/giphy.gif").setFooter("Spam info available with '//spaminfo' in private.", MainBot.jda.getSelfUser().getAvatarUrl()).setTimestamp(Instant.now()).setColor(Color.orange).build();
     }
 
     public static MessageEmbed getHelp(String command) throws FileNotFoundException {

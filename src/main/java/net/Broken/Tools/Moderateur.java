@@ -76,7 +76,7 @@ public class Moderateur {
             }
             if(equalCont >= nbMessage){
                 spam = 1;
-                logger.info("Detection de spam pour "+user.getEffectiveName()+"avec 3 messages identique: ");
+                logger.info("Spam detected for "+user.getEffectiveName()+"with 3 identical messages : ");
                 for(Message aMessage : thisUserHistory)
                 {
                     logger.info("\t - "+aMessage.getContentRaw());
@@ -113,7 +113,7 @@ public class Moderateur {
             if(cpt > 5){
                 MainBot.message_compteur.put(user,0);
                 spam = 1;
-                logger.info("Detection de spam pour "+user.getEffectiveName()+"avec 5 message en 5seg: ");
+                logger.info("Spam detected for "+user.getEffectiveName()+"with 5 messages in 5 secondes: ");
                 ArrayList<Message> histo = MainBot.historique.get(user);
                 for (Message aMessage:histo )
                 {

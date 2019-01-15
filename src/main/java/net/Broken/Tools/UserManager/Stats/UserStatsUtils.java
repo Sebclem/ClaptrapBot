@@ -78,7 +78,7 @@ public class UserStatsUtils {
                 for(Guild guid : user.getMutualGuilds()){
                     logger.debug(guid.getName());
                     if(!guildStat.contains(guid.getId())){
-                        logger.debug("Guild " + guid.getName() + " stat don't exist");
+                        logger.debug("Guild " + guid.getName() + " stats don't exist");
                         stats.add(new UserStats(guid.getId(), userEntity));
                     }
                 }

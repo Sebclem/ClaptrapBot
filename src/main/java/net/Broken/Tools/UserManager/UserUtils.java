@@ -83,7 +83,7 @@ public class UserUtils {
                 pendingUserEntity = thisUser;
                 token = thisUser.getCheckToken();
             }else{
-                logger.warn("Password Not Match!");
+                logger.warn("Password don't match!");
                 throw new PasswordNotMatchException();
             }
         }

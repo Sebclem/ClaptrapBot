@@ -64,7 +64,7 @@ public class AntiSpam {
             else
                 MainBot.spamUtils.get(user).setMultip(1);
 
-           logger.info("Punition de "+user.getEffectiveName()+" avec un multiplicateur de "+MainBot.spamUtils.get(user));
+           logger.info("Starting protocol 66 on "+user.getEffectiveName()+" with a multiplicator of "+MainBot.spamUtils.get(user));
 
             if(!MainBot.spamUtils.get(user).isOnSpam())
             {
@@ -77,7 +77,7 @@ public class AntiSpam {
                         MainBot.spamUtils.get(user).setMinuteur(new Minuteur(MainBot.spamUtils.get(user).getMultip(), move.user, move.saveRoleUser, move.serveur, move.serveurManager,event));
                         MainBot.spamUtils.get(user).launchMinuteur();
                     }catch (HierarchyException e){
-                        Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("Impossible de déplacer un "+user.getRoles().get(0).getAsMention())).complete();
+                        Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("You cannot move a "+user.getRoles().get(0).getAsMention())).complete();
                         List<Message> messages = new ArrayList<Message>(){{
                             add(rest);
                             add(event.getMessage());
@@ -129,7 +129,7 @@ public class AntiSpam {
 
         @Override
         public void run() {
-            logger.info("["+user.getEffectiveName()+"] Démarage pour "+multip+"min");
+            logger.info("["+user.getEffectiveName()+"] Start for "+multip+"min");
             while (MainBot.spamUtils.get(user).isOnSpam())
             {
                 try {
@@ -143,11 +143,11 @@ public class AntiSpam {
                 }
                 timeLeft--;
             }
-            logger.info("["+user.getEffectiveName()+"] Fin de spam pour "+user.getEffectiveName()+" apres "+multip+"min.");
+            logger.info("["+user.getEffectiveName()+"] End of spam for "+user.getEffectiveName()+" after "+multip+"min.");
             try {
                 move.exc(user, saveRoleUser, true, serveur, serveurManager);    //aSaveroleUser=saveRoleUser.get(i)
             }catch (HierarchyException e){
-                Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("Impossible de déplacer un "+user.getRoles().get(0).getAsMention())).complete();
+                Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("You cannot move "+user.getRoles().get(0).getAsMention())).complete();
                 List<Message> messages = new ArrayList<Message>(){{
                     add(rest);
                     add(event.getMessage());
@@ -155,7 +155,7 @@ public class AntiSpam {
                 new MessageTimeOut(messages,MainBot.messageTimeOut).start();
                 logger.error("Hierarchy error");
             }
-            logger.info("["+user.getEffectiveName()+"] Fin des "+multip+"min");
+            logger.info("["+user.getEffectiveName()+"] End for "+multip+"min");
             new MessageTimeOut(new ArrayList<>(MainBot.spamUtils.get(user).getMessages()),0).start();
             MainBot.spamUtils.get(user).clearAndAdd(chanel.sendMessage(EmbedMessageUtils.getSpamPardon(user)).complete());
             new MessageTimeOut(MainBot.spamUtils.get(user).getMessages(),60).start();

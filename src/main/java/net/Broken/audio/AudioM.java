@@ -117,7 +117,7 @@ public class AudioM {
 
             @Override
             public void loadFailed(FriendlyException exception) {
-                logger.error("Cant load media!");
+                logger.error("Can't load media!");
                 logger.error(exception.getMessage());
                 event.getTextChannel().sendMessage(EmbedMessageUtils.getMusicError("Playback error !")).queue();
             }

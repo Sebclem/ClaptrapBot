@@ -73,7 +73,7 @@ public class DailyMadame implements NewDayListener{
                     }
                     if(chanel != null){
 
-                        chanel.sendMessage("Le Daily Madame mes petits cochons :kissing_heart: \n" + imgUrl).queue();
+                        chanel.sendMessage("Madame of the day :kissing_heart: \n" + imgUrl).queue();
 
 
                     }

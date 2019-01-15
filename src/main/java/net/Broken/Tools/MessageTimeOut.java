@@ -37,7 +37,7 @@ public class MessageTimeOut extends Thread{
                 e.printStackTrace();
             }
         }
-        logger.debug("Timiout! Deleting message!");
+        logger.debug("Time out! Deleting message!");
         for(Message aMessage: messages)
         {
             try {

@@ -39,7 +39,7 @@ public class CommandLoader {
                 logger.info("..." + name);
 
                 if (command.isAnnotationPresent(NoDev.class) && MainBot.dev) {
-                    logger.warn("Command disable in dev mode");
+                    logger.warn("Command disabled in dev mode");
                 }else{
                     try {
                         MainBot.commandes.put(name, command.newInstance());
