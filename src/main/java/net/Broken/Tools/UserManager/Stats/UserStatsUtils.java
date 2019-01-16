@@ -27,8 +27,8 @@ import java.util.List;
 
 public class UserStatsUtils {
 
-    static double XP_PER_VOICE_TIME = 0.1;
-    static double XP_PER_MESSAGE    = 1;
+    static double XP_PER_VOICE_TIME = 0.01;
+    static double XP_PER_MESSAGE    = 2;
     static double XP_PER_API_COUNT  = 1;
 
 
