@@ -6,16 +6,20 @@ import net.Broken.DB.Repository.UserRepository;
 import net.Broken.DB.Repository.UserStatsRepository;
 import net.Broken.MainBot;
 import net.Broken.SpringContext;
+import net.Broken.Tools.EmbedMessageUtils;
 import net.Broken.Tools.UserManager.Exceptions.UnknownTokenException;
 import net.Broken.Tools.UserManager.UserUtils;
+import net.dv8tion.jda.core.EmbedBuilder;
 import net.dv8tion.jda.core.entities.Guild;
 import net.dv8tion.jda.core.entities.Member;
+import net.dv8tion.jda.core.entities.MessageEmbed;
 import net.dv8tion.jda.core.entities.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -201,6 +205,48 @@ public class UserStatsUtils {
         }
 
         return new GuildStatsPack(ranked.indexOf(selfGuildStats) + 1 , selfGuildStats, ranked);
+
+    }
+
+
+    public MessageEmbed getRankMessage(Member member){
+        UserStats userStats = getGuildUserStats(member);
+        GuildStatsPack pack = getStatPack(userStats.getUser(), member.getGuild().getId());
+        StringBuilder stringBuilder = new StringBuilder();
+        int i = 1;
+        for(GuildStats stats : pack.ranking){
+            if( i >= 6){
+                break;
+            }
+            stringBuilder.append(i).append(". ").append(stats.userName).append(" with ").append(stats.total).append(" points!").append("\n");
+            i++;
+
+        }
+
+        EmbedBuilder embedBuilder = new EmbedBuilder();
+        embedBuilder.setColor(Color.yellow);
+        embedBuilder.setTitle(member.getGuild().getName() + " Ranking");
+        embedBuilder.addField("Top 5:", stringBuilder.toString(), false);
+        String rank;
+        switch (pack.selfStats.rank){
+            case 1:
+                rank = "1st";
+                break;
+            case 2:
+                rank = "2nd";
+                break;
+            case 3:
+                rank = "3rd";
+                break;
+            default:
+                rank = pack.selfStats.rank + "th";
+                break;
+        }
+
+
+        embedBuilder.addField("Your stats:", rank + " with " + pack.selfStats.total + " points", false);
+        embedBuilder.addField("More stats:", "https://" + MainBot.url+"/rank", false);
+        return EmbedMessageUtils.buildStandar(embedBuilder);
 
     }
 

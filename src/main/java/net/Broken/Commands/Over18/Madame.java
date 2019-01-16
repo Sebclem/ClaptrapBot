@@ -17,7 +17,7 @@ import java.io.IOException;
 /**
  * Madame command that return random picture from dites.bonjourmadame.fr
  */
-//@NoDev
+@NoDev
 public class Madame extends NumberedCommande {
     Logger logger = LogManager.getLogger();
     MessageReceivedEvent event;
