@@ -1,5 +1,5 @@
 
-Une tentative d'association a été demandée.
+An attempt to associate your discord name was requested.
 
-Voici le code de vérification: 
+Here is the verification code: 
 **%code**

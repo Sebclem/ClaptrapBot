@@ -79,11 +79,11 @@ public abstract class NumberedCommande implements Commande{
                             e.printStackTrace();
                         }
                         if (newNumber == maxNumber) {
-                            event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n:arrow_right: Aucune nouvelle image n'a était trouver :cry:").queue();
+                            event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n:arrow_right: 0 new picture found :cry:").queue();
                         } else if (newNumber - maxNumber == 1)
-                            event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n:arrow_right: " + (newNumber - maxNumber) + " nouvelle image a été trouvé :kissing_heart:").queue();
+                            event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n:arrow_right: " + (newNumber - maxNumber) + " picture has been found :kissing_heart:").queue();
                         else
-                            event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n:arrow_right: " + (newNumber - maxNumber) + " nouvelles images on été trouvé :kissing_heart:").queue();
+                            event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n:arrow_right: " + (newNumber - maxNumber) + " pictures has been found :kissing_heart:").queue();
                         logger.info((newNumber - maxNumber) + " new image(s) found.");
                         maxNumber = newNumber;
                         break;
@@ -101,22 +101,22 @@ public abstract class NumberedCommande implements Commande{
                                 if (result == 200) {
                                     event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n" + baseURL + number + urlSuffix).queue();
                                 } else {
-                                    event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n:warning: **__Erreur__** :warning:\n:arrow_right: Page introuvable (404)").queue();
+                                    event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n:warning: **__Error__** :warning:\n:arrow_right: Page not found (404)").queue();
                                 }
 
                             } catch (NumberFormatException e) {
-                                event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n:warning: **__Erreur__** :warning:\n:arrow_right: Erreur d'argument. `//help " + this.toString().toLowerCase() + "` pour plus d'info ").queue();
+                                event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n:warning: **__Error__** :warning:\n:arrow_right: Bad argument. `//help " + this.toString().toLowerCase() + "` for more info ").queue();
                             } catch (IOException e) {
                                 logger.catching(e);
-                                event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n:warning: **__Erreur__** :warning:\n:arrow_right: Erreur interne...").queue();
+                                event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n:warning: **__Error__** :warning:\n:arrow_right: Internal error...").queue();
                             }
                         } else {
-                            event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n:warning: **__Erreur__** :warning:\n:arrow_right: Erreur d'argument. `//help " + this.toString().toLowerCase() + "` pour plus d'info ").queue();
+                            event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n:warning: **__Error__** :warning:\n:arrow_right: Bad argument. `//help " + this.toString().toLowerCase() + "` for more info ").queue();
                             logger.warn("Bad Argument: " + event.getMessage().getContentRaw() + " From " + event.getAuthor().getName());
                         }
                         break;
                     default:
-                        event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n:warning: **__Erreur__** :warning:\n:arrow_right: Erreur d'argument. `//help " + this.toString().toLowerCase() + "` pour plus d'info ").queue();
+                        event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n:warning: **__Error__** :warning:\n:arrow_right: Bad argument. `//help " + this.toString().toLowerCase() + "` for more info ").queue();
                         logger.warn("Bad Argument: " + event.getMessage().getContentRaw() + " From " + event.getAuthor().getName());
                         break;
                 }
