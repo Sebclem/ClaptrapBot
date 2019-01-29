@@ -194,12 +194,15 @@ public class UserStatsUtils {
         List<UserStats> allStats = userStatsRepository.findByGuildId(guildId);
         List<GuildStats> ranked = new ArrayList<>();
         for(UserStats stats : allStats){
-            String avatar = MainBot.jda.getUserById(stats.getUser().getJdaId()).getEffectiveAvatarUrl();
-            GuildStats temp = new GuildStats(stats.getUser().getName(), 0,  avatar, stats.getVocalTime(), stats.getMessageCount(), stats.getApiCommandCount());
-            if(stats.getUser().getId().equals(userEntity.getId())){
-                selfGuildStats = temp;
+            if(stats != null){
+                String avatar = MainBot.jda.getUserById(stats.getUser().getJdaId()).getEffectiveAvatarUrl();
+                GuildStats temp = new GuildStats(stats.getUser().getName(), 0,  avatar, stats.getVocalTime(), stats.getMessageCount(), stats.getApiCommandCount());
+                if(stats.getUser().getId().equals(userEntity.getId())){
+                    selfGuildStats = temp;
+                }
+                ranked.add(temp);
             }
-            ranked.add(temp);
+
 
         }
         ranked.sort((guildStats, t1) -> (int) (t1.total - guildStats.total));
