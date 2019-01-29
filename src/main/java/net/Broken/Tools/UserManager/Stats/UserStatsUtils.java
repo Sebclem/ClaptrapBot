@@ -60,6 +60,8 @@ public class UserStatsUtils {
 
     public List<UserStats> getUserStats(UserEntity userEntity){
         User jdaUser = MainBot.jda.getUserById(userEntity.getJdaId());
+        logger.debug(userEntity);
+        logger.debug(userEntity.getUserStats());
         if(userEntity.getUserStats() == null || userEntity.getUserStats().size() == 0 || userEntity.getUserStats().size() < jdaUser.getMutualGuilds().size()){
             logger.debug("Stats not found for " + userEntity.getName());
             User user = MainBot.jda.getUserById(userEntity.getJdaId());
