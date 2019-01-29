@@ -60,6 +60,10 @@ public class UserStatsUtils {
 
     public List<UserStats> getUserStats(UserEntity userEntity){
         User jdaUser = MainBot.jda.getUserById(userEntity.getJdaId());
+        //TODO clean database for deleted users
+
+        if(jdaUser == null)
+            return null;
         logger.debug(userEntity);
         logger.debug(userEntity.getUserStats());
         if(userEntity.getUserStats() == null || userEntity.getUserStats().size() == 0 || userEntity.getUserStats().size() < jdaUser.getMutualGuilds().size()){
