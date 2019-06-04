@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
@@ -47,7 +47,8 @@
         </div>
     </div>
 
-    <div class="section no-pad-bot container main" id="index-banner"><div th:if="${isLogged} == false">
+    <div class="section no-pad-bot container main" id="index-banner">
+        <div th:if="${isLogged} == false">
             <div class="row valign-wrapper">
                 <div class="col m6 offset-s2 s8 center">
                     <img src="/favicon.png" class="responsive-img"/>
