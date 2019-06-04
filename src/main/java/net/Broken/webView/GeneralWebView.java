@@ -180,10 +180,16 @@ public class GeneralWebView {
 
     private Model addGuildAndRedirect(Model model, String guildId){
         Guild guild = MainBot.jda.getGuildById(guildId);
-        if(guild != null)
+        if(guild != null){
             model.addAttribute("guild_name", guild.getName());
-        else
+            model.addAttribute("guild_icon", guild.getIconUrl() == null ? "https://discordapp.com/assets/dd4dbc0016779df1378e7812eabaa04d.png": guild.getIconUrl());
+        }
+
+        else{
             model.addAttribute("guild_name", "");
+            model.addAttribute("guild_icon", "");
+        }
+
         model.addAttribute("redirect_url", System.getenv("OAUTH_URL"));
         return model;
     }

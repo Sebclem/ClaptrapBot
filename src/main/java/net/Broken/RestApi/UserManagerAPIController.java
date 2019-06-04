@@ -114,7 +114,7 @@ public class UserManagerAPIController {
             if(user != null){
                 for (Guild guild : user.getMutualGuilds()){
 
-                    temp.add(new GuildInfo(guild.getName(), guild.getId(), guild.getMember(user).hasPermission(Permission.ADMINISTRATOR)));
+                    temp.add(new GuildInfo(guild.getName(), guild.getId(), guild.getMember(user).hasPermission(Permission.ADMINISTRATOR), guild.getIconUrl()));
                 }
             }
 

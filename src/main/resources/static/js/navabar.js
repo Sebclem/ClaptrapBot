@@ -80,6 +80,7 @@ function navListeners() {
 
     $('#btn_ok_guild').click(function () {
         guild = $('input[name=guildRadio]:checked').val();
+        let url =  $('input[name=guildRadio]:checked').attr("data-icon");
         Cookies.set('guild', guild, { expires: 31 });
         window.location.reload(true);
     });
@@ -113,6 +114,7 @@ function getGuild(){
             var content = template.html();
             content = content.replace("@name", element.name);
             content = content.replace(/@id/g, element.id);
+            content = content.replace(/@url/g, element.imageUrl == null ? "https://discordapp.com/assets/dd4dbc0016779df1378e7812eabaa04d.png" : element.imageUrl);
             template.html(content);
 
             $('#guild_form').append(template);
