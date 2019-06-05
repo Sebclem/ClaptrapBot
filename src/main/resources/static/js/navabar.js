@@ -80,8 +80,13 @@ function navListeners() {
 
     $('#btn_ok_guild').click(function () {
         guild = $('input[name=guildRadio]:checked').val();
-        let url =  $('input[name=guildRadio]:checked').attr("data-icon");
         Cookies.set('guild', guild, { expires: 31 });
+        window.location.reload(true);
+    });
+
+    $('.guild_change').click(function () {
+        let id = this.getAttribute("data-id");
+        Cookies.set('guild', id, { expires: 31 });
         window.location.reload(true);
     });
 
@@ -179,6 +184,14 @@ function checkToken() {
             });
             if (Cookies.get('guild') === undefined ) {
                 getGuild()
+            }else{
+                $('#drop-trigger-guilds').dropdown({
+                        constrainWidth: false, // Does not change width of dropdown to that of the activator
+                        coverTrigger: false, // Displays dropdown below the button
+                        alignment: 'left', // Displays dropdown with edge aligned to the left of button
+                        stopPropagation: false // Stops event propagation
+                    }
+                );
             }
 
         }

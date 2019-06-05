@@ -32,6 +32,12 @@ main {
     -webkit-text-fill-color: #fbcf40;
     -webkit-text-stroke-color: black;
     -webkit-text-stroke-width: 3px;
+}
 
+#dropdown_guilds a:hover{
+    background-color: rgba(0, 0, 0, 0) !important;
+}
 
+#dropdown_guilds li:hover{
+    background-color: rgba(0, 0, 0, 0.2) !important;
 }
