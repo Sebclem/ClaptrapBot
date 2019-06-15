@@ -26,11 +26,11 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 public class MusicWebView {
 
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
-    UserUtils userUtils = UserUtils.getInstance();
+    private UserUtils userUtils = UserUtils.getInstance();
 
-    Logger logger = LogManager.getLogger();
+    private Logger logger = LogManager.getLogger();
 
 
     @Autowired
@@ -51,12 +51,7 @@ public class MusicWebView {
             User user = MainBot.jda.getUserById(userE.getJdaId());
             if(user == null)
                 return "redirect:/";
-            Guild guild = MainBot.jda.getGuildById(guildId);
-            if(guild != null)
-                model.addAttribute("guild_name", guild.getName());
-            else
-                model.addAttribute("guild_name", "");
-            model.addAttribute("isAdmin", SettingsUtils.getInstance().checkPermission(token, guildId));
+            GeneralWebView.addGuildAndRedirect(model, token, guildId, user.getMutualGuilds());
             return CheckPage.getPageIfReady("music");
 
         } catch (UnknownTokenException e) {

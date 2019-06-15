@@ -197,7 +197,7 @@ public class GeneralWebView {
 
 
 
-    private Model addGuildAndRedirect(Model model, String token, String guildId, List<Guild> mutualGuilds){
+    public static Model addGuildAndRedirect(Model model, String token, String guildId, List<Guild> mutualGuilds){
         Guild guild = MainBot.jda.getGuildById(guildId);
         if(guild != null){
             model.addAttribute("guild_name", guild.getName());
