@@ -27,10 +27,19 @@
             }
         }
         @media only screen and (min-width: 993px) {
-            #playlist_list {
-                max-height: 74vh;
+            #card-playlist {
+                max-height: 75vh;
                 overflow-y: scroll;
             }
+        }
+
+        #card-playlist {
+            margin: 0;
+            padding: 0;
+        }
+
+        #card-playlist li:not(.active){
+            margin: 0;
         }
 
         #modalAdd {
@@ -53,16 +62,16 @@
             padding-right: 75px;
         }
 
-        .scroll4::-webkit-scrollbar {
+        .scroll::-webkit-scrollbar {
             width: 10px;
         }
 
-        .scroll4::-webkit-scrollbar-thumb {
+        .scroll::-webkit-scrollbar-thumb {
             background: #666;
             border-radius: 20px;
         }
 
-        .scroll4::-webkit-scrollbar-track {
+        .scroll::-webkit-scrollbar-track {
             background: #ddd;
             border-radius: 20px;
         }
@@ -178,10 +187,15 @@
                     <tbody>
                     <tr>
                         <td>
-                            <ul id="playlist_list" class="collapsible popout scroll4" data-collapsible="accordion"
-                                style="margin: 0px">
+                            <div class="row card-panel scroll" id="card-playlist">
+                                <div class="col s12" style="padding: 0">
+                                    <ul id="playlist_list" class="collapsible" data-collapsible="accordion"
+                                        style="margin: 0px">
 
-                            </ul>
+                                    </ul>
+                                </div>
+                            </div>
+
                         </td>
                     </tr>
 
@@ -397,11 +411,6 @@
 
     </p>
 </main>
-
-
-<footer class="page-footer" style="padding: 0">
-    <div th:replace="footer :: footer">...</div>
-</footer>
 
 
 <!--  Scripts-->
