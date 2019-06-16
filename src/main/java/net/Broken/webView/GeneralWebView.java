@@ -137,7 +137,6 @@ public class GeneralWebView {
                 addGuildAndRedirect(model, token, guildId, user.getMutualGuilds());
                 Guild guild = MainBot.jda.getGuildById(guildId);
                 model.addAttribute("settings", SettingsUtils.getInstance().extractSettings(guild));
-                model.addAttribute("isAdmin", SettingsUtils.getInstance().checkPermission(token, guildId));
             } catch (UnknownTokenException e) {
                 throw new ForbiddenException();
             }
