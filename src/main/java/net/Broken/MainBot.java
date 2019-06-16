@@ -1,5 +1,6 @@
 package net.Broken;
 
+import net.Broken.DB.Entity.UserEntity;
 import net.Broken.Tools.Command.CommandParser;
 import net.Broken.Tools.EmbedMessageUtils;
 import net.Broken.Tools.MessageTimeOut;
@@ -85,7 +86,7 @@ public class MainBot {
      * Perform test (admin, NSFW and private usable or not) and execute command or not
      * @param cmd Container whit all command info
      */
-    public static void handleCommand(CommandParser.CommandContainer cmd)
+    public static void handleCommand(CommandParser.CommandContainer cmd, UserEntity user)
     {
 
         if(!ready)
@@ -98,39 +99,42 @@ public class MainBot {
         {
             Commande cmdObj = commandes.get(cmd.commande);
             boolean isAdmin;
+            boolean isBotAdmin = user != null && user.isBotAdmin();
             if(cmd.event.isFromType(ChannelType.PRIVATE)){
                 isAdmin = false;
             }
             else
                 isAdmin = cmd.event.getMember().hasPermission(Permission.ADMINISTRATOR);
 
-            if(!cmdObj.isAdminCmd() || isAdmin){
+            if((!cmdObj.isAdminCmd() || isAdmin) && (!cmdObj.isBotAdminCmd() || isBotAdmin)){
 
-                if(cmd.event.isFromType(ChannelType.PRIVATE) && commandes.get(cmd.commande).isPrivateUsable())
-                {
+                    if(cmd.event.isFromType(ChannelType.PRIVATE) && commandes.get(cmd.commande).isPrivateUsable())
+                    {
 
-                    commandes.get(cmd.commande).action(cmd.args, cmd.event);
-                }
-                else if (!cmd.event.isFromType(ChannelType.PRIVATE))
-                {
-                    if(!cmdObj.isNSFW() || cmd.event.getTextChannel().isNSFW()){
                         commandes.get(cmd.commande).action(cmd.args, cmd.event);
                     }
-                    else{
-                        cmd.event.getMessage().delete().queue();
-                    }
+                    else if (!cmd.event.isFromType(ChannelType.PRIVATE))
+                    {
+                        if(!cmdObj.isNSFW() || cmd.event.getTextChannel().isNSFW()){
+                            commandes.get(cmd.commande).action(cmd.args, cmd.event);
+                        }
+                        else{
+                            cmd.event.getMessage().delete().queue();
+                        }
 
-                }
-                else
-                    cmd.event.getPrivateChannel().sendMessage(EmbedMessageUtils.getNoPrivate()).queue();
+                    }
+                    else
+                        cmd.event.getPrivateChannel().sendMessage(EmbedMessageUtils.getNoPrivate()).queue();
+
+
+
             }
             else{
                 if(cmd.event.isFromType(ChannelType.PRIVATE)){
                     PrivateMessage.send(cmd.event.getAuthor(),EmbedMessageUtils.getUnautorized(), logger);
                 }
                 else{
-                    Message msg = cmd.event.getTextChannel().sendMessage(EmbedMessageUtils.getUnautorized()).complete();
-                    new MessageTimeOut(gifMessageTimeOut, msg, cmd.event.getMessage()).start();
+                    cmd.event.getTextChannel().sendMessage(EmbedMessageUtils.getUnautorized()).complete();
                 }
             }
         }

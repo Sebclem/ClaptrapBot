@@ -165,6 +165,16 @@ public class Music implements Commande {
         return false;
     }
 
+    /**
+     * Determines if the command is usable only by bot level admin user
+     *
+     * @return boolean
+     */
+    @Override
+    public boolean isBotAdminCmd() {
+        return false;
+    }
+
     @Override
     public boolean isNSFW() {
         return false;

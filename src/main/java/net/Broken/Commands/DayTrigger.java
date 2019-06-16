@@ -31,6 +31,16 @@ public class DayTrigger implements Commande{
         return true;
     }
 
+    /**
+     * Determines if the command is usable only by bot level admin user
+     *
+     * @return boolean
+     */
+    @Override
+    public boolean isBotAdminCmd() {
+        return true;
+    }
+
     @Override
     public boolean isNSFW() {
         return false;

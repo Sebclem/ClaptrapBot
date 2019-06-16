@@ -25,6 +25,8 @@ public class UserEntity {
 
     private String apiToken;
 
+    private boolean isBotAdmin = false;
+
     @JsonIgnore
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
     private List<UserStats> userStats;
@@ -123,5 +125,13 @@ public class UserEntity {
 
     public void setUserStats(List<UserStats> userStats) {
         this.userStats = userStats;
+    }
+
+    public boolean isBotAdmin() {
+        return isBotAdmin;
+    }
+
+    public void setBotAdmin(boolean botAdmin) {
+        isBotAdmin = botAdmin;
     }
 }

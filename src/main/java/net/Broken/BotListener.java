@@ -2,7 +2,9 @@ package net.Broken;
 
 import net.Broken.Commands.Move;
 import net.Broken.DB.Entity.GuildPreferenceEntity;
+import net.Broken.DB.Entity.UserEntity;
 import net.Broken.DB.Repository.GuildPreferenceRepository;
+import net.Broken.DB.Repository.UserRepository;
 import net.Broken.Tools.AntiSpam;
 import net.Broken.Tools.Command.CommandParser;
 import net.Broken.Tools.EmbedMessageUtils;
@@ -38,6 +40,7 @@ public class BotListener extends ListenerAdapter {
     private Moderateur modo = new Moderateur();
 
     private GuildPreferenceRepository guildPreferenceRepository;
+    private UserRepository userRepository;
 
     private Logger logger = LogManager.getLogger();
 
@@ -45,6 +48,7 @@ public class BotListener extends ListenerAdapter {
 
         ApplicationContext context = SpringContext.getAppContext();
         guildPreferenceRepository = (GuildPreferenceRepository) context.getBean("guildPreferenceRepository");
+        userRepository = (UserRepository) context.getBean("userRepository");
 
     }
 
@@ -157,7 +161,9 @@ public class BotListener extends ListenerAdapter {
             if (event.getMessage().getContentRaw().startsWith("//") && !event.getMessage().getAuthor().getId().equals(event.getJDA().getSelfUser().getId())) {
                 //On a detecter que c'etait une commande
                 //System.out.println(event.getMessage().getContent());
-                MainBot.handleCommand(new CommandParser().parse(event.getMessage().getContentRaw(), event));
+                List<UserEntity> users = userRepository.findByJdaId(event.getAuthor().getId());
+                UserEntity user = users.size() == 0 ? null : users.get(0);
+                MainBot.handleCommand(new CommandParser().parse(event.getMessage().getContentRaw(), event), user);
 
             }
             else if (!event.getMessage().getAuthor().getId().equals(event.getJDA().getSelfUser().getId()))

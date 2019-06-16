@@ -27,6 +27,12 @@ public interface Commande {
     boolean isAdminCmd();
 
     /**
+     * Determines if the command is usable only by bot level admin user
+     * @return boolean
+     */
+    boolean isBotAdminCmd();
+
+    /**
      * Determines if the command is only usable on NSFW channels
      * @return boolean
      */
