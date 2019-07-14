@@ -24,6 +24,8 @@ import java.util.Objects;
 /**
  * Spam admin command
  */
+
+// TODO Rebuild this ...
 public class Spam implements Commande {
     private Logger logger = LogManager.getLogger();
 
@@ -307,9 +309,10 @@ public class Spam implements Commande {
             if (args[0].equals("all"))
             {
                 logger.info("Multiplicator reseted automaticly.");
-                for (Member unUser: MainBot.spamUtils.keySet() )         //=for(int i=0; i<saveRoleUser.size(); i++)
+                for (Member unUser: MainBot.spamUtils.keySet())
                 {
-                    MainBot.message_compteur.remove(unUser);
+
+                    MainBot.message_compteur.remove(unUser); //TODO resolve garbage collector error ????
                 }
             }
         }

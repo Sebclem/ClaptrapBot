@@ -54,7 +54,12 @@ public class DayListener extends Thread {
      */
     public void trigger(){
         for(NewDayListener listener : listeners){
-            listener.onNewDay();
+            try{
+                listener.onNewDay();
+            }catch (Exception ex){
+                logger.error("Fail to execute day change !");
+                logger.catching(ex);
+            }
         }
     }
 
