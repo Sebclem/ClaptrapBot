@@ -202,8 +202,8 @@ public class MusicWebAPIController {
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.GET)
-    public ResponseEntity<List<SearchResult>> search(@CookieValue("token") String token, @RequestParam(value = "query") String query, @RequestParam(value = "playlist") boolean playlist ){
-        if(token != null) {
+    public ResponseEntity<List<SearchResult>> search(@CookieValue(name = "token", defaultValue = "") String token, @RequestParam(value = "query") String query, @RequestParam(value = "playlist") boolean playlist ){
+        if(token != null && !token.isEmpty()) {
             try {
                 UserEntity user = userUtils.getUserWithApiToken(userRepository, token);
                 YoutubeTools youtubeTools = YoutubeTools.getInstance();
