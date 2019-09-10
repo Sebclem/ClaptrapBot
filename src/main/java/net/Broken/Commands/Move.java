@@ -4,11 +4,10 @@ import net.Broken.Commande;
 import net.Broken.MainBot;
 import net.Broken.Tools.EmbedMessageUtils;
 import net.Broken.Tools.MessageTimeOut;
-import net.dv8tion.jda.core.entities.*;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.core.exceptions.HierarchyException;
-import net.dv8tion.jda.core.managers.GuildController;
-import net.dv8tion.jda.core.managers.GuildManager;
+import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.exceptions.HierarchyException;
+import net.dv8tion.jda.api.managers.GuildManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -28,8 +27,6 @@ public class Move implements Commande {
     public Member user;
     public Guild serveur;
     public GuildManager serveurManager;
-    public GuildController guildController;
-
     /** Perform a move (Reset is role and add target(s) role(s)
      *
      * @param user User to move
@@ -42,7 +39,6 @@ public class Move implements Commande {
     public boolean exc(Member user, List<Role> cible , boolean reset, Guild serveur, GuildManager serveurManager) throws HierarchyException
     {
         MainBot.roleFlag = true;
-        guildController = new GuildController(serveur);
         boolean erreur = false;
         List<Role> allRoll = serveur.getRoles();
 
@@ -63,7 +59,7 @@ public class Move implements Commande {
 
 
         //on fait ensuite les modif
-        guildController.modifyMemberRoles(user,cible).complete();
+        serveur.modifyMemberRoles(user,cible).complete();
 
         logger.info("Give " + cible + " role to " + user.getEffectiveName());
 

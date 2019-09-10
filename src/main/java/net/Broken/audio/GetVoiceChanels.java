@@ -1,17 +1,12 @@
 package net.Broken.audio;
 
 import net.Broken.DB.Entity.GuildPreferenceEntity;
-import net.Broken.DB.Repository.GuildPreferenceRepository;
-import net.Broken.DB.Repository.UserRepository;
-import net.Broken.SpringContext;
 import net.Broken.Tools.SettingsUtils;
-import net.dv8tion.jda.core.entities.Category;
-import net.dv8tion.jda.core.entities.Channel;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.VoiceChannel;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.GuildChannel;
+import net.dv8tion.jda.api.entities.VoiceChannel;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.context.ApplicationContext;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -55,7 +50,7 @@ public class GetVoiceChanels {
 
         }
 
-        list.sort(Comparator.comparingInt(Channel::getPositionRaw));
+        list.sort(Comparator.comparingInt(GuildChannel::getPositionRaw));
 
         return list;
 

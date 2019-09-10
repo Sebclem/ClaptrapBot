@@ -4,7 +4,7 @@ import jdk.nashorn.internal.parser.JSONParser;
 import net.Broken.DB.Entity.UserEntity;
 import net.Broken.DB.Repository.UserRepository;
 import net.Broken.MainBot;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.api.entities.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;

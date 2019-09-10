@@ -8,12 +8,12 @@ import net.Broken.Tools.DayListener.DayListener;
 import net.Broken.Tools.DayListener.Listeners.DailyMadame;
 import net.Broken.Tools.DayListener.Listeners.ResetSpam;
 import net.Broken.Tools.UserManager.Stats.UserStatsUtils;
-import net.dv8tion.jda.core.AccountType;
-import net.dv8tion.jda.core.JDA;
-import net.dv8tion.jda.core.JDABuilder;
-import net.dv8tion.jda.core.OnlineStatus;
-import net.dv8tion.jda.core.entities.Game;
-import net.dv8tion.jda.core.entities.Guild;
+import net.dv8tion.jda.api.AccountType;
+import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.OnlineStatus;
+import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.Guild;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.context.ApplicationContext;
@@ -55,8 +55,14 @@ public class Init {
                 /*************************************
                  *      Definition des commande      *
                  *************************************/
-                jda.getPresence().setPresence(OnlineStatus.DO_NOT_DISTURB, Game.playing("Loading..."));
-                jda.getTextChannels().forEach(textChannel -> textChannel.sendTyping().queue());
+                jda.getPresence().setPresence(OnlineStatus.DO_NOT_DISTURB, Activity.playing("Loading..."));
+
+                jda.getTextChannels().forEach(textChannel -> {
+                    try {
+                        textChannel.sendTyping().queue();
+                    }catch (Exception ignored){}
+
+                });
 
 
                 //On recupere le l'id serveur
@@ -90,7 +96,7 @@ public class Init {
         dayListener.addListener(new DailyMadame());
         dayListener.start();
         jda.addEventListener(new BotListener());
-        jda.getPresence().setPresence(OnlineStatus.ONLINE, Game.playing(MainBot.url));
+        jda.getPresence().setPresence(OnlineStatus.ONLINE, Activity.playing(MainBot.url));
 
 
         logger.info("-----------------------END INIT-----------------------");

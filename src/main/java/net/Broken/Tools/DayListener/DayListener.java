@@ -1,6 +1,6 @@
 package net.Broken.Tools.DayListener;
 import net.Broken.Commands.Spam;
-import net.dv8tion.jda.core.exceptions.RateLimitedException;
+import net.dv8tion.jda.api.exceptions.RateLimitedException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

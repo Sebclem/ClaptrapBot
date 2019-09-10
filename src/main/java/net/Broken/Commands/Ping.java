@@ -3,9 +3,9 @@ package net.Broken.Commands;
 import net.Broken.Commande;
 import net.Broken.MainBot;
 import net.Broken.Tools.MessageTimeOut;
-import net.dv8tion.jda.core.entities.ChannelType;
-import net.dv8tion.jda.core.entities.Message;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.entities.ChannelType;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.apache.logging.log4j.LogManager;
 
 
@@ -16,7 +16,7 @@ public class Ping implements Commande {
 
     @Override
     public void action(String[] args, MessageReceivedEvent event) {
-        long ping = event.getJDA().getPing();
+        long ping = event.getJDA().getGatewayPing();
 //        long receivedTime = Timestamp.valueOf(LocalDateTime.ofInstant(event.getMessage().getCreationTime().toInstant(), ZoneId.systemDefault())).getTime();
         if(event.isFromType(ChannelType.PRIVATE))
             event.getPrivateChannel().sendMessage(":arrow_right: Pong! `" + ping+ "ms`").queue();

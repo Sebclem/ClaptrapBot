@@ -4,8 +4,8 @@ import net.Broken.RestApi.CommandInterface;
 import net.Broken.RestApi.Data.CommandPostData;
 import net.Broken.RestApi.Data.CommandResponseData;
 import net.Broken.audio.WebLoadUtils;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.User;
 import org.springframework.http.ResponseEntity;
 
 /**

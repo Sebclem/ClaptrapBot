@@ -1,7 +1,7 @@
 package net.Broken.DB.Entity;
 
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.VoiceChannel;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.VoiceChannel;
 
 import javax.persistence.*;
 import java.util.ArrayList;

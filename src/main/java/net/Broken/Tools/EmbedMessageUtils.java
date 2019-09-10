@@ -4,9 +4,9 @@ import net.Broken.DB.Entity.GuildPreferenceEntity;
 import net.Broken.MainBot;
 import net.Broken.audio.Youtube.SearchResult;
 import net.Broken.audio.Youtube.YoutubeTools;
-import net.dv8tion.jda.core.EmbedBuilder;
-import net.dv8tion.jda.core.entities.Member;
-import net.dv8tion.jda.core.entities.MessageEmbed;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 
 import java.awt.*;
 import java.io.FileNotFoundException;

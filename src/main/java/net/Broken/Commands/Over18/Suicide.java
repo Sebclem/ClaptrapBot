@@ -4,7 +4,7 @@ import net.Broken.Commande;
 import net.Broken.Tools.EmbedMessageUtils;
 import net.Broken.Tools.FindContentOnWebPage;
 import net.Broken.Tools.Redirection;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

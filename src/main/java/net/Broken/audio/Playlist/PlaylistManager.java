@@ -16,7 +16,7 @@ import net.Broken.Tools.UserManager.Exceptions.UnknownTokenException;
 import net.Broken.Tools.UserManager.UserUtils;
 import net.Broken.audio.Playlist.Exception.PlaylistNotFoundException;
 import net.Broken.audio.WebLoadUtils;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.api.entities.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.context.ApplicationContext;

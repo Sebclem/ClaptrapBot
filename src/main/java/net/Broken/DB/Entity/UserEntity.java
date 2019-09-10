@@ -2,7 +2,7 @@ package net.Broken.DB.Entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import net.Broken.Tools.UserManager.UserUtils;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.api.entities.User;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;

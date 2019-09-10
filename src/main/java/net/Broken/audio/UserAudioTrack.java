@@ -1,7 +1,7 @@
 package net.Broken.audio;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.api.entities.User;
 
 /**
  * Container that link AudioTrack to who submit it (User)

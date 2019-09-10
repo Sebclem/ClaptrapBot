@@ -3,8 +3,8 @@ package net.Broken.RestApi;
 import net.Broken.Commands.Music;
 import net.Broken.RestApi.Data.CommandPostData;
 import net.Broken.RestApi.Data.CommandResponseData;
-import net.dv8tion.jda.core.entities.Guild;
-import net.dv8tion.jda.core.entities.User;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.User;
 import org.springframework.http.ResponseEntity;
 
 

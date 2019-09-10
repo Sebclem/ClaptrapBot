@@ -2,7 +2,7 @@ package net.Broken.Tools.DayListener.Listeners;
 
 import net.Broken.Commands.Spam;
 import net.Broken.Tools.DayListener.NewDayListener;
-import net.dv8tion.jda.core.exceptions.RateLimitedException;
+import net.dv8tion.jda.api.exceptions.RateLimitedException;
 
 import java.util.GregorianCalendar;
 

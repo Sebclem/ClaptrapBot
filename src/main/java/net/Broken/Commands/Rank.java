@@ -2,8 +2,8 @@ package net.Broken.Commands;
 
 import net.Broken.Commande;
 import net.Broken.Tools.UserManager.Stats.UserStatsUtils;
-import net.dv8tion.jda.core.entities.MessageEmbed;
-import net.dv8tion.jda.core.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 public class Rank implements Commande {
     @Override
