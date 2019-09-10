@@ -27,22 +27,20 @@ public class Init {
 
     /**
      * Initialize all bot functionality
+     *
      * @param token bot user token
      * @return JDA object
      */
-    static JDA initJda(String token){
+    static JDA initJda(String token) {
         JDA jda = null;
         logger.info("-----------------------INIT-----------------------");
 
         //Bot démarrer sans token
         if (token == null) {
             logger.fatal("Please enter bot token as an argument.");
-        }
-        else
-        {
+        } else {
             //Token présent
-            try
-            {
+            try {
 
                 logger.info("Connecting to Discord api...");
                 //connection au bot
@@ -58,9 +56,9 @@ public class Init {
                 jda.getPresence().setPresence(OnlineStatus.DO_NOT_DISTURB, Activity.playing("Loading..."));
 
                 jda.getTextChannels().forEach(textChannel -> {
-                    try {
-                        textChannel.sendTyping().queue();
-                    }catch (Exception ignored){}
+                    if (textChannel.canTalk())
+                        textChannel.sendTyping().complete();
+
 
                 });
 
@@ -69,15 +67,13 @@ public class Init {
 
                 logger.info("Connected on " + jda.getGuilds().size() + " Guilds:");
 
-                for( Guild server : jda.getGuilds()){
+                for (Guild server : jda.getGuilds()) {
                     //on recupere les utilisateur
                     logger.info("... " + server.getName() + " " + server.getMembers().size() + " Members");
                 }
 
 
-            }
-            catch (LoginException | InterruptedException e)
-            {
+            } catch (LoginException | InterruptedException e) {
                 logger.catching(e);
             }
         }
@@ -86,7 +82,7 @@ public class Init {
     }
 
 
-    static void polish(JDA jda){
+    static void polish(JDA jda) {
         logger.info("Check database...");
         checkDatabase();
         CommandLoader.load();
@@ -105,13 +101,13 @@ public class Init {
     }
 
 
-    private static void checkDatabase(){
+    private static void checkDatabase() {
         ApplicationContext context = SpringContext.getAppContext();
         UserRepository userRepository = (UserRepository) context.getBean("userRepository");
         List<UserEntity> users = (List<UserEntity>) userRepository.findAll();
         UserStatsUtils userStatsUtils = UserStatsUtils.getINSTANCE();
         logger.debug("Stats...");
-        for(UserEntity userEntity : users){
+        for (UserEntity userEntity : users) {
             logger.debug("..." + userEntity.getName());
             userStatsUtils.getUserStats(userEntity);
 
@@ -121,52 +117,52 @@ public class Init {
     }
 
 
-    public static boolean checkEnv(){
+    public static boolean checkEnv() {
         boolean ok = true;
 
 
-        if(System.getenv("PORT") == null){
+        if (System.getenv("PORT") == null) {
             logger.fatal("Missing PORT ENV variable.");
             ok = false;
         }
 
-        if(System.getenv("DB_URL") == null){
+        if (System.getenv("DB_URL") == null) {
             logger.fatal("Missing DB_URL ENV variable.");
             ok = false;
         }
 
-        if(System.getenv("DB_USER") == null){
+        if (System.getenv("DB_USER") == null) {
             logger.fatal("Missing DB_USER ENV variable.");
             ok = false;
         }
 
 
-        if(System.getenv("DB_PWD") == null){
+        if (System.getenv("DB_PWD") == null) {
             logger.fatal("Missing DB_PWD ENV variable.");
             ok = false;
         }
 
-        if(System.getenv("OAUTH_URL") == null){
+        if (System.getenv("OAUTH_URL") == null) {
             logger.fatal("Missing OAUTH_URL ENV variable.");
             ok = false;
         }
 
-        if(System.getenv("DISCORD_TOKEN") == null){
+        if (System.getenv("DISCORD_TOKEN") == null) {
             logger.fatal("Missing DISCORD_TOKEN ENV variable.");
             ok = false;
         }
 
-        if(System.getenv("GOOGLE_API_KEY") == null){
+        if (System.getenv("GOOGLE_API_KEY") == null) {
             logger.fatal("Missing GOOGLE_API_KEY ENV variable.");
             ok = false;
         }
 
-        if(System.getenv("RANDOM_API_KEY") == null){
+        if (System.getenv("RANDOM_API_KEY") == null) {
             logger.fatal("Missing GOOGLE_API_KEY ENV variable.");
             ok = false;
         }
 
-        if(System.getenv("LOG_LEVEL") == null){
+        if (System.getenv("LOG_LEVEL") == null) {
             logger.fatal("Missing LOG_LEVEL ENV variable.");
             ok = false;
         }
