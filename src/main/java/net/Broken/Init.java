@@ -57,8 +57,7 @@ public class Init {
 
                 jda.getTextChannels().forEach(textChannel -> {
                     if (textChannel.canTalk())
-                        textChannel.sendTyping().complete();
-
+                        textChannel.sendTyping().queue();
 
                 });
 
