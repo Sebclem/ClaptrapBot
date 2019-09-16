@@ -23,4 +23,15 @@ public class SearchResult {
         imageUrl = result.getSnippet().getThumbnails().getDefault().getUrl();
         this.duration = duration;
     }
+
+    public SearchResult(String id, String title, String description, String publishedAt, String channelId, String channelTittle, String imageUrl, String duration) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.publishedAt = publishedAt;
+        this.channelId = channelId;
+        this.channelTittle = channelTittle;
+        this.imageUrl = imageUrl;
+        this.duration = duration;
+    }
 }

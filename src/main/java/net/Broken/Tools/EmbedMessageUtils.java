@@ -113,7 +113,7 @@ public class EmbedMessageUtils {
                 .setColor(Color.CYAN)
                 .setTitle(result.title)
                 .setImage(result.imageUrl)
-                .addField("Duration: ", YoutubeTools.getInstance().ytTimeToString(result.duration), false)
+                .addField("Duration: ", result.duration, false)
                 .addField("URL:","https://www.youtube.com/watch?v="+result.id,false)
                 .addField("Chanel:", result.channelTittle, false);
         return buildStandar(builder);

@@ -446,7 +446,7 @@ function search() {
                 "<li class=\"collection-item avatar\">" +
                 "   <img src=\"" + item["imageUrl"] + "\" alt=\"\" class=\"\">" +
                 "   <a class=\"title truncate\" href='" + url + item["id"] + "' target=\"_blank\"><b>" + item["title"] + "</b></a>" +
-                "   <p class='truncate grey-text text-darken-1'>" + item["channelTittle"] + " &#9553 " + item["publishedAt"].substr(0, item["publishedAt"].indexOf('T')) + " <br>" + ytTimeToTime(item["duration"]) +
+                "   <p class='truncate grey-text text-darken-1'>" + item["channelTittle"] + " &#9553 " + item["publishedAt"] + " <br>" + item["duration"] +
                 "   </p>" +
                 "   <a href=\"#!\" class=\"secondary-content btn waves-effect waves-light green add-btn-list scale-transition\" id='" + item["id"] + "'><i class=\"material-icons \">add_circle_outline</i></a>" +
                 "   </div>" +

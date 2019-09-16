@@ -13,6 +13,7 @@ import net.Broken.Tools.UserManager.UserUtils;
 import net.Broken.audio.AudioM;
 import net.Broken.audio.GetVoiceChanels;
 import net.Broken.audio.Youtube.SearchResult;
+import net.Broken.audio.Youtube.YoutubeSearchRework;
 import net.Broken.audio.Youtube.YoutubeTools;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.VoiceChannel;
@@ -206,8 +207,10 @@ public class MusicWebAPIController {
         if(token != null && !token.isEmpty()) {
             try {
                 UserEntity user = userUtils.getUserWithApiToken(userRepository, token);
-                YoutubeTools youtubeTools = YoutubeTools.getInstance();
-                ArrayList<SearchResult> result = youtubeTools.search(query, 25, playlist);
+//                YoutubeTools youtubeTools = YoutubeTools.getInstance();
+//                ArrayList<SearchResult> result = youtubeTools.search(query, 25, playlist);
+                YoutubeSearchRework youtubeSearch = YoutubeSearchRework.getInstance();
+                List<SearchResult> result = youtubeSearch.searchVideo(query, 25, playlist);
                 return new ResponseEntity<>(result, HttpStatus.OK);
 
             }catch (UnknownTokenException e){
