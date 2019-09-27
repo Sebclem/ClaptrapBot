@@ -65,7 +65,7 @@ public class DailyMadame implements NewDayListener{
                 if(guildPreferenceRepository.findByGuildId(guild.getId()).get(0).isDailyMadame()){
                     for(TextChannel iterator : guild.getTextChannels())
                     {
-                        if(iterator.isNSFW()){
+                        if(iterator.isNSFW() && iterator.canTalk()){
                             chanel = iterator;
                             logger.debug("break: " + chanel.getName());
                             break;
