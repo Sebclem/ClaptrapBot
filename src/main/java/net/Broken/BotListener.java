@@ -21,6 +21,7 @@ import net.dv8tion.jda.api.events.guild.member.GuildMemberRoleRemoveEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.managers.GuildManager;
 import org.apache.logging.log4j.LogManager;
@@ -36,7 +37,7 @@ import java.util.List;
  * Bot Listener
  */
 public class BotListener extends ListenerAdapter {
-    private AntiSpam antispam=new AntiSpam();
+    private AntiSpam antispam = new AntiSpam();
     private Moderateur modo = new Moderateur();
 
     private GuildPreferenceRepository guildPreferenceRepository;
@@ -63,22 +64,22 @@ public class BotListener extends ListenerAdapter {
 
         GuildPreferenceEntity guildPref = getPreference(event.getGuild());
 
-        if(guildPref.isDefaultRole()){
+        if (guildPref.isDefaultRole()) {
 
-            logger.info(event.getUser().getName()+ "join the guild, move it!");
+            logger.info(event.getUser().getName() + "join the guild, move it!");
 
             List<Role> roles = new ArrayList<>();
             roles.add(event.getGuild().getRoleById(guildPref.getDefaultRoleId()));
 
 
-            new Move().exc(event.getMember(), roles,false,event.getGuild(),event.getGuild().getManager());
+            new Move().exc(event.getMember(), roles, false, event.getGuild(), event.getGuild().getManager());
         }
 
 
-        if(guildPref.isWelcome()){
+        if (guildPref.isWelcome()) {
 
             TextChannel chanel = event.getGuild().getTextChannelById(guildPref.getWelcomeChanelID());
-            if(chanel != null){
+            if (chanel != null) {
                 String message = guildPref.getWelcomeMessage();
                 message = message.replaceAll("@name", event.getMember().getAsMention());
                 logger.debug(message);
@@ -95,29 +96,26 @@ public class BotListener extends ListenerAdapter {
     public void onGuildMemberRoleRemove(GuildMemberRoleRemoveEvent event) {
 
         GuildPreferenceEntity guildPref = getPreference(event.getGuild());
-        if(guildPref.isDefaultRole()){
+        if (guildPref.isDefaultRole()) {
 
-            if(!MainBot.roleFlag){
+            if (!MainBot.roleFlag) {
 
-                if(event.getMember().getRoles().size() == 0){
+                if (event.getMember().getRoles().size() == 0) {
 
-                    logger.info(event.getUser().getName()+ "have no roles, move it!");
+                    logger.info(event.getUser().getName() + "have no roles, move it!");
                     List<Role> roles = new ArrayList<>();
                     roles.add(event.getGuild().getRoleById(guildPref.getDefaultRoleId()));
 
 
-                    new Move().exc(event.getMember(), roles,false,event.getGuild(),event.getGuild().getManager());
+                    new Move().exc(event.getMember(), roles, false, event.getGuild(), event.getGuild().getManager());
                     MainBot.roleFlag = false;
                 }
-            }
-            else
-            {
+            } else {
                 logger.debug("ignore it");
                 MainBot.roleFlag = false;
             }
 
         }
-
 
 
     }
@@ -126,7 +124,7 @@ public class BotListener extends ListenerAdapter {
     @Override
     public void onGuildVoiceJoin(GuildVoiceJoinEvent event) {
         super.onGuildVoiceJoin(event);
-        if(!event.getMember().getUser().isBot()){
+        if (!event.getMember().getUser().isBot()) {
             UserStatsUtils userStatsUtils = UserStatsUtils.getINSTANCE();
             if (!userStatsUtils.runningCounters.containsKey(event.getMember().getId())) {
                 UserStatsUtils.VoicePresenceCounter temp = new UserStatsUtils.VoicePresenceCounter(event.getMember());
@@ -140,11 +138,10 @@ public class BotListener extends ListenerAdapter {
     @Override
     public void onGuildVoiceLeave(GuildVoiceLeaveEvent event) {
         super.onGuildVoiceLeave(event);
-        if(event.getGuild().getAudioManager().isConnected())
-        {
+        if (event.getGuild().getAudioManager().isConnected()) {
             logger.trace("User disconnected from voice channel.");
 
-            if(event.getGuild().getAudioManager().getConnectedChannel().getMembers().size() == 1){
+            if (event.getGuild().getAudioManager().getConnectedChannel().getMembers().size() == 1) {
                 logger.debug("I'm alone, close audio connection.");
 
                 AudioM.getInstance(event.getGuild()).stop();
@@ -154,10 +151,10 @@ public class BotListener extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
-        if(!event.getAuthor().isBot()){
+        if (!event.getAuthor().isBot()) {
             UserStatsUtils.getINSTANCE().addMessageCount(event.getMember());
         }
-        try{
+        try {
             if (event.getMessage().getContentRaw().startsWith("//") && !event.getMessage().getAuthor().getId().equals(event.getJDA().getSelfUser().getId())) {
                 //On a detecter que c'etait une commande
                 //System.out.println(event.getMessage().getContent());
@@ -165,74 +162,80 @@ public class BotListener extends ListenerAdapter {
                 UserEntity user = users.size() == 0 ? null : users.get(0);
                 MainBot.handleCommand(new CommandParser().parse(event.getMessage().getContentRaw(), event), user);
 
-            }
-            else if (!event.getMessage().getAuthor().getId().equals(event.getJDA().getSelfUser().getId()))
-            {
+            } else if (!event.getMessage().getAuthor().getId().equals(event.getJDA().getSelfUser().getId())) {
 
-                if(!event.isFromType(ChannelType.PRIVATE)) {
-
-
-
-
+                if (!event.isFromType(ChannelType.PRIVATE)) {
 
 
                     Guild serveur = event.getGuild();
                     GuildPreferenceEntity guildPref = getPreference(serveur);
 
-                    if(!guildPref.isAntiSpam())
+                    if (!guildPref.isAntiSpam())
                         return;
+                    try {
+                        GuildManager guildManager = serveur.getManager();
+                        Member user = event.getMember();
 
-                    GuildManager guildManager = serveur.getManager();
-                    Member user = event.getMember();
+                        // appel de la methode d'analyse de message de "Moderateur"
+                        if (event.getMessage().getContentRaw().length() > 0) {
 
-                    // appel de la methode d'analyse de message de "Moderateur"
-                    if (event.getMessage().getContentRaw().length() > 0) {
+                            if (modo.analyse(user, serveur, guildManager, event) == 1) {
+                                antispam.extermine(user, serveur, guildManager, true, event);
+                            }
+                        } else if (event.getMessage().getContentRaw().length() == 0)
+                            logger.error("Image detected, ignoring it.");
 
-                        if (modo.analyse(user, serveur, guildManager, event) == 1) {
-                            antispam.extermine(user, serveur, guildManager, true, event);
-                        }
-                    } else if (event.getMessage().getContentRaw().length() == 0)
-                        logger.error("Image detected, ignoring it.");
+                    } catch (InsufficientPermissionException e) {
+                        logger.warn("Insufficient permission for guild " + e.getGuild(MainBot.jda).getName() + " Missing " + e.getPermission() + " permission.");
+                    }
+
                 }
 
 
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.catching(e);
 
-            if(event.isFromType(ChannelType.PRIVATE))
+            if (event.isFromType(ChannelType.PRIVATE))
                 PrivateMessage.send(event.getAuthor(), EmbedMessageUtils.getInternalError(), logger);
             else
                 event.getTextChannel().sendMessage(EmbedMessageUtils.getInternalError()).queue();
         }
 
 
-
     }
 
     @Override
     public void onGuildJoin(GuildJoinEvent event) {
-        logger.info("Join new guild! (" + event.getGuild().getName() + " " +event.getGuild().getMembers().size() + " Members)");
+        logger.info("Join new guild! (" + event.getGuild().getName() + " " + event.getGuild().getMembers().size() + " Members)");
         super.onGuildJoin(event);
         getPreference(event.getGuild());
         EmbedBuilder eb = new EmbedBuilder().setColor(Color.GREEN)
                 .setTitle("Hello there !")
-                .setDescription("Allow me to introduce myself -- I am a CL4P-TP the discord bot, but my friends call me Claptrap ! Or they would, if any of them were real...\n"+
+                .setDescription("Allow me to introduce myself -- I am a CL4P-TP the discord bot, but my friends call me Claptrap ! Or they would, if any of them were real...\n" +
                         "\nYou can access to my web UI with: " + MainBot.url)
                 .setImage("https://i.imgur.com/Anf1Srg.gif");
 
-        event.getGuild().getDefaultChannel().sendMessage(EmbedMessageUtils.buildStandar(eb)).complete();
+        TextChannel defaultChan = event.getGuild().getDefaultChannel();
+        if (defaultChan != null && defaultChan.canTalk())
+            defaultChan.sendMessage(EmbedMessageUtils.buildStandar(eb)).queue();
+        else {
+            for(TextChannel chan : event.getGuild().getTextChannels()){
+                if(chan.canTalk()){
+                    chan.sendMessage(EmbedMessageUtils.buildStandar(eb)).queue();
+                }
+            }
+        }
     }
 
-    private GuildPreferenceEntity getPreference(Guild guild){
+    private GuildPreferenceEntity getPreference(Guild guild) {
         List<GuildPreferenceEntity> guildPrefList = guildPreferenceRepository.findByGuildId(guild.getId());
         GuildPreferenceEntity guildPref;
-        if(guildPrefList.isEmpty()){
+        if (guildPrefList.isEmpty()) {
             logger.info("Generate default pref");
             guildPref = GuildPreferenceEntity.getDefault(guild);
             guildPreferenceRepository.save(guildPref);
-        }
-        else
+        } else
             guildPref = guildPrefList.get(0);
         return guildPref;
     }
