@@ -128,10 +128,10 @@ public class BotListener extends ListenerAdapter {
         super.onGuildVoiceJoin(event);
         if(!event.getMember().getUser().isBot()){
             UserStatsUtils userStatsUtils = UserStatsUtils.getINSTANCE();
-            if(!userStatsUtils.runningCounters.containsKey(event.getMember())){
+            if (!userStatsUtils.runningCounters.containsKey(event.getMember().getId())) {
                 UserStatsUtils.VoicePresenceCounter temp = new UserStatsUtils.VoicePresenceCounter(event.getMember());
                 temp.start();
-                userStatsUtils.runningCounters.put(event.getMember(), temp);
+                userStatsUtils.runningCounters.put(event.getMember().getId(), temp);
 
             }
         }
