@@ -20,7 +20,7 @@ public class Madame extends NumberedCommande {
     public String HELP = "Yo really? Just type Madame to see some :cat:";
 
     public Madame() {
-        super(LogManager.getLogger(), "http://www.bonjourmadame.fr/page/", "/");
+        super(LogManager.getLogger(), "https://www.bonjourmadame.fr/page/", "/");
     }
 
 

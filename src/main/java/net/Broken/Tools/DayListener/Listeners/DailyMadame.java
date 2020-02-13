@@ -1,6 +1,7 @@
 package net.Broken.Tools.DayListener.Listeners;
 
 import net.Broken.Commands.Over18.Madame;
+import net.Broken.DB.Entity.GuildPreferenceEntity;
 import net.Broken.DB.Repository.GuildPreferenceRepository;
 import net.Broken.MainBot;
 import net.Broken.SpringContext;
@@ -46,7 +47,7 @@ public class DailyMadame implements NewDayListener{
                 LocalDate now = LocalDate.now().minusDays(1);
                 String date = DateTimeFormatter.ofPattern("yyyy/MM/dd").format(now);
 
-                String url = "http://www.bonjourmadame.fr/" + date + "/";
+                String url = "https://www.bonjourmadame.fr/" + date + "/";
 
                 imgUrl = FindContentOnWebPage.doYourJob(url, "post-content", "img");
 
@@ -62,7 +63,8 @@ public class DailyMadame implements NewDayListener{
             for(Guild guild : guilds){
                 TextChannel chanel = null;
                 logger.debug(guild.getName());
-                if(guildPreferenceRepository.findByGuildId(guild.getId()).get(0).isDailyMadame()){
+                List<GuildPreferenceEntity> guildPref = guildPreferenceRepository.findByGuildId(guild.getId());
+                if( guildPref.size() > 0 && guildPref.get(0).isDailyMadame()){
                     for(TextChannel iterator : guild.getTextChannels())
                     {
                         if(iterator.isNSFW() && iterator.canTalk()){
