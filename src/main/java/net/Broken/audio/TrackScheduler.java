@@ -8,6 +8,8 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import net.Broken.MainBot;
 import net.Broken.RestApi.Data.UserAudioTrackData;
+import net.Broken.audio.Youtube.RelatedIdNotFound;
+import net.Broken.audio.Youtube.YoutubeSearchRework;
 import net.Broken.audio.Youtube.YoutubeTools;
 import net.dv8tion.jda.api.entities.Guild;
 import org.apache.logging.log4j.LogManager;
@@ -52,19 +54,18 @@ public class TrackScheduler extends AudioEventAdapter {
         // Calling startTrack with the noInterrupt set to true will start the track only if nothing is currently playing. If
         // something is playing, it returns false and does nothing. In that case the player was already playing so this
         // track goes to the queue instead.
-        if(track.getSubmittedUser() != MainBot.jda.getSelfUser()){
-            logger.debug("Flush history");
+        if (track.getSubmittedUser() != MainBot.jda.getSelfUser()) {
+            logger.debug("[" + guild + "] Flush history");
             history = new ArrayList<>();
         }
 
         history.add(track.getAudioTrack().getIdentifier());
         if (!player.startTrack(track.getAudioTrack(), true)) {
             queue.offer(track);
-        }
-        else{
+        } else {
             currentPlayingTrack = track;
         }
-        if(track.getSubmittedUser() != MainBot.jda.getSelfUser()) {
+        if (track.getSubmittedUser() != MainBot.jda.getSelfUser()) {
             needAutoPlay();
         }
 
@@ -73,13 +74,14 @@ public class TrackScheduler extends AudioEventAdapter {
 
     /**
      * Add track on top of playlist
+     *
      * @param track
      */
     public void addNext(UserAudioTrack track) {
         // Calling startTrack with the noInterrupt set to true will start the track only if nothing is currently playing. If
         // something is playing, it returns false and does nothing. In that case the player was already playing so this
         // track goes to the queue instead.
-        if(track.getSubmittedUser() != MainBot.jda.getSelfUser()){
+        if (track.getSubmittedUser() != MainBot.jda.getSelfUser()) {
             logger.debug("Flush history");
             history = new ArrayList<>();
         }
@@ -87,16 +89,14 @@ public class TrackScheduler extends AudioEventAdapter {
         history.add(track.getAudioTrack().getIdentifier());
         if (!player.startTrack(track.getAudioTrack(), true)) {
             queue.addFirst(track);
-        }
-        else{
+        } else {
             currentPlayingTrack = track;
         }
-        if(track.getSubmittedUser() != MainBot.jda.getSelfUser()) {
+        if (track.getSubmittedUser() != MainBot.jda.getSelfUser()) {
 
             needAutoPlay();
-        }
-        else
-            logger.debug("Bot add, ignore autoFlow");
+        } else
+            logger.debug("[" + guild + "] Bot add, ignore autoFlow");
     }
 
     public void pause() {
@@ -108,29 +108,29 @@ public class TrackScheduler extends AudioEventAdapter {
 
     }
 
-    public void stop(){
+    public void stop() {
         player.stopTrack();
         this.currentPlayingTrack = null;
         player.destroy();
     }
 
-    public void flush(){
+    public void flush() {
         queue.clear();
     }
 
-    public List<UserAudioTrackData> getList(){
+    public List<UserAudioTrackData> getList() {
 //        AudioTrack[] test = (AudioTrack[]) queue.toArray();
 
         List<UserAudioTrackData> temp = new ArrayList<>();
         Object[] test = queue.toArray();
-        for(Object track: test){
+        for (Object track : test) {
             UserAudioTrack casted = (UserAudioTrack) track;
             temp.add(new UserAudioTrackData(casted.getSubmittedUser().getName(), casted.getAudioTrack().getInfo()));
         }
         return temp;
     }
 
-    public AudioTrackInfo getInfo(){
+    public AudioTrackInfo getInfo() {
         return player.getPlayingTrack().getInfo();
     }
 
@@ -138,20 +138,20 @@ public class TrackScheduler extends AudioEventAdapter {
         return currentPlayingTrack;
     }
 
-    public boolean remove(String uri){
-        for(UserAudioTrack track : queue){
-            if(track.getAudioTrack().getInfo().uri.equals(uri)){
-                if(!queue.remove(track)) {
-                    logger.error("Delete failure!");
+    public boolean remove(String uri) {
+        for (UserAudioTrack track : queue) {
+            if (track.getAudioTrack().getInfo().uri.equals(uri)) {
+                if (!queue.remove(track)) {
+                    logger.error("[" + guild + "] Delete failure!");
                     return false;
                 } else {
-                    logger.info("Delete succeful");
+                    logger.info("[" + guild + "] Delete successful");
                     needAutoPlay();
                     return true;
                 }
             }
         }
-        logger.info("Delete failure! Not found.");
+        logger.info("[" + guild + "] Delete failure! Not found.");
 
         return false;
     }
@@ -163,9 +163,9 @@ public class TrackScheduler extends AudioEventAdapter {
         // Start the next track, regardless of if something is already playing or not. In case queue was empty, we are
         // giving null to startTrack, which is a valid argument and will simply stop the player.
         UserAudioTrack track = queue.poll();
-        if(track != null)
+        if (track != null)
             this.currentPlayingTrack = track;
-        if(track != null)
+        if (track != null)
             player.startTrack(track.getAudioTrack(), false);
         needAutoPlay();
     }
@@ -174,27 +174,34 @@ public class TrackScheduler extends AudioEventAdapter {
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
         // Only start the next track if the end reason is suitable for it (FINISHED or LOAD_FAILED)
         if (endReason.mayStartNext) {
-            logger.debug("End of track, start next.");
+            logger.debug("[" + guild + "] End of track, start next.");
             nextTrack();
         }
     }
 
-    private void needAutoPlay(){
-        if((queue.size() < 1) && autoFlow && currentPlayingTrack != null){
-            logger.debug("Auto add needed!");
+    private void needAutoPlay() {
+        if ((queue.size() < 1) && autoFlow && currentPlayingTrack != null) {
+            logger.debug("[" + guild.getName() + "] Auto add needed!");
             AudioM audioM = AudioM.getInstance(guild);
-            YoutubeTools youtubeTools = YoutubeTools.getInstance();
+            YoutubeSearchRework youtubeSearchRework = YoutubeSearchRework.getInstance();
             try {
-                String id =  youtubeTools.getRelatedVideo(currentPlayingTrack.getAudioTrack().getInfo().identifier, history);
-                logger.debug("Related id: "+id);
+                String id = youtubeSearchRework.getRelatedVideo(currentPlayingTrack.getAudioTrack().getInfo().identifier);
+                logger.debug("[" + guild.getName() + "] Related id: " + id);
                 audioM.loadAndPlayAuto(id);
+            } catch (IOException | RelatedIdNotFound ex) {
+                logger.debug("[" + guild.getName() + "] Can't find related id, try API...");
+                YoutubeTools youtubeTools = YoutubeTools.getInstance();
+                try {
+                    String id = youtubeTools.getRelatedVideo(currentPlayingTrack.getAudioTrack().getInfo().identifier, history);
+                    logger.debug("[" + guild.getName() + "] Related id: " + id);
+                    audioM.loadAndPlayAuto(id);
 
-            } catch (GoogleJsonResponseException e) {
-                logger.error("There was a service error: " + e.getDetails().getCode() + " : " + e.getDetails().getMessage());
-            } catch (IOException t) {
-                logger.catching(t);
+                } catch (GoogleJsonResponseException e) {
+                    logger.error("[" + guild.getName() + "] There was a service error: " + e.getDetails().getCode() + " : " + e.getDetails().getMessage());
+                } catch (IOException t) {
+                    logger.catching(t);
+                }
             }
-
         }
     }
 

@@ -104,4 +104,23 @@ public class YoutubeSearchRework {
         }
         return results;
     }
+
+    public String getRelatedVideo(String sourceVideoId) throws IOException, RelatedIdNotFound {
+        sourceVideoId = URLEncoder.encode(sourceVideoId, StandardCharsets.UTF_8.toString());
+        String url =  "https://www.youtube.com/watch?v=" + sourceVideoId;
+        Document doc = getYoutubeSearchDocument(url);
+
+        return extractRelatedVideoId(doc);
+    }
+
+    private String extractRelatedVideoId(Document doc) throws RelatedIdNotFound {
+        Elements elements = doc.select(".autoplay-bar .content-link");
+        if(elements.size() == 0){
+            throw new RelatedIdNotFound();
+        }
+        Element elem = elements.get(0);
+        String url = elem.attributes().get("href");
+        return url.replace("/watch?v=", "");
+    }
+
 }
