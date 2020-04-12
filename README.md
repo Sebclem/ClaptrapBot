@@ -3,7 +3,7 @@
 ![Project Stage][project-stage-shield]
 [![License][license-shield]](LICENSE.md)
 
-![Build Status] [build-badge]
+![Build Status][build-badge]
 ![Project Maintenance][maintenance-shield]
 
 [![Buy me a coffee][buymeacoffee-shield]][buymeacoffee]
