@@ -1,4 +1,6 @@
-# ClaptrapBot: A multifunctional Discord Bot !
+<p align="center"><img alt="discord" src="https://claptrapbot.com/favicon.png" width="150"/></p>
+
+# ClaptrapBot: A multifunctional Discord Bot ! 
 [![GitHub Release][releases-shield]][releases]
 ![Project Stage][project-stage-shield]
 [![License][license-shield]](LICENSE.md)
