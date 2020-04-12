@@ -1,13 +1,11 @@
-FROM debian:latest
-RUN apt-get update
-RUN apt-get -y upgrade
-RUN apt-get -y install openjdk-8-jre openjdk-8-jdk curl wget
+FROM openjdk:8-jre-buster
 WORKDIR /bot_src
 ARG BUILD_NBR
 ARG BRANCH_NAME
-ADD DownloadLast.sh /bot_src/
-RUN chmod +x DownloadLast.sh
-RUN ./DownloadLast.sh ${BRANCH_NAME} ${BUILD_NBR}
+ARG BRANCH_NAME
+ARG GITHUB_RUN_NUMBER
+ADD build/libs/ClaptrapBot-*.jar /bot_src/bot.jar
+RUN java -version
 ENV PORT=8080
 ENV TOKEN=10
 CMD java -jar bot.jar -t ${TOKEN}
