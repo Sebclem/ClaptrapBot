@@ -1,18 +1,9 @@
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.9.RELEASE")
-        classpath 'org.springframework:springloaded:1.2.6.RELEASE'
-    }
+plugins {
+    id 'org.springframework.boot' version '2.2.4.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+    id 'java'
+    id 'groovy'
 }
-
-apply plugin: 'base'
-apply plugin: 'java'
-apply plugin: 'eclipse'
-apply plugin: 'idea'
-apply plugin: 'org.springframework.boot'
 
 
 def versionObj = new Version(major: 0, minor: 2, revision: 0)
@@ -31,7 +22,7 @@ jar.doFirst {
 }
 
 jar {
-    delete "${buildDir}/libs/*"
+//    delete "${buildDir}/libs/*"
     baseName = 'DiscordBot'
 
 }
@@ -54,6 +45,9 @@ dependencies {
     }
     compile("org.springframework.boot:spring-boot-starter-undertow")
     compile("org.springframework.boot:spring-boot-starter-log4j2")
+    implementation 'org.codehaus.groovy:groovy-all:2.4.15'
+
+
 
 
     compile("com.sedmelluq:lavaplayer:1.3.34")

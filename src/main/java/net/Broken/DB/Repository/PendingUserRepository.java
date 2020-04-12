@@ -12,4 +12,6 @@ public interface PendingUserRepository extends CrudRepository<PendingUserEntity,
     List<PendingUserEntity> findByJdaId(String jdaId);
 
 
+    PendingUserEntity findById(int id);
+
 }

@@ -10,4 +10,5 @@ public interface UserStatsRepository extends CrudRepository<UserStats, Long> {
     List<UserStats> findByUser(UserEntity userEntity);
     List<UserStats> findByGuildId(String guildId);
     List<UserStats> findByUserAndGuildId(UserEntity user, String guildId);
+
 }

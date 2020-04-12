@@ -100,7 +100,7 @@ public class PlaylistManager {
 
 
 
-            TrackEntity toDelete = trackRepository.findOne(data.id);
+            TrackEntity toDelete = trackRepository.findById(data.id);
 
             playlist = remove(playlist, toDelete);
 
@@ -129,7 +129,7 @@ public class PlaylistManager {
 
 
 
-            TrackEntity toMove = trackRepository.findOne(data.id);
+            TrackEntity toMove = trackRepository.findById(data.id);
 
             TrackEntity save = new TrackEntity(toMove);
 
@@ -159,7 +159,7 @@ public class PlaylistManager {
     }
 
     private PlaylistEntity getPlaylist(int id) throws PlaylistNotFoundException{
-        PlaylistEntity playlist = playlistRepository.findOne(id);
+        PlaylistEntity playlist = playlistRepository.findById(id);
         if(playlist == null)
             throw new PlaylistNotFoundException();
         else

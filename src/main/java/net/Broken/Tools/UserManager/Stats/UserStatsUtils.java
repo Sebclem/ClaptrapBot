@@ -95,7 +95,7 @@ public class UserStatsUtils {
                 }
             }
 
-            stats = (List<UserStats>) userStatsRepository.save(stats);
+            stats = (List<UserStats>) userStatsRepository.saveAll(stats);
             userEntity.setUserStats(stats);
             userEntity = userRepository.save(userEntity);
 

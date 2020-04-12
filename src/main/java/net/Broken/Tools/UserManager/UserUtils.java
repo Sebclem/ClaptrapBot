@@ -126,7 +126,7 @@ public class UserUtils {
      * @throws UserNotFoundException User not found in Pending user DB
      */
     public PendingUserEntity confirmCheckToken(PendingUserRepository pendingUserRepository, int id, String checkToken ) throws TokenNotMatch, UserNotFoundException {
-        PendingUserEntity pendingUser = pendingUserRepository.findOne(id);
+        PendingUserEntity pendingUser = pendingUserRepository.findById(id);
         if(pendingUser != null) {
             if(pendingUser.getCheckToken().equals(checkToken)){
                 logger.info("Check Token match!");

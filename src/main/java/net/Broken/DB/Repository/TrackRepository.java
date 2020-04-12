@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface TrackRepository extends CrudRepository<TrackEntity, Integer> {
     List<TrackEntity> findDistinctByPlaylistOrderByPos(PlaylistEntity playlistEntity);
+
+    TrackEntity findById(int id);
 }
