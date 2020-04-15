@@ -25,7 +25,7 @@ The original development is by [SebClem][Sebclem].
 
 Thanks to [Alexandre064][alex] for is help with the translation and all gifs.
 
-Artworks: ???
+Artworks: [Aeka][Aeka]
 
 For a full list of all authors and contributors,
 check [the contributor's page][contributors].
@@ -69,4 +69,5 @@ SOFTWARE.
 [releases]: https://github.com/Sebclem/ClaptrapBot/releases
 [Sebclem]: https://github.com/Sebclem
 [alex]: https://github.com/Alexandre064
+[Aeka]: https://twitter.com/Le_aeka
 [contributors]: https://github.com/Sebclem/ClaptrapBot/graphs/contributors
