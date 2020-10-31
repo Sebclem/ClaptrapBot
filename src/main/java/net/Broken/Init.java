@@ -44,7 +44,9 @@ public class Init {
 
                 logger.info("Connecting to Discord api...");
                 //connection au bot
-                jda = new JDABuilder(AccountType.BOT).setToken(token).setBulkDeleteSplittingEnabled(false).build();
+                JDABuilder jdaB = JDABuilder.createDefault(token);
+                jdaB.setBulkDeleteSplittingEnabled(false);
+                jda = jdaB.build();
                 jda = jda.awaitReady();
                 MainBot.jda = jda;
                 jda.setAutoReconnect(true);
