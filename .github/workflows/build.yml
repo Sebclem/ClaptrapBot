@@ -47,5 +47,5 @@ jobs:
           name: brokenfire/brokendiscordbot
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-          tags: latest,${{ GITHUB_RUN_ID}}
+          tags: latest,${{ env.GITHUB_RUN_ID}}
           buildargs: GITHUB_RUN_NUMBER=${{env.RELEASE_VERSION}}
