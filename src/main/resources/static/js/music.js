@@ -431,14 +431,9 @@ function search() {
     load.removeClass("hide");
     load.addClass("scale-in");
 
-    $.get("/api/music/search?query=" + input_search.val() + "&playlist=" + $("#playlistSearch").is(':checked'), (data) => {
+    $.get("/api/music/search?query=" + input_search.val(), (data) => {
         list.empty();
-        let url;
-        if($("#playlistSearch").is(':checked')){
-            url = "https://www.youtube.com/playlist?list="
-        }
-        else
-            url = "https://youtube.com/watch?v=";
+        let url = "https://youtube.com/watch?v=";
 
         data.forEach((item) => {
 

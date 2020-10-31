@@ -189,14 +189,12 @@ public class MusicWebAPIController {
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.GET)
-    public ResponseEntity<List<SearchResult>> search(@CookieValue(name = "token", defaultValue = "") String token, @RequestParam(value = "query") String query, @RequestParam(value = "playlist") boolean playlist) {
+    public ResponseEntity<List<SearchResult>> search(@CookieValue(name = "token", defaultValue = "") String token, @RequestParam(value = "query") String query) {
         if (token != null && !token.isEmpty()) {
             try {
                 UserEntity user = userUtils.getUserWithApiToken(userRepository, token);
-//                YoutubeTools youtubeTools = YoutubeTools.getInstance();
-//                ArrayList<SearchResult> result = youtubeTools.search(query, 25, playlist);
                 YoutubeSearchRework youtubeSearch = YoutubeSearchRework.getInstance();
-                List<SearchResult> result = youtubeSearch.searchVideo(query, 25, playlist);
+                List<SearchResult> result = youtubeSearch.searchVideo(query, 25, false);
                 return new ResponseEntity<>(result, HttpStatus.OK);
 
             } catch (UnknownTokenException e) {
