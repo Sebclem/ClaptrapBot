@@ -1,5 +1,10 @@
 package net.Broken.audio.Youtube;
 
+import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioTrack;
+import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeSearchProvider;
+import com.sedmelluq.discord.lavaplayer.track.AudioItem;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import com.sedmelluq.discord.lavaplayer.track.BasicAudioPlaylist;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jsoup.Jsoup;
@@ -12,6 +17,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class YoutubeSearchRework {
 
@@ -29,9 +35,21 @@ public class YoutubeSearchRework {
 
     public List<SearchResult> searchVideo(String search, int maxResult, boolean playlist) throws IOException {
         search = URLEncoder.encode(search, StandardCharsets.UTF_8.toString());
-        String url = "https://www.youtube.com/results?search_query=" + search + "&sp="+ (playlist ? "EgIQAw%3D%3D" :"EgIQAQ%3D%3D");
-        Document doc = getYoutubeSearchDocument(url);
-        return extractVideoInfo(doc, maxResult, playlist);
+
+        YoutubeSearchProvider searchProvider = new YoutubeSearchProvider();
+        BasicAudioPlaylist rawResult = (BasicAudioPlaylist) searchProvider.loadSearchResult(search, audioTrackInfo -> new YoutubeAudioTrack(audioTrackInfo, null));
+        List<SearchResult> results = new ArrayList<>();
+        for (AudioTrack track : rawResult.getTracks()) {
+            String imageUrl = "https://i.ytimg.com/vi/" + track.getIdentifier() + "/hqdefault.jpg";
+            long hour = TimeUnit.MILLISECONDS.toHours(track.getInfo().length);
+            String hms = hour == 0 ? "" : Long.toString(hour);
+            hms += String.format("%02d:%02d",
+                    TimeUnit.MILLISECONDS.toMinutes(track.getInfo().length) % TimeUnit.HOURS.toMinutes(1),
+                    TimeUnit.MILLISECONDS.toSeconds(track.getInfo().length) % TimeUnit.MINUTES.toSeconds(1));
+            results.add(new SearchResult(track.getIdentifier(), track.getInfo().title, "", "", "", track.getInfo().author, imageUrl, hms));
+        }
+
+        return results;
     }
 
 
@@ -48,15 +66,15 @@ public class YoutubeSearchRework {
         List<SearchResult> results = new ArrayList<>();
         int i = 0;
         for (Element videoDiv : videosDivs) {
-            if(i >= maxResult)
+            if (i >= maxResult)
                 break;
             Element titleDiv = videoDiv.selectFirst(".yt-uix-tile-link");
             String id;
-            if(!playlist)
+            if (!playlist)
                 id = titleDiv.attributes().get("href").replace("/watch?v=", "");
-            else{
+            else {
                 String listUrl = titleDiv.attributes().get("href");
-                int listIndex =  listUrl.indexOf("list=");
+                int listIndex = listUrl.indexOf("list=");
                 id = listUrl.substring(listIndex).replace("list=", "");
 
             }
@@ -65,7 +83,7 @@ public class YoutubeSearchRework {
             Elements metas = videoDiv.selectFirst(".yt-lockup-meta-info").getElementsByTag("li");
             String view = "";
             String date = "";
-            if(!playlist){
+            if (!playlist) {
                 for (Element metaElem : metas) {
 
                     if (metaElem.text().contains("view")) {
@@ -83,14 +101,12 @@ public class YoutubeSearchRework {
 
             String imageUrl;
             String duration;
-            if(!playlist){
+            if (!playlist) {
                 duration = videoDiv.selectFirst(".video-time").text();
                 imageUrl = "https://i.ytimg.com/vi/" + id + "/hqdefault.jpg";
-            }
-
-            else{
+            } else {
                 String listUrl = titleDiv.attributes().get("href");
-                int listIndex =  listUrl.indexOf("&list=");
+                int listIndex = listUrl.indexOf("&list=");
                 listUrl = listUrl.substring(0, listIndex).replace("/watch?v=", "");
                 imageUrl = "https://i.ytimg.com/vi/" + listUrl + "/hqdefault.jpg";
                 duration = videoDiv.selectFirst(".formatted-video-count-label").text();
@@ -107,7 +123,7 @@ public class YoutubeSearchRework {
 
     public String getRelatedVideo(String sourceVideoId) throws IOException, RelatedIdNotFound {
         sourceVideoId = URLEncoder.encode(sourceVideoId, StandardCharsets.UTF_8.toString());
-        String url =  "https://www.youtube.com/watch?v=" + sourceVideoId;
+        String url = "https://www.youtube.com/watch?v=" + sourceVideoId;
         Document doc = getYoutubeSearchDocument(url);
 
         return extractRelatedVideoId(doc);
@@ -115,7 +131,7 @@ public class YoutubeSearchRework {
 
     private String extractRelatedVideoId(Document doc) throws RelatedIdNotFound {
         Elements elements = doc.select(".autoplay-bar .content-link");
-        if(elements.size() == 0){
+        if (elements.size() == 0) {
             throw new RelatedIdNotFound();
         }
         Element elem = elements.get(0);
