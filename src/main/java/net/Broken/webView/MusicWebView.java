@@ -51,7 +51,7 @@ public class MusicWebView {
             User user = MainBot.jda.getUserById(userE.getJdaId());
             if(user == null)
                 return "redirect:/";
-            GeneralWebView.addGuildAndRedirect(model, token, guildId, user.getMutualGuilds());
+            GeneralWebView.addGuildAndRedirect(model, token, guildId, user);
             return CheckPage.getPageIfReady("music");
 
         } catch (UnknownTokenException e) {

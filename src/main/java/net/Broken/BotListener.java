@@ -151,6 +151,7 @@ public class BotListener extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
+
         if (!event.getAuthor().isBot()) {
             UserStatsUtils.getINSTANCE().addMessageCount(event.getMember());
         }

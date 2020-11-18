@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.boot.ExitCodeGenerator;
@@ -31,6 +32,7 @@ public class MainBot {
     public static HashMap<String, Commande> commandes = new HashMap<>();
     public static HashMap<Member, ArrayList<Message>> historique =new HashMap<>();
     public static HashMap<Member, Integer> message_compteur =new HashMap<>();
+    public static HashMap<String, Integer> mutualGuildCount =new HashMap<>();
     public static boolean roleFlag = false;
     public static HashMap<Member, UserSpamUtils> spamUtils = new HashMap<>();
     public static JDA jda;

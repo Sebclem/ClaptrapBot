@@ -14,6 +14,8 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.requests.GatewayIntent;
+import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.context.ApplicationContext;
@@ -44,7 +46,8 @@ public class Init {
 
                 logger.info("Connecting to Discord api...");
                 //connection au bot
-                JDABuilder jdaB = JDABuilder.createDefault(token);
+                JDABuilder jdaB = JDABuilder.createDefault(token).enableIntents(GatewayIntent.GUILD_MEMBERS)
+                        .setMemberCachePolicy(MemberCachePolicy.ALL);
                 jdaB.setBulkDeleteSplittingEnabled(false);
                 jda = jdaB.build();
                 jda = jda.awaitReady();
@@ -69,6 +72,7 @@ public class Init {
                 logger.info("Connected on " + jda.getGuilds().size() + " Guilds:");
 
                 for (Guild server : jda.getGuilds()) {
+                    server.loadMembers().get();
                     //on recupere les utilisateur
                     logger.info("... " + server.getName() + " " + server.getMembers().size() + " Members");
                 }

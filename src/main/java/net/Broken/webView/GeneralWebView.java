@@ -3,6 +3,7 @@ package net.Broken.webView;
 import net.Broken.DB.Entity.UserEntity;
 import net.Broken.DB.Repository.UserRepository;
 import net.Broken.MainBot;
+import net.Broken.Tools.CacheTools;
 import net.Broken.Tools.SettingsUtils;
 import net.Broken.Tools.UserManager.Exceptions.UnknownTokenException;
 import net.Broken.Tools.UserManager.Stats.GuildStatsPack;
@@ -20,10 +21,6 @@ import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
-
-
-
-
 
 
 import javax.servlet.http.Cookie;
@@ -51,15 +48,14 @@ public class GeneralWebView {
     }
 
 
-
-
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    public class ForbiddenException extends RuntimeException {}
+    public class ForbiddenException extends RuntimeException {
+    }
 
 
     @RequestMapping("/")
-    public String music(Model model, HttpServletResponse response, HttpServletRequest request, @CookieValue(value = "guild", defaultValue = "1") String guildId, @CookieValue(value = "token", defaultValue = "") String token){
-        if(token.equals("")){
+    public String music(Model model, HttpServletResponse response, HttpServletRequest request, @CookieValue(value = "guild", defaultValue = "1") String guildId, @CookieValue(value = "token", defaultValue = "") String token) {
+        if (token.equals("")) {
             model.addAttribute("isLogged", false);
             model.addAttribute("guild_name", "");
             model.addAttribute("isAdmin", false);
@@ -72,12 +68,12 @@ public class GeneralWebView {
 
             UserEntity userE = userUtils.getUserWithApiToken(userRepository, token);
             User user = MainBot.jda.getUserById(userE.getJdaId());
-            if(user == null) {
+            if (user == null) {
                 model.addAttribute("noMutualGuilds", true);
-                addGuildAndRedirect(model, token, guildId, new ArrayList<>());
+                addGuildAndRedirect(model, token, guildId, user);
             } else {
                 model.addAttribute("noMutualGuilds", false);
-                addGuildAndRedirect(model, token, guildId, user.getMutualGuilds());
+                addGuildAndRedirect(model, token, guildId, user);
             }
 
             model.addAttribute("isAdmin", SettingsUtils.getInstance().checkPermission(token, guildId));
@@ -98,7 +94,7 @@ public class GeneralWebView {
             model.addAttribute("redirect_url", System.getenv("OAUTH_URL"));
             return CheckPage.getPageIfReady("login");
 
-        } catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             logger.debug("Unknown guild, flush cookies");
             Cookie cookie = new Cookie("guild", null);
             cookie.setPath("/");
@@ -108,33 +104,32 @@ public class GeneralWebView {
         }
 
 
-
     }
 
 
     @RequestMapping("/loading")
-    public String loading(Model model){
+    public String loading(Model model) {
         return "loading";
     }
 
     @RequestMapping("/forgetPass")
-    public String forgetPass(Model model){
+    public String forgetPass(Model model) {
         return CheckPage.getPageIfReady("forgetPass");
     }
 
     @RequestMapping("/oauthCallback")
-    public String oauthCallback(Model model){
+    public String oauthCallback(Model model) {
         return "oauthCallback";
     }
 
     @RequestMapping("/settings")
-    public String settings(Model model, @CookieValue(value = "guild", defaultValue = "") String guildId, @CookieValue(value = "token", defaultValue = "") String token){
+    public String settings(Model model, @CookieValue(value = "guild", defaultValue = "") String guildId, @CookieValue(value = "token", defaultValue = "") String token) {
         SettingsUtils settingsUtils = SettingsUtils.getInstance();
-        if(settingsUtils.checkPermission(token, guildId)){
+        if (settingsUtils.checkPermission(token, guildId)) {
             try {
                 UserEntity userE = userUtils.getUserWithApiToken(userRepository, token);
                 User user = MainBot.jda.getUserById(userE.getJdaId());
-                addGuildAndRedirect(model, token, guildId, user.getMutualGuilds());
+                addGuildAndRedirect(model, token, guildId, user);
                 Guild guild = MainBot.jda.getGuildById(guildId);
                 model.addAttribute("settings", SettingsUtils.getInstance().extractSettings(guild));
             } catch (UnknownTokenException e) {
@@ -142,49 +137,43 @@ public class GeneralWebView {
             }
 
 
-
-
             return CheckPage.getPageIfReady("settings");
-        }
-        else
+        } else
             throw new ForbiddenException();
 
     }
 
     @RequestMapping("/login")
-    public String login(Model model, @CookieValue(value = "token", defaultValue = "") String token){
+    public String login(Model model, @CookieValue(value = "token", defaultValue = "") String token) {
         model.addAttribute("redirect_url", System.getenv("OAUTH_URL"));
-        if(!token.equals("")){
+        if (!token.equals("")) {
             return "redirect:/";
-        }
-        else
+        } else
             return "login";
     }
 
 
-
     @RequestMapping("/rank")
-    public String login(Model model, @CookieValue(value = "token",defaultValue = "1") String token, @CookieValue(value = "guild", defaultValue = "") String cookieGuildId, @RequestParam(value = "guild", defaultValue = "") String praramGuildId){
+    public String login(Model model, @CookieValue(value = "token", defaultValue = "1") String token, @CookieValue(value = "guild", defaultValue = "") String cookieGuildId, @RequestParam(value = "guild", defaultValue = "") String praramGuildId) {
         model.addAttribute("redirect_url", System.getenv("OAUTH_URL"));
         try {
             UserEntity userEntity = userUtils.getUserWithApiToken(userRepository, token);
             GuildStatsPack stack;
-            if(!cookieGuildId.equals("")){
+            if (!cookieGuildId.equals("")) {
                 stack = UserStatsUtils.getINSTANCE().getStatPack(userEntity, cookieGuildId);
 
 
-            }
-            else
+            } else
                 stack = null;
             model.addAttribute("stack", stack);
             try {
                 UserEntity userE = userUtils.getUserWithApiToken(userRepository, token);
                 User user = MainBot.jda.getUserById(userE.getJdaId());
-                addGuildAndRedirect(model, token, cookieGuildId, user.getMutualGuilds());
+                addGuildAndRedirect(model, token, cookieGuildId, user);
             } catch (UnknownTokenException e) {
                 throw new ForbiddenException();
             }
-            return  CheckPage.getPageIfReady("rank");
+            return CheckPage.getPageIfReady("rank");
 
         } catch (UnknownTokenException e) {
             return "login"; // TODO Public rank
@@ -193,20 +182,24 @@ public class GeneralWebView {
     }
 
 
-
-
-
-    public static Model addGuildAndRedirect(Model model, String token, String guildId, List<Guild> mutualGuilds){
-        Guild guild = MainBot.jda.getGuildById(guildId);
-        if(guild != null){
-            model.addAttribute("guild_name", guild.getName());
-            model.addAttribute("guild_id", guild.getId());
-            model.addAttribute("guild_icon", guild.getIconUrl() == null ? "https://discordapp.com/assets/dd4dbc0016779df1378e7812eabaa04d.png": guild.getIconUrl());
-            model.addAttribute("mutual_guilds", mutualGuilds);
-            model.addAttribute("isAdmin", SettingsUtils.getInstance().checkPermission(token, guildId));
+    public static Model addGuildAndRedirect(Model model, String token, String guildId, User user) {
+        List<Guild> mutualGuilds = user.getMutualGuilds();
+        Integer lastCount = MainBot.mutualGuildCount.get(user.getId());
+        if (lastCount == null || lastCount != mutualGuilds.size()) {
+            LogManager.getLogger().debug("Guild miss match, re-cache users...");
+            CacheTools.loadAllGuildMembers();
+            mutualGuilds = user.getMutualGuilds();
+            MainBot.mutualGuildCount.put(user.getId(), mutualGuilds.size());
         }
 
-        else{
+        Guild guild = MainBot.jda.getGuildById(guildId);
+        if (guild != null) {
+            model.addAttribute("guild_name", guild.getName());
+            model.addAttribute("guild_id", guild.getId());
+            model.addAttribute("guild_icon", guild.getIconUrl() == null ? "https://discordapp.com/assets/dd4dbc0016779df1378e7812eabaa04d.png" : guild.getIconUrl());
+            model.addAttribute("mutual_guilds", mutualGuilds);
+            model.addAttribute("isAdmin", SettingsUtils.getInstance().checkPermission(token, guildId));
+        } else {
             model.addAttribute("guild_name", "");
             model.addAttribute("guild_icon", "");
         }
