@@ -112,11 +112,11 @@ public class Init {
         List<UserEntity> users = (List<UserEntity>) userRepository.findAll();
         UserStatsUtils userStatsUtils = UserStatsUtils.getINSTANCE();
         logger.debug("Stats...");
-        for (UserEntity userEntity : users) {
-            logger.debug("..." + userEntity.getName());
-            userStatsUtils.getUserStats(userEntity);
-
-        }
+//        for (UserEntity userEntity : users) {
+//            logger.debug("..." + userEntity.getName());
+//            userStatsUtils.getUserStats(userEntity);
+//
+//        }
 
 
     }
