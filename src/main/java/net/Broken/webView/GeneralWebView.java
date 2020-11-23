@@ -168,7 +168,7 @@ public class GeneralWebView {
             model.addAttribute("stack", stack);
             try {
                 UserEntity userE = userUtils.getUserWithApiToken(userRepository, token);
-                User user = MainBot.jda.getUserById(userE.getJdaId());
+                User user = CacheTools.getJdaUser(userE);
                 addGuildAndRedirect(model, token, cookieGuildId, user);
             } catch (UnknownTokenException e) {
                 throw new ForbiddenException();
