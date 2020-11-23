@@ -6,6 +6,7 @@ import net.Broken.DB.Repository.UserRepository;
 import net.Broken.DB.Repository.UserStatsRepository;
 import net.Broken.MainBot;
 import net.Broken.SpringContext;
+import net.Broken.Tools.CacheTools;
 import net.Broken.Tools.EmbedMessageUtils;
 import net.Broken.Tools.UserManager.Exceptions.UnknownTokenException;
 import net.Broken.Tools.UserManager.UserUtils;
@@ -58,7 +59,7 @@ public class UserStatsUtils {
     }
 
     public List<UserStats> getUserStats(UserEntity userEntity) {
-        User jdaUser = MainBot.jda.getUserById(userEntity.getJdaId());
+        User jdaUser = CacheTools.getJdaUser(userEntity);
         //TODO clean database for deleted users
 
         if (jdaUser == null){
