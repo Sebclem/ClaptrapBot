@@ -8,35 +8,38 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.omg.CosNaming.NamingContextExtPackage.StringNameHelper;
 
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Locale;
 
 public class ChannelsReview implements Commande {
     Logger logger = LogManager.getLogger();
     @Override
     public void action(String[] args, MessageReceivedEvent event) {
-        StringBuilder messageToSend= new StringBuilder();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd LLLL yyyy");
+        HashMap<String, String> result = new HashMap<>();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy").withLocale(Locale.ENGLISH);
         for( TextChannel textChannel: event.getGuild().getTextChannels()){
             if(textChannel.hasLatestMessage()){
                 String lastMessageId = textChannel.getLatestMessageId();
                 logger.debug("Last message in chanel " + textChannel.toString() + " is " + lastMessageId );
                 try {
                     Message lastMessage = textChannel.retrieveMessageById(lastMessageId).complete();
-                    String date = lastMessage.getTimeCreated().toLocalDate().format(formatter);
-                    messageToSend.append("\nChannel : ").append(textChannel.getName()).append(" Date :").append(date);
+                    String date = lastMessage.getTimeCreated().format(formatter);
+                    result.put(textChannel.getName(), date);
                 }catch (RuntimeException e){
                     logger.warn("Can't find message with id: " + lastMessageId);
-                    messageToSend.append("\nChannel : ERROR");
+                    result.put(textChannel.getName(), "ERROR");
                 }
 
 
             }
             else{
-                messageToSend.append("\nChannel : ").append(textChannel.getName()).append(" was never used.");
+                result.put(textChannel.getName(), "No message or access denied.");
             }
         }
-        event.getTextChannel().sendMessage(EmbedMessageUtils.getLastMessageFromTextChannel(messageToSend.toString())).queue();
+        event.getTextChannel().sendMessage(EmbedMessageUtils.getLastMessageFromTextChannel(result)).queue();
     }
 
     @Override

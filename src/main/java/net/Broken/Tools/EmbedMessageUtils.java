@@ -13,6 +13,8 @@ import java.io.FileNotFoundException;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Pre build Message Embed
@@ -108,8 +110,12 @@ public class EmbedMessageUtils {
         return new EmbedBuilder().setTitle("Bot Command ("+role+")").setDescription(message).setFooter("Use '//help <command>' for more info",MainBot.jda.getSelfUser().getAvatarUrl()).setTimestamp(Instant.now()).setColor(Color.green).setThumbnail(MainBot.jda.getSelfUser().getAvatarUrl()).build();
     }
 
-    public static MessageEmbed getLastMessageFromTextChannel(String message) {
-        EmbedBuilder temp = new EmbedBuilder().setTitle("Channel uses checker").setDescription(message).setColor(Color.green);
+    public static MessageEmbed getLastMessageFromTextChannel(HashMap<String, String> message) {
+        EmbedBuilder temp = new EmbedBuilder().setTitle("Channel uses checker").setDescription("Last message date for channels:").setColor(Color.green);
+        for(Map.Entry<String, String> entry : message.entrySet()) {
+            temp.addField(entry.getKey(),entry.getValue(), false);
+        }
+
         return buildStandar(temp);
     }
 
