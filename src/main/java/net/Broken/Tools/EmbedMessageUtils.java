@@ -108,6 +108,11 @@ public class EmbedMessageUtils {
         return new EmbedBuilder().setTitle("Bot Command ("+role+")").setDescription(message).setFooter("Use '//help <command>' for more info",MainBot.jda.getSelfUser().getAvatarUrl()).setTimestamp(Instant.now()).setColor(Color.green).setThumbnail(MainBot.jda.getSelfUser().getAvatarUrl()).build();
     }
 
+    public static MessageEmbed getLastMessageFromTextChannel(String message) {
+        EmbedBuilder temp = new EmbedBuilder().setTitle("Channel uses checker").setDescription(message).setColor(Color.green);
+        return buildStandar(temp);
+    }
+
     public static MessageEmbed searchResult(SearchResult result){
         EmbedBuilder builder = new EmbedBuilder()
                 .setColor(Color.CYAN)
