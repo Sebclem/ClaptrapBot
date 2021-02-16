@@ -29,9 +29,11 @@ jobs:
         with:
           name: claptrap_jar
           path: build/libs/
+
   build-docker:
     runs-on: [ubuntu-latest]
     needs: [build-gradle]
+    if: github.ref == 'refs/heads/master'
     steps:
       - uses: actions/checkout@v2
       - name: Download artifact
