@@ -1,7 +1,7 @@
 package net.Broken.audio.Youtube;
 
 import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.model.*;
 import com.google.api.services.youtube.model.SearchResult;
@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 import static org.hibernate.engine.jdbc.Size.LobMultiplier.M;
@@ -34,7 +35,7 @@ public class YoutubeTools {
 
     private YouTube getYoutubeService() {
 
-        YouTube.Builder builder = new YouTube.Builder(new NetHttpTransport(), new JacksonFactory(), request -> {
+        YouTube.Builder builder = new YouTube.Builder(new NetHttpTransport(), new GsonFactory(), request -> {
         });
         builder.setApplicationName("BotDiscord");
         return builder.build();
@@ -48,19 +49,11 @@ public class YoutubeTools {
         YouTube youtube = getYoutubeService();
 
 
-        HashMap<String, String> parameters = new HashMap<>();
-        parameters.put("part", "snippet");
-        parameters.put("relatedToVideoId", videoId);
-        parameters.put("type", "video");
 
-        YouTube.Search.List searchListRelatedVideosRequest = youtube.search().list(parameters.get("part"));
-        if (parameters.containsKey("relatedToVideoId") && parameters.get("relatedToVideoId") != "") {
-            searchListRelatedVideosRequest.setRelatedToVideoId(parameters.get("relatedToVideoId"));
-        }
 
-        if (parameters.containsKey("type") && !parameters.get("type").equals("")) {
-            searchListRelatedVideosRequest.setType(parameters.get("type"));
-        }
+        YouTube.Search.List searchListRelatedVideosRequest = youtube.search().list(Collections.singletonList("snippet"));
+        searchListRelatedVideosRequest.setRelatedToVideoId(videoId);
+        searchListRelatedVideosRequest.setType(Collections.singletonList("video"));
 
         searchListRelatedVideosRequest.setKey(apiKey);
 
@@ -68,7 +61,8 @@ public class YoutubeTools {
 
         for (SearchResult item : response.getItems()) {
             if (!history.contains(item.getId().getVideoId())) {
-                return item.getId().getVideoId();
+                if(item.getSnippet() != null)
+                    return item.getId().getVideoId();
             } else
                 logger.debug("ID already on history");
         }
@@ -81,11 +75,11 @@ public class YoutubeTools {
 
     public ArrayList<net.Broken.audio.Youtube.SearchResult> search(String query, long max, boolean playlist) throws IOException {
         YouTube youTube = getYoutubeService();
-        YouTube.Search.List searchList = youTube.search().list("snippet");
+        YouTube.Search.List searchList = youTube.search().list(Collections.singletonList("snippet"));
         if(playlist)
-            searchList.setType("playlist");
+            searchList.setType(Collections.singletonList("playlist"));
         else
-            searchList.setType("video");
+            searchList.setType(Collections.singletonList("video"));
         searchList.setSafeSearch("none");
         searchList.setMaxResults(max);
         searchList.setQ(query);
@@ -102,8 +96,8 @@ public class YoutubeTools {
                 idString.append(item.getId().getPlaylistId()).append(",");
             }
             HashMap<String, Playlist> playlistHashMap = new HashMap<>();
-            YouTube.Playlists.List list = youTube.playlists().list("contentDetails");
-            list.setId(idString.toString());
+            YouTube.Playlists.List list = youTube.playlists().list(Collections.singletonList("contentDetails"));
+            list.setId(Collections.singletonList(idString.toString()));
             list.setKey(apiKey);
             PlaylistListResponse playlistResponse = list.execute();
             for( Playlist item : playlistResponse.getItems()){
@@ -122,8 +116,8 @@ public class YoutubeTools {
                 idString.append(item.getId().getVideoId()).append(",");
             }
             HashMap<String, Video> videoHashMap = new HashMap<>();
-            YouTube.Videos.List video = youTube.videos().list("contentDetails");
-            video.setId(idString.toString());
+            YouTube.Videos.List video = youTube.videos().list(Collections.singletonList("contentDetails"));
+            video.setId(Collections.singletonList(idString.toString()));
             video.setKey(apiKey);
             VideoListResponse videoResponse = video.execute();
             for(Video item : videoResponse.getItems()){

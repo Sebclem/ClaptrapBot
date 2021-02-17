@@ -130,7 +130,7 @@ public class YoutubeSearchRework {
     }
 
     private String extractRelatedVideoId(Document doc) throws RelatedIdNotFound {
-        Elements elements = doc.select(".autoplay-bar .content-link");
+        Elements elements = doc.select(".ytd-compact-autoplay-renderer .yt-simple-endpoint");
         if (elements.size() == 0) {
             throw new RelatedIdNotFound();
         }
