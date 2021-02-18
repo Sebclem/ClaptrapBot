@@ -64,5 +64,5 @@ jobs:
         with:
           push: true
           context: .
-          tags: ghcr.io/sebclem/claptrapbot:latest, ghcr.io/sebclem/claptrapbot:${{ env.GITHUB_RUN_ID}}
+          tags: ghcr.io/sebclem/claptrapbot:latest
           file: ./Dockerfile
