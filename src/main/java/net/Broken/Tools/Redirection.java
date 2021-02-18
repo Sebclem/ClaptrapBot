@@ -12,8 +12,6 @@ import java.net.URLConnection;
 public class Redirection {
 
     public Redirection(){
-
-
     }
 
     /**

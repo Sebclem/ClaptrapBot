@@ -10,7 +10,7 @@ import java.util.List;
 @Entity
 public class GuildPreferenceEntity {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
     private String guildId;
@@ -32,9 +32,23 @@ public class GuildPreferenceEntity {
     @ElementCollection
     private List<String> visibleVoiceChanel;
 
+    private boolean autoVoice;
+    private String autoVoiceChannelID;
+    private String autoVoiceChannelTitle;
 
 
-    public GuildPreferenceEntity(String guildId, boolean antiSpam, boolean welcome, String welcomeMessage, String welcomeChanelID, boolean defaultRole, String defaultRoleId, boolean dailyMadame, ArrayList<String> visibleVoiceChanel) {
+    public GuildPreferenceEntity(String guildId,
+                                 boolean antiSpam,
+                                 boolean welcome,
+                                 String welcomeMessage,
+                                 String welcomeChanelID,
+                                 boolean defaultRole,
+                                 String defaultRoleId,
+                                 boolean dailyMadame,
+                                 ArrayList<String> visibleVoiceChanel,
+                                 boolean autoVoice,
+                                 String autoVoiceChannelID,
+                                 String autoVoiceChannelTitle) {
         this.guildId = guildId;
         this.antiSpam = antiSpam;
         this.welcome = welcome;
@@ -44,18 +58,22 @@ public class GuildPreferenceEntity {
         this.defaultRoleId = defaultRoleId;
         this.dailyMadame = dailyMadame;
         this.visibleVoiceChanel = visibleVoiceChanel;
+        this.autoVoice = autoVoice;
+        this.autoVoiceChannelID = autoVoiceChannelID;
+        this.autoVoiceChannelTitle = autoVoiceChannelTitle;
     }
 
-    public GuildPreferenceEntity(){}
+    public GuildPreferenceEntity() {
+    }
 
 
-    public static GuildPreferenceEntity getDefault(Guild guild){
+    public static GuildPreferenceEntity getDefault(Guild guild) {
         ArrayList<String> voice = new ArrayList<>();
-        for(VoiceChannel voiceChannel : guild.getVoiceChannels()){
+        for (VoiceChannel voiceChannel : guild.getVoiceChannels()) {
             voice.add(voiceChannel.getId());
         }
 
-        return new GuildPreferenceEntity(guild.getId(), false, false, "Welcome to this awesome server @name! ", " ", false, " ", true, voice);
+        return new GuildPreferenceEntity(guild.getId(), false, false, "Welcome to this awesome server @name! ", " ", false, " ", true, voice, false, " ", " ");
     }
 
     public Integer getId() {
@@ -136,5 +154,29 @@ public class GuildPreferenceEntity {
 
     public void setVisibleVoiceChanel(List<String> visibleVoiceChanel) {
         this.visibleVoiceChanel = visibleVoiceChanel;
+    }
+
+    public boolean isAutoVoice() {
+        return autoVoice;
+    }
+
+    public void setAutoVoice(boolean autoVoice) {
+        this.autoVoice = autoVoice;
+    }
+
+    public String getAutoVoiceChannelID() {
+        return autoVoiceChannelID;
+    }
+
+    public void setAutoVoiceChannelID(String autoVoiceChannelID) {
+        this.autoVoiceChannelID = autoVoiceChannelID;
+    }
+
+    public String getAutoVoiceChannelTitle() {
+        return autoVoiceChannelTitle;
+    }
+
+    public void setAutoVoiceChannelTitle(String autoVoiceChannelTitle) {
+        this.autoVoiceChannelTitle = autoVoiceChannelTitle;
     }
 }

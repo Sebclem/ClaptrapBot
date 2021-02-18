@@ -5,11 +5,8 @@ import net.Broken.DB.Entity.GuildPreferenceEntity;
 import net.Broken.DB.Entity.UserEntity;
 import net.Broken.DB.Repository.GuildPreferenceRepository;
 import net.Broken.DB.Repository.UserRepository;
-import net.Broken.Tools.AntiSpam;
+import net.Broken.Tools.*;
 import net.Broken.Tools.Command.CommandParser;
-import net.Broken.Tools.EmbedMessageUtils;
-import net.Broken.Tools.Moderateur;
-import net.Broken.Tools.PrivateMessage;
 import net.Broken.Tools.UserManager.Stats.UserStatsUtils;
 import net.Broken.audio.AudioM;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -132,6 +129,8 @@ public class BotListener extends ListenerAdapter {
                 userStatsUtils.runningCounters.put(event.getMember().getId(), temp);
 
             }
+            AutoVoiceChannel autoVoiceChannel = AutoVoiceChannel.getInstance(event.getGuild());
+            autoVoiceChannel.join(event.getChannelJoined());
         }
     }
 
@@ -143,10 +142,11 @@ public class BotListener extends ListenerAdapter {
 
             if (event.getGuild().getAudioManager().getConnectedChannel().getMembers().size() == 1) {
                 logger.debug("I'm alone, close audio connection.");
-
                 AudioM.getInstance(event.getGuild()).stop();
             }
         }
+        AutoVoiceChannel autoVoiceChannel = AutoVoiceChannel.getInstance(event.getGuild());
+        autoVoiceChannel.leave(event.getChannelLeft());
     }
 
     @Override

@@ -31,7 +31,7 @@ public class GetVoiceChanels {
         List<String> chanels = pref.getVisibleVoiceChanel();
 
         if(chanels == null || chanels.size() == 0){
-            pref = settingsUtils.setDefaultVoiceChanels(guild, pref);
+            pref = settingsUtils.setDefaultVoiceChannels(guild, pref);
             chanels = pref.getVisibleVoiceChanel();
         }
 
@@ -46,7 +46,7 @@ public class GetVoiceChanels {
 
         if(needClean){
             logger.debug("Need Clean.");
-            settingsUtils.cleanVoicePref(guild, pref);
+            settingsUtils.cleanVisibleVoicePref(guild, pref);
 
         }
 
