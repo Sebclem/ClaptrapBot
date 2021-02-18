@@ -69,6 +69,7 @@
                                     <span class="lever"></span>
                                     On
                                 </label>
+                                <div th:text="${setting.description}"></div>
                             </div>
 
                             <div th:id="${setting.id}" class="input-field col l12 m12 s12 collect-select"
@@ -81,6 +82,7 @@
                                             th:selected="${setting.current} == ${val.id}"></option>
 
                                 </select>
+                                <div th:text="${setting.description}"></div>
                             </div>
 
                             <div th:id="${setting.id}" class="input-field col l12 m12 s12 collect-select-multiple"
@@ -93,6 +95,7 @@
                                             th:selected="${val.selected} == true"></option>
 
                                 </select>
+                                <div th:text="${setting.description}"></div>
                             </div>
 
 
@@ -100,6 +103,7 @@
                             <div class="input-field col l12 m12 s12 collect" th:if="${setting.type.toString() == 'STRING'}">
                                 <input th:id="${setting.id}" placeholder="Use @name variable" th:value="${setting.current}"
                                        id="first_name" type="text" class="validate collect-text"/>
+                                <div th:text="${setting.description}"></div>
                             </div>
 
                         </div>
