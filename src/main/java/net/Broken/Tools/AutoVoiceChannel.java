@@ -57,6 +57,7 @@ public class AutoVoiceChannel {
                 if (entry.getValue().equals(id)) {
                     logger.info("Auto created channel is empty, deleting it ...");
                     voiceChannel.delete().reason("Auto-remove empty voice channel").queue();
+                    createdChannels.remove(entry.getKey());
                 }
             }
         }

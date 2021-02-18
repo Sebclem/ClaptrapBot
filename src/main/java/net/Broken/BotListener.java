@@ -156,6 +156,7 @@ public class BotListener extends ListenerAdapter {
         super.onGuildVoiceMove(event);
         AutoVoiceChannel autoVoiceChannel = AutoVoiceChannel.getInstance(event.getGuild());
         autoVoiceChannel.leave(event.getChannelLeft());
+        autoVoiceChannel.join(event.getChannelJoined());
     }
 
     @Override
