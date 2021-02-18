@@ -9,3 +9,4 @@ RUN java -version
 ENV PORT=8080
 ENV TOKEN=10
 CMD java -jar bot.jar -t ${TOKEN}
+LABEL org.opencontainers.image.source=https://github.com/Sebclem/ClaptrapBot/
