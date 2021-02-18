@@ -36,13 +36,14 @@ public class AutoVoiceChannel {
         if (guild == null)
             return;
         GuildPreferenceEntity pref = SettingsUtils.getInstance().getPreference(guild);
-        if ( pref.isAutoVoice() && voiceChannel.getId().equals(pref.getAutoVoiceChannelID())) {
+        if (pref.isAutoVoice() && voiceChannel.getId().equals(pref.getAutoVoiceChannelID())) {
             logger.info("Creating new voice channel for Guild : " + guild.getName());
             VoiceChannel newChannel = voiceChannel.createCopy().complete();
             int next = getNextNumber();
             String title = pref.getAutoVoiceChannelTitle();
             title = title.replace("@count", Integer.toString(next));
-            newChannel.getManager().setName(title).queue();
+            newChannel.getManager().setName(title).setPosition(voiceChannel.getPosition()).queue();
+
             createdChannels.put(next, newChannel.getId());
             moveMembers(voiceChannel.getMembers(), newChannel);
         }
@@ -50,10 +51,10 @@ public class AutoVoiceChannel {
     }
 
     public void leave(VoiceChannel voiceChannel) {
-        if (voiceChannel.getMembers().isEmpty()){
+        if (voiceChannel.getMembers().isEmpty()) {
             String id = voiceChannel.getId();
-            for(Map.Entry<Integer, String> entry : createdChannels.entrySet()) {
-                if (entry.getValue().equals(id)){
+            for (Map.Entry<Integer, String> entry : createdChannels.entrySet()) {
+                if (entry.getValue().equals(id)) {
                     logger.info("Auto created channel is empty, deleting it ...");
                     voiceChannel.delete().reason("Auto-remove empty voice channel").queue();
                 }
@@ -71,15 +72,15 @@ public class AutoVoiceChannel {
         return 999;
     }
 
-    private void moveMembers(List<Member> members, VoiceChannel destination){
+    private void moveMembers(List<Member> members, VoiceChannel destination) {
         logger.debug("Moving Members to new voice channel...");
         RestAction<Void> restAction = null;
-        for(Member member : members){
+        for (Member member : members) {
             if (restAction == null)
                 restAction = destination.getGuild().moveVoiceMember(member, destination);
             restAction = restAction.and(destination.getGuild().moveVoiceMember(member, destination));
         }
-        if(restAction != null){
+        if (restAction != null) {
             restAction.queue();
         }
     }

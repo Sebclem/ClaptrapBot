@@ -17,12 +17,14 @@ import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRoleRemoveEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
+import net.dv8tion.jda.api.events.guild.voice.GuildVoiceMoveEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.managers.GuildManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ApplicationContext;
 
 import java.awt.*;
@@ -150,6 +152,13 @@ public class BotListener extends ListenerAdapter {
     }
 
     @Override
+    public void onGuildVoiceMove(@NotNull GuildVoiceMoveEvent event) {
+        super.onGuildVoiceMove(event);
+        AutoVoiceChannel autoVoiceChannel = AutoVoiceChannel.getInstance(event.getGuild());
+        autoVoiceChannel.leave(event.getChannelLeft());
+    }
+
+    @Override
     public void onMessageReceived(MessageReceivedEvent event) {
 
         if (!event.getAuthor().isBot()) {
@@ -205,6 +214,7 @@ public class BotListener extends ListenerAdapter {
 
 
     }
+
 
     @Override
     public void onGuildJoin(GuildJoinEvent event) {
