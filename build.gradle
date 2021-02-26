@@ -51,7 +51,7 @@ dependencies {
 
 
     compile("com.sedmelluq:lavaplayer:1.3.71")
-    compile 'net.dv8tion:JDA:4.2.0_228'
+    compile 'net.dv8tion:JDA:4.2.0_229'
     compile group: 'org.json', name: 'json', version: '20201115'
     compile 'org.springframework.security:spring-security-web:5.4.4'
 //     JPA Data (We are going to use Repositories, Entities, Hibernate, etc...)
