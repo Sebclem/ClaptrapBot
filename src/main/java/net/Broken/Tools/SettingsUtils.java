@@ -58,19 +58,6 @@ public class SettingsUtils {
         } else
             guildPref = guildPrefList.get(0);
 
-        List<String> visibleVoice = new ArrayList<>(guildPref.getVisibleVoiceChanel());
-        if (visibleVoice.size() == 0) {
-            guildPref = setDefaultVoiceChannels(guild, guildPref);
-        }
-        list.add(new GetSettingsData(
-                "Visible Voices Channels",
-                null,
-                "voices_channels",
-                GetSettingsData.TYPE.SELECT_LIST,
-                getVoiceChannels(guild, visibleVoice),
-                null
-        ));
-
         list.add(new GetSettingsData(
                 "Enable Welcome Message",
                 null,
@@ -197,15 +184,6 @@ public class SettingsUtils {
             String value = setting.val;
             logger.debug(setting.id + " : " + value);
             switch (setting.id) {
-                case "voices_channels":
-                    List<String> list = checkVoiceChanel(guild, setting.vals);
-                    if (list == null) {
-                        logger.error("voices_channels error, bad ID.");
-                        return false;
-                    } else
-                        pref.setVisibleVoiceChanel(list);
-                    break;
-
                 case "anti_spam":
                     boolean result_as = Boolean.parseBoolean(value);
                     pref.setAntiSpam(result_as);
@@ -321,29 +299,6 @@ public class SettingsUtils {
             }
         }
         return list;
-    }
-
-    public GuildPreferenceEntity cleanVisibleVoicePref(Guild guild, GuildPreferenceEntity guildPref) {
-        List<String> voice = guildPref.getVisibleVoiceChanel();
-        for (String prefVoice : guildPref.getVisibleVoiceChanel()) {
-            if (guild.getVoiceChannelById(prefVoice) == null)
-                voice.remove(prefVoice);
-        }
-        guildPref.setVisibleVoiceChanel(voice);
-        return guildPreferenceRepository.save(guildPref);
-    }
-
-
-    public GuildPreferenceEntity setDefaultVoiceChannels(Guild guild, GuildPreferenceEntity guildPref) {
-        List<String> prefVoice = guildPref.getVisibleVoiceChanel();
-        if (prefVoice == null)
-            prefVoice = new ArrayList<>();
-        for (VoiceChannel voiceChannel : guild.getVoiceChannels()) {
-            prefVoice.add(voiceChannel.getId());
-        }
-        guildPref.setVisibleVoiceChanel(prefVoice);
-        return guildPreferenceRepository.save(guildPref);
-
     }
 
     public GuildPreferenceEntity getPreference(Guild guild) {
