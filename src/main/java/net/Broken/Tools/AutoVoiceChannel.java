@@ -41,6 +41,9 @@ public class AutoVoiceChannel {
             VoiceChannel newChannel = voiceChannel.createCopy().complete();
             int next = getNextNumber();
             String title = pref.getAutoVoiceChannelTitle();
+            if (title.isEmpty()){
+                title = "Voice @count";
+            }
             title = title.replace("@count", Integer.toString(next));
             newChannel.getManager().setName(title).setPosition(voiceChannel.getPosition()).queue();
 
