@@ -29,9 +29,6 @@ public class GuildPreferenceEntity {
 
     private boolean dailyMadame;
 
-    @ElementCollection
-    private List<String> visibleVoiceChanel;
-
     private boolean autoVoice;
     private String autoVoiceChannelID;
     private String autoVoiceChannelTitle;
@@ -45,7 +42,6 @@ public class GuildPreferenceEntity {
                                  boolean defaultRole,
                                  String defaultRoleId,
                                  boolean dailyMadame,
-                                 ArrayList<String> visibleVoiceChanel,
                                  boolean autoVoice,
                                  String autoVoiceChannelID,
                                  String autoVoiceChannelTitle) {
@@ -57,7 +53,6 @@ public class GuildPreferenceEntity {
         this.defaultRole = defaultRole;
         this.defaultRoleId = defaultRoleId;
         this.dailyMadame = dailyMadame;
-        this.visibleVoiceChanel = visibleVoiceChanel;
         this.autoVoice = autoVoice;
         this.autoVoiceChannelID = autoVoiceChannelID;
         this.autoVoiceChannelTitle = autoVoiceChannelTitle;
@@ -68,12 +63,8 @@ public class GuildPreferenceEntity {
 
 
     public static GuildPreferenceEntity getDefault(Guild guild) {
-        ArrayList<String> voice = new ArrayList<>();
-        for (VoiceChannel voiceChannel : guild.getVoiceChannels()) {
-            voice.add(voiceChannel.getId());
-        }
 
-        return new GuildPreferenceEntity(guild.getId(), false, false, "Welcome to this awesome server @name! ", " ", false, " ", true, voice, false, " ", " ");
+        return new GuildPreferenceEntity(guild.getId(), false, false, "Welcome to this awesome server @name! ", " ", false, " ", true, false, " ", " ");
     }
 
     public Integer getId() {
@@ -146,14 +137,6 @@ public class GuildPreferenceEntity {
 
     public void setDailyMadame(boolean dailyMadame) {
         this.dailyMadame = dailyMadame;
-    }
-
-    public List<String> getVisibleVoiceChanel() {
-        return visibleVoiceChanel;
-    }
-
-    public void setVisibleVoiceChanel(List<String> visibleVoiceChanel) {
-        this.visibleVoiceChanel = visibleVoiceChanel;
     }
 
     public boolean isAutoVoice() {
