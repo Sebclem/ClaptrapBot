@@ -33,22 +33,11 @@ public class UserStatsUtils {
 
 
     private static UserStatsUtils INSTANCE = new UserStatsUtils();
-
-    public static UserStatsUtils getINSTANCE() {
-        if (INSTANCE == null)
-            INSTANCE = new UserStatsUtils();
-        return INSTANCE;
-    }
-
-
+    private final UserStatsRepository userStatsRepository;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final Logger logger = LogManager.getLogger();
     public HashMap<String, VoicePresenceCounter> runningCounters = new HashMap<>();
-
-    private UserStatsRepository userStatsRepository;
-    private UserRepository userRepository;
-    private PasswordEncoder passwordEncoder;
-
-    private Logger logger = LogManager.getLogger();
-
 
     private UserStatsUtils() {
         ApplicationContext context = SpringContext.getAppContext();
@@ -58,11 +47,17 @@ public class UserStatsUtils {
 
     }
 
+    public static UserStatsUtils getINSTANCE() {
+        if (INSTANCE == null)
+            INSTANCE = new UserStatsUtils();
+        return INSTANCE;
+    }
+
     public List<UserStats> getUserStats(UserEntity userEntity) {
         User jdaUser = CacheTools.getJdaUser(userEntity);
         //TODO clean database for deleted users
 
-        if (jdaUser == null){
+        if (jdaUser == null) {
             logger.warn("jdaUser is null, can't find discord user ????");
             return null;
         }
@@ -193,18 +188,37 @@ public class UserStatsUtils {
 
         List<UserStats> allStats = userStatsRepository.findByGuildId(guildId);
         List<GuildStats> ranked = new ArrayList<>();
+        List<UserStats> needCache = new ArrayList<>();
+        Guild guild = MainBot.jda.getGuildById(guildId);
         for (UserStats stats : allStats) {
-            if (CacheTools.getJdaUser(stats.getUser()) != null) {
-                String avatar = CacheTools.getJdaUser(stats.getUser()).getEffectiveAvatarUrl();
-
+            Member member = guild.getMemberById(stats.getUser().getJdaId());
+            if (member == null) {
+                needCache.add(stats);
+                continue;
+            }
+            String avatar = member.getUser().getAvatarUrl();
+            GuildStats temp = new GuildStats(stats.getUser().getName(), 0, avatar, stats.getVocalTime(), stats.getMessageCount(), stats.getApiCommandCount());
+            if (stats.getUser().getId().equals(userEntity.getId())) {
+                selfGuildStats = temp;
+            }
+            ranked.add(temp);
+        }
+        if (needCache.size() != 0) {
+            logger.info("Cache mismatch, loading all guild");
+            MainBot.jda.getGuildById(guildId).loadMembers().get();
+            for (UserStats stats : needCache) {
+                Member member = guild.getMemberById(stats.getUser().getJdaId());
+                if (member == null) {
+                    logger.warn("Can't find member '" + stats.getUser().getName() + "'after load, User leave the guild ?");
+                    continue;
+                }
+                String avatar = member.getUser().getAvatarUrl();
                 GuildStats temp = new GuildStats(stats.getUser().getName(), 0, avatar, stats.getVocalTime(), stats.getMessageCount(), stats.getApiCommandCount());
                 if (stats.getUser().getId().equals(userEntity.getId())) {
                     selfGuildStats = temp;
                 }
                 ranked.add(temp);
             }
-
-
         }
         ranked.sort((guildStats, t1) -> (int) (t1.total - guildStats.total));
 
@@ -261,7 +275,7 @@ public class UserStatsUtils {
     }
 
     public static class VoicePresenceCounter extends Thread {
-        private Member member;
+        private final Member member;
 
         public VoicePresenceCounter(Member member) {
             this.member = member;
