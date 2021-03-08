@@ -50,7 +50,7 @@ dependencies {
 
 
 
-    compile("com.sedmelluq:lavaplayer:1.3.72")
+    compile("com.sedmelluq:lavaplayer:1.3.73")
     compile 'net.dv8tion:JDA:4.2.0_231'
     compile group: 'org.json', name: 'json', version: '20201115'
     compile 'org.springframework.security:spring-security-web:5.4.5'
