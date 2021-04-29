@@ -30,6 +30,9 @@ jar {
 repositories {
     mavenCentral()
     jcenter()
+    maven {
+        url 'https://m2.dv8tion.net/releases'
+    }
 }
 
 javadoc {
@@ -50,7 +53,7 @@ dependencies {
 
 
 
-    compile("com.sedmelluq:lavaplayer:1.3.73")
+    implementation 'com.sedmelluq:lavaplayer:1.3.76'
     compile 'net.dv8tion:JDA:4.2.0_247'
     compile group: 'org.json', name: 'json', version: '20210307'
     compile 'org.springframework.security:spring-security-web:5.4.5'
