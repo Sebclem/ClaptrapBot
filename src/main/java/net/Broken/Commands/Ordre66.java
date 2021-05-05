@@ -23,7 +23,7 @@ public class Ordre66 implements Commande {
 
     @Override
     public boolean isAdminCmd() {
-        return false;
+        return true;
     }
 
     /**

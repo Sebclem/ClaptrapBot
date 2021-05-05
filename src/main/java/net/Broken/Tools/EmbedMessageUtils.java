@@ -119,6 +119,10 @@ public class EmbedMessageUtils {
         return buildStandar(temp);
     }
 
+    public static MessageEmbed getReportUsersError(){
+        return new EmbedBuilder().setTitle(":warning: Command error :warning: ").setDescription("").setColor(Color.red).setFooter("'//help move' for more info.", MainBot.jda.getSelfUser().getAvatarUrl()).setTimestamp(Instant.now()).build();
+    }
+
     public static MessageEmbed searchResult(SearchResult result){
         EmbedBuilder builder = new EmbedBuilder()
                 .setColor(Color.CYAN)
