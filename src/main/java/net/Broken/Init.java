@@ -4,6 +4,7 @@ import net.Broken.DB.Entity.UserEntity;
 import net.Broken.DB.Repository.UserRepository;
 import net.Broken.RestApi.ApiCommandLoader;
 import net.Broken.Tools.Command.CommandLoader;
+import net.Broken.Tools.Command.SlashCommandLoader;
 import net.Broken.Tools.DayListener.DayListener;
 import net.Broken.Tools.DayListener.Listeners.DailyMadame;
 import net.Broken.Tools.DayListener.Listeners.ResetSpam;
@@ -60,12 +61,6 @@ public class Init {
                  *************************************/
                 jda.getPresence().setPresence(OnlineStatus.DO_NOT_DISTURB, Activity.playing("Loading..."));
 
-                jda.getTextChannels().forEach(textChannel -> {
-                    if (textChannel.canTalk())
-                        textChannel.sendTyping().queue();
-
-                });
-
 
                 //On recupere le l'id serveur
 
@@ -91,6 +86,8 @@ public class Init {
         logger.info("Check database...");
         checkDatabase();
         CommandLoader.load();
+        SlashCommandLoader.load();
+        SlashCommandLoader.registerSlashCommands(jda.updateCommands());
         ApiCommandLoader.load();
         DayListener dayListener = DayListener.getInstance();
         dayListener.addListener(new ResetSpam());

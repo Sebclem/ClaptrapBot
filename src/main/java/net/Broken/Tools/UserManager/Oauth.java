@@ -1,6 +1,5 @@
 package net.Broken.Tools.UserManager;
 
-import jdk.nashorn.internal.parser.JSONParser;
 import net.Broken.DB.Entity.UserEntity;
 import net.Broken.DB.Repository.UserRepository;
 import net.Broken.MainBot;

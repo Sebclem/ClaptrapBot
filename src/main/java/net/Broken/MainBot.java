@@ -30,6 +30,7 @@ import java.util.HashMap;
 public class MainBot {
 
     public static HashMap<String, Commande> commandes = new HashMap<>();
+    public static HashMap<String, SlashCommand> slashCommands = new HashMap<>();
     public static HashMap<Member, ArrayList<Message>> historique =new HashMap<>();
     public static HashMap<Member, Integer> message_compteur =new HashMap<>();
     public static HashMap<String, Integer> mutualGuildCount =new HashMap<>();
@@ -89,14 +90,11 @@ public class MainBot {
     public static void handleCommand(CommandParser.CommandContainer cmd, UserEntity user)
     {
 
-        if(!ready)
-        {
-
+        if(!ready){
             return;
         }
 
-        if (commandes.containsKey(cmd.commande))
-        {
+        if (commandes.containsKey(cmd.commande)){
             Commande cmdObj = commandes.get(cmd.commande);
             boolean isAdmin;
             boolean isBotAdmin = user != null && user.isBotAdmin();

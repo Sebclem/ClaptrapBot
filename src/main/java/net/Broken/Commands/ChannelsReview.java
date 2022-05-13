@@ -8,7 +8,6 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.omg.CosNaming.NamingContextExtPackage.StringNameHelper;
 
 import java.text.DateFormat;
 import java.text.ParseException;

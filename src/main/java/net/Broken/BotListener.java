@@ -18,6 +18,7 @@ import net.dv8tion.jda.api.events.guild.member.GuildMemberRoleRemoveEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceMoveEvent;
+import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -29,6 +30,7 @@ import org.springframework.context.ApplicationContext;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -216,6 +218,14 @@ public class BotListener extends ListenerAdapter {
 
     }
 
+    @Override
+    public void onSlashCommand(@NotNull SlashCommandEvent event) {
+        HashMap<String, SlashCommand> commands = MainBot.slashCommands;
+        super.onSlashCommand(event);
+        if(commands.containsKey(event.getName())){
+            commands.get(event.getName()).action(event);
+        }
+    }
 
     @Override
     public void onGuildJoin(GuildJoinEvent event) {
