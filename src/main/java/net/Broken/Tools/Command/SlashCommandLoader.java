@@ -63,7 +63,13 @@ public class SlashCommandLoader {
 
     public static void registerSlashCommands(CommandListUpdateAction commandListUpdateAction){
         MainBot.slashCommands.forEach((k,v)->{
-            commandListUpdateAction.addCommands(new CommandData(k, v.getDescription()).addOptions(v.getOptions()));
+            CommandData command = new CommandData(k, v.getDescription());
+            if(v.getOptions() != null)
+                command.addOptions(v.getOptions());
+            if(v.getSubcommands() != null){
+                command.addSubcommands(v.getSubcommands());
+            }
+            commandListUpdateAction.addCommands(command);
         });
         commandListUpdateAction.queue();
     }

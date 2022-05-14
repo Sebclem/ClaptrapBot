@@ -11,6 +11,7 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
+import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
@@ -61,6 +62,11 @@ public class Cat implements SlashCommand {
     @Override
     public List<OptionData> getOptions() {
         return new ArrayList<>();
+    }
+
+    @Override
+    public List<SubcommandData> getSubcommands() {
+        return null;
     }
 
 

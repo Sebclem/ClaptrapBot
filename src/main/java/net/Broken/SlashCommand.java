@@ -2,6 +2,7 @@ package net.Broken;
 
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
+import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 
 import java.util.List;
 
@@ -19,6 +20,8 @@ public interface SlashCommand {
     String getDescription();
 
     List<OptionData> getOptions();
+
+    List<SubcommandData> getSubcommands();
 
     /**
      * Determines if the command is usable only by bot level admin user

@@ -1,7 +1,5 @@
 package net.Broken.RestApi.Commands;
 
-import net.Broken.Commands.Music;
-import net.Broken.MainBot;
 import net.Broken.RestApi.CommandInterface;
 import net.Broken.RestApi.Data.CommandPostData;
 import net.Broken.RestApi.Data.CommandResponseData;
