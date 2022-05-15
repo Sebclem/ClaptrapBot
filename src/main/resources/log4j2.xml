@@ -1,16 +1,21 @@
-
 <Configuration status="error" packages="com.coralogix.sdk.appenders">
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
             <!--<PatternLayout pattern="[%d{HH:mm:ss.SSS}][%-5level][%-30.30c{1.}]: %msg%n" />-->
             <PatternLayout>
-                <Pattern>[%d{HH:mm:ss.SSS}]%highlight{[%-5level]}{FATAL=red blink, ERROR=red, WARN=bright yellow , INFO=blue, DEBUG=bright black, TRACE=cyan}[%-30.30c{1.}]: %highlight{%msg%n}{FATAL=red blink, ERROR=red, WARN=bright yellow , INFO=blue, DEBUG=bright black, TRACE=cyan}</Pattern>
+                <Pattern>[%d{HH:mm:ss.SSS}]%highlight{[%-5level]}{FATAL=red blink, ERROR=red, WARN=bright yellow ,
+                    INFO=blue, DEBUG=bright black, TRACE=cyan}[%-30.30c{1.}]: %highlight{%msg%n}{FATAL=red blink,
+                    ERROR=red, WARN=bright yellow , INFO=blue, DEBUG=bright black, TRACE=cyan}
+                </Pattern>
             </PatternLayout>
         </Console>
         <RollingFile name="RollingFile" fileName="./logs/current-day.log"
                      filePattern="./logs/$${date:yyyy-MM}/discordBot-%d{yyyy-MM-dd}-%i.log.gz">
             <PatternLayout>
-                <Pattern>[%d{HH:mm:ss.SSS}]%highlight{[%-5level]}{FATAL=red blink, ERROR=red, WARN=bright yellow , INFO=blue, DEBUG=bright black, TRACE=cyan}[%-30.30c{1.}]: %highlight{%msg%n}{FATAL=red blink, ERROR=red, WARN=bright yellow , INFO=blue, DEBUG=bright black, TRACE=cyan}</Pattern>
+                <Pattern>[%d{HH:mm:ss.SSS}]%highlight{[%-5level]}{FATAL=red blink, ERROR=red, WARN=bright yellow ,
+                    INFO=blue, DEBUG=bright black, TRACE=cyan}[%-30.30c{1.}]: %highlight{%msg%n}{FATAL=red blink,
+                    ERROR=red, WARN=bright yellow , INFO=blue, DEBUG=bright black, TRACE=cyan}
+                </Pattern>
             </PatternLayout>
             <Policies>
                 <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
@@ -20,7 +25,10 @@
         </RollingFile>
         <File name="current" fileName="logs/current.log" append="false">
             <PatternLayout>
-                <Pattern>[%d{HH:mm:ss.SSS}]%highlight{[%-5level]}{FATAL=red blink, ERROR=red, WARN=bright yellow , INFO=blue, DEBUG=bright black, TRACE=cyan}[%-30.30c{1.}]: %highlight{%msg%n}{FATAL=red blink, ERROR=red, WARN=bright yellow , INFO=blue, DEBUG=bright black, TRACE=cyan}</Pattern>
+                <Pattern>[%d{HH:mm:ss.SSS}]%highlight{[%-5level]}{FATAL=red blink, ERROR=red, WARN=bright yellow ,
+                    INFO=blue, DEBUG=bright black, TRACE=cyan}[%-30.30c{1.}]: %highlight{%msg%n}{FATAL=red blink,
+                    ERROR=red, WARN=bright yellow , INFO=blue, DEBUG=bright black, TRACE=cyan}
+                </Pattern>
             </PatternLayout>
         </File>
     </Appenders>

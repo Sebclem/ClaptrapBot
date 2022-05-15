@@ -11,52 +11,65 @@
 <!--                           AND                            -->
 <!--                          LOGIN                           -->
 <!--__________________________________________________________-->
-<link href="../static/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+<link href="../static/css/materialize.css" media="screen,projection" rel="stylesheet" type="text/css"/>
 
 <div th:fragment="header (page, guild_name, isAdmin)">
-    <nav class="brown darken-4 z-depth-3" role="navigation" >
-    <div class="nav-wrapper container">
-        <a href="/" class="brand-logo hide-on-small-and-down" style="white-space: nowrap">Claptrap Bot</a>
-        <a href="/" class="brand-logo hide-on-med-and-up show-on-small" style="white-space: nowrap">Claptrap</a>
-        <ul class="right hide-on-med-and-down">
-            <li>
+    <nav class="brown darken-4 z-depth-3" role="navigation">
+        <div class="nav-wrapper container">
+            <a class="brand-logo hide-on-small-and-down" href="/" style="white-space: nowrap">Claptrap Bot</a>
+            <a class="brand-logo hide-on-med-and-up show-on-small" href="/" style="white-space: nowrap">Claptrap</a>
+            <ul class="right hide-on-med-and-down">
+                <li>
 
-                <a th:if="${guild_name != ''}" class="truncate waves-effect brown darken-3 waves-light btn-flat grey-text text-darken-1 dropdown-trigger" id="drop-trigger-guilds" data-target="dropdown_guilds" th:inline="text" style="margin-top: 2px;margin-right: 10px;">[[${guild_name}]]<img th:src="${guild_icon}" id="guildLogo" class="brand-logo left circle" style="max-height: 100%; margin-right: 10px; padding: 2px; padding-left: 0"/></a>
-            </li>
-            <li class="" th:classappend="(${page} == 'home')? 'active' : ''">
-                <a class="waves-effect waves-light" href="/">Home</a>
-            </li>
-            <li class="disable" th:classappend="(${page} == 'music')? 'active' : ''">
-                <a class="waves-effect waves-light" href="/music">Music Control</a>
-            </li>
-            <li class="disable" th:classappend="(${page} == 'rank')? 'active' : ''">
-                <a class="waves-effect waves-light" href="/rank">Stats</a>
-            </li>
+                    <a class="truncate waves-effect brown darken-3 waves-light btn-flat grey-text text-darken-1 dropdown-trigger"
+                       data-target="dropdown_guilds"
+                       id="drop-trigger-guilds" style="margin-top: 2px;margin-right: 10px;" th:if="${guild_name != ''}"
+                       th:inline="text">[[${guild_name}]]<img class="brand-logo left circle"
+                                                                                         id="guildLogo"
+                                                                                         style="max-height: 100%; margin-right: 10px; padding: 2px; padding-left: 0"
+                                                                                         th:src="${guild_icon}"/></a>
+                </li>
+                <li class="" th:classappend="(${page} == 'home')? 'active' : ''">
+                    <a class="waves-effect waves-light" href="/">Home</a>
+                </li>
+                <li class="disable" th:classappend="(${page} == 'music')? 'active' : ''">
+                    <a class="waves-effect waves-light" href="/music">Music Control</a>
+                </li>
+                <li class="disable" th:classappend="(${page} == 'rank')? 'active' : ''">
+                    <a class="waves-effect waves-light" href="/rank">Stats</a>
+                </li>
 
 
-            <li id="nav-bar-account">
-                <a class="dropdown-account dropdown-trigger" data-target="dropdown_connected"><i class="material-icons">account_box</i></a>
-            </li>
+                <li id="nav-bar-account">
+                    <a class="dropdown-account dropdown-trigger" data-target="dropdown_connected"><i
+                            class="material-icons">account_box</i></a>
+                </li>
 
-        </ul>
+            </ul>
 
 
-        <a href="#" data-target="nav-mobile" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-    </div>
+            <a class="sidenav-trigger" data-target="nav-mobile" href="#"><i class="material-icons">menu</i></a>
+        </div>
     </nav>
 
-    <ul id="nav-mobile" class="sidenav">
+    <ul class="sidenav" id="nav-mobile">
         <li class="center">
-            <a class="brand-logo" href="/" style="font-weight: bold"><h3 class="blue-grey-text text-darken-4" style="font-weight: bold">Claptrap</h3></a>
+            <a class="brand-logo" href="/" style="font-weight: bold"><h3 class="blue-grey-text text-darken-4"
+                                                                         style="font-weight: bold">Claptrap</h3></a>
         </li>
-        <li><div class="divider"></div></li>
+        <li>
+            <div class="divider"></div>
+        </li>
         <li class="center ">
-            <a class="nav-change-guild truncate waves-effect waves-light btn grey lighten-2 black-text " th:text="${guild_name}" style=""></a>
+            <a class="nav-change-guild truncate waves-effect waves-light btn grey lighten-2 black-text "
+               style="" th:text="${guild_name}"></a>
         </li>
-        <li><div class="divider"></div></li>
+        <li>
+            <div class="divider"></div>
+        </li>
 
         <li class="center" th:classappend="(${page} == 'home')? 'active' : ''">
-            <a class="waves-effect waves-light sidenav-trigger" href="/" data-target="slide-out">Home</a>
+            <a class="waves-effect waves-light sidenav-trigger" data-target="slide-out" href="/">Home</a>
         </li>
         <li class="center" th:classappend="(${page} == 'music')? 'active' : ''">
             <a class="waves-effect waves-light" href="/music">Music Control</a>
@@ -66,16 +79,21 @@
         </li>
 
 
-        <li><div class="divider"></div></li>
+        <li>
+            <div class="divider"></div>
+        </li>
         <li><a class="center nav-change-guild" href="#">Change Server</a></li>
-        <li class="center bot-settings" th:classappend="(${page} == 'settings')? 'active' : ''" th:style="${isAdmin} ? '' : 'visibility: hidden; display: none;'">
+        <li class="center bot-settings" th:classappend="(${page} == 'settings')? 'active' : ''"
+            th:style="${isAdmin} ? '' : 'visibility: hidden; display: none;'">
             <a class="waves-effect waves-light" href="/settings">Bot Settings</a>
         </li>
         <li>
-            <a class="center tooltipped" data-position="bottom" data-delay="50" data-tooltip="Under Development!">My Account</a>
+            <a class="center tooltipped" data-delay="50" data-position="bottom" data-tooltip="Under Development!">My
+                Account</a>
         </li>
         <li>
-            <a class="center tooltipped" data-position="bottom" data-delay="50" data-tooltip="Under Development!">My Playlists</a>
+            <a class="center tooltipped" data-delay="50" data-position="bottom" data-tooltip="Under Development!">My
+                Playlists</a>
         </li>
         <li class="divider"></li>
 
@@ -84,11 +102,14 @@
     </ul>
 
 
-    <ul  class="dropdown-content" id="dropdown_guilds">
+    <ul class="dropdown-content" id="dropdown_guilds">
         <!--/*@thymesVar id="mutual_guilds" type="java.util.List<net.dv8tion.jda.core.entities.Guild>"*/-->
         <th:block th:each="guild : ${mutual_guilds}">
-            <li style="height: 50px; white-space: nowrap;" th:attr="data-id = ${guild.getId()}" th:if="${guild.getId() != guild_id}" class="guild_change">
-                <img th:src="${guild.getIconUrl() == null ? 'https://discordapp.com/assets/dd4dbc0016779df1378e7812eabaa04d.png' : guild.getIconUrl()}" class="left circle" style="max-height: 100%; padding: 5px; "/><a class="center blue-grey-text text-darken-4" th:inline="text" style="margin-left: 50px">[[${guild.getName()}]]</a>
+            <li class="guild_change" style="height: 50px; white-space: nowrap;"
+                th:attr="data-id = ${guild.getId()}" th:if="${guild.getId() != guild_id}">
+                <img class="left circle"
+                     style="max-height: 100%; padding: 5px; " th:src="${guild.getIconUrl() == null ? 'https://discordapp.com/assets/dd4dbc0016779df1378e7812eabaa04d.png' : guild.getIconUrl()}"/><a
+                    class="center blue-grey-text text-darken-4" style="margin-left: 50px" th:inline="text">[[${guild.getName()}]]</a>
             </li>
         </th:block>
 
@@ -96,22 +117,24 @@
     </ul>
 
 
-
     <!-- Dropdown connected -->
-    <ul id="dropdown_connected" class="dropdown-content ">
+    <ul class="dropdown-content " id="dropdown_connected">
         <li>
-            <a class="center blue-grey-text text-darken-4 tooltipped" data-position="left" data-delay="50" data-tooltip="It's you !" id="nav-name" style="font-weight: bold"></a>
+            <a class="center blue-grey-text text-darken-4 tooltipped" data-delay="50" data-position="left"
+               data-tooltip="It's you !" id="nav-name" style="font-weight: bold"></a>
         </li>
         <li class="divider"></li>
         <li><a class="center nav-change-guild" href="#">Change Server</a></li>
         <li class="bot-settings" th:style="${isAdmin} ? '' : 'visibility: hidden; display: none;'">
-            <a class=" center waves-effect waves-light " href="/settings" >Bot Settings</a>
+            <a class=" center waves-effect waves-light " href="/settings">Bot Settings</a>
         </li>
         <li>
-            <a class="center tooltipped" data-position="left" data-delay="50" data-tooltip="Under Development!">My Account</a>
+            <a class="center tooltipped" data-delay="50" data-position="left" data-tooltip="Under Development!">My
+                Account</a>
         </li>
         <li>
-            <a class="center tooltipped" data-position="left" data-delay="50" data-tooltip="Under Development!">My Playlists</a>
+            <a class="center tooltipped" data-delay="50" data-position="left" data-tooltip="Under Development!">My
+                Playlists</a>
         </li>
         <li class="divider"></li>
 
@@ -119,29 +142,28 @@
     </ul>
 
 
-
     <!--________________________________________-->
     <!--            Guild modal                 -->
     <!--________________________________________-->
 
-    <div id="modal_guild" class="modal">
+    <div class="modal" id="modal_guild">
         <div class="modal-content" style="padding-bottom: 0px">
             <div class="row" style="margin-bottom: 0px">
                 <h3 class="col l12 m12 s12 center">Server Selection</h3>
                 <div class="col l4 offset-l4 m8 offset-m4 offset-s3 s8 center">
-                    <form id="guild_form" action="#" class="left-align">
+                    <form action="#" class="left-align" id="guild_form">
                     </form>
                 </div>
             </div>
         </div>
         <div class="modal-footer">
-            <a href="#" id="btn_ok_guild" class="modal-action modal-close waves-effect waves-green btn-flat disabled">Ok</a>
+            <a class="modal-action modal-close waves-effect waves-green btn-flat disabled" href="#"
+               id="btn_ok_guild">Ok</a>
         </div>
     </div>
 
 
-
-    <div id="modal_internet" class="modal">
+    <div class="modal" id="modal_internet">
         <div class="modal-content" style="padding-bottom: 0px">
             <div class="row" style="margin-bottom: 0px">
                 <h3 class="col l12 m 12 s12 center red-text">Can't connect to the server!</h3>
@@ -155,12 +177,10 @@
     </div>
 
 
-
-
-    <p id="radioTemplateGuild" class="" style="visibility: hidden; display: none ">
+    <p class="" id="radioTemplateGuild" style="visibility: hidden; display: none ">
         <label>
-            <input name="guildRadio" class="with-gap" type="radio" value="@id" id="@id" data-icon="@url"/>
-            <span><img src="@url" class="circle left" style="max-height: 100%; margin-right: 6px"/> @name</span>
+            <input class="with-gap" data-icon="@url" id="@id" name="guildRadio" type="radio" value="@id"/>
+            <span><img class="circle left" src="@url" style="max-height: 100%; margin-right: 6px"/> @name</span>
         </label>
     </p>
 

@@ -4,23 +4,27 @@
     <script async="async" src="https://www.googletagmanager.com/gtag/js?id=UA-144247946-1"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
         gtag('js', new Date());
 
         gtag('config', 'UA-144247946-1');
     </script>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1.0" name="viewport"/>
     <title>Claptrap Bot</title>
-    <link rel="icon"
-          type="image/x-icon"
-          href="/favicon.png"/>
+    <link href="/favicon.png"
+          rel="icon"
+          type="image/x-icon"/>
 
     <!-- CSS  -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
-    <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
-    <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
-    <meta name="theme-color" content="#263238"/>
+    <link href="css/materialize.css" media="screen,projection" rel="stylesheet" type="text/css"/>
+    <link href="css/style.css" media="screen,projection" rel="stylesheet" type="text/css"/>
+    <meta content="#263238" name="theme-color"/>
 
 </head>
 
@@ -34,8 +38,9 @@
 <header>
     <nav class="brown darken-4 z-depth-3" role="navigation">
         <div class="nav-wrapper container">
-            <a href="/" class="brand-logo hide-on-small-and-down center" style="white-space: nowrap">Claptrap Bot</a>
-            <a href="/" class="brand-logo hide-on-med-and-up show-on-small center" style="white-space: nowrap">Claptrap</a>
+            <a class="brand-logo hide-on-small-and-down center" href="/" style="white-space: nowrap">Claptrap Bot</a>
+            <a class="brand-logo hide-on-med-and-up show-on-small center" href="/"
+               style="white-space: nowrap">Claptrap</a>
         </div>
     </nav>
 </header>
@@ -66,25 +71,29 @@
                     </div>
                 </div>
                 <div class="row center" style="margin-bottom: 0px">
-                    <form name="login_form" id="login_form">
+                    <form id="login_form" name="login_form">
                         <div class="row" style="margin-bottom: 0px">
                             <div class="input-field col l6 offset-l3 m10 offset-m1 s10 offset-s1">
                                 <i class="material-icons prefix">account_box</i>
-                                <input name="username" id="user_input" type="text" class="validate" autocomplete="username"/>
-                                <label for="user_input" >User Name</label>
+                                <input autocomplete="username" class="validate" id="user_input" name="username"
+                                       type="text"/>
+                                <label for="user_input">User Name</label>
                                 <span class="helper-text" data-error="User not registered!"></span>
                             </div>
                         </div>
                         <div class="row">
                             <div class="input-field col l6 offset-l3 m10 offset-m1 s10 offset-s1">
                                 <i class="material-icons prefix">security</i>
-                                <input name="password" id="password_input" type="password" class="validate" autocomplete="current-password"/>
+                                <input autocomplete="current-password" class="validate" id="password_input" name="password"
+                                       type="password"/>
                                 <label for="password_input">Password</label>
                                 <span class="helper-text" data-error="Wrong password!"></span>
                             </div>
                         </div>
                         <div class="row" style="margin-bottom: 10px">
-                            <button id="btn-submit-connect" class="btn waves-effect waves-light light-green darken-1 scale-transition scale-out" type="submit" name="action" >
+                            <button class="btn waves-effect waves-light light-green darken-1 scale-transition scale-out"
+                                    id="btn-submit-connect"
+                                    name="action" type="submit">
                                 Submit<i class="material-icons right">send</i>
                             </button>
                         </div>
@@ -113,7 +122,7 @@
 <script th:src="@{/js/materialize.js}"></script>
 <script th:src="@{/js/login.js}"></script>
 <script th:src="@{/js/js.cookie.js}"></script>
-<script src="https://use.fontawesome.com/releases/v5.3.1/js/all.js" crossorigin="anonymous"></script>
+<script crossorigin="anonymous" src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
 
 
 </body>

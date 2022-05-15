@@ -35,8 +35,6 @@ public class Flush implements Commande {
             } else {
                 event.getTextChannel().sendMessage(EmbedMessageUtils.getFlushError("You are not a supreme being, you cannot do that !")).queue();
             }
-
-
         }
     }
 

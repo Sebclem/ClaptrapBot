@@ -31,12 +31,12 @@ self.addEventListener('fetch', function (event) {
 
     var request = event.request;
 
-    event.respondWith(fetch(request).catch( function (reason) {
+    event.respondWith(fetch(request).catch(function (reason) {
         console.error(
             '[onfetch] Failed. Serving cached offline fallback ' +
             reason
         );
-        return caches.open(CACHE_NAME).then(function(cache){
+        return caches.open(CACHE_NAME).then(function (cache) {
             return cache.match(request);
         })
     }));

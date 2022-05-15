@@ -5,23 +5,27 @@
     <script async="async" src="https://www.googletagmanager.com/gtag/js?id=UA-144247946-1"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
         gtag('js', new Date());
 
         gtag('config', 'UA-144247946-1');
     </script>
 
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1.0" name="viewport"/>
     <title>Sign up - Claptrap Bot</title>
-    <link rel="icon" type="image/x-icon" href="favicon.png"/>
+    <link href="favicon.png" rel="icon" type="image/x-icon"/>
 
     <!-- CSS  -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
-    <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
-    <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
-    <link rel="manifest" href="/manifest.json"/>
-    <meta name="theme-color" content="#263238"/>
+    <link href="css/materialize.css" media="screen,projection" rel="stylesheet" type="text/css"/>
+    <link href="css/style.css" media="screen,projection" rel="stylesheet" type="text/css"/>
+    <link href="/manifest.json" rel="manifest"/>
+    <meta content="#263238" name="theme-color"/>
 </head>
 
 <body class="blue-grey lighten-5">
@@ -41,8 +45,8 @@
                 <div class="col s12">
                     <div class="input-field inline">
                         <i class="material-icons prefix">assignment_ind</i>
-                        <input id="name" type="text" class="validate invalid"/>
-                        <label for="name" data-error="" data-success="">Discord Name</label>
+                        <input class="validate invalid" id="name" type="text"/>
+                        <label data-error="" data-success="" for="name">Discord Name</label>
                     </div>
                 </div>
             </div>
@@ -50,8 +54,8 @@
                 <div class="col s12">
                     <div class="input-field inline">
                         <i class="material-icons prefix">security</i>
-                        <input id="passwrd" type="password" class="invalid"/>
-                        <label for="passwrd" data-error="" data-success="">Password</label>
+                        <input class="invalid" id="passwrd" type="password"/>
+                        <label data-error="" data-success="" for="passwrd">Password</label>
                     </div>
                 </div>
             </div>
@@ -59,13 +63,13 @@
                 <div class="col s12">
                     <div class="input-field inline">
                         <i class="material-icons prefix">security</i>
-                        <input id="passwrd2" type="password" class="invalid"/>
-                        <label for="passwrd2" data-error="" data-success="">Confirm</label>
+                        <input class="invalid" id="passwrd2" type="password"/>
+                        <label data-error="" data-success="" for="passwrd2">Confirm</label>
                     </div>
                 </div>
             </div>
             <div class="col s12">
-                <a id="sendBtn" class="waves-effect waves-light btn scale-transition scale-out">Send<i
+                <a class="waves-effect waves-light btn scale-transition scale-out" id="sendBtn">Send<i
                         class="material-icons left">send</i></a>
             </div>
         </div>
@@ -73,7 +77,7 @@
 
 
     <!-- Modal Structure -->
-    <div id="modalToken" class="modal">
+    <div class="modal" id="modalToken">
         <div class="modal-content">
             <div class="row">
                 <h3 class="col s12 center"> User Validation</h3>
@@ -90,7 +94,7 @@
                     <div class="row" style="margin-bottom: 0px">
                         <div class="input-field col s6 offset-s3">
                             <i class="material-icons prefix">fingerprint</i>
-                            <input id="input_preToken" type="text" class="validate"/>
+                            <input class="validate" id="input_preToken" type="text"/>
                             <label for="input_preToken">Verification Code</label>
                         </div>
                     </div>
@@ -98,7 +102,7 @@
             </div>
         </div>
         <div class="modal-footer">
-            <a href="#" id="preTokenSend" class="modal-action waves-effect waves-green btn scale-transition scale-out">Send</a>
+            <a class="modal-action waves-effect waves-green btn scale-transition scale-out" href="#" id="preTokenSend">Send</a>
         </div>
     </div>
 </main>

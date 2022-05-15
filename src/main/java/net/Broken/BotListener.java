@@ -1,16 +1,17 @@
 package net.Broken;
 
-import net.Broken.Commands.Move;
 import net.Broken.DB.Entity.GuildPreferenceEntity;
-import net.Broken.DB.Entity.UserEntity;
 import net.Broken.DB.Repository.GuildPreferenceRepository;
-import net.Broken.DB.Repository.UserRepository;
-import net.Broken.Tools.*;
-import net.Broken.Tools.Command.CommandParser;
+import net.Broken.Tools.AutoVoiceChannel;
+import net.Broken.Tools.EmbedMessageUtils;
 import net.Broken.Tools.UserManager.Stats.UserStatsUtils;
 import net.Broken.audio.AudioM;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.MessageBuilder;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
@@ -20,16 +21,13 @@ import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceMoveEvent;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
-import net.dv8tion.jda.api.exceptions.InsufficientPermissionException;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.dv8tion.jda.api.managers.GuildManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ApplicationContext;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -38,84 +36,59 @@ import java.util.List;
  * Bot Listener
  */
 public class BotListener extends ListenerAdapter {
-    private AntiSpam antispam = new AntiSpam();
-    private Moderateur modo = new Moderateur();
+    private final GuildPreferenceRepository guildPreferenceRepository;
 
-    private GuildPreferenceRepository guildPreferenceRepository;
-    private UserRepository userRepository;
-
-    private Logger logger = LogManager.getLogger();
+    private final Logger logger = LogManager.getLogger();
 
     public BotListener() {
-
         ApplicationContext context = SpringContext.getAppContext();
         guildPreferenceRepository = (GuildPreferenceRepository) context.getBean("guildPreferenceRepository");
-        userRepository = (UserRepository) context.getBean("userRepository");
-
     }
 
     @Override
     public void onReady(ReadyEvent event) {
-        logger.info("Connection succees");
+        logger.info("Connection success");
     }
 
 
     @Override
     public void onGuildMemberJoin(GuildMemberJoinEvent event) {
-
         GuildPreferenceEntity guildPref = getPreference(event.getGuild());
-
         if (guildPref.isDefaultRole()) {
-
-            logger.info(event.getUser().getName() + "join the guild, move it!");
-
-            List<Role> roles = new ArrayList<>();
-            roles.add(event.getGuild().getRoleById(guildPref.getDefaultRoleId()));
-
-
-            new Move().exc(event.getMember(), roles, false, event.getGuild(), event.getGuild().getManager());
+            logger.info("[" + event.getGuild().getName() + "] : " + event.getUser().getName() + " join the guild, adding default role !");
+            Role default_role = event.getGuild().getRoleById(guildPref.getDefaultRoleId());
+            if (default_role != null) {
+                event.getGuild().addRoleToMember(event.getMember(), default_role).queue();
+            } else {
+                logger.fatal("[" + event.getGuild().getName() + "] : Default role is null !");
+            }
         }
-
-
         if (guildPref.isWelcome()) {
-
             TextChannel chanel = event.getGuild().getTextChannelById(guildPref.getWelcomeChanelID());
             if (chanel != null) {
-                String message = guildPref.getWelcomeMessage();
-                message = message.replaceAll("@name", event.getMember().getAsMention());
+                String message = guildPref.getWelcomeMessage().replaceAll("@name", event.getMember().getAsMention());
                 logger.debug(message);
-                chanel.sendMessage(message).complete();
+                chanel.sendMessage(message).queue();
+            }else {
+                logger.fatal("[" + event.getGuild().getName() + "] : Welcome chanel is null !");
             }
-
-            MainBot.roleFlag = false;
         }
-
 
     }
 
     @Override
     public void onGuildMemberRoleRemove(GuildMemberRoleRemoveEvent event) {
-
         GuildPreferenceEntity guildPref = getPreference(event.getGuild());
         if (guildPref.isDefaultRole()) {
-
-            if (!MainBot.roleFlag) {
-
-                if (event.getMember().getRoles().size() == 0) {
-
-                    logger.info(event.getUser().getName() + "have no roles, move it!");
-                    List<Role> roles = new ArrayList<>();
-                    roles.add(event.getGuild().getRoleById(guildPref.getDefaultRoleId()));
-
-
-                    new Move().exc(event.getMember(), roles, false, event.getGuild(), event.getGuild().getManager());
-                    MainBot.roleFlag = false;
+            if (event.getMember().getRoles().size() == 0) {
+                logger.info("[" + event.getGuild().getName() + "] : " + event.getUser().getName() + " have no roles, reset to default !");
+                Role default_role = event.getGuild().getRoleById(guildPref.getDefaultRoleId());
+                if (default_role == null) {
+                    logger.fatal("[" + event.getGuild().getName() + "] : Default role is null !");
+                    return;
                 }
-            } else {
-                logger.debug("ignore it");
-                MainBot.roleFlag = false;
+                event.getGuild().addRoleToMember(event.getMember(), default_role).queue();
             }
-
         }
 
 
@@ -163,66 +136,16 @@ public class BotListener extends ListenerAdapter {
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
-
         if (!event.getAuthor().isBot()) {
             UserStatsUtils.getINSTANCE().addMessageCount(event.getMember());
         }
-        try {
-            if (event.getMessage().getContentRaw().startsWith("//") && !event.getMessage().getAuthor().getId().equals(event.getJDA().getSelfUser().getId())) {
-                //On a detecter que c'etait une commande
-                //System.out.println(event.getMessage().getContent());
-                List<UserEntity> users = userRepository.findByJdaId(event.getAuthor().getId());
-                UserEntity user = users.size() == 0 ? null : users.get(0);
-                MainBot.handleCommand(new CommandParser().parse(event.getMessage().getContentRaw(), event), user);
-
-            } else if (!event.getMessage().getAuthor().getId().equals(event.getJDA().getSelfUser().getId())) {
-
-                if (!event.isFromType(ChannelType.PRIVATE)) {
-
-
-                    Guild serveur = event.getGuild();
-                    GuildPreferenceEntity guildPref = getPreference(serveur);
-
-                    if (!guildPref.isAntiSpam())
-                        return;
-                    try {
-                        GuildManager guildManager = serveur.getManager();
-                        Member user = event.getMember();
-
-                        // appel de la methode d'analyse de message de "Moderateur"
-                        if (event.getMessage().getContentRaw().length() > 0) {
-
-                            if (modo.analyse(user, serveur, guildManager, event) == 1) {
-                                antispam.extermine(user, serveur, guildManager, true, event);
-                            }
-                        } else if (event.getMessage().getContentRaw().length() == 0)
-                            logger.error("Image detected, ignoring it.");
-
-                    } catch (InsufficientPermissionException e) {
-                        logger.warn("Insufficient permission for guild " + e.getGuild(MainBot.jda).getName() + " Missing " + e.getPermission() + " permission.");
-                    }
-
-                }
-
-
-            }
-        } catch (Exception e) {
-            logger.catching(e);
-
-            if (event.isFromType(ChannelType.PRIVATE))
-                PrivateMessage.send(event.getAuthor(), EmbedMessageUtils.getInternalError(), logger);
-            else
-                event.getTextChannel().sendMessage(EmbedMessageUtils.getInternalError()).queue();
-        }
-
-
     }
 
     @Override
     public void onSlashCommand(@NotNull SlashCommandEvent event) {
         HashMap<String, SlashCommand> commands = MainBot.slashCommands;
         super.onSlashCommand(event);
-        if(commands.containsKey(event.getName())){
+        if (commands.containsKey(event.getName())) {
             commands.get(event.getName()).action(event);
         }
     }
@@ -237,14 +160,15 @@ public class BotListener extends ListenerAdapter {
                 .setDescription("Allow me to introduce myself -- I am a CL4P-TP the discord bot, but my friends call me Claptrap ! Or they would, if any of them were real...\n" +
                         "\nYou can access to my web UI with: " + MainBot.url)
                 .setImage("https://i.imgur.com/Anf1Srg.gif");
+        Message message = new MessageBuilder().setEmbeds(EmbedMessageUtils.buildStandar(eb)).build();
 
         TextChannel defaultChan = event.getGuild().getDefaultChannel();
-        if (defaultChan != null && defaultChan.canTalk())
-            defaultChan.sendMessage(EmbedMessageUtils.buildStandar(eb)).queue();
-        else {
-            for(TextChannel chan : event.getGuild().getTextChannels()){
-                if(chan.canTalk()){
-                    chan.sendMessage(EmbedMessageUtils.buildStandar(eb)).queue();
+        if (defaultChan != null && defaultChan.canTalk()) {
+            defaultChan.sendMessage(message).queue();
+        } else {
+            for (TextChannel chan : event.getGuild().getTextChannels()) {
+                if (chan.canTalk()) {
+                    chan.sendMessage(message).queue();
                 }
             }
         }
@@ -254,9 +178,9 @@ public class BotListener extends ListenerAdapter {
         List<GuildPreferenceEntity> guildPrefList = guildPreferenceRepository.findByGuildId(guild.getId());
         GuildPreferenceEntity guildPref;
         if (guildPrefList.isEmpty()) {
-            logger.info("Generate default pref");
+            logger.info("[" + guild.getName() + "] : Generate default pref");
             guildPref = GuildPreferenceEntity.getDefault(guild);
-            guildPreferenceRepository.save(guildPref);
+            guildPref = guildPreferenceRepository.save(guildPref);
         } else
             guildPref = guildPrefList.get(0);
         return guildPref;

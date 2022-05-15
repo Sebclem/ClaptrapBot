@@ -7,7 +7,6 @@ import net.Broken.Tools.Command.CommandLoader;
 import net.Broken.Tools.Command.SlashCommandLoader;
 import net.Broken.Tools.DayListener.DayListener;
 import net.Broken.Tools.DayListener.Listeners.DailyMadame;
-import net.Broken.Tools.DayListener.Listeners.ResetSpam;
 import net.Broken.Tools.UserManager.Stats.UserStatsUtils;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -89,7 +88,6 @@ public class Init {
         SlashCommandLoader.registerSlashCommands(jda.updateCommands());
         ApiCommandLoader.load();
         DayListener dayListener = DayListener.getInstance();
-        dayListener.addListener(new ResetSpam());
         dayListener.addListener(new DailyMadame());
         dayListener.start();
         jda.addEventListener(new BotListener());

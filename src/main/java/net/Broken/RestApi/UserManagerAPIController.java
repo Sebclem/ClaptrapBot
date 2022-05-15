@@ -1,12 +1,15 @@
 package net.Broken.RestApi;
 
-import net.Broken.DB.Entity.PendingUserEntity;
 import net.Broken.DB.Entity.UserEntity;
 import net.Broken.DB.Repository.PendingUserRepository;
 import net.Broken.DB.Repository.UserRepository;
 import net.Broken.MainBot;
-import net.Broken.RestApi.Data.UserManager.*;
-import net.Broken.Tools.UserManager.Exceptions.*;
+import net.Broken.RestApi.Data.UserManager.GuildInfo;
+import net.Broken.RestApi.Data.UserManager.UserConnectionData;
+import net.Broken.RestApi.Data.UserManager.UserInfoData;
+import net.Broken.Tools.UserManager.Exceptions.PasswordNotMatchException;
+import net.Broken.Tools.UserManager.Exceptions.UnknownTokenException;
+import net.Broken.Tools.UserManager.Exceptions.UserNotFoundException;
 import net.Broken.Tools.UserManager.Oauth;
 import net.Broken.Tools.UserManager.Stats.GuildStatsPack;
 import net.Broken.Tools.UserManager.Stats.UserStatsUtils;
@@ -48,43 +51,43 @@ public class UserManagerAPIController {
     }
 
 
-    @RequestMapping(value = "/preRegister", method = RequestMethod.POST)
-    public ResponseEntity<CheckResposeData> command(@RequestBody UserInfoData data) {
-        if (data != null && data.name != null) {
-            try {
-                String id = userUtils.sendCheckToken(pendingUserRepository, userRepository, passwordEncoder, data);
-                return new ResponseEntity<>(new CheckResposeData(true, data.name, "Message sent", id), HttpStatus.OK);
-            } catch (UserNotFoundException e) {
-                logger.warn("User \"" + data.name + "\" not found!");
-                return new ResponseEntity<>(new CheckResposeData(false, data.name, "User not found on server!", ""), HttpStatus.NOT_FOUND);
-            } catch (PasswordNotMatchException userAlreadyRegistered) {
-                return new ResponseEntity<>(new CheckResposeData(false, data.name, "User already registered in pending database and password not match!", ""), HttpStatus.NOT_ACCEPTABLE);
+//    @RequestMapping(value = "/preRegister", method = RequestMethod.POST)
+//    public ResponseEntity<CheckResposeData> command(@RequestBody UserInfoData data) {
+//        if (data != null && data.name != null) {
+//            try {
+//                String id = userUtils.sendCheckToken(pendingUserRepository, userRepository, passwordEncoder, data);
+//                return new ResponseEntity<>(new CheckResposeData(true, data.name, "Message sent", id), HttpStatus.OK);
+//            } catch (UserNotFoundException e) {
+//                logger.warn("User \"" + data.name + "\" not found!");
+//                return new ResponseEntity<>(new CheckResposeData(false, data.name, "User not found on server!", ""), HttpStatus.NOT_FOUND);
+//            } catch (PasswordNotMatchException userAlreadyRegistered) {
+//                return new ResponseEntity<>(new CheckResposeData(false, data.name, "User already registered in pending database and password not match!", ""), HttpStatus.NOT_ACCEPTABLE);
+//
+//            } catch (UserAlreadyRegistered userAlreadyRegistered) {
+//                return new ResponseEntity<>(new CheckResposeData(false, data.name, "User already registered in database!", ""), HttpStatus.NOT_ACCEPTABLE);
+//            }
+//        } else {
+//            return new ResponseEntity<>(new CheckResposeData(false, "", "Missing parameter(s)", ""), HttpStatus.BAD_REQUEST);
+//        }
+//    }
 
-            } catch (UserAlreadyRegistered userAlreadyRegistered) {
-                return new ResponseEntity<>(new CheckResposeData(false, data.name, "User already registered in database!", ""), HttpStatus.NOT_ACCEPTABLE);
-            }
-        } else {
-            return new ResponseEntity<>(new CheckResposeData(false, "", "Missing parameter(s)", ""), HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    @RequestMapping(value = "/confirmAccount", method = RequestMethod.POST)
-    public ResponseEntity<UserConnectionData> confirAccount(@RequestBody ConfirmData data) {
-        try {
-            PendingUserEntity pUser = userUtils.confirmCheckToken(pendingUserRepository, Integer.parseInt(data.id), data.checkToken);
-            UserEntity user = new UserEntity(pUser, userUtils.generateApiToken());
-            userRepository.save(user);
-            pendingUserRepository.delete(pUser);
-
-            return new ResponseEntity<>(new UserConnectionData(true, user.getName(), user.getApiToken(), ""), HttpStatus.OK);
-        } catch (TokenNotMatch tokenNotMatch) {
-            logger.warn("Pre token not match for " + data.id + "!");
-            return new ResponseEntity<>(new UserConnectionData(false, "Token not match!", "token"), HttpStatus.NOT_ACCEPTABLE);
-        } catch (UserNotFoundException e) {
-            logger.warn("Id not found in DB (" + data.id + ")");
-            return new ResponseEntity<>(new UserConnectionData(false, "User not found on DB!", "user"), HttpStatus.NOT_ACCEPTABLE);
-        }
-    }
+//    @RequestMapping(value = "/confirmAccount", method = RequestMethod.POST)
+//    public ResponseEntity<UserConnectionData> confirAccount(@RequestBody ConfirmData data) {
+//        try {
+//            PendingUserEntity pUser = userUtils.confirmCheckToken(pendingUserRepository, Integer.parseInt(data.id), data.checkToken);
+//            UserEntity user = new UserEntity(pUser, userUtils.generateApiToken());
+//            userRepository.save(user);
+//            pendingUserRepository.delete(pUser);
+//
+//            return new ResponseEntity<>(new UserConnectionData(true, user.getName(), user.getApiToken(), ""), HttpStatus.OK);
+//        } catch (TokenNotMatch tokenNotMatch) {
+//            logger.warn("Pre token not match for " + data.id + "!");
+//            return new ResponseEntity<>(new UserConnectionData(false, "Token not match!", "token"), HttpStatus.NOT_ACCEPTABLE);
+//        } catch (UserNotFoundException e) {
+//            logger.warn("Id not found in DB (" + data.id + ")");
+//            return new ResponseEntity<>(new UserConnectionData(false, "User not found on DB!", "user"), HttpStatus.NOT_ACCEPTABLE);
+//        }
+//    }
 
     @RequestMapping(value = "/requestToken", method = RequestMethod.POST)
     public ResponseEntity<UserConnectionData> requestToken(@RequestBody UserInfoData data) {

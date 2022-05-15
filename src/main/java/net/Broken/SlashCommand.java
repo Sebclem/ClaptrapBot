@@ -12,7 +12,8 @@ import java.util.List;
 public interface SlashCommand {
     /**
      * Main action of command
-     * @param args Command args.
+     *
+     * @param args  Command args.
      * @param event Command MessageReceivedEvent
      */
     void action(SlashCommandEvent event);
@@ -25,12 +26,14 @@ public interface SlashCommand {
 
     /**
      * Determines if the command is usable only by bot level admin user
+     *
      * @return boolean
      */
     boolean isBotAdminCmd();
 
     /**
      * Determines if the command is only usable on NSFW channels
+     *
      * @return boolean
      */
     boolean isNSFW();

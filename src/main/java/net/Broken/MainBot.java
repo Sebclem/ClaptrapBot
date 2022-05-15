@@ -1,13 +1,6 @@
 package net.Broken;
 
-import net.Broken.DB.Entity.UserEntity;
-import net.Broken.Tools.Command.CommandParser;
-import net.Broken.Tools.EmbedMessageUtils;
-import net.Broken.Tools.PrivateMessage;
-import net.Broken.Tools.UserSpamUtils;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.ChannelType;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import org.apache.logging.log4j.LogManager;
@@ -30,11 +23,8 @@ public class MainBot {
 
     public static HashMap<String, Commande> commandes = new HashMap<>();
     public static HashMap<String, SlashCommand> slashCommands = new HashMap<>();
-    public static HashMap<Member, ArrayList<Message>> historique = new HashMap<>();
-    public static HashMap<Member, Integer> message_compteur = new HashMap<>();
     public static HashMap<String, Integer> mutualGuildCount = new HashMap<>();
     public static boolean roleFlag = false;
-    public static HashMap<Member, UserSpamUtils> spamUtils = new HashMap<>();
     public static JDA jda;
     public static boolean ready = false;
     public static boolean dev = false;
@@ -79,54 +69,4 @@ public class MainBot {
         ready = true;
 
     }
-
-    /**
-     * Perform test (admin, NSFW and private usable or not) and execute command or not
-     *
-     * @param cmd Container whit all command info
-     */
-    public static void handleCommand(CommandParser.CommandContainer cmd, UserEntity user) {
-
-        if (!ready) {
-            return;
-        }
-
-        if (commandes.containsKey(cmd.commande)) {
-            Commande cmdObj = commandes.get(cmd.commande);
-            boolean isAdmin;
-            boolean isBotAdmin = user != null && user.isBotAdmin();
-            if (cmd.event.isFromType(ChannelType.PRIVATE)) {
-                isAdmin = false;
-            } else
-                isAdmin = cmd.event.getMember().hasPermission(Permission.ADMINISTRATOR);
-
-            if ((!cmdObj.isAdminCmd() || isAdmin) && (!cmdObj.isBotAdminCmd() || isBotAdmin)) {
-
-                if (cmd.event.isFromType(ChannelType.PRIVATE) && commandes.get(cmd.commande).isPrivateUsable()) {
-
-                    commandes.get(cmd.commande).action(cmd.args, cmd.event);
-                } else if (!cmd.event.isFromType(ChannelType.PRIVATE)) {
-                    if (!cmdObj.isNSFW() || cmd.event.getTextChannel().isNSFW()) {
-                        commandes.get(cmd.commande).action(cmd.args, cmd.event);
-                    } else {
-                        cmd.event.getMessage().delete().queue();
-                    }
-
-                } else
-                    cmd.event.getPrivateChannel().sendMessage(EmbedMessageUtils.getNoPrivate()).queue();
-
-
-            } else {
-                if (cmd.event.isFromType(ChannelType.PRIVATE)) {
-                    PrivateMessage.send(cmd.event.getAuthor(), EmbedMessageUtils.getUnautorized(), logger);
-                } else {
-                    cmd.event.getTextChannel().sendMessage(EmbedMessageUtils.getUnautorized()).complete();
-                }
-            }
-        } else {
-            logger.debug("Unknown command : " + cmd.commande);
-        }
-    }
-
-
 }

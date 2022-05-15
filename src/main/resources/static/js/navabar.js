@@ -5,9 +5,7 @@ var btn_disconnect;
 var nav_name;
 
 
-
-
-$(document).ready(function() {
+$(document).ready(function () {
     $('.tooltipped').tooltip();
 
     $('#modal_guild').modal({
@@ -17,9 +15,6 @@ $(document).ready(function() {
     $('#modal_internet').modal({
         dismissible: false // Modal can be dismissed by clicking outside of the modal
     });
-
-
-
 
 
     nav_bar_account_link = $("#nav-bar-account");
@@ -34,15 +29,13 @@ $(document).ready(function() {
 });
 
 
-
-function connected(){
+function connected() {
     console.log("Connected!");
     console.log("Checking token...");
     console.log(window.location.href);
-    if(!window.location.href.includes("oauthCallback")){
+    if (!window.location.href.includes("oauthCallback")) {
         checkToken();
-    }
-    else{
+    } else {
         console.log("Oauth page skip check token");
     }
 
@@ -60,16 +53,13 @@ function disconnected() {
 }
 
 
-
-
-
 function navListeners() {
 
     btn_disconnect.click(function () {
-       Cookies.remove('token');
-       Cookies.remove('name');
-       Cookies.remove('guild');
-       window.location.reload(true);
+        Cookies.remove('token');
+        Cookies.remove('name');
+        Cookies.remove('guild');
+        window.location.reload(true);
     });
 
     $('#guild_form').change(function () {
@@ -80,13 +70,13 @@ function navListeners() {
 
     $('#btn_ok_guild').click(function () {
         guild = $('input[name=guildRadio]:checked').val();
-        Cookies.set('guild', guild, { expires: 31 });
+        Cookies.set('guild', guild, {expires: 31});
         window.location.reload(true);
     });
 
     $('.guild_change').click(function () {
         let id = this.getAttribute("data-id");
-        Cookies.set('guild', id, { expires: 31 });
+        Cookies.set('guild', id, {expires: 31});
         window.location.reload(true);
     });
 
@@ -97,22 +87,20 @@ function navListeners() {
 
 }
 
-function getGuild(){
+function getGuild() {
     $.get("api/userManagement/getGuilds", function (data) {
     }).done(function (data) {
         console.log(data);
         $('#guild_form').empty();
-        if(data.length === 0 && location.pathname !== "/")
+        if (data.length === 0 && location.pathname !== "/")
             window.location.replace("/");
-        if(data.length === 0){
+        if (data.length === 0) {
             return;
-        }
-
-        else if(data.length === 1){
-            Cookies.set('guild', data[0].id, { expires: 31 });
+        } else if (data.length === 1) {
+            Cookies.set('guild', data[0].id, {expires: 31});
             window.location.reload(true);
         }
-        data.forEach(function(element){
+        data.forEach(function (element) {
             var template = $('#radioTemplateGuild').clone();
             template.removeAttr("id");
             template.removeAttr("style");
@@ -127,7 +115,7 @@ function getGuild(){
         $('#modal_guild').modal('open');
 
     }).fail(function (data) {
-        if(!error){
+        if (!error) {
             alert("Com error, please refresh.");
             error = true;
         }
@@ -144,10 +132,9 @@ function checkConnection() {
             console.log("Connection Ok");
             console.log(Cookies.get('token'));
 
-            if(Cookies.get('token') === undefined){
+            if (Cookies.get('token') === undefined) {
                 disconnected()
-            }
-            else{
+            } else {
                 connected();
             }
 
@@ -182,9 +169,9 @@ function checkToken() {
                 closeOnClick: false, // Closes side-nav on <a> clicks, useful for Angular/Meteor
                 draggable: true // Choose whether you can drag to open on touch screens,
             });
-            if (Cookies.get('guild') === undefined ) {
+            if (Cookies.get('guild') === undefined) {
                 getGuild()
-            }else{
+            } else {
                 $('#drop-trigger-guilds').dropdown({
                         constrainWidth: false, // Does not change width of dropdown to that of the activator
                         coverTrigger: false, // Displays dropdown below the button
@@ -206,8 +193,6 @@ function checkToken() {
         window.location.reload(true);
 
     });
-
-
 
 
 }

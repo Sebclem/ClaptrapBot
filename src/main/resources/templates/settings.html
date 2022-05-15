@@ -5,25 +5,29 @@
     <script async="async" src="https://www.googletagmanager.com/gtag/js?id=UA-144247946-1"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
         gtag('js', new Date());
 
         gtag('config', 'UA-144247946-1');
     </script>
 
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1.0" name="viewport"/>
     <title>Bot Settings - Claptrap Bot</title>
-    <link rel="icon"
-          type="image/x-icon"
-          href="/favicon.png"/>
+    <link href="/favicon.png"
+          rel="icon"
+          type="image/x-icon"/>
 
     <!-- CSS  -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
-    <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
-    <link href="css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
-    <link rel="manifest" href="/manifest.json"/>
-    <meta name="theme-color" content="#263238"/>
+    <link href="css/materialize.css" media="screen,projection" rel="stylesheet" type="text/css"/>
+    <link href="css/style.css" media="screen,projection" rel="stylesheet" type="text/css"/>
+    <link href="/manifest.json" rel="manifest"/>
+    <meta content="#263238" name="theme-color"/>
 
 
 </head>
@@ -60,49 +64,51 @@
                 <div th:each="setting : ${settings}">
                     <div class="row">
                         <div class="col l10 offset-l1 m10 offset-m1 s10 offset-s1">
-                            <h5 th:text="${setting.name}" style="font-weight: bold"></h5>
+                            <h5 style="font-weight: bold" th:text="${setting.name}"></h5>
                             <div class="switch" th:if="${setting.type.toString() == 'BOOL'}">
                                 <label>
                                     Off
-                                    <input class="collect-switch" type="checkbox" th:id="${setting.id}"
-                                           th:checked="${setting.current}"/>
+                                    <input class="collect-switch" th:checked="${setting.current}" th:id="${setting.id}"
+                                           type="checkbox"/>
                                     <span class="lever"></span>
                                     On
                                 </label>
                                 <div th:text="${setting.description}"></div>
                             </div>
 
-                            <div th:id="${setting.id}" class="input-field col l12 m12 s12 collect-select"
+                            <div class="input-field col l12 m12 s12 collect-select" th:id="${setting.id}"
                                  th:if="${setting.type.toString() == 'LIST'}">
                                 <select>
-                                    <option disabled="disabled" th:selected="${setting.current} == ' '" value="">Choose your option
+                                    <option disabled="disabled" th:selected="${setting.current} == ' '" value="">Choose
+                                        your option
                                     </option>
-                                    <option th:each="val : ${setting.values}" th:value="${val.id}"
+                                    <option th:each="val : ${setting.values}" th:selected="${setting.current} == ${val.id}"
                                             th:text="${#strings.capitalize(val.name)}"
-                                            th:selected="${setting.current} == ${val.id}"></option>
+                                            th:value="${val.id}"></option>
 
                                 </select>
                                 <div th:text="${setting.description}"></div>
                             </div>
 
-                            <div th:id="${setting.id}" class="input-field col l12 m12 s12 collect-select-multiple"
+                            <div class="input-field col l12 m12 s12 collect-select-multiple" th:id="${setting.id}"
                                  th:if="${setting.type.toString() == 'SELECT_LIST'}">
                                 <select multiple="multiple">
                                     <option disabled="disabled" value="">Choose your option
                                     </option>
-                                    <option th:each="val : ${setting.values}" th:value="${val.id}"
+                                    <option th:each="val : ${setting.values}" th:selected="${val.selected} == true"
                                             th:text="${#strings.capitalize(val.name)}"
-                                            th:selected="${val.selected} == true"></option>
+                                            th:value="${val.id}"></option>
 
                                 </select>
                                 <div th:text="${setting.description}"></div>
                             </div>
 
 
-
-                            <div class="input-field col l12 m12 s12 collect" th:if="${setting.type.toString() == 'STRING'}">
-                                <input th:id="${setting.id}" placeholder="Use @name variable" th:value="${setting.current}"
-                                       id="first_name" type="text" class="validate collect-text"/>
+                            <div class="input-field col l12 m12 s12 collect"
+                                 th:if="${setting.type.toString() == 'STRING'}">
+                                <input class="validate collect-text" id="first_name"
+                                       placeholder="Use @name variable"
+                                       th:id="${setting.id}" th:value="${setting.current}" type="text"/>
                                 <div th:text="${setting.description}"></div>
                             </div>
 
@@ -117,7 +123,7 @@
                 </div>
                 <div class="row">
                     <div class="col s12 center">
-                        <a id="sendBtn" class="waves-effect waves-light btn green">Save<i
+                        <a class="waves-effect waves-light btn green" id="sendBtn">Save<i
                                 class="material-icons left">save</i></a>
                     </div>
                 </div>
@@ -125,7 +131,7 @@
         </div>
     </div>
 
-    <div id="modal_loading" class="modal valign-wrapper">
+    <div class="modal valign-wrapper" id="modal_loading">
         <div class="modal-content">
             <div class="row center">
                 <h3 class="col l12 m12 s12 center">Please wait</h3>

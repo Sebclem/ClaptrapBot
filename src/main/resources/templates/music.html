@@ -4,24 +4,28 @@
     <script async="async" src="https://www.googletagmanager.com/gtag/js?id=UA-144247946-1"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
         gtag('js', new Date());
 
         gtag('config', 'UA-144247946-1');
     </script>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1.0" name="viewport"/>
     <title>Music Control - Claptrap Bot</title>
-    <link rel="icon"
-          type="image/x-icon"
-          href="favicon.png"/>
+    <link href="favicon.png"
+          rel="icon"
+          type="image/x-icon"/>
 
     <!-- CSS  -->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
-    <link href="/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
-    <link href="/css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
-    <link rel="manifest" href="/manifest.json"/>
-    <meta name="theme-color" content="#263238"/>
+    <link href="/css/materialize.css" media="screen,projection" rel="stylesheet" type="text/css"/>
+    <link href="/css/style.css" media="screen,projection" rel="stylesheet" type="text/css"/>
+    <link href="/manifest.json" rel="manifest"/>
+    <meta content="#263238" name="theme-color"/>
     <style>
         @media only screen and (max-width: 1200px) {
             #modalAdd {
@@ -34,6 +38,7 @@
                 width: 80%;
             }
         }
+
         @media only screen and (min-width: 993px) {
             #card-playlist {
                 max-height: 75vh;
@@ -46,7 +51,7 @@
             padding: 0;
         }
 
-        #card-playlist li:not(.active){
+        #card-playlist li:not(.active) {
             margin: 0;
         }
 
@@ -101,8 +106,8 @@
         <div class="row">
             <div class="col l8 s12 m12">
                 <div class="row center">
-                    <img class="responsive-img z-depth-3" id="music_img" style="max-width: 30%"
-                         src="/img/disconnected.png"/>
+                    <img class="responsive-img z-depth-3" id="music_img" src="/img/disconnected.png"
+                         style="max-width: 30%"/>
                 </div>
                 <h4 class="center" id="music_text"></h4>
                 <div class="row center" style="margin-bottom: 0px">
@@ -111,11 +116,11 @@
                     </div>
                 </div>
                 <div class="row center">
-                    <div class="col l2 offset-l3 m2 offset-m1 s2 offset-s1 left-align" style="padding: 0px"
-                         id="current_time">0:00
+                    <div class="col l2 offset-l3 m2 offset-m1 s2 offset-s1 left-align" id="current_time"
+                         style="padding: 0px">0:00
                     </div>
-                    <div class="col l2 offset-l2 m2 offset-m6 s2 offset-s6 right-align " style="padding: 0px"
-                         id="total_time">0:00
+                    <div class="col l2 offset-l2 m2 offset-m6 s2 offset-s6 right-align " id="total_time"
+                         style="padding: 0px">0:00
                     </div>
                 </div>
                 <div class="row center">
@@ -171,17 +176,17 @@
                                 </div>
                                 <div class="col l3 m2 s2 center" style="padding-right: 0px; padding-left: 0px">
                                     <!-- Modal Trigger -->
-                                    <a class="waves-effect waves-light btn modal-trigger green darken-4" id="add_btn"
-                                       href="#modalAdd"><i class="material-icons">add_circle_outline</i></a>
+                                    <a class="waves-effect waves-light btn modal-trigger green darken-4" href="#modalAdd"
+                                       id="add_btn"><i class="material-icons">add_circle_outline</i></a>
                                 </div>
                                 <div class="col l3 m2 s2 center " style="padding-left: 0px">
                                     <div class="row switch  blue-grey-text text-darken-3" style="margin-bottom: 0px">
                                         AutoFlow
                                     </div>
-                                    <div class="row switch tooltipped ctl-btn" data-position="bottom" data-delay="50"
+                                    <div class="row switch tooltipped ctl-btn" data-delay="50" data-position="bottom"
                                          data-tooltip="Experimental!">
                                         <label>
-                                            <input type="checkbox" id="autoflow"/>
+                                            <input id="autoflow" type="checkbox"/>
                                             <span class="lever"></span>
                                         </label>
                                     </div>
@@ -197,7 +202,7 @@
                         <td>
                             <div class="row card-panel scroll" id="card-playlist">
                                 <div class="col s12" style="padding: 0">
-                                    <ul id="playlist_list" class="collapsible" data-collapsible="accordion"
+                                    <ul class="collapsible" data-collapsible="accordion" id="playlist_list"
                                         style="margin: 0px">
 
                                     </ul>
@@ -217,7 +222,7 @@
 
 
         <!-- Music  -->
-        <div id="modal_current_info" class="modal bottom-sheet">
+        <div class="modal bottom-sheet" id="modal_current_info">
             <div class="modal-content">
                 <ul class="collection">
                     <li class="collection-item " id="modal_title"></li>
@@ -234,7 +239,7 @@
     </div>
 
     <!--Add Modal-->
-    <div id="modalAdd" class="modal modal-fixed-footer ">
+    <div class="modal modal-fixed-footer " id="modalAdd">
         <div class="modal-content" style="padding-bottom: 0px">
             <div class="row valign-wrapper">
                 <h3 class="col l12 m12 s12 center"> Add Music</h3>
@@ -246,24 +251,24 @@
                             <div class="input-field col offset-l1 l9 m9 s7"
                                  style="padding-left: 0px; padding-right: 0px">
                                 <!--<i class="material-icons prefix">link</i>-->
-                                <input id="input_search" type="text" class="validate"/>
+                                <input class="validate" id="input_search" type="text"/>
                                 <label for="input_search">Search</label>
                             </div>
                             <div class="input-field col l1 m2 s3" style="margin-top: 22px">
                                 <button class="btn waves-effect waves-light green darken-4 white-text" id="btn_search"
                                         type="button"><i class="material-icons">search</i></button>
                             </div>
-<!--                            <div class="col l1 m1 s2 center" style="padding: 0; margin-top: 15px;">-->
-<!--                                <div class="row switch  blue-grey-text text-darken-3" style="margin-bottom: 0px">-->
-<!--                                    Playlist-->
-<!--                                </div>-->
-<!--                                <div class="row switch">-->
-<!--                                    <label>-->
-<!--                                        <input type="checkbox" id="playlistSearch"/>-->
-<!--                                        <span class="lever"></span>-->
-<!--                                    </label>-->
-<!--                                </div>-->
-<!--                            </div>-->
+                            <!--                            <div class="col l1 m1 s2 center" style="padding: 0; margin-top: 15px;">-->
+                            <!--                                <div class="row switch  blue-grey-text text-darken-3" style="margin-bottom: 0px">-->
+                            <!--                                    Playlist-->
+                            <!--                                </div>-->
+                            <!--                                <div class="row switch">-->
+                            <!--                                    <label>-->
+                            <!--                                        <input type="checkbox" id="playlistSearch"/>-->
+                            <!--                                        <span class="lever"></span>-->
+                            <!--                                    </label>-->
+                            <!--                                </div>-->
+                            <!--                            </div>-->
                         </div>
 
                         <div class="row">
@@ -297,7 +302,7 @@
         <div class="modal-footer">
         <span style="margin-right: 10px">
             <label>
-                <input name="group1" type="radio" checked="checked" id="bottom"/>
+                <input checked="checked" id="bottom" name="group1" type="radio"/>
                 <span>Bottom</span>
             </label>
         </span>
@@ -307,7 +312,7 @@
                 <span>Top</span>
             </label>
         </span>
-            <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">Close</a>
+            <a class="modal-action modal-close waves-effect waves-green btn-flat" href="#">Close</a>
         </div>
     </div>
 
@@ -319,7 +324,7 @@
             <ul class="collection">
                 <li class="collection-item">Author: @author</li>
                 <li class="collection-item">Duration: @lenght</li>
-                <li class="collection-item">URL: <a target="_blank" href="@url">@url</a></li>
+                <li class="collection-item">URL: <a href="@url" target="_blank">@url</a></li>
                 <li class="collection-item">Submitted by: @user</li>
                 <li class="collection-item center">
                     <a class="btn red darken-4 z-depth-3 waves-effect waves-light btn_dell_playlist" data_url="@url">
@@ -331,27 +336,27 @@
     </li>
 
     <!-- Modal Chanels -->
-    <div id="modalChanels" class="modal">
+    <div class="modal" id="modalChanels">
         <div class="modal-content" style="padding-bottom: 0px">
             <div class="row" style="margin-bottom: 0px">
                 <h3 class="col l12 m12 s12 center">Vocal Channels</h3>
                 <div class="col offset-l4 l4 m4 offset-m4 s8 offset-s2 center">
-                    <form id="channelForm" action="#" class="left-align">
+                    <form action="#" class="left-align" id="channelForm">
                     </form>
                 </div>
             </div>
         </div>
         <div class="modal-footer">
-            <a href="/" class="modal-action modal-close waves-effect waves-red btn-flat ">Cancel</a>
-            <a href="#!" id="btn_ok_channel"
-               class="modal-action modal-close waves-effect waves-green btn-flat disabled">Connect</a>
+            <a class="modal-action modal-close waves-effect waves-red btn-flat " href="/">Cancel</a>
+            <a class="modal-action modal-close waves-effect waves-green btn-flat disabled" href="#!"
+               id="btn_ok_channel">Connect</a>
 
         </div>
     </div>
 
 
     <!--Loading Modal-->
-    <div id="modal_loading" class="modal valign-wrapper">
+    <div class="modal valign-wrapper" id="modal_loading">
         <div class="modal-content">
             <div class="row center">
                 <h3 class="col l12 m12 s12 center">Please wait</h3>
@@ -411,9 +416,9 @@
     </div>
 
 
-    <p id="radioTemplate" class="" style="visibility: hidden; display: none">
+    <p class="" id="radioTemplate" style="visibility: hidden; display: none">
         <label>
-            <input name="vocalRadio" class="with-gap" type="radio" value="@id" id="@id"/>
+            <input class="with-gap" id="@id" name="vocalRadio" type="radio" value="@id"/>
             <span for="@id">@name</span>
         </label>
 

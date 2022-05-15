@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    setInterval("loop()",1000);
+    setInterval("loop()", 1000);
 });
 
 function loop() {

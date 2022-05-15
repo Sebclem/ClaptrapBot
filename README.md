@@ -1,6 +1,7 @@
 <p align="center"><img alt="discord" src="https://claptrapbot.com/favicon.png" width="150"/></p>
 
-# ClaptrapBot: A multifunctional Discord Bot ! 
+# ClaptrapBot: A multifunctional Discord Bot !
+
 [![GitHub Release][releases-shield]][releases]
 ![Project Stage][project-stage-shield]
 [![License][license-shield]](LICENSE.md)
@@ -9,16 +10,20 @@
 ![Project Maintenance][maintenance-shield]
 
 [![Buy me a coffee][buymeacoffee-shield]][buymeacoffee]
-## About 
+
+## About
+
 ClaptrapBot is a Discord bot. (No way! :open_mouth:)
 
 ### Features:
+
 - :notes: Music bot with a cool web control interface !
 - :bar_chart: Rank and Stats ! (Text and voice)
 - :heart_eyes: NSFW Commands ! (With a daily surprise :kissing_heart:)
 - :hammer_and_pick: Moderation commands !
 
 You can add the bot to your server from the home page: https://claptrapbot.com/
+
 ## Authors & contributors
 
 The original development is by [SebClem][Sebclem].
@@ -55,19 +60,28 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 
-
-
-
 [license-shield]: https://img.shields.io/github/license/Sebclem/ClaptrapBot.svg
+
 [build-badge]: https://img.shields.io/github/workflow/status/Sebclem/ClaptrapBot/Build
+
 [maintenance-shield]: https://img.shields.io/maintenance/yes/2020.svg
+
 [project-stage-shield]: https://img.shields.io/badge/project%20stage-Beta-red.svg
+
 [buymeacoffee-shield]: https://www.buymeacoffee.com/assets/img/guidelines/download-assets-sm-2.svg
+
 [buymeacoffee]: https://www.buymeacoffee.com/seb6596
+
 [issue]: https://github.com/hassio-addons/addon-log-viewer/issues
+
 [releases-shield]: https://img.shields.io/github/release/Sebclem/ClaptrapBot.svg?include_prereleases
+
 [releases]: https://github.com/Sebclem/ClaptrapBot/releases
+
 [Sebclem]: https://github.com/Sebclem
+
 [alex]: https://github.com/Alexandre064
+
 [Aeka]: https://twitter.com/Le_aeka
+
 [contributors]: https://github.com/Sebclem/ClaptrapBot/graphs/contributors

@@ -1,8 +1,7 @@
-var post_json = {settings : []};
+var post_json = {settings: []};
 
 
-
-$(document).ready(function(){
+$(document).ready(function () {
 
     $('select').formSelect();
     modal_loading = $('#modal_loading');
@@ -13,42 +12,42 @@ $(document).ready(function(){
     $('#sendBtn').click(function () {
 
         var select = $('.collect-select');
-        select.each(function(){
+        select.each(function () {
             var val = $(this).find("select").val();
             var id = $(this).attr("id");
-            if(val != null){
-                post_json["settings"].push({"id" : id, "val" : val});
+            if (val != null) {
+                post_json["settings"].push({"id": id, "val": val});
             }
 
         });
 
 
         var select_multi = $('.collect-select-multiple');
-        select_multi.each(function(){
+        select_multi.each(function () {
             var instance = M.FormSelect.getInstance($(this).find("select")[0]);
 
             var id = $(this).attr("id");
-            post_json["settings"].push({"id" : id, "vals" : instance.getSelectedValues()});
+            post_json["settings"].push({"id": id, "vals": instance.getSelectedValues()});
 
 
         });
 
         var switch_collected = $('.collect-switch');
-        switch_collected.each(function(){
+        switch_collected.each(function () {
             var val = $(this).is(':checked').toString();
             var id = $(this).attr("id");
-            if(val != null){
-                post_json["settings"].push({"id" : id, "val" : val});
+            if (val != null) {
+                post_json["settings"].push({"id": id, "val": val});
             }
 
         });
 
         var text = $('.collect-text');
-        text.each(function(){
+        text.each(function () {
             var val = $(this).val();
             var id = $(this).attr("id");
-            if(val != null){
-                post_json["settings"].push({"id" : id, "val" : val});
+            if (val != null) {
+                post_json["settings"].push({"id": id, "val": val});
             }
 
         });
@@ -58,16 +57,22 @@ $(document).ready(function(){
             type: "POST",
             contentType: 'application/json',
             url: "/api/settings",
-            data:  JSON.stringify(post_json)
+            data: JSON.stringify(post_json)
 
         }).done(function (data) {
             console.log("ok");
-            M.toast({html: '<i class="small material-icons" style="margin-right: 0.3em">done</i>Save Successful ! ', classes: 'rounded green'});
+            M.toast({
+                html: '<i class="small material-icons" style="margin-right: 0.3em">done</i>Save Successful ! ',
+                classes: 'rounded green'
+            });
             modal_loading.modal('close');
         }).fail(function (data) {
             console.log(data);
             modal_loading.modal('close');
-            M.toast({html: '<i class="small material-icons" style="margin-right: 0.3em">report</i>Save Failed ! ', classes: 'rounded red'});
+            M.toast({
+                html: '<i class="small material-icons" style="margin-right: 0.3em">report</i>Save Failed ! ',
+                classes: 'rounded red'
+            });
         });
 
 

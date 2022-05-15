@@ -89,8 +89,7 @@ function getCurentMusic() {
                     enableBtn(btn_play);
                     enableBtn(btn_next);
                     enableBtn(btn_disconnect_music);
-                }
-                else {
+                } else {
                     disableBtn(btn_play);
                     disableBtn(btn_stop);
                     disableBtn(btn_info);
@@ -139,7 +138,7 @@ function getCurentMusic() {
                 if ($('#music_progress').hasClass("determinate")) {
                     $('#music_progress').addClass("indeterminate").removeClass("determinate");
                 }
-                if(!musicLoadFlag){
+                if (!musicLoadFlag) {
                     clearInterval(interval);
                     interval = setInterval("getCurentMusic()", 200);
                     musicLoadFlag = true;
@@ -180,25 +179,23 @@ function getCurentMusic() {
         }
         if (switchAutoFlow.is(':checked') !== data.currentMusic.autoflow)
             switchAutoFlow.prop('checked', data.currentMusic.autoflow);
-        if (data.currentMusic.state !== "DISCONNECTED" && data.currentMusic.state !== "STOP"){
+        if (data.currentMusic.state !== "DISCONNECTED" && data.currentMusic.state !== "STOP") {
             getPlayList(data.playlist.list);
-            if(data.currentMusic.state !== "LOADING"){
+            if (data.currentMusic.state !== "LOADING") {
                 $(".ctl-btn").removeClass("disabled");
-                if(musicLoadFlag){
+                if (musicLoadFlag) {
                     clearInterval(interval);
                     interval = setInterval("getCurentMusic()", 1000);
                     musicLoadFlag = false;
                 }
             }
-        }
-
-        else {
+        } else {
             if (loadingFlag) {
                 modal_loading.close();
                 loadingFlag = false;
             }
             $(".ctl-btn").removeClass("disabled");
-            if(musicLoadFlag){
+            if (musicLoadFlag) {
                 clearInterval(interval);
                 interval = setInterval("getCurentMusic()", 1000);
                 musicLoadFlag = false;
@@ -252,8 +249,7 @@ function getPlayList(data) {
                 sendCommand(command, true);
             });
         }
-    }
-    else {
+    } else {
         $('#playlist_list').empty();
         savedPlaylist = {};
     }
@@ -261,8 +257,6 @@ function getPlayList(data) {
         modal_loading.close();
         loadingFlag = false;
     }
-
-
 
 
 }
@@ -313,14 +307,14 @@ function updateModal(data) {
 
 function updateControl(data) {
 
-    if($('#music_text').text() !== data.info.audioTrackInfo.title){
+    if ($('#music_text').text() !== data.info.audioTrackInfo.title) {
         $('#music_text').text(data.info.audioTrackInfo.title);
     }
     var percent = (data.currentPos / data.info.audioTrackInfo.length) * 100;
 
     $('#music_progress').width(percent + "%");
 
-    if(data.state !== "LOADING"){
+    if (data.state !== "LOADING") {
         if (Cookies.get('token') !== undefined) {
             enableBtn(btn_play);
             enableBtn(btn_stop);
@@ -329,8 +323,7 @@ function updateControl(data) {
             enableBtn(btn_flush);
             enableBtn(btn_next);
             enableBtn(btn_disconnect_music);
-        }
-        else {
+        } else {
             disableBtn(btn_play);
             disableBtn(btn_stop);
             disableBtn(btn_info);
@@ -343,7 +336,6 @@ function updateControl(data) {
             $('#music_progress').addClass("determinate").removeClass("indeterminate");
         }
     }
-
 
 
     $('#music_img').attr("src", "https://img.youtube.com/vi/" + data.info.audioTrackInfo.identifier + "/hqdefault.jpg");
@@ -370,7 +362,7 @@ function sendCommand(command, modal) {
         success: function (data) {
             loadingFlag = true;
             getCurentMusic();
-            if(interval != null)
+            if (interval != null)
                 clearInterval(interval);
             interval = setInterval("getCurentMusic()", 1000);
 
@@ -392,8 +384,7 @@ function sendCommand(command, modal) {
             Cookies.remove('token');
             Cookies.remove('name');
             location.reload();
-        }
-        else {
+        } else {
             M.toast({
                 html: " <i class=\"material-icons\" style='margin-right: 10px'>warning</i> Command fail!",
                 classes: 'red',
@@ -489,8 +480,7 @@ function addListClick(event) {
     let button;
     if (event.target.nodeName === "I") {
         button = event.target.parentNode;
-    }
-    else
+    } else
         button = event.target;
     button.classList.add("scale-out");
 
@@ -509,7 +499,7 @@ function ytTimeToTime(duration) {
     let seconds;
     if (duration === "PT0S")
         return "&#x1F534 LIVE";
-    if(duration.endsWith("Video(s)"))
+    if (duration.endsWith("Video(s)"))
         return duration;
     if (duration.includes("H"))
         hours = parseInt(duration.match(/\d*H/)[0].replace("H", ""), 10);
@@ -587,8 +577,7 @@ function listeners() {
     $('#input_search').on("input", function () {
         if ($('#input_search').val() == "") {
             disableBtn($('#btn_search'));
-        }
-        else {
+        } else {
             enableBtn($('#btn_search'));
         }
     });
@@ -623,8 +612,7 @@ function listeners() {
     switchAutoFlow.click(function () {
         if (switchAutoFlow.is(':checked')) {
             sendCommand({command: 'AUTOFLOWON'}, false)
-        }
-        else
+        } else
             sendCommand({command: 'AUTOFLOWOFF'}, false)
     });
 }

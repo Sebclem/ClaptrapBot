@@ -1,11 +1,11 @@
 /*.nav-wrapper{*/
-    /*!*margin-right: 1%;*!*/
-    /*margin-left: 1%;*/
-    /*width: 100%;*/
+/*!*margin-right: 1%;*!*/
+/*margin-left: 1%;*/
+/*width: 100%;*/
 /*}*/
 
 
-.collapsible-body{
+.collapsible-body {
     padding: 0px;
 }
 
@@ -22,10 +22,10 @@ main {
 @font-face {
     font-family: "Norwester";
     src: url("/css/font/norwester.ttf"),
-         url("/css/font/norwester.woff");
+    url("/css/font/norwester.woff");
 }
 
-.brand-logo{
+.brand-logo {
     font-family: Norwester;
     font-size: 45px !important;
     font-weight: bold;
@@ -34,10 +34,10 @@ main {
     -webkit-text-stroke-width: 3px;
 }
 
-#dropdown_guilds a:hover{
+#dropdown_guilds a:hover {
     background-color: rgba(0, 0, 0, 0) !important;
 }
 
-#dropdown_guilds li:hover{
+#dropdown_guilds li:hover {
     background-color: rgba(0, 0, 0, 0.2) !important;
 }

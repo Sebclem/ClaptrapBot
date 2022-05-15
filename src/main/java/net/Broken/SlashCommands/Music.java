@@ -1,10 +1,8 @@
 package net.Broken.SlashCommands;
 
 
-import net.Broken.MainBot;
 import net.Broken.SlashCommand;
 import net.Broken.Tools.EmbedMessageUtils;
-import net.Broken.Tools.MessageTimeOut;
 import net.Broken.audio.AudioM;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Message;
@@ -16,13 +14,7 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 

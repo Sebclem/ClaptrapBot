@@ -1,15 +1,10 @@
 package net.Broken.SlashCommands;
 
 
-import net.Broken.Commande;
 import net.Broken.SlashCommand;
 import net.Broken.Tools.EmbedMessageUtils;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
-import net.dv8tion.jda.api.entities.ChannelType;
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import org.apache.logging.log4j.LogManager;
@@ -50,7 +45,7 @@ public class Cat implements SlashCommand {
 
         } catch (IOException e) {
             logger.catching(e);
-            event.reply(new MessageBuilder().setEmbeds(EmbedMessageUtils.getInternalError()).build()).queue();
+            event.reply(new MessageBuilder().setEmbeds(EmbedMessageUtils.getInternalError()).build()).setEphemeral(true).queue();
         }
 
 
@@ -63,7 +58,7 @@ public class Cat implements SlashCommand {
 
     @Override
     public List<OptionData> getOptions() {
-        return new ArrayList<>();
+        return null;
     }
 
     @Override
