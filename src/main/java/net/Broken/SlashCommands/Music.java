@@ -44,7 +44,7 @@ public class Music implements SlashCommand {
                     }
                 } else {
                     Message message = new MessageBuilder().setEmbeds(EmbedMessageUtils.getMusicError("You are not in a voice channel !")).build();
-                    event.getHook().sendMessage(message).queue();
+                    event.getHook().setEphemeral(true).sendMessage(message).queue();
                 }
                 break;
             case "add":

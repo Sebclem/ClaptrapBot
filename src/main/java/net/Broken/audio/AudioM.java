@@ -104,7 +104,7 @@ public class AudioM {
             public void noMatches() {
                 logger.warn("[" + guild + "] Cant find media!");
                 Message message = new MessageBuilder().setEmbeds(EmbedMessageUtils.getMusicError("Video not found !")).build();
-                event.getHook().sendMessage(message).queue();
+                event.getHook().setEphemeral(true).sendMessage(message).queue();
             }
 
             @Override
@@ -112,7 +112,7 @@ public class AudioM {
                 logger.error("[" + guild + "] Can't load media!");
                 logger.error(exception.getMessage());
                 Message message = new MessageBuilder().setEmbeds(EmbedMessageUtils.getMusicError("Playback error !")).build();
-                event.getHook().sendMessage(message).queue();
+                event.getHook().setEphemeral(true).sendMessage(message).queue();
             }
         });
     }
@@ -293,7 +293,7 @@ public class AudioM {
             loadAndPlay(event, playedChanel, url, playListLimit, onHead);
         } else {
             Message message = new MessageBuilder().setEmbeds(EmbedMessageUtils.getMusicError("Not connected to vocal chanel !")).build();
-            event.getHook().sendMessage(message).queue();
+            event.getHook().setEphemeral(true).sendMessage(message).queue();
         }
     }
 
