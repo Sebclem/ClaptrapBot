@@ -27,23 +27,14 @@ import java.util.List;
 
 public class PlaylistManager {
 
-    private final ResponseEntity<PlaylistResponseData> TOKEN_ERROR = new ResponseEntity<>(new PlaylistResponseData("Unknown Token!\nPlease Re-connect.", "token"), HttpStatus.UNAUTHORIZED);
-
-    private final ResponseEntity<PlaylistResponseData> PLAYLIST_NOT_FOUND = new ResponseEntity<>(new PlaylistResponseData("Playlist not found", "playlist"), HttpStatus.NOT_FOUND);
-
-    private final ResponseEntity<PlaylistResponseData> TRACK_NOT_FOUND = new ResponseEntity<>(new PlaylistResponseData("Can't find media!", "track"), HttpStatus.NOT_FOUND);
-
-
-
-    private PlaylistRepository playlistRepository;
-
-    private TrackRepository trackRepository;
-
-    private UserRepository userRepository;
-
-    Logger logger = LogManager.getLogger();
-
     private static PlaylistManager INSTANCE = new PlaylistManager();
+    private final ResponseEntity<PlaylistResponseData> TOKEN_ERROR = new ResponseEntity<>(new PlaylistResponseData("Unknown Token!\nPlease Re-connect.", "token"), HttpStatus.UNAUTHORIZED);
+    private final ResponseEntity<PlaylistResponseData> PLAYLIST_NOT_FOUND = new ResponseEntity<>(new PlaylistResponseData("Playlist not found", "playlist"), HttpStatus.NOT_FOUND);
+    private final ResponseEntity<PlaylistResponseData> TRACK_NOT_FOUND = new ResponseEntity<>(new PlaylistResponseData("Can't find media!", "track"), HttpStatus.NOT_FOUND);
+    Logger logger = LogManager.getLogger();
+    private PlaylistRepository playlistRepository;
+    private TrackRepository trackRepository;
+    private UserRepository userRepository;
 
     private PlaylistManager() {
         ApplicationContext context = SpringContext.getAppContext();
@@ -66,57 +57,52 @@ public class PlaylistManager {
 
             User jdaUser = MainBot.jda.getUserById(user.getJdaId());
 
-            WebLoadUtils webLoadUtils = new WebLoadUtils(data, jdaUser, MainBot.jda.getGuilds().get(0) , false);
+            WebLoadUtils webLoadUtils = new WebLoadUtils(data, jdaUser, MainBot.jda.getGuilds().get(0), false);
             webLoadUtils.getResponse();
 
-            if(webLoadUtils.userAudioTrack == null){
+            if (webLoadUtils.userAudioTrack == null) {
                 return TRACK_NOT_FOUND;
-            }
-            else
-            {
+            } else {
                 TrackEntity trackEntity = new TrackEntity(webLoadUtils.userAudioTrack.getAudioTrack().getInfo(), data.pos, playlist);
 
                 playlist = insert(playlist, trackEntity);
-                return new ResponseEntity<>(new PlaylistResponseData("Ok", playlist),HttpStatus.OK);
+                return new ResponseEntity<>(new PlaylistResponseData("Ok", playlist), HttpStatus.OK);
             }
 
 
-
         } catch (UnknownTokenException e) {
-            logger.warn("Unknown token: "+ token);
+            logger.warn("Unknown token: " + token);
             return TOKEN_ERROR;
         } catch (PlaylistNotFoundException e) {
-            logger.debug("Playlist not found: "+ data.playlistId);
+            logger.debug("Playlist not found: " + data.playlistId);
             return PLAYLIST_NOT_FOUND;
         }
     }
 
 
-    public ResponseEntity<PlaylistResponseData> removeTrack(String token, DeleteTrackData data){
+    public ResponseEntity<PlaylistResponseData> removeTrack(String token, DeleteTrackData data) {
         UserUtils userUtils = UserUtils.getInstance();
         try {
             UserEntity user = userUtils.getUserWithApiToken(userRepository, token);
             PlaylistEntity playlist = getPlaylist(data.playlistId);
 
 
-
             TrackEntity toDelete = trackRepository.findById(data.id);
 
             playlist = remove(playlist, toDelete);
 
-            if(playlist == null)
-            {
+            if (playlist == null) {
                 logger.warn("Playlist: " + data.playlistId + " Track: " + data.id);
                 return TRACK_NOT_FOUND;
             }
 
-            return new ResponseEntity<>(new PlaylistResponseData("Ok", playlist),HttpStatus.OK);
+            return new ResponseEntity<>(new PlaylistResponseData("Ok", playlist), HttpStatus.OK);
 
         } catch (UnknownTokenException e) {
-            logger.warn("Unknown token: "+ token);
+            logger.warn("Unknown token: " + token);
             return TOKEN_ERROR;
         } catch (PlaylistNotFoundException e) {
-            logger.debug("Playlist not found: "+ data.playlistId);
+            logger.debug("Playlist not found: " + data.playlistId);
             return PLAYLIST_NOT_FOUND;
         }
     }
@@ -128,15 +114,13 @@ public class PlaylistManager {
             PlaylistEntity playlist = getPlaylist(data.playlistId);
 
 
-
             TrackEntity toMove = trackRepository.findById(data.id);
 
             TrackEntity save = new TrackEntity(toMove);
 
             playlist = remove(playlist, toMove);
 
-            if(playlist == null)
-            {
+            if (playlist == null) {
                 logger.warn("Playlist: " + data.playlistId + " Track: " + data.id);
                 return TRACK_NOT_FOUND;
             }
@@ -146,21 +130,20 @@ public class PlaylistManager {
             playlist = insert(playlist, save);
 
 
-
-            return new ResponseEntity<>(new PlaylistResponseData("Ok", playlist),HttpStatus.OK);
+            return new ResponseEntity<>(new PlaylistResponseData("Ok", playlist), HttpStatus.OK);
 
         } catch (UnknownTokenException e) {
-            logger.warn("Unknown token: "+ token);
+            logger.warn("Unknown token: " + token);
             return TOKEN_ERROR;
         } catch (PlaylistNotFoundException e) {
-            logger.debug("Playlist not found: "+ data.playlistId);
+            logger.debug("Playlist not found: " + data.playlistId);
             return PLAYLIST_NOT_FOUND;
         }
     }
 
-    private PlaylistEntity getPlaylist(int id) throws PlaylistNotFoundException{
+    private PlaylistEntity getPlaylist(int id) throws PlaylistNotFoundException {
         PlaylistEntity playlist = playlistRepository.findById(id);
-        if(playlist == null)
+        if (playlist == null)
             throw new PlaylistNotFoundException();
         else
             return playlist;
@@ -168,26 +151,25 @@ public class PlaylistManager {
     }
 
 
-    private PlaylistEntity insert(PlaylistEntity playlistEntity, TrackEntity trackEntity){
+    private PlaylistEntity insert(PlaylistEntity playlistEntity, TrackEntity trackEntity) {
         List<TrackEntity> tracks = trackRepository.findDistinctByPlaylistOrderByPos(playlistEntity);
 
 
         boolean increase = false;
-        for(TrackEntity track : tracks){
-            if(track.getPos().equals(trackEntity.getPos())){
+        for (TrackEntity track : tracks) {
+            if (track.getPos().equals(trackEntity.getPos())) {
                 logger.debug("Need re-organisation");
                 increase = true;
             }
 
 
-            if(increase){
+            if (increase) {
                 track.setPos(track.getPos() + 1);
                 trackRepository.save(track);
             }
         }
 
-        if(!increase)
-        {
+        if (!increase) {
             trackEntity.setPos(tracks.size());
         }
 
@@ -200,9 +182,9 @@ public class PlaylistManager {
 
     }
 
-    private PlaylistEntity remove(PlaylistEntity playlistEntity, TrackEntity trackEntity){
+    private PlaylistEntity remove(PlaylistEntity playlistEntity, TrackEntity trackEntity) {
 
-        if(trackEntity == null){
+        if (trackEntity == null) {
             logger.warn("Track not found in DB!");
             return null;
         }
@@ -210,14 +192,14 @@ public class PlaylistManager {
         List<TrackEntity> tracks = trackRepository.findDistinctByPlaylistOrderByPos(playlistEntity);
 
         int toDeleteIndex = tracks.indexOf(trackEntity);
-        logger.debug("To delete index: "  + toDeleteIndex);
-        if(toDeleteIndex == -1){
+        logger.debug("To delete index: " + toDeleteIndex);
+        if (toDeleteIndex == -1) {
             logger.warn("Track not found in playlist");
             return null;
         }
 
 
-        for(int i = toDeleteIndex + 1; i< tracks.size(); i++){
+        for (int i = toDeleteIndex + 1; i < tracks.size(); i++) {
             tracks.get(i).setPos(tracks.get(i).getPos() - 1);
             trackRepository.save(tracks.get(i));
         }

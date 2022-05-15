@@ -58,13 +58,12 @@ public class Music implements SlashCommand {
             case "add":
                 OptionMapping url = event.getOption("url");
                 boolean next = false;
-                if(event.getOption("next") != null){
+                if (event.getOption("next") != null) {
                     next = event.getOption("next").getAsBoolean();
                 }
-                if(event.getOption("playlist-limit") == null){
-                    audio.add(event, url.getAsString(),30, next);
-                }
-                else{
+                if (event.getOption("playlist-limit") == null) {
+                    audio.add(event, url.getAsString(), 30, next);
+                } else {
                     long limit = event.getOption("playlist-limit").getAsLong();
                     audio.add(event, url.getAsString(), (int) limit, next);
                 }

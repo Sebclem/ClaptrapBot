@@ -16,9 +16,9 @@ import javax.servlet.http.HttpServletRequest;
 public class MyErrorController implements ErrorController {
 
     @RequestMapping("/error")
-    public String handleError(HttpServletRequest request, Model model, @CookieValue(value = "guild", defaultValue = "1") String guildId){
+    public String handleError(HttpServletRequest request, Model model, @CookieValue(value = "guild", defaultValue = "1") String guildId) {
         Guild guild = MainBot.jda.getGuildById(guildId);
-        if(guild != null)
+        if (guild != null)
             model.addAttribute("guild_name", guild.getName());
         else
             model.addAttribute("guild_name", "");
@@ -27,13 +27,11 @@ public class MyErrorController implements ErrorController {
         if (status != null) {
             Integer statusCode = Integer.valueOf(status.toString());
 
-            if(statusCode == HttpStatus.NOT_FOUND.value()) {
+            if (statusCode == HttpStatus.NOT_FOUND.value()) {
                 return "error/404";
-            }
-            else if(statusCode == HttpStatus.FORBIDDEN.value()){
+            } else if (statusCode == HttpStatus.FORBIDDEN.value()) {
                 return "error/403";
-            }
-            else if(statusCode == HttpStatus.INTERNAL_SERVER_ERROR.value()){
+            } else if (statusCode == HttpStatus.INTERNAL_SERVER_ERROR.value()) {
                 return "error/500";
             }
 

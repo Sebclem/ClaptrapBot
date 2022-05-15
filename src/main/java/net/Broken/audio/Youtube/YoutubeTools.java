@@ -3,8 +3,8 @@ package net.Broken.audio.Youtube;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.youtube.YouTube;
-import com.google.api.services.youtube.model.*;
 import com.google.api.services.youtube.model.SearchResult;
+import com.google.api.services.youtube.model.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -13,14 +13,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 
-import static org.hibernate.engine.jdbc.Size.LobMultiplier.M;
-
 public class YoutubeTools {
 
+    private static YoutubeTools INSTANCE;
     private Logger logger = LogManager.getLogger();
     private String apiKey = System.getenv("GOOGLE_API_KEY");
-
-    private static YoutubeTools INSTANCE;
 
     private YoutubeTools() {
 
@@ -49,8 +46,6 @@ public class YoutubeTools {
         YouTube youtube = getYoutubeService();
 
 
-
-
         YouTube.Search.List searchListRelatedVideosRequest = youtube.search().list(Collections.singletonList("snippet"));
         searchListRelatedVideosRequest.setRelatedToVideoId(videoId);
         searchListRelatedVideosRequest.setType(Collections.singletonList("video"));
@@ -61,7 +56,7 @@ public class YoutubeTools {
 
         for (SearchResult item : response.getItems()) {
             if (!history.contains(item.getId().getVideoId())) {
-                if(item.getSnippet() != null)
+                if (item.getSnippet() != null)
                     return item.getId().getVideoId();
             } else
                 logger.debug("ID already on history");
@@ -76,7 +71,7 @@ public class YoutubeTools {
     public ArrayList<net.Broken.audio.Youtube.SearchResult> search(String query, long max, boolean playlist) throws IOException {
         YouTube youTube = getYoutubeService();
         YouTube.Search.List searchList = youTube.search().list(Collections.singletonList("snippet"));
-        if(playlist)
+        if (playlist)
             searchList.setType(Collections.singletonList("playlist"));
         else
             searchList.setType(Collections.singletonList("video"));
@@ -91,8 +86,8 @@ public class YoutubeTools {
         StringBuilder idString = new StringBuilder();
 
 
-        if(playlist){
-            for(SearchResult item : response.getItems()){
+        if (playlist) {
+            for (SearchResult item : response.getItems()) {
                 idString.append(item.getId().getPlaylistId()).append(",");
             }
             HashMap<String, Playlist> playlistHashMap = new HashMap<>();
@@ -100,19 +95,18 @@ public class YoutubeTools {
             list.setId(Collections.singletonList(idString.toString()));
             list.setKey(apiKey);
             PlaylistListResponse playlistResponse = list.execute();
-            for( Playlist item : playlistResponse.getItems()){
+            for (Playlist item : playlistResponse.getItems()) {
                 playlistHashMap.put(item.getId(), item);
             }
             ArrayList<net.Broken.audio.Youtube.SearchResult> finalResult = new ArrayList<>();
-            for(SearchResult item : response.getItems()){
+            for (SearchResult item : response.getItems()) {
                 logger.trace(item.getSnippet().getTitle());
-                finalResult.add(new net.Broken.audio.Youtube.SearchResult(item, playlistHashMap.get(item.getId().getPlaylistId()).getContentDetails().getItemCount().toString()+ " Video(s)"));
+                finalResult.add(new net.Broken.audio.Youtube.SearchResult(item, playlistHashMap.get(item.getId().getPlaylistId()).getContentDetails().getItemCount().toString() + " Video(s)"));
 
             }
             return finalResult;
-        }
-        else{
-            for(SearchResult item : response.getItems()){
+        } else {
+            for (SearchResult item : response.getItems()) {
                 idString.append(item.getId().getVideoId()).append(",");
             }
             HashMap<String, Video> videoHashMap = new HashMap<>();
@@ -120,11 +114,11 @@ public class YoutubeTools {
             video.setId(Collections.singletonList(idString.toString()));
             video.setKey(apiKey);
             VideoListResponse videoResponse = video.execute();
-            for(Video item : videoResponse.getItems()){
+            for (Video item : videoResponse.getItems()) {
                 videoHashMap.put(item.getId(), item);
             }
             ArrayList<net.Broken.audio.Youtube.SearchResult> finalResult = new ArrayList<>();
-            for(SearchResult item : response.getItems()){
+            for (SearchResult item : response.getItems()) {
                 logger.trace(item.getSnippet().getTitle());
                 finalResult.add(new net.Broken.audio.Youtube.SearchResult(item, videoHashMap.get(item.getId().getVideoId()).getContentDetails().getDuration()));
             }
@@ -132,50 +126,40 @@ public class YoutubeTools {
         }
 
 
-
-
-
-
-
-
-
     }
 
 
-    public String ytTimeToString(String time){
+    public String ytTimeToString(String time) {
         int hours;
         int minutes;
         int seconds;
-        if(time.equals("PT0S"))
+        if (time.equals("PT0S"))
             return ":red_circle: LIVE";
 
-        time = time.replace("PT","");
-        if(time.contains("H")) {
+        time = time.replace("PT", "");
+        if (time.contains("H")) {
 
-            String matched = time.substring(0, time.indexOf("H")+1);
-            time = time.replace(matched,"");
+            String matched = time.substring(0, time.indexOf("H") + 1);
+            time = time.replace(matched, "");
             hours = Integer.parseInt(matched.replace("H", ""));
-        }
-        else
+        } else
             hours = 0;
         logger.trace(time);
 
-        if(time.contains("M")) {
+        if (time.contains("M")) {
 
-            String matched = time.substring(0, time.indexOf("M")+1);
-            time = time.replace(matched,"");
+            String matched = time.substring(0, time.indexOf("M") + 1);
+            time = time.replace(matched, "");
             minutes = Integer.parseInt(matched.replace("M", ""));
-        }
-        else
+        } else
             minutes = 0;
         logger.trace(time);
-        if(time.contains("S")) {
+        if (time.contains("S")) {
 
-            String matched = time.substring(0, time.indexOf("S")+1);
-            time = time.replace(matched,"");
+            String matched = time.substring(0, time.indexOf("S") + 1);
+            time = time.replace(matched, "");
             seconds = Integer.parseInt(matched.replace("S", ""));
-        }
-        else
+        } else
             seconds = 0;
         logger.trace(time);
 

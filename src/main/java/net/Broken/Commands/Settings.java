@@ -1,27 +1,17 @@
 package net.Broken.Commands;
 
 import net.Broken.Commande;
-import net.Broken.DB.Entity.GuildPreferenceEntity;
 import net.Broken.DB.Repository.GuildPreferenceRepository;
 import net.Broken.MainBot;
 import net.Broken.SpringContext;
 import net.Broken.Tools.EmbedMessageUtils;
-import net.Broken.Tools.MessageTimeOut;
-import net.Broken.Tools.SettingsUtils;
-import net.Broken.audio.AudioM;
-import net.Broken.audio.NotConnectedException;
-import net.Broken.audio.NullMusicManager;
-import net.Broken.audio.Youtube.YoutubeTools;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 
 import java.awt.*;
-import java.io.IOException;
-import java.util.List;
 
 public class Settings implements Commande {
 
@@ -40,7 +30,7 @@ public class Settings implements Commande {
 
         EmbedBuilder builder = new EmbedBuilder()
                 .setTitle("Settings")
-                .setDescription("You can do all the configuration on the web page in the \"Bot Settings\" menu.\nhttps://"+MainBot.url).setColor(Color.green);
+                .setDescription("You can do all the configuration on the web page in the \"Bot Settings\" menu.\nhttps://" + MainBot.url).setColor(Color.green);
         event.getTextChannel().sendMessage(EmbedMessageUtils.buildStandar(builder)).queue();
 
 

@@ -1,9 +1,7 @@
 package net.Broken.Tools;
 
-import net.Broken.DB.Entity.GuildPreferenceEntity;
 import net.Broken.MainBot;
 import net.Broken.audio.Youtube.SearchResult;
-import net.Broken.audio.Youtube.YoutubeTools;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -11,8 +9,6 @@ import net.dv8tion.jda.api.entities.MessageEmbed;
 import java.awt.*;
 import java.io.FileNotFoundException;
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,13 +28,13 @@ public class EmbedMessageUtils {
 
     }
 
-    public static MessageEmbed getNoPrivate(){
+    public static MessageEmbed getNoPrivate() {
         EmbedBuilder temp = new EmbedBuilder().setTitle(":warning: Command not available in private :warning:").setDescription(":arrow_right: Use `//help` to see the available commands.").setColor(Color.red);
         return buildStandar(temp);
     }
 
-    public static MessageEmbed getMusicError(String message){
-        return new EmbedBuilder().setTitle(":warning: Musique Error :warning:").setDescription(":arrow_right: "+message).setFooter("'//help music' for more info.",MainBot.jda.getSelfUser().getAvatarUrl()).setTimestamp(Instant.now()).setColor(Color.red).setFooter(MainBot.url, MainBot.jda.getSelfUser().getAvatarUrl()).build();
+    public static MessageEmbed getMusicError(String message) {
+        return new EmbedBuilder().setTitle(":warning: Musique Error :warning:").setDescription(":arrow_right: " + message).setFooter("'//help music' for more info.", MainBot.jda.getSelfUser().getAvatarUrl()).setTimestamp(Instant.now()).setColor(Color.red).setFooter(MainBot.url, MainBot.jda.getSelfUser().getAvatarUrl()).build();
 
     }
 
@@ -57,7 +53,7 @@ public class EmbedMessageUtils {
 
     public static MessageEmbed getHelp(String command) throws FileNotFoundException {
         String name = command.substring(0, 1).toUpperCase() + command.substring(1).toLowerCase();
-        String message = new ResourceLoader().getFile("Help/"+name+"/en/main.md");
+        String message = new ResourceLoader().getFile("Help/" + name + "/en/main.md");
         EmbedBuilder temp = new EmbedBuilder().setTitle(":question: " + command.substring(0, 1).toUpperCase() + command.substring(1).toLowerCase() + " :question: ").setDescription(message).setColor(Color.green);
         return buildStandar(temp);
     }
@@ -76,7 +72,7 @@ public class EmbedMessageUtils {
     }
 
     public static MessageEmbed getSpamError(String message, String sub) {
-        return new EmbedBuilder().setTitle(":warning: Spam Error :warning: ").setDescription(message).setColor(Color.red).setFooter("'//help spam "+sub+"' for more info.", MainBot.jda.getSelfUser().getAvatarUrl()).setThumbnail(MainBot.jda.getSelfUser().getAvatarUrl()).setTimestamp(Instant.now()).build();
+        return new EmbedBuilder().setTitle(":warning: Spam Error :warning: ").setDescription(message).setColor(Color.red).setFooter("'//help spam " + sub + "' for more info.", MainBot.jda.getSelfUser().getAvatarUrl()).setThumbnail(MainBot.jda.getSelfUser().getAvatarUrl()).setTimestamp(Instant.now()).build();
     }
 
     public static MessageEmbed getSpamInfo(String message) {
@@ -92,49 +88,47 @@ public class EmbedMessageUtils {
         return buildStandar(new EmbedBuilder().setTitle(":pencil: Web Registration :pencil:").setDescription(message).setColor(Color.green));
     }
 
-    public static MessageEmbed getInternalError(){
+    public static MessageEmbed getInternalError() {
         return buildStandar(getError("I... I... I don't feel so good ~~mr stark~~...  :thermometer_face: \nPlease contact my developer!").setImage("https://i.imgur.com/anKv8U5.gif"));
     }
 
-    public static MessageEmbed buildStandar(EmbedBuilder embedBuilder){
+    public static MessageEmbed buildStandar(EmbedBuilder embedBuilder) {
         return embedBuilder.setFooter(MainBot.url, MainBot.jda.getSelfUser().getAvatarUrl()).setThumbnail(MainBot.jda.getSelfUser().getAvatarUrl()).setTimestamp(Instant.now()).build();
     }
 
-    public static MessageEmbed getUnautorized(){
+    public static MessageEmbed getUnautorized() {
         return buildStandar(getError("You're not powerful enough to do that slave !").setImage("https://i.imgur.com/0OSsdvW.gif"));
     }
 
     public static MessageEmbed getHelpList(String role, String list) throws FileNotFoundException {
         String message = new ResourceLoader().getFile("Help/main.md");
         message = message.replace("@list", list);
-        return new EmbedBuilder().setTitle("Bot Command ("+role+")").setDescription(message).setFooter("Use '//help <command>' for more info",MainBot.jda.getSelfUser().getAvatarUrl()).setTimestamp(Instant.now()).setColor(Color.green).setThumbnail(MainBot.jda.getSelfUser().getAvatarUrl()).build();
+        return new EmbedBuilder().setTitle("Bot Command (" + role + ")").setDescription(message).setFooter("Use '//help <command>' for more info", MainBot.jda.getSelfUser().getAvatarUrl()).setTimestamp(Instant.now()).setColor(Color.green).setThumbnail(MainBot.jda.getSelfUser().getAvatarUrl()).build();
     }
 
     public static MessageEmbed getLastMessageFromTextChannel(HashMap<String, String> message) {
         EmbedBuilder temp = new EmbedBuilder().setTitle("Channel uses checker").setDescription("Last message date for channels:").setColor(Color.green);
-        for(Map.Entry<String, String> entry : message.entrySet()) {
-            temp.addField(entry.getKey(),entry.getValue(), false);
+        for (Map.Entry<String, String> entry : message.entrySet()) {
+            temp.addField(entry.getKey(), entry.getValue(), false);
         }
 
         return buildStandar(temp);
     }
 
-    public static MessageEmbed getReportUsersError(){
+    public static MessageEmbed getReportUsersError() {
         return new EmbedBuilder().setTitle(":warning: Command error :warning: ").setDescription("").setColor(Color.red).setFooter("'//help move' for more info.", MainBot.jda.getSelfUser().getAvatarUrl()).setTimestamp(Instant.now()).build();
     }
 
-    public static MessageEmbed searchResult(SearchResult result){
+    public static MessageEmbed searchResult(SearchResult result) {
         EmbedBuilder builder = new EmbedBuilder()
                 .setColor(Color.CYAN)
                 .setTitle(result.title)
                 .setImage(result.imageUrl)
                 .addField("Duration: ", result.duration, false)
-                .addField("URL:","https://www.youtube.com/watch?v="+result.id,false)
+                .addField("URL:", "https://www.youtube.com/watch?v=" + result.id, false)
                 .addField("Chanel:", result.channelTittle, false);
         return buildStandar(builder);
     }
-
-
 
 
 }

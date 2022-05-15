@@ -2,7 +2,6 @@ package net.Broken.audio.Youtube;
 
 import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioTrack;
 import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeSearchProvider;
-import com.sedmelluq.discord.lavaplayer.track.AudioItem;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.BasicAudioPlaylist;
 import org.apache.logging.log4j.LogManager;
@@ -21,9 +20,8 @@ import java.util.concurrent.TimeUnit;
 
 public class YoutubeSearchRework {
 
-    private Logger logger = LogManager.getLogger();
-
     private static YoutubeSearchRework INSTANCE;
+    private Logger logger = LogManager.getLogger();
 
     public static YoutubeSearchRework getInstance() {
         if (INSTANCE == null) {

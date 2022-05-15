@@ -31,18 +31,15 @@ public class Help implements Commande {
 
     @Override
     public void action(String[] args, MessageReceivedEvent event) {
-        if(args.length>=1)
-        {
+        if (args.length >= 1) {
             String argsString = args[0];
             //System.out.println(argsString);
-            if (MainBot.commandes.containsKey(argsString))
-            {
+            if (MainBot.commandes.containsKey(argsString)) {
 
 
                 Commande cmdObj = MainBot.commandes.get(argsString);
-                if(!cmdObj.isAdminCmd() || isAdmin(event))
-                {
-                    logger.debug("Help for "+argsString+" by "+event.getAuthor().getName());
+                if (!cmdObj.isAdminCmd() || isAdmin(event)) {
+                    logger.debug("Help for " + argsString + " by " + event.getAuthor().getName());
                     MessageEmbed messageEmbed;
                     try {
                         messageEmbed = EmbedMessageUtils.getHelp(argsString);
@@ -54,62 +51,55 @@ public class Help implements Commande {
                             logger.catching(e1);
                         }
                     }
-                    if(!event.isFromType(ChannelType.PRIVATE)) {
+                    if (!event.isFromType(ChannelType.PRIVATE)) {
                         event.getTextChannel().sendMessage(messageEmbed).queue();
 
-                    } else{
-                        PrivateMessage.send(event.getAuthor(), messageEmbed,logger);
+                    } else {
+                        PrivateMessage.send(event.getAuthor(), messageEmbed, logger);
                     }
-                }
-                else
-                {
+                } else {
                     logger.info("Help wanted for admin command, Denied!");
-                    if(!event.isFromType(ChannelType.PRIVATE)) {
+                    if (!event.isFromType(ChannelType.PRIVATE)) {
                         Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getUnautorized()).complete();
-                        List<Message> messages = new ArrayList<Message>(){{
+                        List<Message> messages = new ArrayList<Message>() {{
                             add(rest);
                             add(event.getMessage());
                         }};
-                        new MessageTimeOut(messages,MainBot.messageTimeOut).start();
+                        new MessageTimeOut(messages, MainBot.messageTimeOut).start();
 
-                    } else{
+                    } else {
                         PrivateMessage.send(event.getAuthor(), EmbedMessageUtils.getUnautorized(), logger);
                     }
                 }
 
 
-
-            }
-            else
-            {
-                if(!event.isFromType(ChannelType.PRIVATE)) {
+            } else {
+                if (!event.isFromType(ChannelType.PRIVATE)) {
                     Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getUnknowCommand()).complete();
-                    List<Message> messages = new ArrayList<Message>(){{
+                    List<Message> messages = new ArrayList<Message>() {{
                         add(rest);
                         add(event.getMessage());
                     }};
-                    new MessageTimeOut(messages,MainBot.messageTimeOut).start();
-                } else{
-                    PrivateMessage.send(event.getAuthor(),EmbedMessageUtils.getUnknowCommand(),logger);
+                    new MessageTimeOut(messages, MainBot.messageTimeOut).start();
+                } else {
+                    PrivateMessage.send(event.getAuthor(), EmbedMessageUtils.getUnknowCommand(), logger);
                 }
                 logger.debug("Unknown command!");
             }
-        }
-        else
-        {
+        } else {
             TableRenderer table = new TableRenderer();
-            table.setHeader("Command","PU");
+            table.setHeader("Command", "PU");
 
             TableRenderer nsfwTable = new TableRenderer();
             nsfwTable.setHeader("NSFW Only\u00A0", "PU");
             List<String> noPu = new ArrayList<>();
 
             for (Map.Entry<String, Commande> e : MainBot.commandes.entrySet()) {
-                if(!e.getValue().isAdminCmd() || isAdmin(event)){
-                    if(e.getValue().isPrivateUsable())
+                if (!e.getValue().isAdminCmd() || isAdmin(event)) {
+                    if (e.getValue().isPrivateUsable())
                         table.addRow(e.getKey(), "XX");
-                    else if(e.getValue().isNSFW())
-                        nsfwTable.addRow(e.getKey(),"");
+                    else if (e.getValue().isNSFW())
+                        nsfwTable.addRow(e.getKey(), "");
                     else
                         noPu.add(e.getKey());
                 }
@@ -117,27 +107,27 @@ public class Help implements Commande {
 
             }
 
-            for(String key : noPu)
+            for (String key : noPu)
                 table.addRow(key, "");
 
             String txt = table.build();
             txt += "\n\n";
             txt += nsfwTable.build();
 
-            if(!event.isFromType(ChannelType.PRIVATE)){
+            if (!event.isFromType(ChannelType.PRIVATE)) {
                 Message rest = event.getTextChannel().sendMessage(new EmbedBuilder().setTitle("Commands sent by private message").setColor(Color.green).build()).complete();
                 new MessageTimeOut(MainBot.messageTimeOut, rest, event.getMessage()).start();
             }
 
 
             String role;
-            if(isAdmin(event))
+            if (isAdmin(event))
                 role = "Admin";
             else
                 role = "No Admin";
 
             try {
-                PrivateMessage.send(event.getAuthor(), EmbedMessageUtils.getHelpList(role, txt),logger);
+                PrivateMessage.send(event.getAuthor(), EmbedMessageUtils.getHelpList(role, txt), logger);
             } catch (FileNotFoundException e) {
                 logger.catching(e);
                 PrivateMessage.send(event.getAuthor(), EmbedMessageUtils.getInternalError(), logger);
@@ -176,19 +166,18 @@ public class Help implements Commande {
     }
 
 
-    public boolean isAdmin(MessageReceivedEvent event){
+    public boolean isAdmin(MessageReceivedEvent event) {
 
-        if(event.isFromType(ChannelType.PRIVATE)){
+        if (event.isFromType(ChannelType.PRIVATE)) {
             List<Guild> guilds = event.getAuthor().getMutualGuilds();
-            for(Guild iterator : guilds){
-                if(iterator.getMember(event.getAuthor()).hasPermission(Permission.ADMINISTRATOR)){
+            for (Guild iterator : guilds) {
+                if (iterator.getMember(event.getAuthor()).hasPermission(Permission.ADMINISTRATOR)) {
                     return true;
                 }
 
             }
 
-        }
-        else
+        } else
             return event.getMember().hasPermission(Permission.ADMINISTRATOR);
         return false;
     }

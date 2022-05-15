@@ -15,17 +15,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.List;
 
 public class PasswordResetUtils {
+    private static PasswordResetUtils INSTANCE = new PasswordResetUtils();
     private Logger logger = LogManager.getLogger();
     private PasswordEncoder passwordEncoder;
     private PendingPwdResetRepository pendingPwdResetRepository;
     private UserRepository userRepository;
 
-    private static PasswordResetUtils INSTANCE = new PasswordResetUtils();
-
     /**
      * Private default constructor
      */
-    private PasswordResetUtils(){
+    private PasswordResetUtils() {
         ApplicationContext context = SpringContext.getAppContext();
         passwordEncoder = (PasswordEncoder) context.getBean("passwordEncoder");
         pendingPwdResetRepository = (PendingPwdResetRepository) context.getBean("pendingPwdResetRepository");
@@ -35,13 +34,14 @@ public class PasswordResetUtils {
 
     /**
      * Singleton
+     *
      * @return Unique PasswordResetUtils instance
      */
-    public static PasswordResetUtils getInstance(){
+    public static PasswordResetUtils getInstance() {
         return INSTANCE;
     }
 
-    public String resetRequest(UserEntity userEntity){
+    public String resetRequest(UserEntity userEntity) {
         String token = UserUtils.getInstance().generateCheckToken();
         String encodedToken = passwordEncoder.encode(token);
         PendingPwdResetEntity entity = new PendingPwdResetEntity(userEntity, encodedToken);
@@ -51,10 +51,10 @@ public class PasswordResetUtils {
 
     public void changePass(UserEntity userEntity, String token, String newPassword) throws UserNotFoundException, TokenNotMatch {
         List<PendingPwdResetEntity> dbResults = pendingPwdResetRepository.findByUserEntity(userEntity);
-        if(dbResults.size() == 0)
+        if (dbResults.size() == 0)
             throw new UserNotFoundException();
         PendingPwdResetEntity pendingPwdReset = dbResults.get(0);
-        if(!passwordEncoder.matches(token, pendingPwdReset.getSecurityToken()))
+        if (!passwordEncoder.matches(token, pendingPwdReset.getSecurityToken()))
             throw new TokenNotMatch();
 
         userEntity.setPassword(passwordEncoder.encode(newPassword));

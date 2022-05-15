@@ -8,14 +8,14 @@ import javax.persistence.*;
 public class UserStats {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
 
     private String guildId;
 
     @ManyToOne
-    @JoinColumn(name="userEntity_id", nullable=false)
+    @JoinColumn(name = "userEntity_id", nullable = false)
     private UserEntity user;
 
     @ColumnDefault("0")
@@ -27,9 +27,10 @@ public class UserStats {
     @ColumnDefault("0")
     private Long apiCommandCount = 0L;
 
-    public UserStats(){}
+    public UserStats() {
+    }
 
-    public UserStats(String guildId, UserEntity user){
+    public UserStats(String guildId, UserEntity user) {
         this.guildId = guildId;
         this.user = user;
     }

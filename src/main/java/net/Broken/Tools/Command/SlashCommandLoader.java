@@ -1,13 +1,11 @@
 package net.Broken.Tools.Command;
 
-import net.Broken.Commande;
 import net.Broken.MainBot;
 import net.Broken.SlashCommand;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jboss.jandex.Main;
 import org.reflections.Reflections;
 import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
@@ -45,10 +43,11 @@ public class SlashCommandLoader {
 
                 if (command.isAnnotationPresent(NoDev.class) && MainBot.dev) {
                     logger.warn("Command disabled in dev mode");
-                }else{
+                } else {
                     try {
                         MainBot.slashCommands.put(name, command.getDeclaredConstructor().newInstance());
-                    } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+                    } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
+                             NoSuchMethodException e) {
                         logger.error("Failed to load " + name + "!");
                     }
 
@@ -61,12 +60,12 @@ public class SlashCommandLoader {
         }
     }
 
-    public static void registerSlashCommands(CommandListUpdateAction commandListUpdateAction){
-        MainBot.slashCommands.forEach((k,v)->{
+    public static void registerSlashCommands(CommandListUpdateAction commandListUpdateAction) {
+        MainBot.slashCommands.forEach((k, v) -> {
             CommandData command = new CommandData(k, v.getDescription());
-            if(v.getOptions() != null)
+            if (v.getOptions() != null)
                 command.addOptions(v.getOptions());
-            if(v.getSubcommands() != null){
+            if (v.getSubcommands() != null) {
                 command.addSubcommands(v.getSubcommands());
             }
             commandListUpdateAction.addCommands(command);

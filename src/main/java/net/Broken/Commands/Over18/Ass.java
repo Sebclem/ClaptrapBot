@@ -9,10 +9,10 @@ import org.apache.logging.log4j.LogManager;
  */
 
 @NoDev()
-public class Ass  extends NumberedCommande {
+public class Ass extends NumberedCommande {
 
     public Ass() {
-        super(LogManager.getLogger(), "http://les400culs.com/","-2/","featured-img","img");
+        super(LogManager.getLogger(), "http://les400culs.com/", "-2/", "featured-img", "img");
     }
 
     @Override

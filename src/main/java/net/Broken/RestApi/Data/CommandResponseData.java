@@ -1,6 +1,7 @@
 package net.Broken.RestApi.Data;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+
 /**
  * Data for JSON Parsing
  */

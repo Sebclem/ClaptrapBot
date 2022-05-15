@@ -15,9 +15,9 @@ import java.io.IOException;
  */
 @NoDev
 public class Madame extends NumberedCommande {
+    public String HELP = "Yo really? Just type Madame to see some :cat:";
     Logger logger = LogManager.getLogger();
     MessageReceivedEvent event;
-    public String HELP = "Yo really? Just type Madame to see some :cat:";
 
     public Madame() {
         super(LogManager.getLogger(), "https://www.bonjourmadame.fr/page/", "/");
@@ -73,10 +73,10 @@ public class Madame extends NumberedCommande {
             return false;
     }
 
-    private String removeParams(String url){
+    private String removeParams(String url) {
         int par = url.indexOf('?');
-        if(par != -1){
-            url = url.substring(0,par);
+        if (par != -1) {
+            url = url.substring(0, par);
         }
         return url;
     }
@@ -86,7 +86,7 @@ public class Madame extends NumberedCommande {
     public String poll() throws IOException {
         boolean success = false;
         String imgUrl = null;
-        while (!success ) {
+        while (!success) {
 
             checkRandom();
             int randomResult = randomQueue.poll();

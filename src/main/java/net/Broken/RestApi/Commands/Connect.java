@@ -13,24 +13,25 @@ import org.springframework.http.ResponseEntity;
 /**
  * Connect to vocal channel RestApi command
  */
-public class Connect implements CommandInterface{
+public class Connect implements CommandInterface {
     @Override
     public ResponseEntity<CommandResponseData> action(CommandPostData data, User user, Guild guild) {
         AudioM audioM = AudioM.getInstance(guild);
-        if(data.chanelId == null)
-            return new ResponseEntity<>(new CommandResponseData(data.command,"Missing chanelId"),HttpStatus.BAD_REQUEST);
+        if (data.chanelId == null)
+            return new ResponseEntity<>(new CommandResponseData(data.command, "Missing chanelId"), HttpStatus.BAD_REQUEST);
         VoiceChannel voiceChannel = null;
-        try{
+        try {
             voiceChannel = guild.getVoiceChannelById(data.chanelId);
-        }catch (NumberFormatException ignored){}
+        } catch (NumberFormatException ignored) {
+        }
 
-        if(voiceChannel == null){
-            return new ResponseEntity<>(new CommandResponseData(data.command,"Channel Not found"), HttpStatus.BAD_REQUEST);
+        if (voiceChannel == null) {
+            return new ResponseEntity<>(new CommandResponseData(data.command, "Channel Not found"), HttpStatus.BAD_REQUEST);
         }
 
         audioM.getGuildAudioPlayer();
         guild.getAudioManager().openAudioConnection(guild.getVoiceChannelById(data.chanelId));
         audioM.setPlayedChanel(voiceChannel);
-        return new ResponseEntity<>(new CommandResponseData(data.command,"Accepted"),HttpStatus.OK);
+        return new ResponseEntity<>(new CommandResponseData(data.command, "Accepted"), HttpStatus.OK);
     }
 }

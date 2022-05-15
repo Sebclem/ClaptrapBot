@@ -9,7 +9,6 @@ import net.Broken.Tools.DayListener.DayListener;
 import net.Broken.Tools.DayListener.Listeners.DailyMadame;
 import net.Broken.Tools.DayListener.Listeners.ResetSpam;
 import net.Broken.Tools.UserManager.Stats.UserStatsUtils;
-import net.dv8tion.jda.api.AccountType;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;

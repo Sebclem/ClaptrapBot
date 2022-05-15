@@ -1,22 +1,17 @@
 package net.Broken.Commands;
 
-import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import net.Broken.Commande;
 import net.Broken.MainBot;
 import net.Broken.Tools.EmbedMessageUtils;
 import net.Broken.Tools.MessageTimeOut;
 import net.Broken.audio.Youtube.SearchResult;
 import net.Broken.audio.Youtube.YoutubeSearchRework;
-import net.Broken.audio.Youtube.YoutubeTools;
-import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class YtSearch implements Commande {

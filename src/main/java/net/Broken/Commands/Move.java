@@ -11,7 +11,6 @@ import net.dv8tion.jda.api.managers.GuildManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,27 +20,27 @@ import java.util.List;
  */
 public class Move implements Commande {
 
-    Logger logger = LogManager.getLogger();
-    private String HELP="`//move <@user> <@Role>`\n:arrow_right:\t*Move a user to a specified role.*";
     public List<Role> saveRoleUser;
     public Member user;
     public Guild serveur;
     public GuildManager serveurManager;
-    /** Perform a move (Reset is role and add target(s) role(s)
+    Logger logger = LogManager.getLogger();
+    private String HELP = "`//move <@user> <@Role>`\n:arrow_right:\t*Move a user to a specified role.*";
+
+    /**
+     * Perform a move (Reset is role and add target(s) role(s)
      *
-     * @param user User to move
-     * @param cible Complete list of new role
+     * @param user           User to move
+     * @param cible          Complete list of new role
      * @param reset
-     * @param serveur Guild
+     * @param serveur        Guild
      * @param serveurManager GuildManager
      * @return success
      */
-    public boolean exc(Member user, List<Role> cible , boolean reset, Guild serveur, GuildManager serveurManager) throws HierarchyException
-    {
+    public boolean exc(Member user, List<Role> cible, boolean reset, Guild serveur, GuildManager serveurManager) throws HierarchyException {
         MainBot.roleFlag = true;
         boolean erreur = false;
         List<Role> allRoll = serveur.getRoles();
-
 
 
         //On recupere les roles de l'utilisateur
@@ -59,71 +58,61 @@ public class Move implements Commande {
 
 
         //on fait ensuite les modif
-        serveur.modifyMemberRoles(user,cible).complete();
+        serveur.modifyMemberRoles(user, cible).complete();
 
         logger.info("Give " + cible + " role to " + user.getEffectiveName());
 
-        this.user=user;
-        this.serveur=serveur;
-        this.serveurManager=serveurManager;
+        this.user = user;
+        this.serveur = serveur;
+        this.serveurManager = serveurManager;
         return erreur;
     }
 
-    /** Command handler
+    /**
+     * Command handler
      *
      * @param args
      * @param event
      */
-    public void action(String[] args, MessageReceivedEvent event)
-    {
-        if(!event.isFromType(ChannelType.PRIVATE))
-        {
-            if(args.length>=2)
-            {
-                serveur=event.getGuild();
+    public void action(String[] args, MessageReceivedEvent event) {
+        if (!event.isFromType(ChannelType.PRIVATE)) {
+            if (args.length >= 2) {
+                serveur = event.getGuild();
                 List<User> userL = event.getMessage().getMentionedUsers();
                 List<Role> roleL = event.getMessage().getMentionedRoles();
 
-                if(userL.size()<1 ||roleL.size()<1)
-                {
+                if (userL.size() < 1 || roleL.size() < 1) {
                     logger.warn("Wrong mention.");
                     Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("Error, please check if the user and/or the role are existing.")).complete();
-                    List<Message> messages = new ArrayList<Message>(){{
+                    List<Message> messages = new ArrayList<Message>() {{
                         add(rest);
                         add(event.getMessage());
                     }};
-                    new MessageTimeOut(messages,MainBot.messageTimeOut).start();
-                }
-                else
-                {
+                    new MessageTimeOut(messages, MainBot.messageTimeOut).start();
+                } else {
                     user = serveur.getMember(userL.get(0));
-                    serveur=event.getGuild();
-                    logger.info("Attempting role assignement for "+user.getEffectiveName()+" to "+roleL+" by "+event.getAuthor().getName());
+                    serveur = event.getGuild();
+                    logger.info("Attempting role assignement for " + user.getEffectiveName() + " to " + roleL + " by " + event.getAuthor().getName());
 
                     logger.info("Permission granted, role assignement authorized");
                     logger.debug("User found");
                     try {
-                        boolean erreur=this.exc(user,roleL,true,serveur,serveur.getManager());
-                        if(erreur)
-                        {
+                        boolean erreur = this.exc(user, roleL, true, serveur, serveur.getManager());
+                        if (erreur) {
                             Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("Check the targeted role. ")).complete();
-                            List<Message> messages = new ArrayList<Message>(){{
+                            List<Message> messages = new ArrayList<Message>() {{
                                 add(rest);
                                 add(event.getMessage());
                             }};
-                            new MessageTimeOut(messages,MainBot.messageTimeOut).start();
-                        }
-                        else
-                        {
+                            new MessageTimeOut(messages, MainBot.messageTimeOut).start();
+                        } else {
                             StringBuilder roleStr = new StringBuilder("");
                             boolean first = true;
-                            for( Role role : roleL)
-                            {
+                            for (Role role : roleL) {
                                 if (!first) {
                                     roleStr.append(", ");
 
-                                }
-                                else
+                                } else
                                     first = false;
                                 roleStr.append("__");
                                 roleStr.append(role.getName());
@@ -131,47 +120,37 @@ public class Move implements Commande {
                             }
 
 
-                            Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveOk("User "+user.getEffectiveName()+" as been successfully moved to "+roleStr.toString())).complete();
-                            List<Message> messages = new ArrayList<Message>(){{
+                            Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveOk("User " + user.getEffectiveName() + " as been successfully moved to " + roleStr.toString())).complete();
+                            List<Message> messages = new ArrayList<Message>() {{
                                 add(rest);
                                 add(event.getMessage());
                             }};
-                            new MessageTimeOut(messages,MainBot.messageTimeOut).start();
+                            new MessageTimeOut(messages, MainBot.messageTimeOut).start();
                         }
-                    }catch (HierarchyException e){
-                        Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("You cannot move "+user.getRoles().get(0).getAsMention())).complete();
-                        List<Message> messages = new ArrayList<Message>(){{
+                    } catch (HierarchyException e) {
+                        Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("You cannot move " + user.getRoles().get(0).getAsMention())).complete();
+                        List<Message> messages = new ArrayList<Message>() {{
                             add(rest);
                             add(event.getMessage());
                         }};
-                        new MessageTimeOut(messages,MainBot.messageTimeOut).start();
+                        new MessageTimeOut(messages, MainBot.messageTimeOut).start();
                         logger.error("Hierarchy error, please move bot's role on top!");
                     }
 
 
-
                 }
 
-            }
-            else
-            {
+            } else {
                 logger.warn("Missing argument.");
                 Message rest = event.getTextChannel().sendMessage(EmbedMessageUtils.getMoveError("Missing argument.")).complete();
-                List<Message> messages = new ArrayList<Message>(){{
+                List<Message> messages = new ArrayList<Message>() {{
                     add(rest);
                     add(event.getMessage());
                 }};
-                new MessageTimeOut(messages,MainBot.messageTimeOut).start();
+                new MessageTimeOut(messages, MainBot.messageTimeOut).start();
             }
-        }
-        else
+        } else
             event.getPrivateChannel().sendMessage(EmbedMessageUtils.getNoPrivate());
-
-
-
-
-
-
 
 
     }

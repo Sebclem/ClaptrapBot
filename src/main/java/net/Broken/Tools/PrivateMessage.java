@@ -12,11 +12,12 @@ public class PrivateMessage {
 
     /**
      * Auto open private channel and send message
-     * @param user User to send message
+     *
+     * @param user    User to send message
      * @param message Message to send
-     * @param logger Logger
+     * @param logger  Logger
      */
-    public static void send(User user, String message, Logger logger){
+    public static void send(User user, String message, Logger logger) {
 
         user.openPrivateChannel().complete().sendMessage(message).queue();
 
@@ -24,12 +25,13 @@ public class PrivateMessage {
 
     /**
      * Auto open private channel and send message
-     * @param user User to send message
+     *
+     * @param user    User to send message
      * @param message Message to send
-     * @param logger Logger
+     * @param logger  Logger
      * @return Sended Message
      */
-    public static Message send(User user, MessageEmbed message, Logger logger){
+    public static Message send(User user, MessageEmbed message, Logger logger) {
         return user.openPrivateChannel().complete().sendMessage(message).complete();
 
     }

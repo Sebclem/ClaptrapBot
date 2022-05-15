@@ -40,13 +40,13 @@ public class CommandLoader {
 
                 if (command.isAnnotationPresent(NoDev.class) && MainBot.dev) {
                     logger.warn("Command disabled in dev mode");
-                }else{
+                } else {
                     try {
                         MainBot.commandes.put(name, command.newInstance());
                     } catch (InstantiationException | IllegalAccessException e) {
                         logger.error("Failed to load " + name + "!");
                     }
-                    
+
                 }
 
             } else {

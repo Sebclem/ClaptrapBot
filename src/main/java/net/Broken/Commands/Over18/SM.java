@@ -17,7 +17,7 @@ public class SM implements Commande {
 
     @Override
     public void action(String[] args, MessageReceivedEvent event) {
-        Redirection redirect= new Redirection();
+        Redirection redirect = new Redirection();
         try {
             String redirectUrl = redirect.get("https://bonjourfetish.tumblr.com/random");
             logger.debug(redirectUrl);

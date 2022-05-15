@@ -16,7 +16,7 @@ import java.util.List;
 @Entity
 public class UserEntity {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
     private String name;
@@ -49,14 +49,14 @@ public class UserEntity {
         this.apiToken = apiToken;
     }
 
-    public UserEntity(User user, PasswordEncoder passwordEncoder){
+    public UserEntity(User user, PasswordEncoder passwordEncoder) {
         this.name = user.getName();
         this.jdaId = user.getId();
         this.apiToken = UserUtils.getInstance().generateApiToken();
         this.password = passwordEncoder.encode(UserUtils.getInstance().generateCheckToken());
     }
 
-    public UserEntity(String name, String id, PasswordEncoder passwordEncoder){
+    public UserEntity(String name, String id, PasswordEncoder passwordEncoder) {
         this.name = name;
         this.jdaId = id;
         this.apiToken = UserUtils.getInstance().generateApiToken();
@@ -112,8 +112,8 @@ public class UserEntity {
         this.playlists = playlists;
     }
 
-    public void addPlaylist(PlaylistEntity... playlists){
-        if(this.playlists == null)
+    public void addPlaylist(PlaylistEntity... playlists) {
+        if (this.playlists == null)
             this.playlists = new ArrayList<>();
 
         this.playlists.addAll(Arrays.asList(playlists));

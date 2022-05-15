@@ -17,28 +17,24 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class SettingsUtils {
 
     private static SettingsUtils INSTANCE;
     private final Logger logger = LogManager.getLogger();
-
-    public static SettingsUtils getInstance() {
-        return (INSTANCE == null) ? new SettingsUtils() : INSTANCE;
-    }
-
     private final GuildPreferenceRepository guildPreferenceRepository;
     private final UserRepository userRepository;
-
-
     private SettingsUtils() {
         ApplicationContext context = SpringContext.getAppContext();
         guildPreferenceRepository = (GuildPreferenceRepository) context.getBean("guildPreferenceRepository");
         userRepository = (UserRepository) context.getBean("userRepository");
 
 
+    }
+
+    public static SettingsUtils getInstance() {
+        return (INSTANCE == null) ? new SettingsUtils() : INSTANCE;
     }
 
     /**

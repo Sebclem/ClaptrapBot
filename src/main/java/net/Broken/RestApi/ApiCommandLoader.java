@@ -12,7 +12,8 @@ import java.util.Set;
 public class ApiCommandLoader {
     public static HashMap<String, CommandInterface> apiCommands = new HashMap<>();
     private static Logger logger = LogManager.getLogger();
-    public static void load(){
+
+    public static void load() {
         logger.info("Loading Api Command...");
 //        Reflections reflections = new Reflections("net.Broken.RestApi.Command");
         Reflections reflections = new Reflections(new ConfigurationBuilder().setUrls(ClasspathHelper.forPackage(
@@ -27,7 +28,7 @@ public class ApiCommandLoader {
 
             String reference = apiClass.getName();
             String[] splited = reference.split("\\.");
-            String name = splited[splited.length-1].toUpperCase();
+            String name = splited[splited.length - 1].toUpperCase();
 
             logger.info("..." + name);
 

@@ -9,7 +9,6 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -20,17 +19,14 @@ import java.util.List;
 public class TrueRandom {
 
     private static TrueRandom INSTANCE = new TrueRandom();
+    private Logger logger = LogManager.getLogger();
+    private String url = "https://api.random.org/json-rpc/2/invoke";
+    private String apiKey = System.getenv("RANDOM_API_KEY");
+    private TrueRandom() {
+    }
 
     public static TrueRandom getINSTANCE() {
         return INSTANCE;
-    }
-
-    private Logger logger = LogManager.getLogger();
-
-    private String url = "https://api.random.org/json-rpc/2/invoke";
-    private String apiKey = System.getenv("RANDOM_API_KEY");
-
-    private TrueRandom() {
     }
 
     public ArrayList<Integer> getNumbers(int min, int max) throws IOException {
@@ -46,11 +42,10 @@ public class TrueRandom {
         int status = response.getStatusLine().getStatusCode();
         logger.debug("Status: " + status);
 
-        if(status != 200){
+        if (status != 200) {
             logger.error("Request fail! Status: " + status);
             throw new IOException();
         }
-
 
 
         InputStream responseIS = response.getEntity().getContent();
@@ -58,7 +53,7 @@ public class TrueRandom {
         logger.trace(content);
 
         JSONObject json = new JSONObject(content);
-        if(json.keySet().contains("error")){
+        if (json.keySet().contains("error")) {
             logger.error("Request fail!");
             logger.error("Request : " + postVal);
             logger.error("Response : " + content);

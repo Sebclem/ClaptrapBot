@@ -4,8 +4,6 @@ import net.Broken.Commands.Spam;
 import net.Broken.Tools.DayListener.NewDayListener;
 import net.dv8tion.jda.api.exceptions.RateLimitedException;
 
-import java.util.GregorianCalendar;
-
 /**
  * Daily spam reset
  */
@@ -16,7 +14,7 @@ public class ResetSpam implements NewDayListener {
         String str[] = {"all"};
 
         try {
-            spam.reset(null,str);
+            spam.reset(null, str);
         } catch (RateLimitedException e) {
             e.printStackTrace();
         }

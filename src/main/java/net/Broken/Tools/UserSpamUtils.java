@@ -15,31 +15,29 @@ public class UserSpamUtils {
     private boolean onSpam = false;
     private List<Message> messages;
 
-    public int getTimeLeft(){
-        return minuteur.timeLeft;
-    }
-
-    public int getMultip()
-    {
-        return multip;
-    }
-
     public UserSpamUtils(Member user, List<Message> messages) {
         this.user = user;
         this.messages = messages;
     }
 
+    public int getTimeLeft() {
+        return minuteur.timeLeft;
+    }
+
+    public int getMultip() {
+        return multip;
+    }
+
+    public void setMultip(int multip) {
+        this.multip = multip;
+    }
 
     public void setMinuteur(AntiSpam.Minuteur minuteur) {
         this.minuteur = minuteur;
     }
 
-    public void launchMinuteur(){
+    public void launchMinuteur() {
         minuteur.start();
-    }
-
-    public void setMultip(int multip) {
-        this.multip = multip;
     }
 
     public boolean isOnSpam() {
@@ -54,7 +52,7 @@ public class UserSpamUtils {
         return user;
     }
 
-    public void addMessage(Message message){
+    public void addMessage(Message message) {
         messages.add(message);
     }
 
@@ -62,7 +60,7 @@ public class UserSpamUtils {
         return messages;
     }
 
-    public void clearAndAdd(Message message){
+    public void clearAndAdd(Message message) {
         messages.clear();
         messages.add(message);
     }

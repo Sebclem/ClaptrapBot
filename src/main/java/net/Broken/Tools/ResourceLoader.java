@@ -3,12 +3,9 @@ package net.Broken.Tools;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Scanner;
-
 
 
 public class ResourceLoader {
@@ -17,6 +14,7 @@ public class ResourceLoader {
 
     /**
      * Get file contents as string for resource folder
+     *
      * @param fileName Requested file
      * @return File contents as string
      * @throws FileNotFoundException
@@ -28,7 +26,7 @@ public class ResourceLoader {
         //Get file from resources folder
         ClassLoader classLoader = getClass().getClassLoader();
         InputStream file = classLoader.getResourceAsStream(fileName);
-        if(file == null)
+        if (file == null)
             throw new FileNotFoundException();
 
         try (Scanner scanner = new Scanner(file, "UTF-8")) {

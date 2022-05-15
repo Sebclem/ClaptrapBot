@@ -10,8 +10,8 @@ public class SearchResult {
     public String imageUrl;
     public String duration;
 
-    public SearchResult(com.google.api.services.youtube.model.SearchResult result, String duration){
-        if(result.getId().getVideoId() == null)
+    public SearchResult(com.google.api.services.youtube.model.SearchResult result, String duration) {
+        if (result.getId().getVideoId() == null)
             id = result.getId().getPlaylistId();
         else
             id = result.getId().getVideoId();

@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -46,11 +45,31 @@ public class GeneralWebView {
         this.userRepository = userRepository;
     }
 
+    public static Model addGuildAndRedirect(Model model, String token, String guildId, User user) {
+        List<Guild> mutualGuilds = user.getMutualGuilds();
+        Integer lastCount = MainBot.mutualGuildCount.get(user.getId());
+        if (lastCount == null || lastCount != mutualGuilds.size()) {
+            LogManager.getLogger().debug("Guild miss match, re-cache users...");
+            CacheTools.loadAllGuildMembers();
+            mutualGuilds = user.getMutualGuilds();
+            MainBot.mutualGuildCount.put(user.getId(), mutualGuilds.size());
+        }
 
-    @ResponseStatus(HttpStatus.FORBIDDEN)
-    public class ForbiddenException extends RuntimeException {
+        Guild guild = MainBot.jda.getGuildById(guildId);
+        if (guild != null) {
+            model.addAttribute("guild_name", guild.getName());
+            model.addAttribute("guild_id", guild.getId());
+            model.addAttribute("guild_icon", guild.getIconUrl() == null ? "https://discordapp.com/assets/dd4dbc0016779df1378e7812eabaa04d.png" : guild.getIconUrl());
+            model.addAttribute("mutual_guilds", mutualGuilds);
+            model.addAttribute("isAdmin", SettingsUtils.getInstance().checkPermission(token, guildId));
+        } else {
+            model.addAttribute("guild_name", "");
+            model.addAttribute("guild_icon", "");
+        }
+
+        model.addAttribute("redirect_url", System.getenv("OAUTH_URL"));
+        return model;
     }
-
 
     @RequestMapping("/")
     public String music(Model model, HttpServletResponse response, HttpServletRequest request, @CookieValue(value = "guild", defaultValue = "1") String guildId, @CookieValue(value = "token", defaultValue = "") String token) {
@@ -180,31 +199,8 @@ public class GeneralWebView {
 
     }
 
-
-    public static Model addGuildAndRedirect(Model model, String token, String guildId, User user) {
-        List<Guild> mutualGuilds = user.getMutualGuilds();
-        Integer lastCount = MainBot.mutualGuildCount.get(user.getId());
-        if (lastCount == null || lastCount != mutualGuilds.size()) {
-            LogManager.getLogger().debug("Guild miss match, re-cache users...");
-            CacheTools.loadAllGuildMembers();
-            mutualGuilds = user.getMutualGuilds();
-            MainBot.mutualGuildCount.put(user.getId(), mutualGuilds.size());
-        }
-
-        Guild guild = MainBot.jda.getGuildById(guildId);
-        if (guild != null) {
-            model.addAttribute("guild_name", guild.getName());
-            model.addAttribute("guild_id", guild.getId());
-            model.addAttribute("guild_icon", guild.getIconUrl() == null ? "https://discordapp.com/assets/dd4dbc0016779df1378e7812eabaa04d.png" : guild.getIconUrl());
-            model.addAttribute("mutual_guilds", mutualGuilds);
-            model.addAttribute("isAdmin", SettingsUtils.getInstance().checkPermission(token, guildId));
-        } else {
-            model.addAttribute("guild_name", "");
-            model.addAttribute("guild_icon", "");
-        }
-
-        model.addAttribute("redirect_url", System.getenv("OAUTH_URL"));
-        return model;
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public class ForbiddenException extends RuntimeException {
     }
 
 

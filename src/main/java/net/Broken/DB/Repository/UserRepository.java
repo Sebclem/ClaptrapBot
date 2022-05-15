@@ -9,8 +9,10 @@ import java.util.List;
  * Repository for UserEntity
  */
 
-public interface UserRepository extends CrudRepository<UserEntity, Integer>{
+public interface UserRepository extends CrudRepository<UserEntity, Integer> {
     List<UserEntity> findByName(String name);
+
     List<UserEntity> findByJdaId(String jdaId);
+
     List<UserEntity> findByApiToken(String apiToken);
 }

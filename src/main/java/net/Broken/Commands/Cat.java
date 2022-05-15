@@ -20,8 +20,7 @@ public class Cat implements Commande {
     @Override
     public void action(String[] args, MessageReceivedEvent event) {
 
-        if(!event.isFromType(ChannelType.PRIVATE))
-        {
+        if (!event.isFromType(ChannelType.PRIVATE)) {
             try {
                 URL urlC = new URL("http://aws.random.cat/meow");
                 URLConnection yc = urlC.openConnection();
@@ -40,8 +39,7 @@ public class Cat implements Commande {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
-        else
+        } else
             event.getPrivateChannel().sendMessage("\n:warning: **__This command cannot be used there !__** :warning:").queue();
 
     }

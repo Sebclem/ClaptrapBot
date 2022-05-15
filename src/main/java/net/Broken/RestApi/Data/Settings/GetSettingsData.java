@@ -25,8 +25,8 @@ public class GetSettingsData {
         this.current = current;
     }
 
-    public enum TYPE{
-        BOOL,LIST,STRING,SELECT_LIST
+    public enum TYPE {
+        BOOL, LIST, STRING, SELECT_LIST
     }
 }
 

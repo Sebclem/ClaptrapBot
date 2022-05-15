@@ -13,8 +13,8 @@ public class ListRoles implements Commande {
     public void action(String[] args, MessageReceivedEvent event) {
         List<Role> roles = event.getGuild().getRoles();
         EmbedBuilder messageB = new EmbedBuilder();
-        for (Role role : roles){
-            messageB.addField(role.getName(),"```id: " + role.getId() + "```",false);
+        for (Role role : roles) {
+            messageB.addField(role.getName(), "```id: " + role.getId() + "```", false);
         }
 
         messageB.setColor(Color.green);

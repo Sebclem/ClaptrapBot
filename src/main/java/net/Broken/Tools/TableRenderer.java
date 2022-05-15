@@ -1,12 +1,12 @@
 package net.Broken.Tools;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * Utils to render table in block code
@@ -25,6 +25,7 @@ public class TableRenderer {
 
     /**
      * Set Table header(s)
+     *
      * @param header Header(s) as String
      */
     public void setHeader(Object... header) {
@@ -35,6 +36,7 @@ public class TableRenderer {
 
     /**
      * Add row to table
+     *
      * @param content Content(s) as string
      */
     public void addRow(Object... content) {
@@ -46,6 +48,7 @@ public class TableRenderer {
 
     /**
      * Change default empty string
+     *
      * @param str
      */
     public void setEmptyString(String str) {
@@ -72,7 +75,7 @@ public class TableRenderer {
                 if (obj.size() > hIndex)
                     normalized[vIndex][hIndex] = obj.get(hIndex).toString();
                 else
-                    normalized[vIndex][hIndex] = this.empty+"s";
+                    normalized[vIndex][hIndex] = this.empty + "s";
             }
             vIndex++;
         }
@@ -86,7 +89,7 @@ public class TableRenderer {
             for (int hIndex = 0; hIndex < width; hIndex++)
                 if (table[vIndex][hIndex].length() + padding > collums[hIndex])
                     collums[hIndex] = table[vIndex][hIndex].length() + padding;
-        collums[collums.length-1] -= padding;
+        collums[collums.length - 1] -= padding;
         return collums;
     }
 
@@ -102,7 +105,7 @@ public class TableRenderer {
         String line = IntStream.range(0, strings.length)
                 .mapToObj((i) -> buildElement(strings[i], widths[i], " "))
                 .collect(Collectors.joining("│ "));
-        line = "│ "+ line + " │";
+        line = "│ " + line + " │";
         if (header) {
             String seperator = IntStream.range(0, strings.length)
                     .mapToObj((i) -> buildElement("", widths[i], "═"))
@@ -117,7 +120,7 @@ public class TableRenderer {
         String[][] table = normalizeTable();
         int[] widths = getCollumnWidths(table, 1);
         return IntStream.range(0, table.length)
-                .mapToObj(i -> buildLine(table[i], widths, header != null && i==0))
+                .mapToObj(i -> buildLine(table[i], widths, header != null && i == 0))
                 .collect(Collectors.joining("\n"));
     }
 }

@@ -3,7 +3,6 @@ package net.Broken.Commands;
 import net.Broken.Commande;
 import net.Broken.Tools.EmbedMessageUtils;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.MessageHistory;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.apache.logging.log4j.LogManager;
@@ -24,20 +23,19 @@ public class ChannelsReview implements Commande {
     public void action(String[] args, MessageReceivedEvent event) {
         DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
         event.getTextChannel().sendMessage("Number of channels found in total : " + event.getGuild().getTextChannels().size()).queue();
-        if(args.length>=1){
+        if (args.length >= 1) {
             try {
-                SendBackBefore(format.parse(args[0]), event, format );
+                SendBackBefore(format.parse(args[0]), event, format);
             } catch (ParseException e) {
                 logger.warn("Can't parse date : " + e.getMessage());
             }
-        }
-        else{
+        } else {
             SendBack(event);
         }
     }
 
 
-    private void SendBackBefore(Date beforeDate,MessageReceivedEvent event,DateFormat format ){
+    private void SendBackBefore(Date beforeDate, MessageReceivedEvent event, DateFormat format) {
         HashMap<String, String> result = new HashMap<>();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy").withLocale(Locale.ENGLISH);
         int charCtl = 0;
@@ -46,7 +44,7 @@ public class ChannelsReview implements Commande {
                 String lastMessageId = textChannel.getLatestMessageId();
                 try {
                     Message lastMessage = textChannel.retrieveMessageById(lastMessageId).complete();
-                    if(beforeDate.compareTo(format.parse(lastMessage.getTimeCreated().format(formatter)))>0){
+                    if (beforeDate.compareTo(format.parse(lastMessage.getTimeCreated().format(formatter))) > 0) {
                         logger.debug("Last message in channel " + textChannel.toString() + " is " + lastMessageId);
                         String date = lastMessage.getTimeCreated().format(formatter);
                         charCtl += textChannel.getName().length() + date.length();
@@ -72,7 +70,7 @@ public class ChannelsReview implements Commande {
             event.getTextChannel().sendMessage(EmbedMessageUtils.getLastMessageFromTextChannel(result)).queue();
     }
 
-    private void SendBack(MessageReceivedEvent event){
+    private void SendBack(MessageReceivedEvent event) {
         HashMap<String, String> result = new HashMap<>();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMMM yyyy").withLocale(Locale.ENGLISH);
         int charCtl = 0;

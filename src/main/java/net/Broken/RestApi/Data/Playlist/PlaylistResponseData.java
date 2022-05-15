@@ -13,6 +13,7 @@ public class PlaylistResponseData {
         this.message = message;
         this.playlist = playlist;
     }
+
     public PlaylistResponseData(String message, String error) {
         this.message = message;
         this.error = error;

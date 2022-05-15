@@ -13,9 +13,10 @@ import org.springframework.http.ResponseEntity;
 public interface CommandInterface {
     /**
      * Main action
+     *
      * @param musicCommande Current guild music command
-     * @param data Received data
-     * @param user User who submit RestApi command
+     * @param data          Received data
+     * @param user          User who submit RestApi command
      * @param guild
      * @return HTTP Response
      */

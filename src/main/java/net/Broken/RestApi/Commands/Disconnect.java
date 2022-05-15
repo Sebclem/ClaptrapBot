@@ -12,11 +12,11 @@ import org.springframework.http.ResponseEntity;
 /**
  * Disconnect from vocal chanel RestApi Command
  */
-public class Disconnect implements CommandInterface{
+public class Disconnect implements CommandInterface {
     @Override
     public ResponseEntity<CommandResponseData> action(CommandPostData data, User user, Guild guild) {
         AudioM.getInstance(guild).stop();
-        return new ResponseEntity<>(new CommandResponseData(data.command,"Ok"), HttpStatus.OK);
+        return new ResponseEntity<>(new CommandResponseData(data.command, "Ok"), HttpStatus.OK);
     }
 
 }

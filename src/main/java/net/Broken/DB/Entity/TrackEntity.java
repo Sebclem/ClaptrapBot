@@ -9,7 +9,7 @@ import javax.persistence.*;
 public class TrackEntity {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
     private String title;
@@ -22,7 +22,7 @@ public class TrackEntity {
 
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name="playlistEntity_id", nullable=false)
+    @JoinColumn(name = "playlistEntity_id", nullable = false)
     private PlaylistEntity playlist;
 
     public TrackEntity() {
@@ -36,9 +36,9 @@ public class TrackEntity {
         this.pos = pos;
     }
 
-    public TrackEntity(TrackEntity trackEntity){
+    public TrackEntity(TrackEntity trackEntity) {
         this.title = trackEntity.title;
-        this.url  = trackEntity.url;
+        this.url = trackEntity.url;
         this.identifier = trackEntity.identifier;
         this.pos = trackEntity.pos;
         this.playlist = trackEntity.playlist;

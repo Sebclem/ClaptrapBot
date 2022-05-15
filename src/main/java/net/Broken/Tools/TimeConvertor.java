@@ -3,15 +3,12 @@ package net.Broken.Tools;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 public class TimeConvertor {
     static Logger logger = LogManager.getLogger();
-    public static ArrayList<String> sToTime(long sec){
+
+    public static ArrayList<String> sToTime(long sec) {
         final int MINUTES_IN_AN_HOUR = 60;
         final int SECONDS_IN_A_MINUTE = 60;
 

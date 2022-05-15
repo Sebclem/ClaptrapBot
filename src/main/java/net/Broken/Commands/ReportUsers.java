@@ -3,10 +3,8 @@ package net.Broken.Commands;
 import net.Broken.Commande;
 import net.Broken.Tools.EmbedMessageUtils;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.requests.RestAction;
-import net.dv8tion.jda.api.requests.restaction.MessageAction;
 
 
 public class ReportUsers implements Commande {
@@ -28,7 +26,7 @@ public class ReportUsers implements Commande {
                         }
                     }
                 }
-                if(restAction!=null)
+                if (restAction != null)
                     restAction.queue();
             } else if (args.length == 0) {
 

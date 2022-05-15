@@ -1,6 +1,6 @@
 package net.Broken.Tools.UserManager.Stats;
 
-public class GuildStats{
+public class GuildStats {
     public String userName;
     public int rank;
     public String avatarUrl;

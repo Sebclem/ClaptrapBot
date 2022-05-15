@@ -8,7 +8,7 @@ import java.util.Date;
 @Entity
 public class PendingPwdResetEntity {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
     @OneToOne
@@ -17,7 +17,7 @@ public class PendingPwdResetEntity {
     private Date expirationDate;
 
 
-    public PendingPwdResetEntity(UserEntity userEntity,String token) {
+    public PendingPwdResetEntity(UserEntity userEntity, String token) {
         this.userEntity = userEntity;
         this.securityToken = token;
         Calendar cal = Calendar.getInstance();
@@ -27,7 +27,8 @@ public class PendingPwdResetEntity {
 
     }
 
-    public PendingPwdResetEntity() {}
+    public PendingPwdResetEntity() {
+    }
 
 
     public UserEntity getUserEntity() {

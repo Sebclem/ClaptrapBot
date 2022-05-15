@@ -6,7 +6,7 @@ import net.dv8tion.jda.api.entities.User;
 /**
  * Container that link AudioTrack to who submit it (User)
  */
-public class UserAudioTrack{
+public class UserAudioTrack {
     private User user;
     private AudioTrack audioTrack;
 

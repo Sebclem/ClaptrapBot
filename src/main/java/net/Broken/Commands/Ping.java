@@ -18,10 +18,10 @@ public class Ping implements Commande {
     public void action(String[] args, MessageReceivedEvent event) {
         long ping = event.getJDA().getGatewayPing();
 //        long receivedTime = Timestamp.valueOf(LocalDateTime.ofInstant(event.getMessage().getCreationTime().toInstant(), ZoneId.systemDefault())).getTime();
-        if(event.isFromType(ChannelType.PRIVATE))
-            event.getPrivateChannel().sendMessage(":arrow_right: Pong! `" + ping+ "ms`").queue();
+        if (event.isFromType(ChannelType.PRIVATE))
+            event.getPrivateChannel().sendMessage(":arrow_right: Pong! `" + ping + "ms`").queue();
         else {
-            Message rest = event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n:arrow_right: Pong! `" + ping + "ms`").complete();
+            Message rest = event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n:arrow_right: Pong! `" + ping + "ms`").complete();
             new MessageTimeOut(MainBot.messageTimeOut, event.getMessage(), rest).start();
         }
         LogManager.getLogger().debug("pong");

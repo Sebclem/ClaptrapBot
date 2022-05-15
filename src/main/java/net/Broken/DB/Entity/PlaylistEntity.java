@@ -3,10 +3,7 @@ package net.Broken.DB.Entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.annotation.Nullable;
 import javax.persistence.*;
-import javax.sound.midi.Track;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -15,14 +12,14 @@ import java.util.List;
 public class PlaylistEntity {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
     private String name;
 
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name="userEntity_id", nullable=false)
+    @JoinColumn(name = "userEntity_id", nullable = false)
     private UserEntity user;
 
 
@@ -71,9 +68,8 @@ public class PlaylistEntity {
         this.tracks = tracks;
     }
 
-    public void addTracks(TrackEntity... tracks )
-    {
-        if(this.tracks == null)
+    public void addTracks(TrackEntity... tracks) {
+        if (this.tracks == null)
             this.tracks = new ArrayList<>();
 
         this.tracks.addAll(Arrays.asList(tracks));

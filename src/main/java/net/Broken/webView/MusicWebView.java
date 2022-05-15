@@ -37,17 +37,16 @@ public class MusicWebView {
     }
 
 
-
     @RequestMapping("/music")
-    public String music(Model model, HttpServletResponse response, HttpServletRequest request, @CookieValue(value = "guild", defaultValue = "1") String guildId, @CookieValue(value = "token", defaultValue = "") String token){
-        if(token.equals("")){
+    public String music(Model model, HttpServletResponse response, HttpServletRequest request, @CookieValue(value = "guild", defaultValue = "1") String guildId, @CookieValue(value = "token", defaultValue = "") String token) {
+        if (token.equals("")) {
             model.addAttribute("redirect_url", System.getenv("OAUTH_URL"));
             return "login";
         }
         try {
             UserEntity userE = userUtils.getUserWithApiToken(userRepository, token);
             User user = MainBot.jda.getUserById(userE.getJdaId());
-            if(user == null)
+            if (user == null)
                 return "redirect:/";
             GeneralWebView.addGuildAndRedirect(model, token, guildId, user);
             return CheckPage.getPageIfReady("music");
@@ -64,7 +63,7 @@ public class MusicWebView {
             model.addAttribute("redirect_url", System.getenv("OAUTH_URL"));
             return "login";
 
-        } catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             logger.debug("Unknown guild, flush cookies");
             Cookie cookie = new Cookie("guild", null); // Not necessary, but saves bandwidth.
             cookie.setPath("/");
@@ -73,7 +72,6 @@ public class MusicWebView {
             response.addCookie(cookie);
             return "redirect:music";
         }
-
 
 
     }

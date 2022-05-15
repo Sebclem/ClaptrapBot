@@ -5,14 +5,13 @@ import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 /**
  * Auto dell message util
  */
-public class MessageTimeOut extends Thread{
+public class MessageTimeOut extends Thread {
     List<Message> messages;
     int second;
     Logger logger = LogManager.getLogger();
@@ -30,7 +29,7 @@ public class MessageTimeOut extends Thread{
     @Override
     public void run() {
         logger.debug("Timer for message deletion stated...");
-        for(int i=0; i<second; i++){
+        for (int i = 0; i < second; i++) {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
@@ -38,11 +37,10 @@ public class MessageTimeOut extends Thread{
             }
         }
         logger.debug("Time out! Deleting message!");
-        for(Message aMessage: messages)
-        {
+        for (Message aMessage : messages) {
             try {
                 aMessage.delete().queue();
-            }catch (ErrorResponseException e){
+            } catch (ErrorResponseException e) {
                 logger.warn("Unknown Message");
             }
 

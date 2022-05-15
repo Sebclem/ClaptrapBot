@@ -17,7 +17,6 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.VoiceChannel;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -27,6 +26,7 @@ import java.util.List;
 
 public class AudioM {
 
+    private static HashMap<Guild, AudioM> INSTANCES = new HashMap<>();
     /**
      * Music manager for this guild
      */
@@ -53,7 +53,12 @@ public class AudioM {
     private Guild guild;
     private Logger logger = LogManager.getLogger();
 
-    private static HashMap<Guild, AudioM> INSTANCES = new HashMap<>();
+    private AudioM(Guild guild) {
+        this.playerManager = new DefaultAudioPlayerManager();
+        AudioSourceManagers.registerRemoteSources(playerManager);
+        AudioSourceManagers.registerLocalSource(playerManager);
+        this.guild = guild;
+    }
 
     public static AudioM getInstance(Guild guild) {
         if (!INSTANCES.containsKey(guild)) {
@@ -61,14 +66,6 @@ public class AudioM {
         }
 
         return INSTANCES.get(guild);
-    }
-
-
-    private AudioM(Guild guild) {
-        this.playerManager = new DefaultAudioPlayerManager();
-        AudioSourceManagers.registerRemoteSources(playerManager);
-        AudioSourceManagers.registerLocalSource(playerManager);
-        this.guild = guild;
     }
 
     /**

@@ -9,7 +9,10 @@ import net.dv8tion.jda.api.requests.RestAction;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import static net.Broken.MainBot.jda;
 
@@ -20,15 +23,15 @@ public class AutoVoiceChannel {
     private final String guildID;
     private final HashMap<Integer, String> createdChannels = new HashMap<>();
 
+    public AutoVoiceChannel(Guild guild) {
+        this.guildID = guild.getId();
+    }
+
     public static AutoVoiceChannel getInstance(Guild guild) {
         if (INSTANCE_MAP.get(guild.getId()) == null) {
             INSTANCE_MAP.put(guild.getId(), new AutoVoiceChannel(guild));
         }
         return INSTANCE_MAP.get(guild.getId());
-    }
-
-    public AutoVoiceChannel(Guild guild) {
-        this.guildID = guild.getId();
     }
 
     public void join(VoiceChannel voiceChannel) {
@@ -41,7 +44,7 @@ public class AutoVoiceChannel {
             VoiceChannel newChannel = voiceChannel.createCopy().complete();
             int next = getNextNumber();
             String title = pref.getAutoVoiceChannelTitle();
-            if (title.isEmpty()){
+            if (title.isEmpty()) {
                 title = "Voice @count";
             }
             title = title.replace("@count", Integer.toString(next));

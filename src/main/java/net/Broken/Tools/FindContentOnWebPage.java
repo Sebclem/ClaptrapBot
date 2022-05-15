@@ -6,10 +6,11 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 
-public  class FindContentOnWebPage {
+public class FindContentOnWebPage {
     /**
      * Find picture URL on webPage
-     * @param url Web Page URL
+     *
+     * @param url      Web Page URL
      * @param divClass Div class where the picture is
      * @param htmlType HTML tag of image (img)
      * @return Picture URL
@@ -18,13 +19,13 @@ public  class FindContentOnWebPage {
     public static String doYourJob(String url, String divClass, String htmlType) throws IOException {
 //        System.out.println(url);
         String source = getSourceUrl(url);
-        int divIndex = source.indexOf("class=\""+divClass);
+        int divIndex = source.indexOf("class=\"" + divClass);
         String sub = source.substring(divIndex);
 //        System.out.println(sub);
-        sub = sub.replace(divClass,"");
+        sub = sub.replace(divClass, "");
         sub = sub.substring(sub.indexOf(htmlType));
         sub = sub.substring(sub.indexOf("src"));
-        sub = sub.replace("src=\"","");
+        sub = sub.replace("src=\"", "");
         String[] split = sub.split("\"");
 //        System.out.println(split[0]);
         return split[0];
@@ -32,6 +33,7 @@ public  class FindContentOnWebPage {
 
     /**
      * Get source code of web page
+     *
      * @param url Web page URL
      * @return Web page source as String
      * @throws IOException
@@ -39,7 +41,7 @@ public  class FindContentOnWebPage {
     public static String getSourceUrl(String url) throws IOException {
         URL urlC = new URL(url);
         URLConnection yc = urlC.openConnection();
-        yc.setRequestProperty("User-Agent","Googlebot/2.1 (+http://www.googlebot.com/bot.html)");
+        yc.setRequestProperty("User-Agent", "Googlebot/2.1 (+http://www.googlebot.com/bot.html)");
         BufferedReader in = new BufferedReader(new InputStreamReader(
                 yc.getInputStream(), "UTF-8"));
         String inputLine;

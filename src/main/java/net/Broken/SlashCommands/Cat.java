@@ -28,7 +28,9 @@ import java.util.List;
  * Command that return a random picture of cat.
  */
 public class Cat implements SlashCommand {
-    private Logger logger = LogManager.getLogger();;
+    private Logger logger = LogManager.getLogger();
+    ;
+
     @Override
     public void action(SlashCommandEvent event) {
         try {

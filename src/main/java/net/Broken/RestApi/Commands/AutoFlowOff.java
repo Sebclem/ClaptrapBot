@@ -10,13 +10,13 @@ import net.dv8tion.jda.api.entities.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-public class AutoFlowOff implements CommandInterface{
+public class AutoFlowOff implements CommandInterface {
 
     @Override
     public ResponseEntity<CommandResponseData> action(CommandPostData data, User user, Guild guild) {
         AudioM audioM = AudioM.getInstance(guild);
         TrackScheduler scheduler = audioM.getGuildMusicManager().scheduler;
         scheduler.setAutoFlow(false);
-        return new ResponseEntity<>(new CommandResponseData(data.command,"ok"), HttpStatus.OK);
+        return new ResponseEntity<>(new CommandResponseData(data.command, "ok"), HttpStatus.OK);
     }
 }

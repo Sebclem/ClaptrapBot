@@ -1,10 +1,7 @@
 package net.Broken.RestApi.Data;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
-import com.sedmelluq.discord.lavaplayer.track.AudioTrackState;
+
 /**
  * Data for JSON Parsing
  */
@@ -34,7 +31,7 @@ public class CurrentMusicData {
     }
 
     public String getState() {
-        if(pause)
+        if (pause)
             return "PAUSE";
         else
             return state;

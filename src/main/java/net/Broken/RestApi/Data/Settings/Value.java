@@ -12,6 +12,7 @@ public class Value {
         this.name = name;
         this.id = id;
     }
+
     public Value(String name, String id, boolean selected) {
         this.name = name;
         this.id = id;

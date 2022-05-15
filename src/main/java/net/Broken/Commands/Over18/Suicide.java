@@ -1,7 +1,6 @@
 package net.Broken.Commands.Over18;
 
 import net.Broken.Commande;
-import net.Broken.Tools.EmbedMessageUtils;
 import net.Broken.Tools.FindContentOnWebPage;
 import net.Broken.Tools.Redirection;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -10,7 +9,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
-public class Suicide implements Commande{
+public class Suicide implements Commande {
 
     private Logger logger = LogManager.getLogger();
 
@@ -25,16 +24,16 @@ public class Suicide implements Commande{
 
             Boolean success = false;
             int tryCount = 0;
-            while(!success && tryCount < 10 ){
+            while (!success && tryCount < 10) {
                 redirectUrl = redirection.get(base + "/random");
 
                 String img;
-                try{
+                try {
                     img = FindContentOnWebPage.doYourJob(redirectUrl, "post photo_nav_caption", "img");
                     event.getTextChannel().sendMessage(img).queue();
                     success = true;
 
-                }catch (StringIndexOutOfBoundsException | IOException e){
+                } catch (StringIndexOutOfBoundsException | IOException e) {
                     logger.debug("Photo_nav not found try photoset");
 
                     try {
@@ -48,13 +47,11 @@ public class Suicide implements Commande{
 
 
                 }
-                tryCount ++;
+                tryCount++;
             }
         } catch (IOException e) {
             logger.catching(e);
         }
-
-
 
 
     }

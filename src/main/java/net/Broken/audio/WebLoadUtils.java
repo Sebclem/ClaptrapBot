@@ -18,17 +18,18 @@ import org.springframework.http.ResponseEntity;
  * Interface between WebApi and Music bot for submitting track
  */
 public class WebLoadUtils {
+    public UserAudioTrack userAudioTrack;
     private ResponseEntity<CommandResponseData> response;
     private Logger logger = LogManager.getLogger();
-    public UserAudioTrack userAudioTrack;
 
     /**
      * Submit a track or playlist to Music bot
-     * @param data Received data from API
-     * @param user User who submit the track
+     *
+     * @param data  Received data from API
+     * @param user  User who submit the track
      * @param guild
      */
-    public WebLoadUtils(CommandPostData data, User user, Guild guild, boolean submit){
+    public WebLoadUtils(CommandPostData data, User user, Guild guild, boolean submit) {
         AudioPlayerManager playerM = AudioM.getInstance(guild).getPlayerManager();
 
         try {
@@ -40,7 +41,7 @@ public class WebLoadUtils {
                     logger.info("Single Track detected from web!");
 
                     userAudioTrack = new UserAudioTrack(user, track);
-                    if(submit)
+                    if (submit)
                         audioM.play(audioM.getGuild(), audioM.getPlayedChanel(), audioM.getGuildMusicManager(), userAudioTrack, data.onHead);
                     response = new ResponseEntity<>(new CommandResponseData("ADD", "Loaded"), HttpStatus.OK);
 
@@ -49,13 +50,11 @@ public class WebLoadUtils {
                 @Override
                 public void playlistLoaded(AudioPlaylist playlist) {
 
-                    if(submit)
-                    {
+                    if (submit) {
                         logger.info("Playlist detected from web! Limit: " + data.playlistLimit);
                         audioM.playListLoader(playlist, data.playlistLimit, user, data.onHead);
                         response = new ResponseEntity<>(new CommandResponseData("ADD", "Loaded"), HttpStatus.OK);
-                    }else
-                    {
+                    } else {
                         response = new ResponseEntity<>(new CommandResponseData("ADD", "Adding a list on saved playlist is currently not supported"), HttpStatus.NOT_ACCEPTABLE);
 
                     }
@@ -64,7 +63,7 @@ public class WebLoadUtils {
 
                 @Override
                 public void noMatches() {
-                    logger.warn("Cant find media ! (web) url: "+ data.url);
+                    logger.warn("Cant find media ! (web) url: " + data.url);
                     response = new ResponseEntity<>(new CommandResponseData("ADD", "Can't find media!"), HttpStatus.NOT_FOUND);
 
                 }
@@ -76,7 +75,7 @@ public class WebLoadUtils {
 
                 }
             });
-            while(response == null)
+            while (response == null)
                 Thread.sleep(10);
 
         } catch (InterruptedException nullMusicManager) {
@@ -86,10 +85,11 @@ public class WebLoadUtils {
 
     /**
      * Wait for the end of submit process and return ResponseEntity
+     *
      * @return HTTP Response
      */
-    public ResponseEntity<CommandResponseData> getResponse(){
-        while(response == null) {
+    public ResponseEntity<CommandResponseData> getResponse() {
+        while (response == null) {
             try {
                 Thread.sleep(10);
             } catch (InterruptedException e) {

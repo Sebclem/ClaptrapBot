@@ -10,12 +10,12 @@ import org.apache.logging.log4j.Logger;
 /**
  * Admin command to manually trigger daily action(s)
  */
-public class DayTrigger implements Commande{
+public class DayTrigger implements Commande {
     Logger logger = LogManager.getLogger();
 
     @Override
     public void action(String[] args, MessageReceivedEvent event) {
-        if(!event.isFromType(ChannelType.PRIVATE))
+        if (!event.isFromType(ChannelType.PRIVATE))
             event.getMessage().delete().queue();
         DayListener.getInstance().trigger();
 

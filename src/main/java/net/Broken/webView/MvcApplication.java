@@ -25,6 +25,7 @@ public class MvcApplication implements WebMvcConfigurer {
                 .resourceChain(true)
                 .addResolver(versionResourceResolver);
     }
+
     @Bean
     public ResourceUrlEncodingFilter resourceUrlEncodingFilter() {
         return new ResourceUrlEncodingFilter();

@@ -205,12 +205,12 @@ public class TrackScheduler extends AudioEventAdapter {
         }
     }
 
+    public boolean isAutoFlow() {
+        return autoFlow;
+    }
+
     public void setAutoFlow(boolean autoFlow) {
         this.autoFlow = autoFlow;
         needAutoPlay();
-    }
-
-    public boolean isAutoFlow() {
-        return autoFlow;
     }
 }

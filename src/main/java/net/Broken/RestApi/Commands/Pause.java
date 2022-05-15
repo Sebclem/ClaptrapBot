@@ -15,7 +15,7 @@ import org.springframework.http.ResponseEntity;
 public class Pause implements CommandInterface {
     @Override
     public ResponseEntity<CommandResponseData> action(CommandPostData data, User user, Guild guild) {
-       AudioM.getInstance(guild).getGuildMusicManager().scheduler.pause();
+        AudioM.getInstance(guild).getGuildMusicManager().scheduler.pause();
         return new ResponseEntity<>(new CommandResponseData(data.command, "Accepted"), HttpStatus.OK);
     }
 }

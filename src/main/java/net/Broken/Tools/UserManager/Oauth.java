@@ -18,21 +18,21 @@ import java.util.List;
 
 public class Oauth {
     private static Oauth INSTANCE = new Oauth();
-    public static Oauth getInstance(){ return INSTANCE; }
-
     Logger logger = LogManager.getLogger();
     private String baseUrl = "https://discordapp.com/api";
     private String mePath = "/users/@me";
 
+    public static Oauth getInstance() {
+        return INSTANCE;
+    }
 
-
-    private JSONObject getUserId(String token){
+    private JSONObject getUserId(String token) {
         StringBuffer content = new StringBuffer();
         try {
-            String httpsURL = baseUrl+mePath;
+            String httpsURL = baseUrl + mePath;
             URL myUrl = new URL(httpsURL);
-            HttpURLConnection con = (HttpURLConnection)myUrl.openConnection();
-            con.setRequestProperty("Authorization", "Bearer "+token);
+            HttpURLConnection con = (HttpURLConnection) myUrl.openConnection();
+            con.setRequestProperty("Authorization", "Bearer " + token);
             con.setRequestProperty("User-Agent", "DiscordBot (claptrapbot.com, 0.1)");
             con.setRequestMethod("GET");
             logger.debug("Response code: " + con.getResponseCode());
@@ -56,15 +56,15 @@ public class Oauth {
     }
 
 
-    public UserEntity getUserEntity(String token, UserRepository userRepository, PasswordEncoder passwordEncoder){
+    public UserEntity getUserEntity(String token, UserRepository userRepository, PasswordEncoder passwordEncoder) {
         JSONObject discorResponse = getUserId(token);
         List<UserEntity> userEntitys = userRepository.findByJdaId(discorResponse.getString("id"));
-        if(userEntitys.size() != 0){
+        if (userEntitys.size() != 0) {
             return userEntitys.get(0);
-        }else{
+        } else {
             User jdaUser = MainBot.jda.getUserById(discorResponse.getString("id"));
             UserEntity user;
-            if( jdaUser == null)
+            if (jdaUser == null)
                 user = new UserEntity(discorResponse.getString("username"), discorResponse.getString("id"), passwordEncoder);
             else
                 user = new UserEntity(MainBot.jda.getUserById(discorResponse.getString("id")), passwordEncoder);

@@ -12,7 +12,7 @@ import javax.persistence.Id;
 @Entity
 public class PendingUserEntity {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
     private String name;
@@ -32,7 +32,6 @@ public class PendingUserEntity {
         this.checkToken = checkToken;
         this.password = password;
     }
-
 
 
     public String getPassword() {

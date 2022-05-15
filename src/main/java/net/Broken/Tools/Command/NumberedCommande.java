@@ -1,4 +1,5 @@
 package net.Broken.Tools.Command;
+
 import net.Broken.Commande;
 import net.Broken.Tools.FindContentOnWebPage;
 import net.Broken.Tools.LimitChecker;
@@ -11,15 +12,13 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Abstact class used for all command that need to find the max number of page on a web site.
  */
 @Ignore
-public abstract class NumberedCommande implements Commande{
-    private Logger logger = LogManager.getLogger();
+public abstract class NumberedCommande implements Commande {
     protected int minNumber = 1;
     protected int maxNumber = -1;
     protected String baseURL;
@@ -27,11 +26,13 @@ public abstract class NumberedCommande implements Commande{
     protected String htmlType;
     protected String urlSuffix;
     protected LinkedBlockingQueue<Integer> randomQueue = new LinkedBlockingQueue<>();
+    private Logger logger = LogManager.getLogger();
 
     /**
      * Default constructor
-     * @param logger Logger used for logs
-     * @param baseURL WebSite base url
+     *
+     * @param logger   Logger used for logs
+     * @param baseURL  WebSite base url
      * @param divClass DivClass to search to extract image
      * @param htmlType HTML tag to extract image (img)
      */
@@ -44,29 +45,25 @@ public abstract class NumberedCommande implements Commande{
         try {
             logger.debug("Checking max...");
             maxNumber = LimitChecker.doYourJob(baseURL, 2, urlSuffix);
-            logger.info("Limit is "+maxNumber);
+            logger.info("Limit is " + maxNumber);
         } catch (IOException e) {
             logger.catching(e);
         }
     }
 
-    public NumberedCommande(Logger logger, String baseURL, String urlSuffix){
+    public NumberedCommande(Logger logger, String baseURL, String urlSuffix) {
         this(logger, baseURL, urlSuffix, null, null);
 
     }
 
     @Override
     public void action(String[] args, MessageReceivedEvent event) {
-        try
-        {
-            if(args.length == 0)
-            {
-               String result = poll();
-               event.getTextChannel().sendMessage(event.getAuthor().getAsMention()+"\n"+result).queue();
+        try {
+            if (args.length == 0) {
+                String result = poll();
+                event.getTextChannel().sendMessage(event.getAuthor().getAsMention() + "\n" + result).queue();
 
-            }
-            else
-            {
+            } else {
                 switch (args[0].toLowerCase()) {
                     case "update":
                         logger.info("update commande from " + event.getMessage().getAuthor().getName());
@@ -139,7 +136,7 @@ public abstract class NumberedCommande implements Commande{
 
     protected void checkRandom() throws IOException {
         logger.trace("Queue size: " + randomQueue.size());
-        if(randomQueue.isEmpty()){
+        if (randomQueue.isEmpty()) {
             logger.debug("Queue empty, update it.");
             completeRandom();
         }

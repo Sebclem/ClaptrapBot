@@ -44,22 +44,22 @@ public class PlaylistAPIController {
 
 
     @RequestMapping("/myPlaylist")
-    public List<PlaylistEntity> myPlaylist(@CookieValue(value = "token", defaultValue = "") String token){
-        if(token.isEmpty())
+    public List<PlaylistEntity> myPlaylist(@CookieValue(value = "token", defaultValue = "") String token) {
+        if (token.isEmpty())
             return null;
-        else{
+        else {
             UserEntity user = userRepository.findByApiToken(token).get(0);
-            return  user.getPlaylists();
+            return user.getPlaylists();
         }
 
     }
 
     @RequestMapping("/createPlaylist")
-    public ResponseEntity<PlaylistResponseData> createPlaylist(@CookieValue(value = "token", defaultValue = "") String token, @RequestBody CreatePlaylistData data){
+    public ResponseEntity<PlaylistResponseData> createPlaylist(@CookieValue(value = "token", defaultValue = "") String token, @RequestBody CreatePlaylistData data) {
 
-        if(token.isEmpty())
+        if (token.isEmpty())
             return new ResponseEntity<>(new PlaylistResponseData("Unknown Token!\nPlease Re-connect.", "token"), HttpStatus.UNAUTHORIZED);
-        else{
+        else {
             UserEntity user = userRepository.findByApiToken(token).get(0);
             PlaylistEntity playlistEntity = new PlaylistEntity(data.name, user);
             playlistEntity = playlistRepository.save(playlistEntity);
@@ -72,7 +72,7 @@ public class PlaylistAPIController {
     }
 
     @RequestMapping("/addToPlaylist")
-    public ResponseEntity<PlaylistResponseData> addToPlaylist(@CookieValue(value = "token", defaultValue = "") String token, @RequestBody AddToPlaylistData data){
+    public ResponseEntity<PlaylistResponseData> addToPlaylist(@CookieValue(value = "token", defaultValue = "") String token, @RequestBody AddToPlaylistData data) {
         PlaylistManager playlistManager = PlaylistManager.getINSTANCE();
 
         return playlistManager.addToPlaylist(token, data);
@@ -80,7 +80,7 @@ public class PlaylistAPIController {
     }
 
     @RequestMapping("/dellTrack")
-    public ResponseEntity<PlaylistResponseData> dellTrack(@CookieValue(value = "token", defaultValue = "") String token, @RequestBody DeleteTrackData data){
+    public ResponseEntity<PlaylistResponseData> dellTrack(@CookieValue(value = "token", defaultValue = "") String token, @RequestBody DeleteTrackData data) {
         PlaylistManager playlistManager = PlaylistManager.getINSTANCE();
 
         return playlistManager.removeTrack(token, data);
@@ -88,14 +88,12 @@ public class PlaylistAPIController {
     }
 
     @RequestMapping("/moveTrack")
-    public ResponseEntity<PlaylistResponseData> moveTrack(@CookieValue(value = "token", defaultValue = "") String token, @RequestBody MoveTrackData data){
+    public ResponseEntity<PlaylistResponseData> moveTrack(@CookieValue(value = "token", defaultValue = "") String token, @RequestBody MoveTrackData data) {
         PlaylistManager playlistManager = PlaylistManager.getINSTANCE();
 
         return playlistManager.moveTrack(token, data);
 
     }
-
-
 
 
 }
