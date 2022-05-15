@@ -44,7 +44,7 @@ dependencies {
     implementation(platform("org.apache.logging.log4j:log4j-bom:2.17.1"))
 //     Use MySQL Connector-J
     implementation 'mysql:mysql-connector-java'
-    implementation 'org.reflections:reflections:0.9.12'
+    implementation 'org.reflections:reflections:0.10.2'
     implementation 'org.apache.commons:commons-lang3:3.12.0'
     implementation 'com.google.api-client:google-api-client:1.31.5'
     implementation 'com.google.apis:google-api-services-youtube:v3-rev20210410-1.31.0'
