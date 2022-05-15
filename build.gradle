@@ -15,21 +15,8 @@ version = "$versionObj"
 sourceCompatibility = '17'
 
 
-
-
-jar.doFirst {
-    delete "${buildDir}/libs/*"
-}
-
-jar {
-//    delete "${buildDir}/libs/*"
-//    baseName = 'DiscordBot'
-
-}
-
 repositories {
     mavenCentral()
-    jcenter()
     maven {
         url 'https://m2.dv8tion.net/releases'
     }
