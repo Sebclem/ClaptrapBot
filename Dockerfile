@@ -6,5 +6,5 @@ ARG BRANCH_NAME
 ARG GITHUB_RUN_NUMBER
 ADD build/libs/ClaptrapBot-*.jar /bot_src/bot.jar
 RUN java -version
-CMD java -jar bot.jar -t ${TOKEN}
+CMD java -jar bot.jar
 LABEL org.opencontainers.image.source=https://github.com/Sebclem/ClaptrapBot/
