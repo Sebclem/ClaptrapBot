@@ -11,6 +11,7 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import net.Broken.MainBot;
 import net.Broken.RestApi.Data.UserAudioTrackData;
 import net.Broken.Tools.EmbedMessageUtils;
+import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
@@ -86,7 +87,9 @@ public class AudioM {
             public void trackLoaded(AudioTrack track) {
                 logger.info("[" + guild + "] Single Track detected!");
                 UserAudioTrack uat = new UserAudioTrack(event.getUser(), track);
-                Message message = new MessageBuilder().setEmbeds(EmbedMessageUtils.getMusicOk("Add " + track.getInfo().title + " to playlist")).build();
+                Message message = new MessageBuilder()
+                        .setEmbeds(EmbedMessageUtils.getMusicAdded(track.getInfo(), event.getMember(), -1))
+                        .build();
                 event.getHook().sendMessage(message).queue();
                 play(guild, voiceChannel, musicManager, uat, onHead);
             }
@@ -95,7 +98,10 @@ public class AudioM {
             public void playlistLoaded(AudioPlaylist playlist) {
                 logger.info("[" + guild + "] Playlist detected! Limit: " + playlistLimit);
                 AudioTrack firstTrack = playlist.getSelectedTrack();
-                Message message = new MessageBuilder().setEmbeds(EmbedMessageUtils.getMusicOk("Add " + firstTrack.getInfo().title + " and 30 first videos to playlist !")).build();
+                int size = Math.min(playlist.getTracks().size(), playlistLimit);
+                Message message = new MessageBuilder()
+                        .setEmbeds(EmbedMessageUtils.getMusicAdded(firstTrack.getInfo(), event.getMember(), size))
+                        .build();
                 event.getHook().sendMessage(message).queue();
                 playListLoader(playlist, playlistLimit, event.getUser(), onHead);
             }
@@ -247,7 +253,7 @@ public class AudioM {
         GuildMusicManager musicManager = getGuildAudioPlayer();
         AudioTrackInfo info = musicManager.scheduler.getInfo();
         UserAudioTrack userAudioTrack = musicManager.scheduler.getCurrentPlayingTrack();
-        Message message = new MessageBuilder().setEmbeds(EmbedMessageUtils.getMusicOk(info.title + "\n" + info.uri + "\nSubmitted by: " + userAudioTrack.getSubmittedUser().getName())).build();
+        Message message = new MessageBuilder().setEmbeds(EmbedMessageUtils.getMusicInfo(info, userAudioTrack)).build();
         event.getHook().sendMessage(message).queue();
     }
 
