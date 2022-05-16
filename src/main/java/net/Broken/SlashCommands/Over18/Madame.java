@@ -1,5 +1,7 @@
 package net.Broken.SlashCommands.Over18;
 
+import net.Broken.Tools.Command.Ignore;
+import net.Broken.Tools.Command.NoDev;
 import net.Broken.Tools.Command.NumberedSlashCommand;
 import net.Broken.Tools.FindContentOnWebPage;
 import org.apache.logging.log4j.LogManager;
@@ -7,6 +9,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
+@NoDev
 public class Madame extends NumberedSlashCommand {
     Logger logger = LogManager.getLogger();
 
@@ -88,7 +91,7 @@ public class Madame extends NumberedSlashCommand {
 
     @Override
     public boolean isPrivateUsable() {
-        return false;
+        return true;
     }
 
     @Override
