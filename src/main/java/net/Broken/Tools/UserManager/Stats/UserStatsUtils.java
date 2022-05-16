@@ -249,7 +249,7 @@ public class UserStatsUtils {
 
         EmbedBuilder embedBuilder = new EmbedBuilder();
         embedBuilder.setColor(Color.yellow);
-        embedBuilder.setTitle(member.getGuild().getName() + " Ranking");
+        embedBuilder.setTitle(":trophy:  " + member.getGuild().getName() + " Ranking");
         embedBuilder.addField("Top 5:", stringBuilder.toString(), false);
         String rank;
         switch (pack.selfStats.rank) {
@@ -269,7 +269,6 @@ public class UserStatsUtils {
 
 
         embedBuilder.addField("Your stats:", rank + " with " + pack.selfStats.total + " points", false);
-        embedBuilder.addField("More stats:", "https://" + MainBot.url + "/rank", false);
         return EmbedMessageUtils.buildStandar(embedBuilder);
 
     }

@@ -50,13 +50,10 @@ public class SlashCommandLoader {
                              NoSuchMethodException e) {
                         logger.error("Failed to load " + name + "!");
                     }
-
                 }
-
             } else {
                 logger.trace("Ignored command: " + name);
             }
-
         }
     }
 
@@ -71,5 +68,6 @@ public class SlashCommandLoader {
             commandListUpdateAction.addCommands(command);
         });
         commandListUpdateAction.queue();
+
     }
 }
