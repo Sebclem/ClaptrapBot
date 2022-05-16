@@ -21,6 +21,7 @@ import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.awt.*;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -214,7 +215,12 @@ public class AudioM {
     public void skipTrack(SlashCommandEvent event) {
         GuildMusicManager musicManager = getGuildAudioPlayer();
         musicManager.scheduler.nextTrack();
-        Message message = new MessageBuilder().setEmbeds(EmbedMessageUtils.getMusicOk("Next music !")).build();
+        Message message = new MessageBuilder().setEmbeds(
+                EmbedMessageUtils.buildStandar(
+                        new EmbedBuilder()
+                            .setTitle(":track_next:  Next Track")
+                            .setColor(Color.green)
+        )).build();
         event.getHook().sendMessage(message).queue();
     }
 
@@ -226,7 +232,12 @@ public class AudioM {
     public void pause(SlashCommandEvent event) {
         GuildMusicManager musicManager = getGuildAudioPlayer();
         musicManager.scheduler.pause();
-        Message message = new MessageBuilder().setEmbeds(EmbedMessageUtils.getMusicOk("Playback paused")).build();
+        Message message = new MessageBuilder().setEmbeds(
+                EmbedMessageUtils.buildStandar(
+                        new EmbedBuilder()
+                                .setTitle(":pause_button:  Playback paused")
+                                .setColor(Color.green)
+                )).build();
         event.getHook().sendMessage(message).queue();
 
 
@@ -240,7 +251,12 @@ public class AudioM {
     public void resume(SlashCommandEvent event) {
         GuildMusicManager musicManager = getGuildAudioPlayer();
         musicManager.scheduler.resume();
-        Message message = new MessageBuilder().setEmbeds(EmbedMessageUtils.getMusicOk("Playback resumed")).build();
+        Message message = new MessageBuilder().setEmbeds(
+                EmbedMessageUtils.buildStandar(
+                        new EmbedBuilder()
+                                .setTitle(":arrow_forward:  Playback resumed")
+                                .setColor(Color.green)
+                )).build();
         event.getHook().sendMessage(message).queue();
     }
 
@@ -260,7 +276,12 @@ public class AudioM {
     public void flush(SlashCommandEvent event) {
         GuildMusicManager musicManager = getGuildAudioPlayer();
         musicManager.scheduler.flush();
-        Message message = new MessageBuilder().setEmbeds(EmbedMessageUtils.getMusicOk("Flush playlist!")).build();
+        Message message = new MessageBuilder().setEmbeds(
+                EmbedMessageUtils.buildStandar(
+                        new EmbedBuilder()
+                                .setTitle(":wastebasket:  Playlist flushed")
+                                .setColor(Color.green)
+                )).build();
         event.getHook().sendMessage(message).queue();
     }
 
@@ -272,18 +293,43 @@ public class AudioM {
     public void list(SlashCommandEvent event) {
         GuildMusicManager musicManager = getGuildAudioPlayer();
         List<UserAudioTrackData> list = musicManager.scheduler.getList();
-        StringBuilder resp = new StringBuilder();
+
         if (list.size() == 0) {
-            resp.append("Oh my god!\nThe playlist is empty ! \n:astonished: ");
+            Message message = new MessageBuilder().setEmbeds(
+                    EmbedMessageUtils.buildStandar(
+                            new EmbedBuilder()
+                                    .setTitle(":scroll:  Playlist")
+                                    .setColor(Color.green)
+                                    .setDescription("Oh no ! The playlist is empty !")
+                    )).build();
+            event.getHook().sendMessage(message).queue();
         } else {
+            StringBuilder resp = new StringBuilder();
+            int i = 0;
             for (UserAudioTrackData trackInfo : list) {
-                resp.append("- ");
+                resp.append(":arrow_right:  ");
                 resp.append(trackInfo.getAudioTrackInfo().title);
-                resp.append("\n");
+                resp.append(" - ");
+                resp.append(trackInfo.getAudioTrackInfo().author);
+                resp.append("\n\n");
+                if (i >= 5){
+                    resp.append(":arrow_forward: And ");
+                    resp.append(list.size() - 5);
+                    resp.append(" other tracks ...");
+                    break;
+                }
+                i++;
             }
+            Message message = new MessageBuilder().setEmbeds(
+                    EmbedMessageUtils.buildStandar(
+                            new EmbedBuilder()
+                                    .setTitle(":scroll:  Playlist")
+                                    .setColor(Color.green)
+                                    .setDescription(resp.toString())
+                    )).build();
+            event.getHook().sendMessage(message).queue();
         }
-        Message message = new MessageBuilder().setEmbeds(EmbedMessageUtils.getMusicOk("Playlist:\n\n" + resp.toString())).build();
-        event.getHook().sendMessage(message).queue();
+
     }
 
     /**

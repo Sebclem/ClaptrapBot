@@ -37,7 +37,7 @@ public class EmbedMessageUtils {
     }
 
     public static MessageEmbed getMusicInfo(AudioTrackInfo info, UserAudioTrack userAudioTrack) {
-        EmbedBuilder temp = new EmbedBuilder().setTitle(":loud_sound: Currently playing")
+        EmbedBuilder temp = new EmbedBuilder().setTitle(":information_source: Currently playing")
                 .addField("Title", info.title, false)
                 .addField("Author", info.author, false)
                 .addField("URL", info.uri, false)
