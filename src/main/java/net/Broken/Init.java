@@ -93,7 +93,6 @@ public class Init {
         jda.addEventListener(new BotListener());
         jda.getPresence().setPresence(OnlineStatus.ONLINE, Activity.playing(MainBot.url));
 
-
         logger.info("-----------------------END INIT-----------------------");
 
 
