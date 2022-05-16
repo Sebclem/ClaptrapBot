@@ -19,6 +19,7 @@ import net.dv8tion.jda.api.events.guild.member.GuildMemberRoleRemoveEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceJoinEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceLeaveEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceMoveEvent;
+import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -28,6 +29,7 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ApplicationContext;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -122,6 +124,9 @@ public class BotListener extends ListenerAdapter {
                 AudioM.getInstance(event.getGuild()).stop();
             }
         }
+        else if (event.getMember().getUser() == MainBot.jda.getSelfUser()){
+            AudioM.getInstance(event.getGuild()).clearLastButton();
+        }
         AutoVoiceChannel autoVoiceChannel = AutoVoiceChannel.getInstance(event.getGuild());
         autoVoiceChannel.leave(event.getChannelLeft());
     }
@@ -138,6 +143,20 @@ public class BotListener extends ListenerAdapter {
     public void onMessageReceived(MessageReceivedEvent event) {
         if (!event.getAuthor().isBot()) {
             UserStatsUtils.getINSTANCE().addMessageCount(event.getMember());
+        }
+    }
+
+    @Override
+    public void onButtonClick(@NotNull ButtonClickEvent event) {
+        super.onButtonClick(event);
+        event.deferReply().queue();
+        AudioM audioM = AudioM.getInstance(event.getGuild());
+        switch (event.getComponentId()) {
+            case "pause" -> audioM.pause(event);
+            case "play" -> audioM.resume(event);
+            case "next" -> audioM.skipTrack(event);
+            case "stop" -> audioM.stop(event);
+            case "disconnect" -> audioM.disconect(event);
         }
     }
 
@@ -185,5 +204,7 @@ public class BotListener extends ListenerAdapter {
             guildPref = guildPrefList.get(0);
         return guildPref;
     }
+
+
 
 }

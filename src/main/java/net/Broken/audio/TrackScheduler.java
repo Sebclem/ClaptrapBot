@@ -3,6 +3,7 @@ package net.Broken.audio;
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
+import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
@@ -163,10 +164,11 @@ public class TrackScheduler extends AudioEventAdapter {
         // Start the next track, regardless of if something is already playing or not. In case queue was empty, we are
         // giving null to startTrack, which is a valid argument and will simply stop the player.
         UserAudioTrack track = queue.poll();
-        if (track != null)
+        if (track != null){
             this.currentPlayingTrack = track;
-        if (track != null)
             player.startTrack(track.getAudioTrack(), false);
+        }
+
         needAutoPlay();
     }
 
@@ -174,9 +176,46 @@ public class TrackScheduler extends AudioEventAdapter {
     public void onTrackEnd(AudioPlayer player, AudioTrack track, AudioTrackEndReason endReason) {
         // Only start the next track if the end reason is suitable for it (FINISHED or LOAD_FAILED)
         if (endReason.mayStartNext) {
-            logger.debug("[" + guild + "] End of track, start next.");
-            nextTrack();
+            if(queue.isEmpty()){
+                logger.debug("[" + guild.getName() + "] End of track, Playlist empty.");
+                AudioM.getInstance(guild).updateLastButton();
+            }else{
+                logger.debug("[" + guild.getName() + "] End of track, start next.");
+                nextTrack();
+            }
+
+
         }
+    }
+
+    @Override
+    public void onTrackStart(AudioPlayer player, AudioTrack track) {
+        super.onTrackStart(player, track);
+        AudioM.getInstance(guild).updateLastButton();
+    }
+
+    @Override
+    public void onPlayerPause(AudioPlayer player) {
+        super.onPlayerPause(player);
+        AudioM.getInstance(guild).updateLastButton();
+    }
+
+    @Override
+    public void onPlayerResume(AudioPlayer player) {
+        super.onPlayerResume(player);
+        AudioM.getInstance(guild).updateLastButton();
+    }
+
+    @Override
+    public void onTrackException(AudioPlayer player, AudioTrack track, FriendlyException exception) {
+        super.onTrackException(player, track, exception);
+        AudioM.getInstance(guild).updateLastButton();
+    }
+
+    @Override
+    public void onTrackStuck(AudioPlayer player, AudioTrack track, long thresholdMs) {
+        super.onTrackStuck(player, track, thresholdMs);
+        AudioM.getInstance(guild).updateLastButton();
     }
 
     private void needAutoPlay() {

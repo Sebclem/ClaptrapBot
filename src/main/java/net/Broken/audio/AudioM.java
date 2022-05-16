@@ -13,15 +13,17 @@ import net.Broken.RestApi.Data.UserAudioTrackData;
 import net.Broken.Tools.EmbedMessageUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.entities.VoiceChannel;
+import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.interactions.components.ActionRow;
+import net.dv8tion.jda.api.interactions.components.Button;
+import net.dv8tion.jda.api.interactions.components.ComponentLayout;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -54,6 +56,8 @@ public class AudioM {
      */
     private Guild guild;
     private Logger logger = LogManager.getLogger();
+
+    private Message lastMessageWithButton;
 
     private AudioM(Guild guild) {
         this.playerManager = new DefaultAudioPlayerManager();
@@ -91,7 +95,8 @@ public class AudioM {
                 Message message = new MessageBuilder()
                         .setEmbeds(EmbedMessageUtils.getMusicAdded(track.getInfo(), event.getMember(), -1))
                         .build();
-                event.getHook().sendMessage(message).queue();
+                clearLastButton();
+                lastMessageWithButton = event.getHook().sendMessage(message).addActionRow(getActionButton()).complete();
                 play(guild, voiceChannel, musicManager, uat, onHead);
             }
 
@@ -103,7 +108,8 @@ public class AudioM {
                 Message message = new MessageBuilder()
                         .setEmbeds(EmbedMessageUtils.getMusicAdded(firstTrack.getInfo(), event.getMember(), size))
                         .build();
-                event.getHook().sendMessage(message).queue();
+                clearLastButton();
+                lastMessageWithButton = event.getHook().sendMessage(message).addActionRow(getActionButton()).complete();
                 playListLoader(playlist, playlistLimit, event.getUser(), onHead);
             }
 
@@ -212,16 +218,17 @@ public class AudioM {
      *
      * @param event
      */
-    public void skipTrack(SlashCommandEvent event) {
+    public void skipTrack(GenericInteractionCreateEvent event) {
         GuildMusicManager musicManager = getGuildAudioPlayer();
         musicManager.scheduler.nextTrack();
         Message message = new MessageBuilder().setEmbeds(
                 EmbedMessageUtils.buildStandar(
                         new EmbedBuilder()
-                            .setTitle(":track_next:  Next Track")
-                            .setColor(Color.green)
-        )).build();
-        event.getHook().sendMessage(message).queue();
+                                .setTitle(":track_next:  Next Track")
+                                .setColor(Color.green)
+                )).build();
+        clearLastButton();
+        lastMessageWithButton = event.getHook().sendMessage(message).addActionRow(getActionButton()).complete();
     }
 
     /**
@@ -229,7 +236,7 @@ public class AudioM {
      *
      * @param event
      */
-    public void pause(SlashCommandEvent event) {
+    public void pause(GenericInteractionCreateEvent event) {
         GuildMusicManager musicManager = getGuildAudioPlayer();
         musicManager.scheduler.pause();
         Message message = new MessageBuilder().setEmbeds(
@@ -238,7 +245,8 @@ public class AudioM {
                                 .setTitle(":pause_button:  Playback paused")
                                 .setColor(Color.green)
                 )).build();
-        event.getHook().sendMessage(message).queue();
+        clearLastButton();
+        lastMessageWithButton = event.getHook().sendMessage(message).addActionRow(getActionButton()).complete();
 
 
     }
@@ -248,16 +256,27 @@ public class AudioM {
      *
      * @param event
      */
-    public void resume(SlashCommandEvent event) {
+    public void resume(GenericInteractionCreateEvent event) {
         GuildMusicManager musicManager = getGuildAudioPlayer();
-        musicManager.scheduler.resume();
-        Message message = new MessageBuilder().setEmbeds(
-                EmbedMessageUtils.buildStandar(
-                        new EmbedBuilder()
-                                .setTitle(":arrow_forward:  Playback resumed")
-                                .setColor(Color.green)
-                )).build();
-        event.getHook().sendMessage(message).queue();
+        Message message;
+        if(musicManager.player.getPlayingTrack() == null){
+            message = new MessageBuilder().setEmbeds(
+                    EmbedMessageUtils.buildStandar(
+                            new EmbedBuilder()
+                                    .setTitle(":warning:  Nothing to play, playlist is empty !")
+                                    .setColor(Color.green)
+                    )).build();
+        }else{
+            musicManager.scheduler.resume();
+            message = new MessageBuilder().setEmbeds(
+                    EmbedMessageUtils.buildStandar(
+                            new EmbedBuilder()
+                                    .setTitle(":arrow_forward:  Playback resumed")
+                                    .setColor(Color.green)
+                    )).build();
+        }
+        clearLastButton();
+        lastMessageWithButton = event.getHook().sendMessage(message).addActionRow(getActionButton()).complete();
     }
 
     /**
@@ -265,15 +284,16 @@ public class AudioM {
      *
      * @param event
      */
-    public void info(SlashCommandEvent event) {
+    public void info(GenericInteractionCreateEvent event) {
         GuildMusicManager musicManager = getGuildAudioPlayer();
         AudioTrackInfo info = musicManager.scheduler.getInfo();
         UserAudioTrack userAudioTrack = musicManager.scheduler.getCurrentPlayingTrack();
         Message message = new MessageBuilder().setEmbeds(EmbedMessageUtils.getMusicInfo(info, userAudioTrack)).build();
-        event.getHook().sendMessage(message).queue();
+        clearLastButton();
+        lastMessageWithButton = event.getHook().sendMessage(message).addActionRow(getActionButton()).complete();
     }
 
-    public void flush(SlashCommandEvent event) {
+    public void flush(GenericInteractionCreateEvent event) {
         GuildMusicManager musicManager = getGuildAudioPlayer();
         musicManager.scheduler.flush();
         Message message = new MessageBuilder().setEmbeds(
@@ -282,7 +302,8 @@ public class AudioM {
                                 .setTitle(":wastebasket:  Playlist flushed")
                                 .setColor(Color.green)
                 )).build();
-        event.getHook().sendMessage(message).queue();
+        clearLastButton();
+        lastMessageWithButton = event.getHook().sendMessage(message).addActionRow(getActionButton()).complete();
     }
 
     /**
@@ -290,7 +311,7 @@ public class AudioM {
      *
      * @param event
      */
-    public void list(SlashCommandEvent event) {
+    public void list(GenericInteractionCreateEvent event) {
         GuildMusicManager musicManager = getGuildAudioPlayer();
         List<UserAudioTrackData> list = musicManager.scheduler.getList();
 
@@ -312,7 +333,7 @@ public class AudioM {
                 resp.append(" - ");
                 resp.append(trackInfo.getAudioTrackInfo().author);
                 resp.append("\n\n");
-                if (i >= 5){
+                if (i >= 5) {
                     resp.append(":arrow_forward: And ");
                     resp.append(list.size() - 5);
                     resp.append(" other tracks ...");
@@ -354,14 +375,37 @@ public class AudioM {
      *
      * @param event
      */
-    public void stop(SlashCommandEvent event) {
+    public void stop(GenericInteractionCreateEvent event) {
         musicManager.scheduler.stop();
         musicManager.scheduler.flush();
 
         if (event != null) {
-            Message message = new MessageBuilder().setEmbeds(EmbedMessageUtils.getMusicOk("Music stopped")).build();
-            event.getHook().sendMessage(message).queue();
+            Message message = new MessageBuilder().setEmbeds(
+                    EmbedMessageUtils.buildStandar(
+                            new EmbedBuilder()
+                                    .setTitle(":stop_button:  Playback stopped")
+                                    .setColor(Color.green)
+                    )).build();
+            clearLastButton();
+            lastMessageWithButton = event.getHook().sendMessage(message).addActionRow(getActionButton()).complete();
         }
+    }
+
+    public void disconect(GenericInteractionCreateEvent event){
+        GuildMusicManager musicManager = getGuildAudioPlayer();
+        musicManager.scheduler.stop();
+        musicManager.scheduler.flush();
+        playedChanel = null;
+        guild.getAudioManager().closeAudioConnection();
+        clearLastButton();
+        Message message = new MessageBuilder().setEmbeds(
+                EmbedMessageUtils.buildStandar(
+                        new EmbedBuilder()
+                                .setTitle(":eject:  Disconnected")
+                                .setColor(Color.green)
+                )).build();
+        clearLastButton();
+        event.getHook().sendMessage(message).queue();
     }
 
     /**
@@ -374,6 +418,7 @@ public class AudioM {
         musicManager.scheduler.flush();
         playedChanel = null;
         guild.getAudioManager().closeAudioConnection();
+        clearLastButton();
     }
 
     public GuildMusicManager getGuildMusicManager() {
@@ -397,5 +442,39 @@ public class AudioM {
 
     public void setPlayedChanel(VoiceChannel playedChanel) {
         this.playedChanel = playedChanel;
+    }
+
+    public void clearLastButton() {
+        if (lastMessageWithButton != null){
+            this.lastMessageWithButton.editMessageComponents(new ArrayList<>()).queue();
+            this.lastMessageWithButton = null;
+        }
+
+    }
+    public void updateLastButton(){
+        if (lastMessageWithButton != null)
+            lastMessageWithButton = lastMessageWithButton.editMessageComponents(ActionRow.of(getActionButton())).complete();
+    }
+
+
+    private List<Button> getActionButton(){
+        ArrayList<Button> buttonArrayList = new ArrayList<>();
+        if(musicManager.player.getPlayingTrack() == null){
+            buttonArrayList.add(Button.success("play", Emoji.fromUnicode("▶️")).withDisabled(true));
+            buttonArrayList.add(Button.primary("next", Emoji.fromUnicode("⏭️")).withDisabled(true));
+            buttonArrayList.add(Button.primary("stop", Emoji.fromUnicode("⏹️")).withDisabled(true));
+            buttonArrayList.add(Button.danger("disconnect", Emoji.fromUnicode("⏏️")));
+            return buttonArrayList;
+        }
+        if(musicManager.player.isPaused()){
+            buttonArrayList.add(Button.success("play", Emoji.fromUnicode("▶️")));
+        }
+        else{
+            buttonArrayList.add(Button.success("pause", Emoji.fromUnicode("⏸️")));
+        }
+        buttonArrayList.add(Button.primary("next", Emoji.fromUnicode("⏭️")));
+        buttonArrayList.add(Button.primary("stop", Emoji.fromUnicode("⏹️")));
+        buttonArrayList.add(Button.danger("disconnect", Emoji.fromUnicode("⏏️")));
+        return buttonArrayList;
     }
 }
