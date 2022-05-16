@@ -1,9 +1,9 @@
 package net.Broken.Tools.DayListener.Listeners;
 
-import net.Broken.Commands.Over18.Madame;
 import net.Broken.DB.Entity.GuildPreferenceEntity;
 import net.Broken.DB.Repository.GuildPreferenceRepository;
 import net.Broken.MainBot;
+import net.Broken.SlashCommands.Over18.Madame;
 import net.Broken.SpringContext;
 import net.Broken.Tools.DayListener.NewDayListener;
 import net.Broken.Tools.FindContentOnWebPage;
@@ -50,7 +50,7 @@ public class DailyMadame implements NewDayListener {
 
 
             } else {
-                Madame command = (Madame) MainBot.commandes.get("madame");
+                Madame command = (Madame) MainBot.slashCommands.get("madame");
                 imgUrl = command.poll();
             }
 

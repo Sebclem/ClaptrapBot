@@ -8,10 +8,7 @@ import net.Broken.Tools.UserManager.Stats.UserStatsUtils;
 import net.Broken.audio.AudioM;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
@@ -29,7 +26,6 @@ import org.jetbrains.annotations.NotNull;
 import org.springframework.context.ApplicationContext;
 
 import java.awt.*;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -71,7 +67,7 @@ public class BotListener extends ListenerAdapter {
                 String message = guildPref.getWelcomeMessage().replaceAll("@name", event.getMember().getAsMention());
                 logger.debug(message);
                 chanel.sendMessage(message).queue();
-            }else {
+            } else {
                 logger.fatal("[" + event.getGuild().getName() + "] : Welcome chanel is null !");
             }
         }
@@ -123,8 +119,7 @@ public class BotListener extends ListenerAdapter {
                 logger.debug("I'm alone, close audio connection.");
                 AudioM.getInstance(event.getGuild()).stop();
             }
-        }
-        else if (event.getMember().getUser() == MainBot.jda.getSelfUser()){
+        } else if (event.getMember().getUser() == MainBot.jda.getSelfUser()) {
             AudioM.getInstance(event.getGuild()).clearLastButton();
         }
         AutoVoiceChannel autoVoiceChannel = AutoVoiceChannel.getInstance(event.getGuild());
@@ -165,7 +160,29 @@ public class BotListener extends ListenerAdapter {
         HashMap<String, SlashCommand> commands = MainBot.slashCommands;
         super.onSlashCommand(event);
         if (commands.containsKey(event.getName())) {
-            commands.get(event.getName()).action(event);
+            SlashCommand commandRunner = commands.get(event.getName());
+            // It's form private message
+            if (!event.isFromGuild()) {
+                if (commandRunner.isPrivateUsable()) {
+                    commandRunner.action(event);
+                } else {
+                    MessageEmbed message = EmbedMessageUtils.buildStandar(new EmbedBuilder()
+                            .setTitle(":no_entry_sign:  This command is not usable in private message")
+                            .setColor(Color.red)
+                    );
+                    event.replyEmbeds(message).setEphemeral(true).queue();
+                }
+            } else {
+                if (!commandRunner.isNSFW() || event.getTextChannel().isNSFW()) {
+                    commandRunner.action(event);
+                } else {
+                    MessageEmbed message = EmbedMessageUtils.buildStandar(new EmbedBuilder()
+                            .setTitle(":underage:  This command is only usable in NSFW channels")
+                            .setColor(Color.red)
+                    );
+                    event.replyEmbeds(message).setEphemeral(true).queue();
+                }
+            }
         }
     }
 
@@ -204,7 +221,6 @@ public class BotListener extends ListenerAdapter {
             guildPref = guildPrefList.get(0);
         return guildPref;
     }
-
 
 
 }

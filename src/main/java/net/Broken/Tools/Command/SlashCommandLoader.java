@@ -65,6 +65,7 @@ public class SlashCommandLoader {
             if (v.getSubcommands() != null) {
                 command.addSubcommands(v.getSubcommands());
             }
+            command.setDefaultEnabled(!v.isDisableByDefault());
             commandListUpdateAction.addCommands(command);
         });
         commandListUpdateAction.queue();

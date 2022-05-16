@@ -38,5 +38,9 @@ public interface SlashCommand {
      */
     boolean isNSFW();
 
+    boolean isPrivateUsable();
+
+
+    boolean isDisableByDefault();
 
 }

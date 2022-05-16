@@ -1,55 +1,18 @@
-package net.Broken.Commands.Over18;
+package net.Broken.SlashCommands.Over18;
 
-import net.Broken.Tools.Command.NoDev;
-import net.Broken.Tools.Command.NumberedCommande;
+import net.Broken.Tools.Command.NumberedSlashCommand;
 import net.Broken.Tools.FindContentOnWebPage;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
-
-/**
- * Madame command that return random picture from dites.bonjourmadame.fr
- */
-@NoDev
-public class Madame extends NumberedCommande {
-    public String HELP = "Yo really? Just type Madame to see some :cat:";
+public class Madame extends NumberedSlashCommand {
     Logger logger = LogManager.getLogger();
-    MessageReceivedEvent event;
 
     public Madame() {
         super(LogManager.getLogger(), "https://www.bonjourmadame.fr/page/", "/");
     }
-
-
-    @Override
-    public boolean isPrivateUsable() {
-        return false;
-    }
-
-    @Override
-    public boolean isAdminCmd() {
-        return false;
-    }
-
-    /**
-     * Determines if the command is usable only by bot level admin user
-     *
-     * @return boolean
-     */
-    @Override
-    public boolean isBotAdminCmd() {
-        return false;
-    }
-
-    @Override
-    public boolean isNSFW() {
-        return true;
-    }
-
-
     /**
      * Detect if picture link go to Tepeee
      *
@@ -106,5 +69,30 @@ public class Madame extends NumberedCommande {
         }
         imgUrl = removeParams(imgUrl);
         return imgUrl;
+    }
+
+    @Override
+    public String getDescription() {
+        return "Return random image from bonjourmadame.fr";
+    }
+
+    @Override
+    public boolean isBotAdminCmd() {
+        return false;
+    }
+
+    @Override
+    public boolean isNSFW() {
+        return true;
+    }
+
+    @Override
+    public boolean isPrivateUsable() {
+        return false;
+    }
+
+    @Override
+    public boolean isDisableByDefault() {
+        return true;
     }
 }

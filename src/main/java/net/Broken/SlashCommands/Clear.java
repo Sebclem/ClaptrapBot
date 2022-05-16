@@ -55,4 +55,14 @@ public class Clear implements SlashCommand {
     public boolean isNSFW() {
         return false;
     }
+
+    @Override
+    public boolean isPrivateUsable() {
+        return false;
+    }
+
+    @Override
+    public boolean isDisableByDefault() {
+        return true;
+    }
 }

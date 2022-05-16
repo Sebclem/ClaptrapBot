@@ -81,4 +81,14 @@ public class Cat implements SlashCommand {
     public boolean isNSFW() {
         return false;
     }
+
+    @Override
+    public boolean isPrivateUsable() {
+        return true;
+    }
+
+    @Override
+    public boolean isDisableByDefault() {
+        return false;
+    }
 }
