@@ -34,3 +34,8 @@ server:
   port: ${PORT}
   http2:
     enabled: 'true'
+
+discord:
+  client-id: ${CLIENT_ID}
+  client-secret: ${CLIENT_SECRET}
+  token-endpoint: https://discord.com/api/oauth2/token
