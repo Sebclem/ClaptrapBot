@@ -38,6 +38,11 @@
             <AppenderRef ref="current"/>
             <AppenderRef ref="RollingFile"/>
         </Logger>
+        <Logger name="org.springframework.security" level="${env:LOG_LEVEL}" additivity="false">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="current"/>
+            <AppenderRef ref="RollingFile"/>
+        </Logger>
         <Root level="debug">
             <AppenderRef ref="Console" level="info"/>
             <AppenderRef ref="RollingFile" level="info"/>

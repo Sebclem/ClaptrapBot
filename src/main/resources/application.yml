@@ -1,0 +1,36 @@
+spring:
+  datasource:
+    username: ${DB_USER}
+    url: ${DB_URL}
+    password: ${DB_PWD}
+  thymeleaf:
+    cache: 'true'
+  jpa:
+    hibernate:
+      ddl-auto: update
+  security:
+    oauth2:
+      client:
+        registration:
+          discord:
+            client-id: ${CLIENT_ID}
+            client-secret: ${CLIENT_SECRET}
+            clientAuthenticationMethod: post
+            authorizationGrantType: authorization_code
+            scope:
+              - identify
+            redirect-uri: "http://localhost:8080/login/oauth2/code/discord"
+            clientName: FourScouts client
+        provider:
+          discord:
+            authorizationUri: https://discordapp.com/api/oauth2/authorize
+            tokenUri: https://discordapp.com/api/oauth2/token
+            userInfoUri: https://discordapp.com/api/users/@me
+            userNameAttribute: username
+server:
+  compression:
+    enabled: 'true'
+    mime-types: application/json,application/xml,text/html,text/xml,text/plain,application/javascript,text/css
+  port: ${PORT}
+  http2:
+    enabled: 'true'
