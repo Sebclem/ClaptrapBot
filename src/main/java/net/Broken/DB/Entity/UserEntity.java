@@ -21,19 +21,14 @@ public class UserEntity {
 
     private String name;
 
+    @Column(unique=true)
     private String jdaId;
-
-    private String apiToken;
 
     private boolean isBotAdmin = false;
 
     @JsonIgnore
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
     private List<UserStats> userStats;
-
-    @JsonIgnore
-    private String password;
-
 
     @OneToMany(mappedBy = "user")
     private List<PlaylistEntity> playlists;
@@ -42,35 +37,16 @@ public class UserEntity {
     public UserEntity() {
     }
 
-    public UserEntity(PendingUserEntity pendingUserEntity, String apiToken) {
-        this.name = pendingUserEntity.getName();
-        this.jdaId = pendingUserEntity.getJdaId();
-        this.password = pendingUserEntity.getPassword();
-        this.apiToken = apiToken;
-    }
-
-    public UserEntity(User user, PasswordEncoder passwordEncoder) {
+    public UserEntity(User user) {
         this.name = user.getName();
         this.jdaId = user.getId();
-        this.apiToken = UserUtils.getInstance().generateApiToken();
-        this.password = passwordEncoder.encode(UserUtils.getInstance().generateCheckToken());
     }
 
-    public UserEntity(String name, String id, PasswordEncoder passwordEncoder) {
+    public UserEntity(String name, String id) {
         this.name = name;
         this.jdaId = id;
-        this.apiToken = UserUtils.getInstance().generateApiToken();
-        this.password = passwordEncoder.encode(UserUtils.getInstance().generateCheckToken());
     }
 
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 
     public Integer getId() {
         return id;
@@ -94,14 +70,6 @@ public class UserEntity {
 
     public void setJdaId(String jdaId) {
         this.jdaId = jdaId;
-    }
-
-    public String getApiToken() {
-        return apiToken;
-    }
-
-    public void setApiToken(String apiToken) {
-        this.apiToken = apiToken;
     }
 
     public List<PlaylistEntity> getPlaylists() {

@@ -24,6 +24,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 public class UserStatsUtils {
 
@@ -105,27 +106,16 @@ public class UserStatsUtils {
     }
 
     public List<UserStats> getUserStats(User user) {
-        UserEntity userEntity;
-        List<UserEntity> userList = userRepository.findByJdaId(user.getId());
-        if (userList.size() == 0) {
-            logger.debug("User not registered, generate it. User: " + user.getName() + " " + user.getDiscriminator());
-            userEntity = genUserEntity(user);
-        } else
-            userEntity = userList.get(0);
-
+        UserEntity userEntity = userRepository.findByJdaId(user.getId())
+                .orElseGet(() -> genUserEntity(user));
         return getUserStats(userEntity);
 
     }
 
 
     public UserStats getGuildUserStats(Member member) {
-        List<UserEntity> userEntityList = userRepository.findByJdaId(member.getUser().getId());
-        UserEntity userEntity;
-        if (userEntityList.size() == 0) {
-            logger.debug("UserEntity not found for user " + member.getNickname());
-            userEntity = genUserEntity(member.getUser());
-        } else
-            userEntity = userEntityList.get(0);
+        UserEntity userEntity = userRepository.findByJdaId(member.getUser().getId())
+                .orElseGet(() -> genUserEntity(member.getUser()));
 
         List<UserStats> userStatsList = userStatsRepository.findByUserAndGuildId(userEntity, member.getGuild().getId());
         if (userStatsList.size() == 0) {
@@ -177,7 +167,7 @@ public class UserStatsUtils {
 
 
     private UserEntity genUserEntity(User user) {
-        UserEntity userEntity = new UserEntity(user, passwordEncoder);
+        UserEntity userEntity = new UserEntity(user);
         return userRepository.save(userEntity);
     }
 

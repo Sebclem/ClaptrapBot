@@ -39,32 +39,6 @@ public class UserUtils {
     public static UserUtils getInstance() {
         return INSTANCE;
     }
-    /**
-     * Get user Entity
-     *
-     * @param userRepository  User DB interface
-     * @param passwordEncoder Password encoder
-     * @param userInfoData    Received data
-     * @return User Entity
-     * @throws UserNotFoundException     User not found in User DB
-     * @throws PasswordNotMatchException Given password not match
-     */
-    public UserEntity getUser(UserRepository userRepository, PasswordEncoder passwordEncoder, UserInfoData userInfoData) throws UserNotFoundException, PasswordNotMatchException {
-        List<UserEntity> users = userRepository.findByName(userInfoData.name);
-        if (users.size() < 1) {
-            logger.warn("Login with unknown username: " + userInfoData.name);
-            throw new UserNotFoundException();
-        } else {
-            UserEntity user = users.get(0);
-            if (passwordEncoder.matches(userInfoData.password, user.getPassword())) {
-                logger.info("Login successful for " + user.getName());
-                return user;
-            } else {
-                logger.warn("Login fail for " + user.getName() + ", wrong password!");
-                throw new PasswordNotMatchException();
-            }
-        }
-    }
 
     /**
      * return token's UserEntity
@@ -75,36 +49,12 @@ public class UserUtils {
      * @throws UnknownTokenException Can't find token on User DB
      */
     public UserEntity getUserWithApiToken(UserRepository userRepository, String token) throws UnknownTokenException {
-        List<UserEntity> users = userRepository.findByApiToken(token);
-        if (users.size() > 0) {
-            return users.get(0);
-        } else
-            throw new UnknownTokenException();
+//        List<UserEntity> users = userRepository.findByApiToken(token);
+//        if (users.size() > 0) {
+//            return users.get(0);
+//        } else
+//            throw new UnknownTokenException();
+        return null;
 
     }
-
-    /**
-     * Generate API Token
-     *
-     * @return UUID String TODO Find something more secure
-     */
-    public String generateApiToken() {
-        return UUID.randomUUID().toString();
-    }
-
-    /**
-     * Generate short check token
-     *
-     * @return check token as string
-     */
-    public String generateCheckToken() {
-        SecureRandom random = new SecureRandom();
-        long longToken = Math.abs(random.nextLong());
-        String randomStr = Long.toString(longToken, 16);
-        randomStr = randomStr.substring(0, 4);
-        randomStr = randomStr.toUpperCase();
-        return randomStr;
-    }
-
-
 }

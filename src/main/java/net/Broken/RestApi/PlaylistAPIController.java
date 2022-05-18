@@ -43,33 +43,33 @@ public class PlaylistAPIController {
     }
 
 
-    @RequestMapping("/myPlaylist")
-    public List<PlaylistEntity> myPlaylist(@CookieValue(value = "token", defaultValue = "") String token) {
-        if (token.isEmpty())
-            return null;
-        else {
-            UserEntity user = userRepository.findByApiToken(token).get(0);
-            return user.getPlaylists();
-        }
+//    @RequestMapping("/myPlaylist")
+//    public List<PlaylistEntity> myPlaylist(@CookieValue(value = "token", defaultValue = "") String token) {
+//        if (token.isEmpty())
+//            return null;
+//        else {
+//            UserEntity user = userRepository.findByApiToken(token).get(0);
+//            return user.getPlaylists();
+//        }
+//
+//    }
 
-    }
-
-    @RequestMapping("/createPlaylist")
-    public ResponseEntity<PlaylistResponseData> createPlaylist(@CookieValue(value = "token", defaultValue = "") String token, @RequestBody CreatePlaylistData data) {
-
-        if (token.isEmpty())
-            return new ResponseEntity<>(new PlaylistResponseData("Unknown Token!\nPlease Re-connect.", "token"), HttpStatus.UNAUTHORIZED);
-        else {
-            UserEntity user = userRepository.findByApiToken(token).get(0);
-            PlaylistEntity playlistEntity = new PlaylistEntity(data.name, user);
-            playlistEntity = playlistRepository.save(playlistEntity);
-            user.addPlaylist(playlistEntity);
-            userRepository.save(user);
-            return new ResponseEntity<>(new PlaylistResponseData("Ok", playlistEntity), HttpStatus.OK);
-        }
-
-
-    }
+//    @RequestMapping("/createPlaylist")
+//    public ResponseEntity<PlaylistResponseData> createPlaylist(@CookieValue(value = "token", defaultValue = "") String token, @RequestBody CreatePlaylistData data) {
+//
+//        if (token.isEmpty())
+//            return new ResponseEntity<>(new PlaylistResponseData("Unknown Token!\nPlease Re-connect.", "token"), HttpStatus.UNAUTHORIZED);
+//        else {
+//            UserEntity user = userRepository.findByApiToken(token).get(0);
+//            PlaylistEntity playlistEntity = new PlaylistEntity(data.name, user);
+//            playlistEntity = playlistRepository.save(playlistEntity);
+//            user.addPlaylist(playlistEntity);
+//            userRepository.save(user);
+//            return new ResponseEntity<>(new PlaylistResponseData("Ok", playlistEntity), HttpStatus.OK);
+//        }
+//
+//
+//    }
 
     @RequestMapping("/addToPlaylist")
     public ResponseEntity<PlaylistResponseData> addToPlaylist(@CookieValue(value = "token", defaultValue = "") String token, @RequestBody AddToPlaylistData data) {

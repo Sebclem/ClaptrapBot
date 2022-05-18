@@ -1,13 +1,11 @@
-package net.Broken.Api.Security;
+package net.Broken.Api.Security.Services;
 
-import net.Broken.DB.Entity.UserEntity;
+import net.Broken.Api.Security.DiscordUserPrincipal;
 import net.Broken.DB.Repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class DiscordUserDetailsService implements UserDetailsService {
@@ -20,10 +18,9 @@ public class DiscordUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        List<UserEntity> user = userRepository.findByName(username);
-        if(user.isEmpty()){
-            throw new UsernameNotFoundException(username);
-        }
-        return new DiscordUserPrincipal(user.get(0));
+        return new DiscordUserPrincipal(
+                userRepository.findByJdaId(username)
+                        .orElseThrow(() -> new UsernameNotFoundException(username))
+        );
     }
 }
