@@ -1,24 +1,10 @@
 package net.Broken.Tools.UserManager;
 
-import net.Broken.DB.Entity.PendingUserEntity;
 import net.Broken.DB.Entity.UserEntity;
-import net.Broken.DB.Repository.PendingUserRepository;
 import net.Broken.DB.Repository.UserRepository;
-import net.Broken.MainBot;
-import net.Broken.RestApi.Data.UserManager.UserInfoData;
-import net.Broken.Tools.EmbedMessageUtils;
-import net.Broken.Tools.ResourceLoader;
 import net.Broken.Tools.UserManager.Exceptions.*;
-import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.entities.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
-import java.io.FileNotFoundException;
-import java.security.SecureRandom;
-import java.util.List;
-import java.util.UUID;
 
 public class UserUtils {
 

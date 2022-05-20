@@ -1,4 +1,4 @@
-package net.Broken.Api.Security;
+package net.Broken.Api.Security.Components;
 
 import net.Broken.Api.Security.Data.DiscordOauthUserInfo;
 import net.Broken.Api.Security.Exception.OAuthLoginFail;
@@ -17,7 +17,6 @@ import java.util.ArrayList;
 
 @Component
 public class DiscordAuthenticationProvider implements AuthenticationProvider {
-    private final Logger logger = LogManager.getLogger();
     private final DiscordOauthService discordOauthService;
 
     public DiscordAuthenticationProvider(DiscordOauthService discordOauthService) {
@@ -34,7 +33,6 @@ public class DiscordAuthenticationProvider implements AuthenticationProvider {
             discordOauthService.revokeToken(token);
             UserEntity userEntity = discordOauthService.loginOrRegisterDiscordUser(discordOauthUserInfo);
             return new UsernamePasswordAuthenticationToken(userEntity, null, new ArrayList<>());
-
         } catch (OAuthLoginFail e) {
             throw new BadCredentialsException("Bad response form Discord Oauth server ! Code expired ?");
         }

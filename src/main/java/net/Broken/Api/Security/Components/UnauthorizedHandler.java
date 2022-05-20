@@ -1,4 +1,4 @@
-package net.Broken.Api.Security.Services;
+package net.Broken.Api.Security.Components;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;

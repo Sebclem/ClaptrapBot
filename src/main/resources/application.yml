@@ -3,41 +3,24 @@ spring:
     username: ${DB_USER}
     url: ${DB_URL}
     password: ${DB_PWD}
-  thymeleaf:
-    cache: 'true'
-  jpa:
-    hibernate:
-      ddl-auto: update
-  security:
-    oauth2:
-      client:
-        registration:
-          discord:
-            client-id: ${CLIENT_ID}
-            client-secret: ${CLIENT_SECRET}
-            clientAuthenticationMethod: post
-            authorizationGrantType: authorization_code
-            scope:
-              - identify
-            redirect-uri: "http://localhost:8080/login/oauth2/code/discord"
-            clientName: FourScouts client
-        provider:
-          discord:
-            authorizationUri: https://discordapp.com/api/oauth2/authorize
-            tokenUri: https://discordapp.com/api/oauth2/token
-            userInfoUri: https://discordapp.com/api/users/@me
-            userNameAttribute: username
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yml
 server:
   compression:
-    enabled: 'true'
+    enabled: true
     mime-types: application/json,application/xml,text/html,text/xml,text/plain,application/javascript,text/css
   port: ${PORT}
   http2:
-    enabled: 'true'
+    enabled: true
+
+security:
+  jwt:
+    secret: ${JWT_SECRET}
 
 discord:
-  client-id: ${CLIENT_ID}
-  client-secret: ${CLIENT_SECRET}
-  token-endpoint: https://discord.com/api/oauth2/token
-  tokenRevokeEndpoint: https://discord.com/api/oauth2/token/revoke
-  userInfoEnpoint: https://discord.com/api/users/@me
+  oauth:
+    client-id: ${CLIENT_ID}
+    client-secret: ${CLIENT_SECRET}
+    token-endpoint: https://discord.com/api/oauth2/token
+    tokenRevokeEndpoint: https://discord.com/api/oauth2/token/revoke
+    userInfoEnpoint: https://discord.com/api/users/@me

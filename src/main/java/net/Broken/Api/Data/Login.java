@@ -1,5 +1,8 @@
 package net.Broken.Api.Data;
 
-public record Login (String code, String redirectUri){
+import javax.validation.constraints.NotBlank;
+
+public record Login(
+        @NotBlank String code, @NotBlank String redirectUri) {
 
 }

@@ -1,0 +1,567 @@
+databaseChangeLog:
+- changeSet:
+    id: 1653065037086-1
+    author: seb65 (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+            name: id
+            type: INT
+        - column:
+            constraints:
+              nullable: false
+            name: anti_spam
+            type: BIT
+        - column:
+            constraints:
+              nullable: false
+            name: default_role
+            type: BIT
+        - column:
+            name: default_role_id
+            type: VARCHAR(255)
+        - column:
+            name: guild_id
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: welcome
+            type: BIT
+        - column:
+            name: welcome_chanelid
+            type: VARCHAR(255)
+        - column:
+            name: welcome_message
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: daily_madame
+            type: BIT
+        - column:
+            constraints:
+              nullable: false
+            name: auto_voice
+            type: BIT
+        - column:
+            name: auto_voice_channelid
+            type: VARCHAR(255)
+        - column:
+            name: auto_voice_channel_title
+            type: VARCHAR(255)
+        tableName: guild_preference_entity
+- changeSet:
+    id: 1653065037086-2
+    author: seb65 (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            constraints:
+              nullable: false
+            name: guild_preference_entity_id
+            type: INT
+        - column:
+            name: visible_voice_chanel
+            type: VARCHAR(255)
+        tableName: guild_preference_entity_visible_voice_chanel
+- changeSet:
+    id: 1653065037086-3
+    author: seb65 (generated)
+    changes:
+    - createSequence:
+        columns:
+        - column:
+            defaultValueComputed: 'NULL'
+            name: next_val
+            type: BIGINT
+        tableName: hibernate_sequence
+- changeSet:
+    id: 1653065037086-4
+    author: seb65 (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+            name: id
+            type: INT
+        - column:
+            defaultValueComputed: 'NULL'
+            name: expiration_date
+            type: datetime
+        - column:
+            name: security_token
+            type: VARCHAR(255)
+        - column:
+            defaultValueComputed: 'NULL'
+            name: user_entity_id
+            type: INT
+        tableName: pending_pwd_reset_entity
+- changeSet:
+    id: 1653065037086-5
+    author: seb65 (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+            name: id
+            type: INT
+        - column:
+            name: check_token
+            type: VARCHAR(255)
+        - column:
+            name: jda_id
+            type: VARCHAR(255)
+        - column:
+            name: name
+            type: VARCHAR(255)
+        - column:
+            name: password
+            type: VARCHAR(255)
+        tableName: pending_user_entity
+- changeSet:
+    id: 1653065037086-6
+    author: seb65 (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+            name: id
+            type: INT
+        - column:
+            name: name
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: user_entity_id
+            type: INT
+        tableName: playlist_entity
+- changeSet:
+    id: 1653065037086-7
+    author: seb65 (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+            name: id
+            type: INT
+        - column:
+            name: identifier
+            type: VARCHAR(255)
+        - column:
+            defaultValueComputed: 'NULL'
+            name: pos
+            type: INT
+        - column:
+            name: title
+            type: VARCHAR(255)
+        - column:
+            name: url
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: playlist_entity_id
+            type: INT
+        tableName: track_entity
+- changeSet:
+    id: 1653065037086-8
+    author: seb65 (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+            name: id
+            type: INT
+        - column:
+            name: api_token
+            type: VARCHAR(255)
+        - column:
+            name: jda_id
+            type: VARCHAR(255)
+        - column:
+            name: name
+            type: VARCHAR(255)
+        - column:
+            name: password
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: is_bot_admin
+            type: BIT
+        tableName: user_entity
+- changeSet:
+    id: 1653065037086-9
+    author: seb65 (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+            name: id
+            type: BIGINT
+        - column:
+            defaultValueNumeric: 0
+            name: api_command_count
+            type: BIGINT
+        - column:
+            name: guild_id
+            type: VARCHAR(255)
+        - column:
+            defaultValueNumeric: 0
+            name: message_count
+            type: BIGINT
+        - column:
+            defaultValueNumeric: 0
+            name: vocal_time
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: user_entity_id
+            type: INT
+        tableName: user_stats
+- changeSet:
+    id: 1653065037086-10
+    author: seb65 (generated)
+    changes:
+    - createIndex:
+        columns:
+        - column:
+            defaultValueComputed: 'NULL'
+            name: user_entity_id
+        indexName: FKatrj670ooxj9qiq230iacbt68
+        tableName: pending_pwd_reset_entity
+- changeSet:
+    id: 1653065037086-11
+    author: seb65 (generated)
+    changes:
+    - createIndex:
+        columns:
+        - column:
+            name: user_entity_id
+        indexName: FKi0pu9fhjbhs223glek7baeuwm
+        tableName: playlist_entity
+- changeSet:
+    id: 1653065037086-12
+    author: seb65 (generated)
+    changes:
+    - createIndex:
+        columns:
+        - column:
+            name: playlist_entity_id
+        indexName: FKjrr0flblumxnll3re0apujvr
+        tableName: track_entity
+- changeSet:
+    id: 1653065037086-13
+    author: seb65 (generated)
+    changes:
+    - createIndex:
+        columns:
+        - column:
+            name: user_entity_id
+        indexName: FKjvpcyocfa9h3ybvr5loj4lfbk
+        tableName: user_stats
+- changeSet:
+    id: 1653065037086-14
+    author: seb65 (generated)
+    changes:
+    - createIndex:
+        columns:
+        - column:
+            name: guild_preference_entity_id
+        indexName: FKlyf6ksd3969rqtwm3bqupbniu
+        tableName: guild_preference_entity_visible_voice_chanel
+- changeSet:
+    id: 1653065037086-15
+    author: seb65 (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: user_entity_id
+        baseTableName: pending_pwd_reset_entity
+        constraintName: FKatrj670ooxj9qiq230iacbt68
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: RESTRICT
+        onUpdate: RESTRICT
+        referencedColumnNames: id
+        referencedTableName: user_entity
+        validate: true
+- changeSet:
+    id: 1653065037086-16
+    author: seb65 (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: user_entity_id
+        baseTableName: playlist_entity
+        constraintName: FKi0pu9fhjbhs223glek7baeuwm
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: RESTRICT
+        onUpdate: RESTRICT
+        referencedColumnNames: id
+        referencedTableName: user_entity
+        validate: true
+- changeSet:
+    id: 1653065037086-17
+    author: seb65 (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: playlist_entity_id
+        baseTableName: track_entity
+        constraintName: FKjrr0flblumxnll3re0apujvr
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: RESTRICT
+        onUpdate: RESTRICT
+        referencedColumnNames: id
+        referencedTableName: playlist_entity
+        validate: true
+- changeSet:
+    id: 1653065037086-18
+    author: seb65 (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: user_entity_id
+        baseTableName: user_stats
+        constraintName: FKjvpcyocfa9h3ybvr5loj4lfbk
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: RESTRICT
+        onUpdate: RESTRICT
+        referencedColumnNames: id
+        referencedTableName: user_entity
+        validate: true
+- changeSet:
+    id: 1653065037086-19
+    author: seb65 (generated)
+    changes:
+    - addForeignKeyConstraint:
+        baseColumnNames: guild_preference_entity_id
+        baseTableName: guild_preference_entity_visible_voice_chanel
+        constraintName: FKlyf6ksd3969rqtwm3bqupbniu
+        deferrable: false
+        initiallyDeferred: false
+        onDelete: RESTRICT
+        onUpdate: RESTRICT
+        referencedColumnNames: id
+        referencedTableName: guild_preference_entity
+        validate: true
+
+databaseChangeLog:
+- changeSet:
+    id: 1653073535100-14
+    author: seb65 (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: jda_id
+        constraintName: UC_USER_ENTITYJDA_ID_COL
+        tableName: user_entity
+- changeSet:
+    id: 1653073535100-15
+    author: seb65 (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: pending_pwd_reset_entity
+        constraintName: FKatrj670ooxj9qiq230iacbt68
+- changeSet:
+    id: 1653073535100-16
+    author: seb65 (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: guild_preference_entity_visible_voice_chanel
+        constraintName: FKlyf6ksd3969rqtwm3bqupbniu
+- changeSet:
+    id: 1653073535100-17
+    author: seb65 (generated)
+    changes:
+    - dropTable:
+        tableName: guild_preference_entity_visible_voice_chanel
+- changeSet:
+    id: 1653073535100-18
+    author: seb65 (generated)
+    changes:
+    - dropTable:
+        tableName: hibernate_sequence
+- changeSet:
+    id: 1653073535100-19
+    author: seb65 (generated)
+    changes:
+    - dropTable:
+        tableName: pending_pwd_reset_entity
+- changeSet:
+    id: 1653073535100-20
+    author: seb65 (generated)
+    changes:
+    - dropTable:
+        tableName: pending_user_entity
+- changeSet:
+    id: 1653073535100-21
+    author: seb65 (generated)
+    changes:
+    - dropColumn:
+        columnName: api_token
+        tableName: user_entity
+- changeSet:
+    id: 1653073535100-22
+    author: seb65 (generated)
+    changes:
+    - dropColumn:
+        columnName: password
+        tableName: user_entity
+- changeSet:
+    id: 1653073535100-1
+    author: seb65 (generated)
+    changes:
+    - dropDefaultValue:
+        columnDataType: varchar(255)
+        columnName: auto_voice_channel_title
+        tableName: guild_preference_entity
+- changeSet:
+    id: 1653073535100-2
+    author: seb65 (generated)
+    changes:
+    - dropDefaultValue:
+        columnDataType: varchar(255)
+        columnName: auto_voice_channelid
+        tableName: guild_preference_entity
+- changeSet:
+    id: 1653073535100-3
+    author: seb65 (generated)
+    changes:
+    - dropDefaultValue:
+        columnDataType: varchar(255)
+        columnName: default_role_id
+        tableName: guild_preference_entity
+- changeSet:
+    id: 1653073535100-4
+    author: seb65 (generated)
+    changes:
+    - dropDefaultValue:
+        columnDataType: varchar(255)
+        columnName: guild_id
+        tableName: guild_preference_entity
+- changeSet:
+    id: 1653073535100-5
+    author: seb65 (generated)
+    changes:
+    - dropDefaultValue:
+        columnDataType: varchar(255)
+        columnName: guild_id
+        tableName: user_stats
+- changeSet:
+    id: 1653073535100-6
+    author: seb65 (generated)
+    changes:
+    - dropDefaultValue:
+        columnDataType: varchar(255)
+        columnName: identifier
+        tableName: track_entity
+- changeSet:
+    id: 1653073535100-7
+    author: seb65 (generated)
+    changes:
+    - dropDefaultValue:
+        columnDataType: varchar(255)
+        columnName: jda_id
+        tableName: user_entity
+- changeSet:
+    id: 1653073535100-8
+    author: seb65 (generated)
+    changes:
+    - dropDefaultValue:
+        columnDataType: varchar(255)
+        columnName: name
+        tableName: playlist_entity
+- changeSet:
+    id: 1653073535100-9
+    author: seb65 (generated)
+    changes:
+    - dropDefaultValue:
+        columnDataType: varchar(255)
+        columnName: name
+        tableName: user_entity
+- changeSet:
+    id: 1653073535100-10
+    author: seb65 (generated)
+    changes:
+    - dropDefaultValue:
+        columnDataType: varchar(255)
+        columnName: title
+        tableName: track_entity
+- changeSet:
+    id: 1653073535100-11
+    author: seb65 (generated)
+    changes:
+    - dropDefaultValue:
+        columnDataType: varchar(255)
+        columnName: url
+        tableName: track_entity
+- changeSet:
+    id: 1653073535100-12
+    author: seb65 (generated)
+    changes:
+    - dropDefaultValue:
+        columnDataType: varchar(255)
+        columnName: welcome_chanelid
+        tableName: guild_preference_entity
+- changeSet:
+    id: 1653073535100-13
+    author: seb65 (generated)
+    changes:
+    - dropDefaultValue:
+        columnDataType: varchar(255)
+        columnName: welcome_message
+        tableName: guild_preference_entity
+
+databaseChangeLog:
+- changeSet:
+    id: 1653086152139-1
+    author: seb65 (generated)
+    preConditions:
+        onFail: MARK_RAN
+        tableExists:
+            tableName: hibernate_sequence
+    changes:
+    - dropTable:
+        tableName: hibernate_sequence
+    - createSequence:
+        cycle: false
+        ordered: true
+        sequenceName: hibernate_sequence
+        startValue: 23608
+
+
+databaseChangeLog: []
+

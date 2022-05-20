@@ -1,7 +1,6 @@
 package net.Broken.Api.Security;
 
-import net.Broken.Api.Security.Services.UnauthorizedHandler;
-import net.Broken.DB.Repository.UserRepository;
+import net.Broken.Api.Security.Components.UnauthorizedHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;

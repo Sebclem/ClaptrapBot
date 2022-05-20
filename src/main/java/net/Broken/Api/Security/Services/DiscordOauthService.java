@@ -25,19 +25,19 @@ import java.util.Map;
 public class DiscordOauthService {
 
     private final Logger logger = LogManager.getLogger();
-    @Value("${discord.client-id}")
+    @Value("${discord.oauth.client-id}")
     private String clientId;
 
-    @Value("${discord.client-secret}")
+    @Value("${discord.oauth.client-secret}")
     private String clientSecret;
 
-    @Value("${discord.token-endpoint}")
+    @Value("${discord.oauth.token-endpoint}")
     private String tokenEndpoint;
 
-    @Value("${discord.tokenRevokeEndpoint}")
+    @Value("${discord.oauth.tokenRevokeEndpoint}")
     private String tokenRevokeEndpoint;
 
-    @Value("${discord.userInfoEnpoint}")
+    @Value("${discord.oauth.userInfoEnpoint}")
     private String userInfoEnpoint;
 
     private final UserRepository userRepository;
