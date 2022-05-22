@@ -1,9 +1,7 @@
 package net.Broken.DB.Entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import net.Broken.Tools.UserManager.UserUtils;
 import net.dv8tion.jda.api.entities.User;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -22,7 +20,7 @@ public class UserEntity {
     private String name;
 
     @Column(unique=true)
-    private String jdaId;
+    private String discordId;
 
     private boolean isBotAdmin = false;
 
@@ -39,12 +37,12 @@ public class UserEntity {
 
     public UserEntity(User user) {
         this.name = user.getName();
-        this.jdaId = user.getId();
+        this.discordId = user.getId();
     }
 
     public UserEntity(String name, String id) {
         this.name = name;
-        this.jdaId = id;
+        this.discordId = id;
     }
 
 
@@ -64,12 +62,12 @@ public class UserEntity {
         this.name = name;
     }
 
-    public String getJdaId() {
-        return jdaId;
+    public String getDiscordId() {
+        return discordId;
     }
 
-    public void setJdaId(String jdaId) {
-        this.jdaId = jdaId;
+    public void setDiscordId(String discordId) {
+        this.discordId = discordId;
     }
 
     public List<PlaylistEntity> getPlaylists() {

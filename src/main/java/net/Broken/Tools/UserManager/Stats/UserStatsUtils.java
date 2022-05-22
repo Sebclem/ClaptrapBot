@@ -24,7 +24,6 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 
 public class UserStatsUtils {
 
@@ -106,7 +105,7 @@ public class UserStatsUtils {
     }
 
     public List<UserStats> getUserStats(User user) {
-        UserEntity userEntity = userRepository.findByJdaId(user.getId())
+        UserEntity userEntity = userRepository.findByDiscordId(user.getId())
                 .orElseGet(() -> genUserEntity(user));
         return getUserStats(userEntity);
 
@@ -114,7 +113,7 @@ public class UserStatsUtils {
 
 
     public UserStats getGuildUserStats(Member member) {
-        UserEntity userEntity = userRepository.findByJdaId(member.getUser().getId())
+        UserEntity userEntity = userRepository.findByDiscordId(member.getUser().getId())
                 .orElseGet(() -> genUserEntity(member.getUser()));
 
         List<UserStats> userStatsList = userStatsRepository.findByUserAndGuildId(userEntity, member.getGuild().getId());
@@ -181,7 +180,7 @@ public class UserStatsUtils {
         List<UserStats> needCache = new ArrayList<>();
         Guild guild = MainBot.jda.getGuildById(guildId);
         for (UserStats stats : allStats) {
-            Member member = guild.getMemberById(stats.getUser().getJdaId());
+            Member member = guild.getMemberById(stats.getUser().getDiscordId());
             if (member == null) {
                 needCache.add(stats);
                 continue;
@@ -197,7 +196,7 @@ public class UserStatsUtils {
             logger.info("Cache mismatch, loading all guild");
             MainBot.jda.getGuildById(guildId).loadMembers().get();
             for (UserStats stats : needCache) {
-                Member member = guild.getMemberById(stats.getUser().getJdaId());
+                Member member = guild.getMemberById(stats.getUser().getDiscordId());
                 if (member == null) {
                     logger.warn("Can't find member '" + stats.getUser().getName() + "'after load, User leave the guild ?");
                     continue;

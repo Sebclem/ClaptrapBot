@@ -1,9 +1,9 @@
 package net.Broken.Api.Security.Services;
 
-import com.google.gson.Gson;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import net.Broken.Api.Security.Data.AccessTokenResponse;
 import net.Broken.Api.Security.Data.DiscordOauthUserInfo;
-import net.Broken.Api.Security.Exception.OAuthLoginFail;
+import net.Broken.Api.Security.Exceptions.OAuthLoginFail;
 import net.Broken.DB.Entity.UserEntity;
 import net.Broken.DB.Repository.UserRepository;
 import org.apache.logging.log4j.LogManager;
@@ -18,6 +18,7 @@ import java.net.URLEncoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -60,9 +61,9 @@ public class DiscordOauthService {
                 logger.warn("[OAUTH] Invalid response while getting AccessToken: Status Code: " + response.statusCode() + " Body:" + response.body());
                 throw new OAuthLoginFail();
             }
-            Gson gson = new Gson();
-            AccessTokenResponse accessTokenResponse = gson.fromJson(response.body(), AccessTokenResponse.class);
-            return accessTokenResponse.access_token;
+            ObjectMapper objectMapper = new ObjectMapper();
+            AccessTokenResponse accessTokenResponse = objectMapper.readValue(response.body(), AccessTokenResponse.class);
+            return accessTokenResponse.access_token();
         } catch (IOException | InterruptedException e) {
             logger.catching(e);
             throw new OAuthLoginFail();
@@ -83,8 +84,8 @@ public class DiscordOauthService {
                 logger.warn("[OAUTH] Invalid response while getting UserInfo: Status Code: " + response.statusCode() + " Body:" + response.body());
                 throw new OAuthLoginFail();
             }
-            Gson gson = new Gson();
-            return gson.fromJson(response.body(), DiscordOauthUserInfo.class);
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.readValue(response.body(), DiscordOauthUserInfo.class);
         } catch (IOException | InterruptedException e) {
             logger.catching(e);
             throw new OAuthLoginFail();
@@ -98,7 +99,7 @@ public class DiscordOauthService {
         try {
             HttpResponse<String> response = makeFormPost(this.tokenRevokeEndpoint, data);
             if (response.statusCode() != 200) {
-                logger.warn("OAUTH] Invalid response while token revocation: Status Code: " + response.statusCode() + " Body:" + response.body());
+                logger.warn("[OAUTH] Invalid response while token revocation: Status Code: " + response.statusCode() + " Body:" + response.body());
             }
         } catch (IOException | InterruptedException e) {
             logger.catching(e);
@@ -108,8 +109,8 @@ public class DiscordOauthService {
 
     public UserEntity loginOrRegisterDiscordUser(DiscordOauthUserInfo discordOauthUserInfo) {
         return userRepository
-                .findByJdaId(discordOauthUserInfo.id)
-                .orElseGet(() -> userRepository.save(new UserEntity(discordOauthUserInfo.username, discordOauthUserInfo.id)));
+                .findByDiscordId(discordOauthUserInfo.id())
+                .orElseGet(() -> userRepository.save(new UserEntity(discordOauthUserInfo.username(), discordOauthUserInfo.id())));
     }
 
     private String getFormString(HashMap<String, String> params) throws UnsupportedEncodingException {
@@ -120,9 +121,9 @@ public class DiscordOauthService {
                 first = false;
             else
                 result.append("&");
-            result.append(URLEncoder.encode(entry.getKey(), "UTF-8"));
+            result.append(URLEncoder.encode(entry.getKey(), StandardCharsets.UTF_8));
             result.append("=");
-            result.append(URLEncoder.encode(entry.getValue(), "UTF-8"));
+            result.append(URLEncoder.encode(entry.getValue(), StandardCharsets.UTF_8));
         }
         return result.toString();
     }

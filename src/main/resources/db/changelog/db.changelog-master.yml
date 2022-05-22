@@ -545,23 +545,16 @@ databaseChangeLog:
         columnName: welcome_message
         tableName: guild_preference_entity
 
+
 databaseChangeLog:
-- changeSet:
-    id: 1653086152139-1
-    author: seb65 (generated)
-    preConditions:
-        onFail: MARK_RAN
-        tableExists:
-            tableName: hibernate_sequence
-    changes:
-    - dropTable:
-        tableName: hibernate_sequence
-    - createSequence:
-        cycle: false
-        ordered: true
-        sequenceName: hibernate_sequence
-        startValue: 23608
+    - changeSet:
+        id: sebclem-manual-1
+        author: sebclem
+        changes:
+          - renameColumn:
+              newColumnName: discord_id
+              oldColumnName: jda_id
+              tableName: user_entity
+              columnDataType: varchar(255)
 
-
-databaseChangeLog: []
 

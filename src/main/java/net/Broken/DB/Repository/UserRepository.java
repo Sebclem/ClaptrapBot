@@ -13,5 +13,5 @@ import java.util.Optional;
 public interface UserRepository extends CrudRepository<UserEntity, Integer> {
     List<UserEntity> findByName(String name);
 
-    Optional<UserEntity> findByJdaId(String jdaId);
+    Optional<UserEntity> findByDiscordId(String discordId);
 }

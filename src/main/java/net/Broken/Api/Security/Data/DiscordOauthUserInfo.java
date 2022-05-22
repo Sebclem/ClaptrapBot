@@ -1,8 +1,12 @@
 package net.Broken.Api.Security.Data;
 
-public class DiscordOauthUserInfo {
-    public String id;
-    public String username;
-    public String discriminator;
-    public String avatar;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+public record DiscordOauthUserInfo(
+        String id,
+        String username,
+        String discriminator,
+        String avatar) {
 }
+

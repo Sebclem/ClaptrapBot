@@ -1,4 +1,4 @@
-package net.Broken.Api.Security.Exception;
+package net.Broken.Api.Security.Exceptions;
 
 public class OAuthLoginFail extends Exception{
 }

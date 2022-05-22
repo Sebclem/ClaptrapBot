@@ -157,7 +157,7 @@ public class SettingsUtils {
         } else {
             try {
                 UserEntity user = UserUtils.getInstance().getUserWithApiToken(userRepository, token);
-                User jdaUser = MainBot.jda.getUserById(user.getJdaId());
+                User jdaUser = MainBot.jda.getUserById(user.getDiscordId());
                 Guild jdaGuild = MainBot.jda.getGuildById(guild);
                 if (jdaGuild == null || jdaUser == null)
                     return false;

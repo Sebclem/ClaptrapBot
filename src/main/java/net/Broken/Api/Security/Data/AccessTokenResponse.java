@@ -1,9 +1,12 @@
 package net.Broken.Api.Security.Data;
 
-public class AccessTokenResponse {
-    public String access_token;
-    public String token_type;
-    public String expires_in;
-    public String refresh_token;
-    public String scope;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+public record AccessTokenResponse(
+        String access_token,
+        String token_type,
+        String expires_in,
+        String refresh_token,
+        String scope
+) {
 }

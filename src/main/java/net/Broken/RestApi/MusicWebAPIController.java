@@ -152,7 +152,7 @@ public class MusicWebAPIController {
 
                         UserStatsUtils.getINSTANCE().addApiCount(user, guildId);
 
-                        return ApiCommandLoader.apiCommands.get(data.command).action(data, MainBot.jda.getUserById(user.getJdaId()), guild);
+                        return ApiCommandLoader.apiCommands.get(data.command).action(data, MainBot.jda.getUserById(user.getDiscordId()), guild);
                     } else
                         return new ResponseEntity<>(new CommandResponseData(data.command, "Unknown Command", "command"), HttpStatus.BAD_REQUEST);
 

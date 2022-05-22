@@ -55,7 +55,7 @@ public class PlaylistManager {
             UserEntity user = userUtils.getUserWithApiToken(userRepository, token);
             PlaylistEntity playlist = getPlaylist(data.playlistId);
 
-            User jdaUser = MainBot.jda.getUserById(user.getJdaId());
+            User jdaUser = MainBot.jda.getUserById(user.getDiscordId());
 
             WebLoadUtils webLoadUtils = new WebLoadUtils(data, jdaUser, MainBot.jda.getGuilds().get(0), false);
             webLoadUtils.getResponse();

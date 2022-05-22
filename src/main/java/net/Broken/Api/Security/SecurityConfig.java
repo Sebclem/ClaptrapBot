@@ -1,6 +1,7 @@
 package net.Broken.Api.Security;
 
 import net.Broken.Api.Security.Components.UnauthorizedHandler;
+import net.Broken.Api.Security.Filters.JwtFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -8,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
 @Configuration
@@ -23,15 +25,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
-                // Our private endpoints
-                .antMatchers("/api/v2/**").permitAll()
-                .anyRequest().permitAll();
-//        http.authenticationProvider(discordAuthenticationProvider);
+                .antMatchers("/api/v2/auth/**").permitAll()
+                .anyRequest().authenticated();
+
+        http.addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
 
 //        http.exceptionHandling().authenticationEntryPoint((request, response, authException) -> {
 //            response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
 //        });
     }
+
+    @Bean
+    public JwtFilter jwtFilter(){
+        return new JwtFilter();
+    }
+
 
     @Bean
     @Override

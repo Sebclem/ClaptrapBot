@@ -1,11 +1,9 @@
 package net.Broken.Api.Security.Components;
 
 import net.Broken.Api.Security.Data.DiscordOauthUserInfo;
-import net.Broken.Api.Security.Exception.OAuthLoginFail;
+import net.Broken.Api.Security.Exceptions.OAuthLoginFail;
 import net.Broken.Api.Security.Services.DiscordOauthService;
 import net.Broken.DB.Entity.UserEntity;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

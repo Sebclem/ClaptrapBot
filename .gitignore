@@ -26,3 +26,7 @@ src/main/resources/templates/js
 src/main/resources/static/error/css
 
 src/main/resources/static/error/js
+
+
+**.log
+.jpb/
