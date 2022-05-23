@@ -65,7 +65,7 @@ public class UserStatsUtils {
         logger.debug(userEntity);
         logger.debug(userEntity.getUserStats());
         if (userEntity.getUserStats() == null || userEntity.getUserStats().size() == 0 || userEntity.getUserStats().size() < jdaUser.getMutualGuilds().size()) {
-            logger.debug("Stats not found for " + userEntity.getName());
+            logger.debug("Stats not found for " + userEntity.getUsername());
 
             List<UserStats> stats;
             if (userEntity.getUserStats() == null || userEntity.getUserStats().size() == 0) {
@@ -118,7 +118,7 @@ public class UserStatsUtils {
 
         List<UserStats> userStatsList = userStatsRepository.findByUserAndGuildId(userEntity, member.getGuild().getId());
         if (userStatsList.size() == 0) {
-            logger.debug("User stats not found for user " + userEntity.getName() + " guild: " + member.getGuild().getId());
+            logger.debug("User stats not found for user " + userEntity.getUsername() + " guild: " + member.getGuild().getId());
             getUserStats(userEntity);
             userStatsList = userStatsRepository.findByUserAndGuildId(userEntity, member.getGuild().getId());
         }
@@ -129,7 +129,7 @@ public class UserStatsUtils {
     public UserStats getGuildUserStats(UserEntity userEntity, String guildId) {
         List<UserStats> userStatsList = userStatsRepository.findByUserAndGuildId(userEntity, guildId);
         if (userStatsRepository.findByUserAndGuildId(userEntity, guildId).size() == 0) {
-            logger.debug("User stats not found for user " + userEntity.getName() + " guild: " + guildId);
+            logger.debug("User stats not found for user " + userEntity.getUsername() + " guild: " + guildId);
             getUserStats(userEntity);
             userStatsList = userStatsRepository.findByUserAndGuildId(userEntity, guildId);
         }
@@ -186,7 +186,7 @@ public class UserStatsUtils {
                 continue;
             }
             String avatar = member.getUser().getAvatarUrl();
-            GuildStats temp = new GuildStats(stats.getUser().getName(), 0, avatar, stats.getVocalTime(), stats.getMessageCount(), stats.getApiCommandCount());
+            GuildStats temp = new GuildStats(stats.getUser().getUsername(), 0, avatar, stats.getVocalTime(), stats.getMessageCount(), stats.getApiCommandCount());
             if (stats.getUser().getId().equals(userEntity.getId())) {
                 selfGuildStats = temp;
             }
@@ -198,11 +198,11 @@ public class UserStatsUtils {
             for (UserStats stats : needCache) {
                 Member member = guild.getMemberById(stats.getUser().getDiscordId());
                 if (member == null) {
-                    logger.warn("Can't find member '" + stats.getUser().getName() + "'after load, User leave the guild ?");
+                    logger.warn("Can't find member '" + stats.getUser().getUsername() + "'after load, User leave the guild ?");
                     continue;
                 }
                 String avatar = member.getUser().getAvatarUrl();
-                GuildStats temp = new GuildStats(stats.getUser().getName(), 0, avatar, stats.getVocalTime(), stats.getMessageCount(), stats.getApiCommandCount());
+                GuildStats temp = new GuildStats(stats.getUser().getUsername(), 0, avatar, stats.getVocalTime(), stats.getMessageCount(), stats.getApiCommandCount());
                 if (stats.getUser().getId().equals(userEntity.getId())) {
                     selfGuildStats = temp;
                 }

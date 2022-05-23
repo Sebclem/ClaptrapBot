@@ -16,6 +16,6 @@ public class HelloController {
     @GetMapping("world")
     public String helloWorld(Authentication authentication){
         UserEntity principal = (UserEntity) authentication.getPrincipal();
-        return "Hello " + principal.getName();
+        return "Hello " + principal.getUsername();
     }
 }

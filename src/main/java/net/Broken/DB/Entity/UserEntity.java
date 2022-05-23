@@ -1,6 +1,7 @@
 package net.Broken.DB.Entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import net.Broken.Api.Security.Data.DiscordOauthUserInfo;
 import net.dv8tion.jda.api.entities.User;
 
 import javax.persistence.*;
@@ -17,10 +18,14 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String name;
+    private String username;
+
+    private String discriminator;
 
     @Column(unique=true)
     private String discordId;
+
+    private String avatar;
 
     private boolean isBotAdmin = false;
 
@@ -36,13 +41,20 @@ public class UserEntity {
     }
 
     public UserEntity(User user) {
-        this.name = user.getName();
+        this.username = user.getName();
         this.discordId = user.getId();
     }
 
-    public UserEntity(String name, String id) {
-        this.name = name;
+    public UserEntity(String username, String id) {
+        this.username = username;
         this.discordId = id;
+    }
+
+    public UserEntity(DiscordOauthUserInfo discordOauthUserInfo){
+        this.username = discordOauthUserInfo.username();
+        this.discriminator = discordOauthUserInfo.discriminator();
+        this.discordId = discordOauthUserInfo.id();
+        this.avatar = discordOauthUserInfo.avatar();
     }
 
 
@@ -54,12 +66,12 @@ public class UserEntity {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getUsername() {
+        return username;
     }
 
     public String getDiscordId() {
@@ -99,5 +111,21 @@ public class UserEntity {
 
     public void setBotAdmin(boolean botAdmin) {
         isBotAdmin = botAdmin;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public String getDiscriminator() {
+        return discriminator;
+    }
+
+    public void setDiscriminator(String discriminator) {
+        this.discriminator = discriminator;
     }
 }

@@ -22,7 +22,7 @@ public class CacheTools {
     public static User getJdaUser(UserEntity userEntity) {
         User user = MainBot.jda.getUserById(userEntity.getDiscordId());
         if (user == null) {
-            logger.debug("User cache not found for " + userEntity.getName() + ", fetching user.");
+            logger.debug("User cache not found for " + userEntity.getUsername() + ", fetching user.");
             user = MainBot.jda.retrieveUserById(userEntity.getDiscordId()).complete();
         }
         return user;

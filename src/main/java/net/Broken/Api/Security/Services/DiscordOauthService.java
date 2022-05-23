@@ -21,6 +21,7 @@ import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class DiscordOauthService {
@@ -107,11 +108,40 @@ public class DiscordOauthService {
     }
 
 
-    public UserEntity loginOrRegisterDiscordUser(DiscordOauthUserInfo discordOauthUserInfo) {
-        return userRepository
-                .findByDiscordId(discordOauthUserInfo.id())
-                .orElseGet(() -> userRepository.save(new UserEntity(discordOauthUserInfo.username(), discordOauthUserInfo.id())));
+    public record LoginOrRegisterResponse<T>(T response, boolean created) {
     }
+
+    public LoginOrRegisterResponse<UserEntity> loginOrRegisterDiscordUser(DiscordOauthUserInfo discordOauthUserInfo) {
+        Optional<UserEntity> optionalUserEntity = userRepository.findByDiscordId(discordOauthUserInfo.id());
+        return optionalUserEntity.map(
+                        userEntity -> new LoginOrRegisterResponse<>(userEntity, false))
+                .orElseGet(() -> {
+                    UserEntity created = userRepository.save(new UserEntity(discordOauthUserInfo));
+                    return new LoginOrRegisterResponse<>(created, true);
+                });
+    }
+
+    public UserEntity updateUserInfo(DiscordOauthUserInfo discordOauthUserInfo, UserEntity userEntity){
+        boolean updated = false;
+        if(!userEntity.getUsername().equals(discordOauthUserInfo.username())){
+            userEntity.setUsername(discordOauthUserInfo.username());
+            updated = true;
+        }
+        if(!userEntity.getDiscriminator().equals(discordOauthUserInfo.discriminator())){
+            userEntity.setDiscriminator(discordOauthUserInfo.discriminator());
+            updated = true;
+        }
+        if(!userEntity.getAvatar().equals(discordOauthUserInfo.avatar())){
+            userEntity.setAvatar(discordOauthUserInfo.avatar());
+            updated = true;
+        }
+
+        if(updated){
+            return userRepository.save(userEntity);
+        }
+        return userEntity;
+    }
+
 
     private String getFormString(HashMap<String, String> params) throws UnsupportedEncodingException {
         StringBuilder result = new StringBuilder();
@@ -138,4 +168,6 @@ public class DiscordOauthService {
         HttpClient client = HttpClient.newHttpClient();
         return client.send(request, HttpResponse.BodyHandlers.ofString());
     }
+
+
 }

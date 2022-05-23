@@ -50,7 +50,7 @@ public class SettingAPIController {
             Guild jdaGuild = MainBot.jda.getGuildById(guild);
             try {
                 UserEntity user = UserUtils.getInstance().getUserWithApiToken(userRepository, token);
-                logger.info(user.getName() + " change config of " + jdaGuild.getName());
+                logger.info(user.getUsername() + " change config of " + jdaGuild.getName());
             } catch (UnknownTokenException e) {
                 e.printStackTrace();
             }

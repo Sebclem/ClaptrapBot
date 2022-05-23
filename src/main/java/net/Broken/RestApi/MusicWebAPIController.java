@@ -100,7 +100,7 @@ public class MusicWebAPIController {
 
             try {
                 UserEntity user = userUtils.getUserWithApiToken(userRepository, token);
-                logger.trace("All info from USER: " + user.getName() + " GUILD: " + guild.getName());
+                logger.trace("All info from USER: " + user.getUsername() + " GUILD: " + guild.getName());
 
                 PlaylistData list = new PlaylistData(AudioM.getInstance(guild).getGuildMusicManager().scheduler.getList());
                 CurrentMusicData musicData;
@@ -146,7 +146,7 @@ public class MusicWebAPIController {
 
                 try {
                     UserEntity user = userUtils.getUserWithApiToken(userRepository, token);
-                    logger.info("[" + guild.getName() + "] Receive command" + data.command + " from" + request.getRemoteAddr() + " USER:" + user.getName() + " GUILD:" + guild.getName());
+                    logger.info("[" + guild.getName() + "] Receive command" + data.command + " from" + request.getRemoteAddr() + " USER:" + user.getUsername() + " GUILD:" + guild.getName());
 
                     if (ApiCommandLoader.apiCommands.containsKey(data.command)) {
 
@@ -186,7 +186,7 @@ public class MusicWebAPIController {
                 if (member == null) {
                     member = guild.retrieveMember(CacheTools.getJdaUser(user)).complete();
                     if (member == null) {
-                        logger.warn("Can't find member " + user.getName() + " for guild " + guild.getName() + ", User not in guild ?");
+                        logger.warn("Can't find member " + user.getUsername() + " for guild " + guild.getName() + ", User not in guild ?");
                         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
                     }
                 }

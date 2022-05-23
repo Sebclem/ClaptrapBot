@@ -29,7 +29,11 @@ public class DiscordAuthenticationProvider implements AuthenticationProvider {
             String token = discordOauthService.getAccessToken(code, redirectUri);
             DiscordOauthUserInfo discordOauthUserInfo = discordOauthService.getUserInfo(token);
             discordOauthService.revokeToken(token);
-            UserEntity userEntity = discordOauthService.loginOrRegisterDiscordUser(discordOauthUserInfo);
+            DiscordOauthService.LoginOrRegisterResponse<UserEntity> loginOrRegisterResponse = discordOauthService.loginOrRegisterDiscordUser(discordOauthUserInfo);
+            UserEntity userEntity = loginOrRegisterResponse.response();
+            if(!loginOrRegisterResponse.created()){
+                userEntity = discordOauthService.updateUserInfo(discordOauthUserInfo, loginOrRegisterResponse.response());
+            }
             return new UsernamePasswordAuthenticationToken(userEntity, null, new ArrayList<>());
         } catch (OAuthLoginFail e) {
             throw new BadCredentialsException("Bad response form Discord Oauth server ! Code expired ?");

@@ -558,3 +558,190 @@ databaseChangeLog:
               columnDataType: varchar(255)
 
 
+databaseChangeLog:
+- changeSet:
+    id: 1653309183173-13
+    author: seb65 (generated)
+    changes:
+    - addColumn:
+        columns:
+        - column:
+            name: avatar
+            type: varchar(255)
+        tableName: user_entity
+- changeSet:
+    id: 1653309183173-14
+    author: seb65 (generated)
+    changes:
+    - addColumn:
+        columns:
+        - column:
+            name: discriminator
+            type: varchar(255)
+        tableName: user_entity
+- changeSet:
+    id: 1653309183173-15
+    author: seb65 (generated)
+    changes:
+    - renameColumn:
+        oldColumnName: name
+        newColumnName: username
+        columnDataType: varchar(255)
+        tableName: user_entity
+- changeSet:
+    id: 1653309183173-16
+    author: seb65 (generated)
+    changes:
+    - addUniqueConstraint:
+        columnNames: discord_id
+        constraintName: UC_USER_ENTITYDISCORD_ID_COL
+        tableName: user_entity
+- changeSet:
+    id: 1653309183173-17
+    author: seb65 (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: pending_pwd_reset_entity
+        constraintName: FKatrj670ooxj9qiq230iacbt68
+- changeSet:
+    id: 1653309183173-18
+    author: seb65 (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: guild_preference_entity_visible_voice_chanel
+        constraintName: FKlyf6ksd3969rqtwm3bqupbniu
+- changeSet:
+    id: 1653309183173-19
+    author: seb65 (generated)
+    changes:
+    - dropTable:
+        tableName: guild_preference_entity_visible_voice_chanel
+- changeSet:
+    id: 1653309183173-20
+    author: seb65 (generated)
+    changes:
+    - dropTable:
+        tableName: hibernate_sequence
+- changeSet:
+    id: 1653309183173-21
+    author: seb65 (generated)
+    changes:
+    - dropTable:
+        tableName: pending_pwd_reset_entity
+- changeSet:
+    id: 1653309183173-22
+    author: seb65 (generated)
+    changes:
+    - dropTable:
+        tableName: pending_user_entity
+- changeSet:
+    id: 1653309183173-23
+    author: seb65 (generated)
+    changes:
+    - dropColumn:
+        columnName: api_token
+        tableName: user_entity
+- changeSet:
+    id: 1653309183173-25
+    author: seb65 (generated)
+    changes:
+    - dropColumn:
+        columnName: password
+        tableName: user_entity
+- changeSet:
+    id: 1653309183173-1
+    author: seb65 (generated)
+    changes:
+    - dropDefaultValue:
+        columnDataType: varchar(255)
+        columnName: auto_voice_channel_title
+        tableName: guild_preference_entity
+- changeSet:
+    id: 1653309183173-2
+    author: seb65 (generated)
+    changes:
+    - dropDefaultValue:
+        columnDataType: varchar(255)
+        columnName: auto_voice_channelid
+        tableName: guild_preference_entity
+- changeSet:
+    id: 1653309183173-3
+    author: seb65 (generated)
+    changes:
+    - dropDefaultValue:
+        columnDataType: varchar(255)
+        columnName: default_role_id
+        tableName: guild_preference_entity
+- changeSet:
+    id: 1653309183173-4
+    author: seb65 (generated)
+    changes:
+    - dropDefaultValue:
+        columnDataType: varchar(255)
+        columnName: discord_id
+        tableName: user_entity
+- changeSet:
+    id: 1653309183173-5
+    author: seb65 (generated)
+    changes:
+    - dropDefaultValue:
+        columnDataType: varchar(255)
+        columnName: guild_id
+        tableName: guild_preference_entity
+- changeSet:
+    id: 1653309183173-6
+    author: seb65 (generated)
+    changes:
+    - dropDefaultValue:
+        columnDataType: varchar(255)
+        columnName: guild_id
+        tableName: user_stats
+- changeSet:
+    id: 1653309183173-7
+    author: seb65 (generated)
+    changes:
+    - dropDefaultValue:
+        columnDataType: varchar(255)
+        columnName: identifier
+        tableName: track_entity
+- changeSet:
+    id: 1653309183173-8
+    author: seb65 (generated)
+    changes:
+    - dropDefaultValue:
+        columnDataType: varchar(255)
+        columnName: name
+        tableName: playlist_entity
+- changeSet:
+    id: 1653309183173-9
+    author: seb65 (generated)
+    changes:
+    - dropDefaultValue:
+        columnDataType: varchar(255)
+        columnName: title
+        tableName: track_entity
+- changeSet:
+    id: 1653309183173-10
+    author: seb65 (generated)
+    changes:
+    - dropDefaultValue:
+        columnDataType: varchar(255)
+        columnName: url
+        tableName: track_entity
+- changeSet:
+    id: 1653309183173-11
+    author: seb65 (generated)
+    changes:
+    - dropDefaultValue:
+        columnDataType: varchar(255)
+        columnName: welcome_chanelid
+        tableName: guild_preference_entity
+- changeSet:
+    id: 1653309183173-12
+    author: seb65 (generated)
+    changes:
+    - dropDefaultValue:
+        columnDataType: varchar(255)
+        columnName: welcome_message
+        tableName: guild_preference_entity
+

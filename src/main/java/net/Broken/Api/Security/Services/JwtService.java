@@ -38,7 +38,7 @@ public class JwtService {
 
 
         return Jwts.builder()
-                .setSubject(user.getName())
+                .setSubject(user.getUsername())
                 .claim("discord_id", user.getDiscordId())
                 .setId(uuid.toString())
                 .setIssuedAt(iat)
