@@ -40,6 +40,8 @@ public class JwtService {
         return Jwts.builder()
                 .setSubject(user.getUsername())
                 .claim("discord_id", user.getDiscordId())
+                .claim("avatar", user.getAvatar())
+                .claim("discriminator", user.getDiscriminator())
                 .setId(uuid.toString())
                 .setIssuedAt(iat)
                 .setNotBefore(nbf)

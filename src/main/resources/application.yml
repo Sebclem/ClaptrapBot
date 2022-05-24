@@ -24,3 +24,6 @@ discord:
     token-endpoint: https://discord.com/api/oauth2/token
     tokenRevokeEndpoint: https://discord.com/api/oauth2/token/revoke
     userInfoEnpoint: https://discord.com/api/users/@me
+
+springdoc:
+  paths-to-match: /api/v2/**

@@ -123,15 +123,15 @@ public class DiscordOauthService {
 
     public UserEntity updateUserInfo(DiscordOauthUserInfo discordOauthUserInfo, UserEntity userEntity){
         boolean updated = false;
-        if(!userEntity.getUsername().equals(discordOauthUserInfo.username())){
+        if(userEntity.getUsername() == null || !userEntity.getUsername().equals(discordOauthUserInfo.username())){
             userEntity.setUsername(discordOauthUserInfo.username());
             updated = true;
         }
-        if(!userEntity.getDiscriminator().equals(discordOauthUserInfo.discriminator())){
+        if(userEntity.getDiscriminator() == null || !userEntity.getDiscriminator().equals(discordOauthUserInfo.discriminator())){
             userEntity.setDiscriminator(discordOauthUserInfo.discriminator());
             updated = true;
         }
-        if(!userEntity.getAvatar().equals(discordOauthUserInfo.avatar())){
+        if(userEntity.getAvatar() == null || !userEntity.getAvatar().equals(discordOauthUserInfo.avatar())){
             userEntity.setAvatar(discordOauthUserInfo.avatar());
             updated = true;
         }
