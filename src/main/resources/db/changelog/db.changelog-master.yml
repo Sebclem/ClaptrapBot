@@ -1,5 +1,72 @@
 databaseChangeLog:
 - changeSet:
+    id: 1653065037086-9
+    author: seb65 (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+            name: id
+            type: BIGINT
+        - column:
+            defaultValueNumeric: 0
+            name: api_command_count
+            type: BIGINT
+        - column:
+            name: guild_id
+            type: VARCHAR(255)
+        - column:
+            defaultValueNumeric: 0
+            name: message_count
+            type: BIGINT
+        - column:
+            defaultValueNumeric: 0
+            name: vocal_time
+            type: BIGINT
+        - column:
+            constraints:
+              nullable: false
+            name: user_entity_id
+            type: INT
+        tableName: user_stats
+
+- changeSet:
+    id: 1653065037086-8
+    author: seb65 (generated)
+    changes:
+    - createTable:
+        columns:
+        - column:
+            autoIncrement: true
+            constraints:
+              nullable: false
+              primaryKey: true
+            name: id
+            type: INT
+        - column:
+            name: api_token
+            type: VARCHAR(255)
+        - column:
+            name: jda_id
+            type: VARCHAR(255)
+        - column:
+            name: name
+            type: VARCHAR(255)
+        - column:
+            name: password
+            type: VARCHAR(255)
+        - column:
+            constraints:
+              nullable: false
+            name: is_bot_admin
+            type: BIT
+        tableName: user_entity
+
+- changeSet:
     id: 1653065037086-1
     author: seb65 (generated)
     changes:
@@ -71,17 +138,7 @@ databaseChangeLog:
             name: visible_voice_chanel
             type: VARCHAR(255)
         tableName: guild_preference_entity_visible_voice_chanel
-- changeSet:
-    id: 1653065037086-3
-    author: seb65 (generated)
-    changes:
-    - createSequence:
-        columns:
-        - column:
-            defaultValueComputed: 'NULL'
-            name: next_val
-            type: BIGINT
-        tableName: hibernate_sequence
+
 - changeSet:
     id: 1653065037086-4
     author: seb65 (generated)
@@ -218,40 +275,7 @@ databaseChangeLog:
             name: is_bot_admin
             type: BIT
         tableName: user_entity
-- changeSet:
-    id: 1653065037086-9
-    author: seb65 (generated)
-    changes:
-    - createTable:
-        columns:
-        - column:
-            autoIncrement: true
-            constraints:
-              nullable: false
-              primaryKey: true
-            name: id
-            type: BIGINT
-        - column:
-            defaultValueNumeric: 0
-            name: api_command_count
-            type: BIGINT
-        - column:
-            name: guild_id
-            type: VARCHAR(255)
-        - column:
-            defaultValueNumeric: 0
-            name: message_count
-            type: BIGINT
-        - column:
-            defaultValueNumeric: 0
-            name: vocal_time
-            type: BIGINT
-        - column:
-            constraints:
-              nullable: false
-            name: user_entity_id
-            type: INT
-        tableName: user_stats
+
 - changeSet:
     id: 1653065037086-10
     author: seb65 (generated)
@@ -379,7 +403,6 @@ databaseChangeLog:
         referencedTableName: guild_preference_entity
         validate: true
 
-databaseChangeLog:
 - changeSet:
     id: 1653073535100-14
     author: seb65 (generated)
@@ -411,6 +434,10 @@ databaseChangeLog:
 - changeSet:
     id: 1653073535100-18
     author: seb65 (generated)
+    preConditions:
+    - onFail: MARK_RAN
+    - tableExists:
+        tableName: hibernate_sequence
     changes:
     - dropTable:
         tableName: hibernate_sequence
@@ -544,21 +571,15 @@ databaseChangeLog:
         columnDataType: varchar(255)
         columnName: welcome_message
         tableName: guild_preference_entity
-
-
-databaseChangeLog:
-    - changeSet:
-        id: sebclem-manual-1
-        author: sebclem
-        changes:
-          - renameColumn:
-              newColumnName: discord_id
-              oldColumnName: jda_id
-              tableName: user_entity
-              columnDataType: varchar(255)
-
-
-databaseChangeLog:
+- changeSet:
+    id: sebclem-manual-1
+    author: sebclem
+    changes:
+        - renameColumn:
+            newColumnName: discord_id
+            oldColumnName: jda_id
+            tableName: user_entity
+            columnDataType: varchar(255)
 - changeSet:
     id: 1653309183173-13
     author: seb65 (generated)
@@ -595,58 +616,6 @@ databaseChangeLog:
     - addUniqueConstraint:
         columnNames: discord_id
         constraintName: UC_USER_ENTITYDISCORD_ID_COL
-        tableName: user_entity
-- changeSet:
-    id: 1653309183173-17
-    author: seb65 (generated)
-    changes:
-    - dropForeignKeyConstraint:
-        baseTableName: pending_pwd_reset_entity
-        constraintName: FKatrj670ooxj9qiq230iacbt68
-- changeSet:
-    id: 1653309183173-18
-    author: seb65 (generated)
-    changes:
-    - dropForeignKeyConstraint:
-        baseTableName: guild_preference_entity_visible_voice_chanel
-        constraintName: FKlyf6ksd3969rqtwm3bqupbniu
-- changeSet:
-    id: 1653309183173-19
-    author: seb65 (generated)
-    changes:
-    - dropTable:
-        tableName: guild_preference_entity_visible_voice_chanel
-- changeSet:
-    id: 1653309183173-20
-    author: seb65 (generated)
-    changes:
-    - dropTable:
-        tableName: hibernate_sequence
-- changeSet:
-    id: 1653309183173-21
-    author: seb65 (generated)
-    changes:
-    - dropTable:
-        tableName: pending_pwd_reset_entity
-- changeSet:
-    id: 1653309183173-22
-    author: seb65 (generated)
-    changes:
-    - dropTable:
-        tableName: pending_user_entity
-- changeSet:
-    id: 1653309183173-23
-    author: seb65 (generated)
-    changes:
-    - dropColumn:
-        columnName: api_token
-        tableName: user_entity
-- changeSet:
-    id: 1653309183173-25
-    author: seb65 (generated)
-    changes:
-    - dropColumn:
-        columnName: password
         tableName: user_entity
 - changeSet:
     id: 1653309183173-1
