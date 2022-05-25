@@ -3,6 +3,7 @@ package net.Broken.Api.Controllers;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityRequirements;
+import net.Broken.Api.Security.Data.JwtPrincipal;
 import net.Broken.DB.Entity.UserEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -18,7 +19,7 @@ public class HelloController {
 
     @GetMapping("world")
     public String helloWorld(Authentication authentication){
-        UserEntity principal = (UserEntity) authentication.getPrincipal();
-        return "Hello " + principal.getUsername();
+        JwtPrincipal principal = (JwtPrincipal) authentication.getPrincipal();
+        return "Hello " + principal.user().getUsername();
     }
 }

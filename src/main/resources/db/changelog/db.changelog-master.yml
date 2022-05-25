@@ -403,6 +403,8 @@ databaseChangeLog:
         referencedTableName: guild_preference_entity
         validate: true
 
+
+# End base
 - changeSet:
     id: 1653073535100-14
     author: seb65 (generated)

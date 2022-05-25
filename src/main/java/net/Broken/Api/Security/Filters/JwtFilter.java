@@ -2,6 +2,7 @@ package net.Broken.Api.Security.Filters;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
+import net.Broken.Api.Security.Data.JwtPrincipal;
 import net.Broken.Api.Security.Services.JwtService;
 import net.Broken.DB.Entity.UserEntity;
 import org.apache.logging.log4j.LogManager;
@@ -32,7 +33,8 @@ public class JwtFilter extends OncePerRequestFilter {
             try {
                 Jws<Claims> jwt = jwtService.verifyAndParseJwt(token);
                 UserEntity user = jwtService.getUserWithJwt(jwt);
-                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user, null, new ArrayList<>());
+                JwtPrincipal principal = new JwtPrincipal(jwt.getBody().getId(), user);
+                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(principal, null, new ArrayList<>());
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             } catch (Exception e) {
