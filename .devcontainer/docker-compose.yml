@@ -1,0 +1,48 @@
+version: '3.8'
+
+volumes:
+  mysql-data:
+services:
+  app:
+    container_name: javadev
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        # Update 'VARIANT' to pick an version of Java: 11, 17.
+        # Append -bullseye or -buster to pin to an OS version.
+        # Use -bullseye variants on local arm64/Apple Silicon.
+        VARIANT: "17"
+        # Options
+        INSTALL_MAVEN: "false"
+        MAVEN_VERSION: ""
+        INSTALL_GRADLE: "true"
+        GRADLE_VERSION: "7.4.2"
+        NODE_VERSION: "lts/*"
+    volumes:
+      - ..:/workspace:cached
+
+    # Overrides default command so things don't shut down after the process ends.
+    command: sleep infinity
+
+    # Runs app on the same network as the database container, allows "forwardPorts" in devcontainer.json function.
+    network_mode: service:db
+    # Uncomment the next line to use a non-root user for all processes.
+    # user: vscode
+
+    # Use "forwardPorts" in **devcontainer.json** to forward an app port locally. 
+    # (Adding the "ports" property to this file will not forward from a Codespace.)
+
+  db:
+    container_name: database
+    image: mariadb:latest
+    restart: unless-stopped
+    volumes:
+      - mysql-data:/var/lib/mysql
+    environment:
+      MARIADB_ROOT_PASSWORD: mariadb_root
+      MARIADB_PASSWORD: claptrap
+      MARIADB_USER: claptrap
+      MARIADB_DATABASE: claptrap
+    # Add "forwardPorts": ["5432"] to **devcontainer.json** to forward PostgreSQL locally.
+    # (Adding the "ports" property to this file will not forward from a Codespace.)

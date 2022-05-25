@@ -30,3 +30,5 @@ src/main/resources/static/error/js
 
 **.log
 .jpb/
+
+**/*.env
