@@ -22,7 +22,7 @@ public class GuildController {
         this.guildService = guildService;
     }
 
-    @GetMapping("mutual-guilds")
+    @GetMapping("mutual")
     public List<Guild> getMutualGuilds(Authentication authentication){
         JwtPrincipal jwtPrincipal = (JwtPrincipal) authentication.getPrincipal();
         return guildService.getMutualGuilds(jwtPrincipal.user());
