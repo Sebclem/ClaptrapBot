@@ -9,21 +9,22 @@ server:
   compression:
     enabled: true
     mime-types: application/json,application/xml,text/html,text/xml,text/plain,application/javascript,text/css
-  port: ${PORT}
+  port: 8080
   http2:
     enabled: true
 
-security:
-  jwt:
-    secret: ${JWT_SECRET}
-
 discord:
   oauth:
-    client-id: ${CLIENT_ID}
-    client-secret: ${CLIENT_SECRET}
+    client-id: ${OAUTH_CLIENT_ID}
+    client-secret: ${OAUTH_CLIENT_SECRET}
     token-endpoint: https://discord.com/api/oauth2/token
     tokenRevokeEndpoint: https://discord.com/api/oauth2/token/revoke
     userInfoEnpoint: https://discord.com/api/users/@me
+  bot:
+    token: ${BOT_TOKEN}
+    url: "claptrapbot.com"
+    mode: ${APP_MODE}
+    randomApiKey: ${RANDOM_API_KEY}
 
 springdoc:
   paths-to-match: /api/v2/**

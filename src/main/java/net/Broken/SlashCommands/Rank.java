@@ -1,7 +1,9 @@
 package net.Broken.SlashCommands;
 
+import net.Broken.BotConfigLoader;
 import net.Broken.MainBot;
 import net.Broken.SlashCommand;
+import net.Broken.SpringContext;
 import net.Broken.Tools.UserManager.Stats.UserStatsUtils;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
@@ -14,11 +16,12 @@ import java.util.List;
 public class Rank implements SlashCommand {
     @Override
     public void action(SlashCommandEvent event) {
+        String url = SpringContext.getAppContext().getBean(BotConfigLoader.class).url();
         event.deferReply().queue();
         UserStatsUtils userStats = UserStatsUtils.getINSTANCE();
         MessageEmbed messageEmbed = userStats.getRankMessage(event.getMember());
         event.getHook().sendMessageEmbeds(messageEmbed).addActionRow(
-                Button.link("https://" + MainBot.url + "/rank", "More stats")
+                Button.link("https://" + url + "/rank", "More stats")
         ).queue();
     }
 

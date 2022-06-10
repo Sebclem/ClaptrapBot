@@ -35,12 +35,14 @@ import java.util.List;
  */
 public class BotListener extends ListenerAdapter {
     private final GuildPreferenceRepository guildPreferenceRepository;
+    private final BotConfigLoader botConfig;
 
     private final Logger logger = LogManager.getLogger();
 
     public BotListener() {
         ApplicationContext context = SpringContext.getAppContext();
-        guildPreferenceRepository = (GuildPreferenceRepository) context.getBean("guildPreferenceRepository");
+        guildPreferenceRepository = context.getBean(GuildPreferenceRepository.class);
+        botConfig = context.getBean(BotConfigLoader.class);
     }
 
     @Override
@@ -194,7 +196,7 @@ public class BotListener extends ListenerAdapter {
         EmbedBuilder eb = new EmbedBuilder().setColor(Color.GREEN)
                 .setTitle("Hello there !")
                 .setDescription("Allow me to introduce myself -- I am a CL4P-TP the discord bot, but my friends call me Claptrap ! Or they would, if any of them were real...\n" +
-                        "\nYou can access to my web UI with: " + MainBot.url)
+                        "\nYou can access to my web UI with: " + botConfig.url())
                 .setImage("https://i.imgur.com/Anf1Srg.gif");
         Message message = new MessageBuilder().setEmbeds(EmbedMessageUtils.buildStandar(eb)).build();
 

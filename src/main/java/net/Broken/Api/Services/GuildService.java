@@ -2,7 +2,6 @@ package net.Broken.Api.Services;
 
 import net.Broken.Api.Data.Guild;
 import net.Broken.DB.Entity.UserEntity;
-import net.Broken.MainBot;
 import net.Broken.Tools.CacheTools;
 import net.dv8tion.jda.api.entities.User;
 import org.springframework.stereotype.Service;

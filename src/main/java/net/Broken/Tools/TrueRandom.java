@@ -1,5 +1,7 @@
 package net.Broken.Tools;
 
+import net.Broken.BotConfigLoader;
+import net.Broken.SpringContext;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -18,11 +20,11 @@ import java.util.List;
 
 public class TrueRandom {
 
-    private static TrueRandom INSTANCE = new TrueRandom();
-    private Logger logger = LogManager.getLogger();
-    private String url = "https://api.random.org/json-rpc/2/invoke";
-    private String apiKey = System.getenv("RANDOM_API_KEY");
+    private static final TrueRandom INSTANCE = new TrueRandom();
+    private final Logger logger = LogManager.getLogger();
+    private final String apiKey;
     private TrueRandom() {
+        apiKey = SpringContext.getAppContext().getBean(BotConfigLoader.class).randomApiKey();
     }
 
     public static TrueRandom getINSTANCE() {
@@ -30,10 +32,13 @@ public class TrueRandom {
     }
 
     public ArrayList<Integer> getNumbers(int min, int max) throws IOException {
+
+//        TODO Migrate to native http client
         HttpClient httpClient = HttpClientBuilder.create().build();
 
         String postVal = "{\"jsonrpc\":\"2.0\",\"method\":\"generateIntegers\",\"params\":{\"apiKey\":\"" + apiKey + "\",\"n\":50,\"min\":" + min + ",\"max\":" + max + ",\"replacement\":" + (((max - min) >= 50) ? "false" : "true") + "},\"id\":41}";
         StringEntity entity = new StringEntity(postVal, ContentType.APPLICATION_JSON);
+        String url = "https://api.random.org/json-rpc/2/invoke";
         HttpPost request = new HttpPost(url);
         request.setEntity(entity);
         request.setHeader("Accept", "application/json");
