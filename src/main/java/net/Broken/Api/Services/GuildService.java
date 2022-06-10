@@ -1,7 +1,8 @@
 package net.Broken.Api.Services;
 
-import net.Broken.Api.Data.Guild;
-import net.Broken.Api.Data.Channel;
+import net.Broken.Api.Data.Guild.Guild;
+import net.Broken.Api.Data.Guild.Channel;
+import net.Broken.Api.Data.Guild.Role;
 import net.Broken.DB.Entity.UserEntity;
 import net.Broken.MainBot;
 import net.Broken.Tools.CacheTools;
@@ -41,6 +42,17 @@ public class GuildService {
             voiceChannels.add(new Channel(textChannel.getId(), textChannel.getName()));
         }
         return voiceChannels;
+    }
+
+    public List<Role> getRole(String guildId){
+        net.dv8tion.jda.api.entities.Guild guild = MainBot.jda.getGuildById(guildId);
+        List<Role> roles = new ArrayList<>();
+        for(net.dv8tion.jda.api.entities.Role role : guild.getRoles()){
+            if(!role.isManaged()){
+                roles.add(new Role(role.getId(), role.getName()));
+            }
+        }
+        return roles;
     }
 
 }

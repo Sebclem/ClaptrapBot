@@ -1,8 +1,9 @@
 package net.Broken.Api.Controllers;
 
-import net.Broken.Api.Data.Guild;
+import net.Broken.Api.Data.Guild.Guild;
+import net.Broken.Api.Data.Guild.Role;
 import net.Broken.Api.Data.InviteLink;
-import net.Broken.Api.Data.Channel;
+import net.Broken.Api.Data.Guild.Channel;
 import net.Broken.Api.Security.Data.JwtPrincipal;
 import net.Broken.Api.Services.GuildService;
 import net.Broken.MainBot;
@@ -40,12 +41,18 @@ public class GuildController {
     @GetMapping("/{guildId}/voiceChannels")
     @PreAuthorize("isInGuild(#guildId)")
     public List<Channel> getVoiceChannels(@PathVariable String guildId){
-        return guildService.getVoiceChannel(String.valueOf(guildId));
+        return guildService.getVoiceChannel(guildId);
     }
 
     @GetMapping("/{guildId}/textChannels")
     @PreAuthorize("isInGuild(#guildId)")
     public List<Channel> getTextChannels(@PathVariable String guildId){
-        return guildService.getTextChannel(String.valueOf(guildId));
+        return guildService.getTextChannel(guildId);
+    }
+
+    @GetMapping("/{guildId}/roles")
+    @PreAuthorize("isInGuild(#guildId)")
+    public List<Role> getRoles(@PathVariable String guildId){
+        return guildService.getRole(guildId);
     }
 }
