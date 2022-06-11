@@ -3,7 +3,9 @@ package net.Broken.Api.Security.Expression;
 import net.Broken.Api.Security.Data.JwtPrincipal;
 import net.Broken.MainBot;
 import net.Broken.Tools.CacheTools;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
 import okhttp3.Cache;
 import org.springframework.security.access.expression.SecurityExpressionRoot;
 import org.springframework.security.access.expression.method.MethodSecurityExpressionOperations;
@@ -27,6 +29,16 @@ public class CustomMethodSecurityExpressionRoot
         JwtPrincipal jwtPrincipal = (JwtPrincipal) authentication.getPrincipal();
         Guild guild = MainBot.jda.getGuildById(guildId);
         return CacheTools.getJdaUser(jwtPrincipal.user()).getMutualGuilds().contains(guild);
+    }
+
+    public boolean canManageGuild(String guildId){
+        JwtPrincipal jwtPrincipal = (JwtPrincipal) authentication.getPrincipal();
+        Member member = MainBot.jda.getGuildById(guildId).getMemberById(jwtPrincipal.user().getDiscordId());
+        return member.hasPermission(
+                Permission.MANAGE_SERVER,
+                Permission.MANAGE_PERMISSIONS,
+                Permission.MANAGE_CHANNEL
+        );
     }
 
     @Override

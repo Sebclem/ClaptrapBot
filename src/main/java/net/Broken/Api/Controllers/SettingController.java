@@ -1,11 +1,10 @@
 package net.Broken.Api.Controllers;
 
 import net.Broken.Api.Data.Settings.SettingGroup;
+import net.Broken.Api.Data.Settings.Value;
 import net.Broken.Api.Services.SettingService;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,5 +21,11 @@ public class SettingController {
     @GetMapping("description")
     public List<SettingGroup> getSettingDescription(){
         return settingService.getSettingDescription();
+    }
+
+    @GetMapping("/{guildId}/values")
+    @PreAuthorize("isInGuild(#guildId) && canManageGuild(#guildId)")
+    public List<Value> getSettingValues(@PathVariable String guildId){
+        return settingService.getValues(guildId);
     }
 }
