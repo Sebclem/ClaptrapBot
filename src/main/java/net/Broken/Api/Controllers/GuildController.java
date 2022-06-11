@@ -40,14 +40,16 @@ public class GuildController {
 
     @GetMapping("/{guildId}/voiceChannels")
     @PreAuthorize("isInGuild(#guildId)")
-    public List<Channel> getVoiceChannels(@PathVariable String guildId){
-        return guildService.getVoiceChannel(guildId);
+    public List<Channel> getVoiceChannels(@PathVariable String guildId, Authentication authentication){
+        JwtPrincipal principal = (JwtPrincipal) authentication.getPrincipal();
+        return guildService.getVoiceChannel(guildId, principal.user().getDiscordId());
     }
 
     @GetMapping("/{guildId}/textChannels")
     @PreAuthorize("isInGuild(#guildId)")
-    public List<Channel> getTextChannels(@PathVariable String guildId){
-        return guildService.getTextChannel(guildId);
+    public List<Channel> getTextChannels(@PathVariable String guildId, Authentication authentication){
+        JwtPrincipal principal = (JwtPrincipal) authentication.getPrincipal();
+        return guildService.getTextChannel(guildId, principal.user().getDiscordId());
     }
 
     @GetMapping("/{guildId}/roles")

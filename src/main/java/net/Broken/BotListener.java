@@ -27,7 +27,7 @@ import org.springframework.context.ApplicationContext;
 
 import java.awt.*;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -213,15 +213,13 @@ public class BotListener extends ListenerAdapter {
     }
 
     private GuildPreferenceEntity getPreference(Guild guild) {
-        List<GuildPreferenceEntity> guildPrefList = guildPreferenceRepository.findByGuildId(guild.getId());
-        GuildPreferenceEntity guildPref;
-        if (guildPrefList.isEmpty()) {
+        Optional<GuildPreferenceEntity> guildPref = guildPreferenceRepository.findByGuildId(guild.getId());
+        if (guildPref.isEmpty()) {
             logger.info("[" + guild.getName() + "] : Generate default pref");
-            guildPref = GuildPreferenceEntity.getDefault(guild);
-            guildPref = guildPreferenceRepository.save(guildPref);
-        } else
-            guildPref = guildPrefList.get(0);
-        return guildPref;
+            return guildPreferenceRepository.save(GuildPreferenceEntity.getDefault(guild.getId()));
+        } else{
+            return guildPref.get();
+        }
     }
 
 

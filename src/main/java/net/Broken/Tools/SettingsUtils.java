@@ -38,113 +38,6 @@ public class SettingsUtils {
     }
 
     /**
-     * Extract all settings for displaying on webpage
-     *
-     * @param guild The guild
-     * @return All formatted settings
-     */
-    public ArrayList<GetSettingsData> extractSettings(Guild guild) {
-
-        ArrayList<GetSettingsData> list = new ArrayList<>();
-        List<GuildPreferenceEntity> guildPrefList = guildPreferenceRepository.findByGuildId(guild.getId());
-        GuildPreferenceEntity guildPref;
-        if (guildPrefList.isEmpty()) {
-            guildPref = GuildPreferenceEntity.getDefault(guild);
-            guildPreferenceRepository.save(guildPref);
-        } else
-            guildPref = guildPrefList.get(0);
-
-        list.add(new GetSettingsData(
-                "Enable Welcome Message",
-                null,
-                "welcome",
-                GetSettingsData.TYPE.BOOL,
-                null,
-                Boolean.toString(guildPref.isWelcome())
-        ));
-        list.add(new GetSettingsData(
-                "Welcome Message chanel",
-                null,
-                "welcome_chanel_id",
-                GetSettingsData.TYPE.LIST,
-                getTextChannels(guild),
-                guildPref.getWelcomeChanelID()
-        ));
-        list.add(new GetSettingsData(
-                "Welcome Message",
-                null,
-                "welcome_message",
-                GetSettingsData.TYPE.STRING,
-                null,
-                guildPref.getWelcomeMessage()
-        ));
-
-
-        list.add(new GetSettingsData(
-                "Enable Default Role",
-                null,
-                "default_role",
-                GetSettingsData.TYPE.BOOL,
-                null,
-                Boolean.toString(guildPref.isDefaultRole())
-        ));
-        list.add(new GetSettingsData(
-                "Default Role",
-                null,
-                "default_role_id",
-                GetSettingsData.TYPE.LIST,
-                getRoles(guild),
-                guildPref.getDefaultRoleId()
-        ));
-
-        list.add(new GetSettingsData(
-                "Enable Anti Spam",
-                null,
-                "anti_spam",
-                GetSettingsData.TYPE.BOOL,
-                null,
-                Boolean.toString(guildPref.isAntiSpam())
-        ));
-
-        list.add(new GetSettingsData(
-                "Enable Daily Madame Message",
-                null,
-                "daily_madame",
-                GetSettingsData.TYPE.BOOL,
-                null,
-                Boolean.toString(guildPref.isDailyMadame())
-        ));
-
-        list.add(new GetSettingsData(
-                "Enable Auto Create Voice Chanel",
-                null,
-                "auto_voice",
-                GetSettingsData.TYPE.BOOL,
-                null,
-                Boolean.toString(guildPref.isAutoVoice())
-        ));
-        list.add(new GetSettingsData(
-                "Base Voice Channel For Auto Create",
-                "If someone joint this channel, a new voice channel will be created with the same settings.",
-                "auto_voice_base_channel",
-                GetSettingsData.TYPE.LIST,
-                getVoiceChannels(guild, null),
-                guildPref.getAutoVoiceChannelID()
-        ));
-        list.add(new GetSettingsData(
-                "Auto Created Voice Channel title",
-                "Auto created voice channel will use this title, @count will be replaced by the channel count.",
-                "auto_voice_channel_title",
-                GetSettingsData.TYPE.STRING,
-                null,
-                guildPref.getAutoVoiceChannelTitle()
-        ));
-
-        return list;
-
-    }
-
-    /**
      * Check if the user have the permission to set settings
      *
      * @param token User token
@@ -171,87 +64,6 @@ public class SettingsUtils {
                 return false;
             }
         }
-    }
-
-
-    public boolean setSettings(Guild guild, List<PostSetSettings> settings) {
-        GuildPreferenceEntity pref = getPreference(guild);
-        for (PostSetSettings setting : settings) {
-            String value = setting.val;
-            logger.debug(setting.id + " : " + value);
-            switch (setting.id) {
-                case "anti_spam":
-                    boolean result_as = Boolean.parseBoolean(value);
-                    pref.setAntiSpam(result_as);
-                    break;
-
-                case "default_role":
-                    boolean result_df = Boolean.parseBoolean(value);
-                    pref.setDefaultRole(result_df);
-                    pref = guildPreferenceRepository.save(pref);
-                    break;
-
-                case "default_role_id":
-                    try {
-                        Role role = guild.getRoleById(value);
-                        if (role != null) {
-                            pref.setDefaultRoleId(role.getId());
-                            pref = guildPreferenceRepository.save(pref);
-                        } else
-                            throw new NumberFormatException();
-                    } catch (NumberFormatException e) {
-                        logger.error("default_role_id error. Key: " + setting.id + " Val: " + setting.val);
-                        return false;
-                    }
-                    break;
-
-                case "welcome":
-                    boolean result_w = Boolean.parseBoolean(value);
-                    pref.setWelcome(result_w);
-                    break;
-                case "welcome_chanel_id":
-                    try {
-                        TextChannel channel = guild.getTextChannelById(value);
-                        if (channel != null) {
-                            pref.setWelcomeChanelID(channel.getId());
-                        } else
-                            throw new NumberFormatException();
-                    } catch (NumberFormatException e) {
-                        logger.error("welcome_chanel_id error. Key: " + setting.id + " Val: " + setting.val);
-                        return false;
-                    }
-                    break;
-
-                case "welcome_message":
-                    pref.setWelcomeMessage(value);
-                    break;
-
-                case "daily_madame":
-                    boolean result_dm = Boolean.parseBoolean(value);
-                    pref.setDailyMadame(result_dm);
-                    break;
-
-                case "auto_voice":
-                    boolean result_av = Boolean.parseBoolean(value);
-                    pref.setAutoVoice(result_av);
-                    break;
-
-                case "auto_voice_base_channel":
-                    VoiceChannel channel = guild.getVoiceChannelById(value);
-                    if (channel == null) {
-                        logger.error("voices_channels error, bad ID.");
-                        return false;
-                    } else
-                        pref.setAutoVoiceChannelID(channel.getId());
-                    break;
-
-                case "auto_voice_channel_title":
-                    pref.setAutoVoiceChannelTitle(value);
-                    break;
-            }
-        }
-        guildPreferenceRepository.save(pref);
-        return true;
     }
 
 
@@ -298,14 +110,9 @@ public class SettingsUtils {
     }
 
     public GuildPreferenceEntity getPreference(Guild guild) {
-        List<GuildPreferenceEntity> guildPrefList = guildPreferenceRepository.findByGuildId(guild.getId());
-        GuildPreferenceEntity guildPref;
-        if (guildPrefList.isEmpty()) {
+        return guildPreferenceRepository.findByGuildId(guild.getId()).orElseGet(()->{
             logger.info("Generate default pref for " + guild.getName());
-            guildPref = GuildPreferenceEntity.getDefault(guild);
-            guildPreferenceRepository.save(guildPref);
-        } else
-            guildPref = guildPrefList.get(0);
-        return guildPref;
+            return guildPreferenceRepository.save(GuildPreferenceEntity.getDefault(guild.getId()));
+        });
     }
 }

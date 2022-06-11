@@ -6,6 +6,8 @@ import net.Broken.Api.Data.Guild.Role;
 import net.Broken.DB.Entity.UserEntity;
 import net.Broken.MainBot;
 import net.Broken.Tools.CacheTools;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 import org.springframework.stereotype.Service;
 
@@ -25,21 +27,26 @@ public class GuildService {
         return guildList;
     }
 
-    public List<Channel> getVoiceChannel(String guildId){
+    public List<Channel> getVoiceChannel(String guildId, String userId){
         net.dv8tion.jda.api.entities.Guild guild = MainBot.jda.getGuildById(guildId);
-
+        Member member = guild.getMemberById(userId);
         List<Channel> voiceChannels = new ArrayList<>();
         for(net.dv8tion.jda.api.entities.VoiceChannel voiceChannel : guild.getVoiceChannels()){
-            voiceChannels.add(new Channel(voiceChannel.getId(), voiceChannel.getName()));
+            if(member.hasPermission(voiceChannel, Permission.VIEW_CHANNEL)){
+                voiceChannels.add(new Channel(voiceChannel.getId(), voiceChannel.getName()));
+            }
         }
         return voiceChannels;
     }
 
-    public List<Channel> getTextChannel(String guildId){
+    public List<Channel> getTextChannel(String guildId, String userId){
         net.dv8tion.jda.api.entities.Guild guild = MainBot.jda.getGuildById(guildId);
+        Member member = guild.getMemberById(userId);
         List<Channel> voiceChannels = new ArrayList<>();
         for(net.dv8tion.jda.api.entities.TextChannel textChannel : guild.getTextChannels()){
-            voiceChannels.add(new Channel(textChannel.getId(), textChannel.getName()));
+            if(member.hasPermission(textChannel, Permission.VIEW_CHANNEL)) {
+                voiceChannels.add(new Channel(textChannel.getId(), textChannel.getName()));
+            }
         }
         return voiceChannels;
     }
