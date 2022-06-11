@@ -16,46 +16,51 @@ import java.util.List;
 
 @Service
 public class GuildService {
-    public List<Guild> getMutualGuilds(UserEntity user){
+    public List<Guild> getMutualGuilds(UserEntity user) {
         User discordUser = CacheTools.getJdaUser(user);
         List<net.dv8tion.jda.api.entities.Guild> mutualGuilds = discordUser.getMutualGuilds();
         List<Guild> guildList = new ArrayList<>();
 
-        for (net.dv8tion.jda.api.entities.Guild guild : mutualGuilds){
-            guildList.add(new Guild(guild.getId(), guild.getName(), guild.getIconUrl()));
+        for (net.dv8tion.jda.api.entities.Guild guild : mutualGuilds) {
+            boolean canManage = guild.getMember(discordUser).hasPermission(
+                    Permission.MANAGE_SERVER,
+                    Permission.MANAGE_PERMISSIONS,
+                    Permission.MANAGE_CHANNEL
+            );
+            guildList.add(new Guild(guild.getId(), guild.getName(), guild.getIconUrl(), canManage));
         }
         return guildList;
     }
 
-    public List<Channel> getVoiceChannel(String guildId, String userId){
+    public List<Channel> getVoiceChannel(String guildId, String userId) {
         net.dv8tion.jda.api.entities.Guild guild = MainBot.jda.getGuildById(guildId);
         Member member = guild.getMemberById(userId);
         List<Channel> voiceChannels = new ArrayList<>();
-        for(net.dv8tion.jda.api.entities.VoiceChannel voiceChannel : guild.getVoiceChannels()){
-            if(member.hasPermission(voiceChannel, Permission.VIEW_CHANNEL)){
+        for (net.dv8tion.jda.api.entities.VoiceChannel voiceChannel : guild.getVoiceChannels()) {
+            if (member.hasPermission(voiceChannel, Permission.VIEW_CHANNEL)) {
                 voiceChannels.add(new Channel(voiceChannel.getId(), voiceChannel.getName()));
             }
         }
         return voiceChannels;
     }
 
-    public List<Channel> getTextChannel(String guildId, String userId){
+    public List<Channel> getTextChannel(String guildId, String userId) {
         net.dv8tion.jda.api.entities.Guild guild = MainBot.jda.getGuildById(guildId);
         Member member = guild.getMemberById(userId);
         List<Channel> voiceChannels = new ArrayList<>();
-        for(net.dv8tion.jda.api.entities.TextChannel textChannel : guild.getTextChannels()){
-            if(member.hasPermission(textChannel, Permission.VIEW_CHANNEL)) {
+        for (net.dv8tion.jda.api.entities.TextChannel textChannel : guild.getTextChannels()) {
+            if (member.hasPermission(textChannel, Permission.VIEW_CHANNEL)) {
                 voiceChannels.add(new Channel(textChannel.getId(), textChannel.getName()));
             }
         }
         return voiceChannels;
     }
 
-    public List<Role> getRole(String guildId){
+    public List<Role> getRole(String guildId) {
         net.dv8tion.jda.api.entities.Guild guild = MainBot.jda.getGuildById(guildId);
         List<Role> roles = new ArrayList<>();
-        for(net.dv8tion.jda.api.entities.Role role : guild.getRoles()){
-            if(!role.isManaged()){
+        for (net.dv8tion.jda.api.entities.Role role : guild.getRoles()) {
+            if (!role.isManaged()) {
                 roles.add(new Role(role.getId(), role.getName()));
             }
         }
