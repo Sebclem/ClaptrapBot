@@ -193,6 +193,9 @@ public class BotListener extends ListenerAdapter {
         logger.info("Join new guild! (" + event.getGuild().getName() + " " + event.getGuild().getMembers().size() + " Members)");
         super.onGuildJoin(event);
         getPreference(event.getGuild());
+        event.getGuild().loadMembers().onSuccess((members -> {
+            logger.debug("[" + event.getGuild().getName() + "] Members loaded");
+        }));
         EmbedBuilder eb = new EmbedBuilder().setColor(Color.GREEN)
                 .setTitle("Hello there !")
                 .setDescription("Allow me to introduce myself -- I am a CL4P-TP the discord bot, but my friends call me Claptrap ! Or they would, if any of them were real...\n" +
@@ -207,6 +210,7 @@ public class BotListener extends ListenerAdapter {
             for (TextChannel chan : event.getGuild().getTextChannels()) {
                 if (chan.canTalk()) {
                     chan.sendMessage(message).queue();
+                    break;
                 }
             }
         }

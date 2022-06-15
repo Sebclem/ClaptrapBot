@@ -17,7 +17,7 @@ import java.util.List;
 @Service
 public class GuildService {
     public List<Guild> getMutualGuilds(UserEntity user) {
-        User discordUser = CacheTools.getJdaUser(user);
+        User discordUser = MainBot.jda.retrieveUserById(user.getDiscordId()).complete();
         List<net.dv8tion.jda.api.entities.Guild> mutualGuilds = discordUser.getMutualGuilds();
         List<Guild> guildList = new ArrayList<>();
 
