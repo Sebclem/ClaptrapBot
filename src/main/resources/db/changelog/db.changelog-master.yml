@@ -716,3 +716,20 @@ databaseChangeLog:
         columnName: welcome_message
         tableName: guild_preference_entity
 
+# 12/06/2022
+- changeSet:
+    id: 1655026344809-1
+    author: seb65 (generated)
+    changes:
+    - addUniqueConstraint:
+          columnNames: guild_id
+          constraintName: UC_GUILD_PREFERENCE_ENTITYGUILD_ID_COL
+          tableName: guild_preference_entity
+- changeSet:
+    id: 1655026344809-2
+    author: seb65 (generated)
+    changes:
+    - dropColumn:
+          columnName: anti_spam
+          tableName: guild_preference_entity
+

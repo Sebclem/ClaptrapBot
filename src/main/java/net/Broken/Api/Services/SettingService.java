@@ -103,7 +103,7 @@ public class SettingService {
         SettingDescriber mainField = new SettingDescriber(
                 "auto_voice",
                 "Enable Auto Create Voice Chanel",
-                "Auto create voice channel on join.",
+                 null,
                 SettingDescriber.TYPE.BOOL
         );
 
@@ -118,7 +118,7 @@ public class SettingService {
                 "auto_voice_channel_title",
                 "Auto Created Voice Channel title",
                 "Auto created voice channel will use this title, @count will be replaced by the channel count.",
-                SettingDescriber.TYPE.VOICE_CHANNEL
+                SettingDescriber.TYPE.STRING
         ));
 
         return new SettingGroup(
