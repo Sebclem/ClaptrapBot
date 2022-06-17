@@ -1,6 +1,8 @@
 package net.Broken;
 
+import net.Broken.DB.Entity.GuildPreferenceEntity;
 import net.Broken.DB.Entity.UserEntity;
+import net.Broken.DB.Repository.GuildPreferenceRepository;
 import net.Broken.DB.Repository.UserRepository;
 import net.Broken.RestApi.ApiCommandLoader;
 import net.Broken.Tools.Command.SlashCommandLoader;
@@ -17,6 +19,7 @@ import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.context.ApplicationContext;
+import org.thymeleaf.spring5.processor.SpringOptionFieldTagProcessor;
 
 import javax.security.auth.login.LoginException;
 import java.util.List;
@@ -82,11 +85,46 @@ public class Init {
         List<UserEntity> users = (List<UserEntity>) userRepository.findAll();
         UserStatsUtils userStatsUtils = UserStatsUtils.getINSTANCE();
         logger.debug("Stats...");
+
 //        for (UserEntity userEntity : users) {
 //            logger.debug("..." + userEntity.getName());
 //            userStatsUtils.getUserStats(userEntity);
 //
 //        }
+
+        logger.debug("Guild Prefs...");
+        GuildPreferenceRepository guildPreference = context.getBean(GuildPreferenceRepository.class);
+        for(GuildPreferenceEntity pref :guildPreference.findAll()){
+            boolean save = false;
+            if(pref.getWelcomeMessage() != null && pref.getWelcomeMessage().equals(" ")){
+                pref.setWelcomeMessage(null);
+                save = true;
+            }
+            if(pref.getWelcomeChanelID() != null && pref.getWelcomeChanelID().equals(" ")){
+                pref.setWelcomeChanelID(null);
+                save = true;
+            }
+            if(pref.getWelcomeChanelID() != null && pref.getWelcomeChanelID().equals(" ")){
+                pref.setWelcomeChanelID(null);
+                save = true;
+            }
+            if(pref.getDefaultRoleId() != null && pref.getDefaultRoleId().equals(" ")){
+                pref.setDefaultRoleId(null);
+                save = true;
+            }
+            if(pref.getAutoVoiceChannelID() != null && pref.getAutoVoiceChannelID().equals(" ")){
+                pref.setAutoVoiceChannelID(null);
+                save = true;
+            }
+            if(pref.getAutoVoiceChannelTitle() != null && pref.getAutoVoiceChannelTitle().equals(" ")){
+                pref.setAutoVoiceChannelTitle(null);
+                save = true;
+            }
+
+            if(save){
+                guildPreference.save(pref);
+            }
+        }
 
 
     }

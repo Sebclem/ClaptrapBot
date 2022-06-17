@@ -60,7 +60,7 @@ public class GuildPreferenceEntity {
 
 
     public static GuildPreferenceEntity getDefault(String guildId) {
-        return new GuildPreferenceEntity(guildId, false, "Welcome to this awesome server @name! ", " ", false, " ", true, false, " ", " ");
+        return new GuildPreferenceEntity(guildId, false, "Welcome to this awesome server @name! ", null, false, null, true, false, null, null);
     }
 
     public Integer getId() {
