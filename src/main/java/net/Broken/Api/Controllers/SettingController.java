@@ -3,6 +3,8 @@ package net.Broken.Api.Controllers;
 import net.Broken.Api.Data.Settings.SettingGroup;
 import net.Broken.Api.Data.Settings.Value;
 import net.Broken.Api.Services.SettingService;
+import net.Broken.DB.Entity.GuildPreferenceEntity;
+import net.Broken.Tools.Settings.SettingValueBuilder;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,5 +29,12 @@ public class SettingController {
     @PreAuthorize("isInGuild(#guildId) && canManageGuild(#guildId)")
     public List<Value> getSettingValues(@PathVariable String guildId){
         return settingService.getValues(guildId);
+    }
+
+    @PostMapping("/{guildId}/values")
+    @PreAuthorize("isInGuild(#guildId) && canManageGuild(#guildId)")
+    public List<Value> getSettingValues(@PathVariable String guildId, @RequestBody List<Value> values){
+        GuildPreferenceEntity pref = settingService.saveValue(guildId, values);
+        return new SettingValueBuilder(pref).build();
     }
 }
