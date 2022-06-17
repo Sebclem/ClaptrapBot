@@ -28,8 +28,8 @@ public class SettingService {
         List<SettingGroup> toReturn = new ArrayList<>();
         toReturn.add(getWelcomeGroup());
         toReturn.add(getDefaultRoleGroup());
-        toReturn.add(getDailyGroup());
         toReturn.add(getAutoVoiceChannelGroup());
+        toReturn.add(getDailyGroup());
         return toReturn;
     }
 
@@ -145,7 +145,7 @@ public class SettingService {
         List<Value> toReturn = new ArrayList<>();
         toReturn.add(new Value(
                         "welcome_enable",
-                        String.valueOf(pref.isWelcome())
+                        pref.isWelcome()
                 )
         );
         toReturn.add(new Value(
@@ -164,7 +164,7 @@ public class SettingService {
         List<Value> toReturn = new ArrayList<>();
         toReturn.add(new Value(
                         "default_role",
-                        String.valueOf(pref.isDefaultRole())
+                        pref.isDefaultRole()
                 )
         );
         toReturn.add(new Value(
@@ -178,7 +178,7 @@ public class SettingService {
         List<Value> toReturn = new ArrayList<>();
         toReturn.add(new Value(
                         "daily_madame",
-                        String.valueOf(pref.isDefaultRole())
+                        pref.isDailyMadame()
                 )
         );
         return toReturn;
@@ -188,7 +188,7 @@ public class SettingService {
         List<Value> toReturn = new ArrayList<>();
         toReturn.add(new Value(
                         "auto_voice",
-                        String.valueOf(pref.isAutoVoice())
+                        pref.isAutoVoice()
                 )
         );
         toReturn.add(new Value(
