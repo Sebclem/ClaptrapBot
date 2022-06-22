@@ -28,15 +28,18 @@ public class AudioService {
 //                  -> He can view the voice channel
 //                  -> OR He can *not* view the voice channel, but he is connected to this voice channel
                 boolean canView = member.hasPermission(channel, Permission.VIEW_CHANNEL)
-                        || (member.getVoiceState() != null && member.getVoiceState().getChannel() == channel);
+                        || (member.getVoiceState() != null
+                        && member.getVoiceState().getChannel() == channel);
                 if (canView) {
 //                  The user can interact with the audio if:
 //                      -> He can connect to this voice channel
+//                          -> OR he is connected to this voice channel
 //                      -> AND He can speak in this voice channel
-//                      -> AND He is connected to this voice channel
-                    boolean canInteract = member.hasPermission(channel, Permission.VOICE_CONNECT, Permission.VOICE_SPEAK)
-                            && member.getVoiceState() != null
-                            && member.getVoiceState().getChannel() == channel;
+                    boolean canInteract = (member.hasPermission(channel, Permission.VOICE_CONNECT)
+                            || member.getVoiceState() != null
+                            || member.getVoiceState().getChannel() == channel)
+                            && member.hasPermission(channel, Permission.VOICE_SPEAK);
+                    
                     AudioM audioM = AudioM.getInstance(guild);
                     boolean stopped = audioM.getGuildAudioPlayer().player.getPlayingTrack() == null;
                     PlayBackInfo playBackInfo;
