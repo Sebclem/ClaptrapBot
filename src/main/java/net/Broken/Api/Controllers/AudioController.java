@@ -1,8 +1,10 @@
 package net.Broken.Api.Controllers;
 
+import net.Broken.Api.Data.Music.Connect;
 import net.Broken.Api.Data.Music.Status;
 import net.Broken.Api.Security.Data.JwtPrincipal;
 import net.Broken.Api.Services.AudioService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -24,5 +26,12 @@ public class AudioController {
     public Status getMusicStatus(@PathVariable String guildId, Authentication authentication){
         JwtPrincipal principal = (JwtPrincipal) authentication.getPrincipal();
         return audioService.getGuildAudioStatus(guildId, principal.user().getDiscordId());
+    }
+
+
+    @PostMapping("/{guildId}/connect")
+    @PreAuthorize("isInGuild(#guildId) && canInteractWithVoiceChannel(#guildId, #body)")
+    public ResponseEntity<String> connect(@PathVariable String guildId, @RequestBody Connect body){
+        return audioService.connect(guildId, body);
     }
 }

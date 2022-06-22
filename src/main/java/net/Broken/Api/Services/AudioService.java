@@ -1,6 +1,7 @@
 package net.Broken.Api.Services;
 
 import net.Broken.Api.Data.Guild.Channel;
+import net.Broken.Api.Data.Music.Connect;
 import net.Broken.Api.Data.Music.PlayBackInfo;
 import net.Broken.Api.Data.Music.Status;
 import net.Broken.Api.Data.Music.TrackInfo;
@@ -12,6 +13,8 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.VoiceChannel;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -37,9 +40,9 @@ public class AudioService {
 //                      -> AND He can speak in this voice channel
                     boolean canInteract = (member.hasPermission(channel, Permission.VOICE_CONNECT)
                             || member.getVoiceState() != null
-                            || member.getVoiceState().getChannel() == channel)
+                            && member.getVoiceState().getChannel() == channel)
                             && member.hasPermission(channel, Permission.VOICE_SPEAK);
-                    
+
                     AudioM audioM = AudioM.getInstance(guild);
                     boolean stopped = audioM.getGuildAudioPlayer().player.getPlayingTrack() == null;
                     PlayBackInfo playBackInfo;
@@ -64,5 +67,15 @@ public class AudioService {
             }
         }
         return new Status(false, null, null, null, null);
+    }
+    
+    public ResponseEntity<String> connect(String guildId, Connect body){
+        Guild guild = MainBot.jda.getGuildById(guildId);
+        AudioM audioM = AudioM.getInstance(guild);
+        VoiceChannel voiceChannel = guild.getVoiceChannelById(body.channelId());
+        audioM.getGuildAudioPlayer();
+        guild.getAudioManager().openAudioConnection(voiceChannel);
+        audioM.setPlayedChanel(voiceChannel);
+        return new ResponseEntity<>("OK", HttpStatus.OK);
     }
 }

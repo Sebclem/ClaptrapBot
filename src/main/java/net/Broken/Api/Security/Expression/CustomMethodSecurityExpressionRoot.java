@@ -1,11 +1,13 @@
 package net.Broken.Api.Security.Expression;
 
+import net.Broken.Api.Data.Music.Connect;
 import net.Broken.Api.Security.Data.JwtPrincipal;
 import net.Broken.MainBot;
 import net.Broken.Tools.CacheTools;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.VoiceChannel;
 import okhttp3.Cache;
 import org.springframework.security.access.expression.SecurityExpressionRoot;
 import org.springframework.security.access.expression.method.MethodSecurityExpressionOperations;
@@ -39,6 +41,21 @@ public class CustomMethodSecurityExpressionRoot
                 Permission.MANAGE_PERMISSIONS,
                 Permission.MANAGE_CHANNEL
         );
+    }
+
+    public boolean canInteractWithVoiceChannel(String guildId, Connect connectPayload){
+        JwtPrincipal jwtPrincipal = (JwtPrincipal) authentication.getPrincipal();
+        Guild guild = MainBot.jda.getGuildById(guildId);
+        Member member = guild.getMemberById(jwtPrincipal.user().getDiscordId());
+        VoiceChannel channel = guild.getVoiceChannelById(connectPayload.channelId());
+        if( channel == null){
+            return false;
+        }
+
+       return  (member.hasPermission(channel, Permission.VOICE_CONNECT)
+                || member.getVoiceState() != null
+                && member.getVoiceState().getChannel() == channel)
+                && member.hasPermission(channel, Permission.VOICE_SPEAK);
     }
 
     @Override
