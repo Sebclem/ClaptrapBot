@@ -5,7 +5,7 @@ import net.Broken.Api.Data.Music.Connect;
 import net.Broken.Api.Data.Music.PlayBackInfo;
 import net.Broken.Api.Data.Music.Status;
 import net.Broken.Api.Data.Music.TrackInfo;
-import net.Broken.Audio.GuildAudioWrapper;
+import net.Broken.Audio.GuildAudioBotService;
 import net.Broken.Audio.UserAudioTrack;
 import net.Broken.MainBot;
 import net.dv8tion.jda.api.Permission;
@@ -38,7 +38,7 @@ public class AudioService {
             boolean canView = member.hasPermission(channel, Permission.VIEW_CHANNEL)
                     || (member.getVoiceState() != null
                     && member.getVoiceState().getChannel() == channel);
-            GuildAudioWrapper guildAudioWrapper = GuildAudioWrapper.getInstance(guild);
+            GuildAudioBotService guildAudioBotService = GuildAudioBotService.getInstance(guild);
 
             if (canView) {
 //                  The user can interact with the audio if:
@@ -51,12 +51,12 @@ public class AudioService {
                         && member.hasPermission(channel, Permission.VOICE_SPEAK);
 
 
-                boolean stopped = guildAudioWrapper.getGuidAudioManager().player.getPlayingTrack() == null;
+                boolean stopped = guildAudioBotService.getGuidAudioManager().player.getPlayingTrack() == null;
                 PlayBackInfo playBackInfo;
                 if (!stopped) {
-                    boolean paused = guildAudioWrapper.getGuidAudioManager().player.isPaused();
-                    long position = guildAudioWrapper.getGuidAudioManager().player.getPlayingTrack().getPosition();
-                    UserAudioTrack userAudioTrack = guildAudioWrapper.getGuidAudioManager().scheduler.getCurrentPlayingTrack();
+                    boolean paused = guildAudioBotService.getGuidAudioManager().player.isPaused();
+                    long position = guildAudioBotService.getGuidAudioManager().player.getPlayingTrack().getPosition();
+                    UserAudioTrack userAudioTrack = guildAudioBotService.getGuidAudioManager().scheduler.getCurrentPlayingTrack();
 
                     playBackInfo = new PlayBackInfo(paused, false, position, new TrackInfo(userAudioTrack));
 
@@ -75,18 +75,45 @@ public class AudioService {
 
     public ResponseEntity<Status> connect(String guildId, Connect body, String userId) {
         Guild guild = MainBot.jda.getGuildById(guildId);
-        GuildAudioWrapper guildAudioWrapper = GuildAudioWrapper.getInstance(guild);
         VoiceChannel voiceChannel = guild.getVoiceChannelById(body.channelId());
-        guildAudioWrapper.getGuidAudioManager();
-        guild.getAudioManager().openAudioConnection(voiceChannel);
+        GuildAudioBotService.getInstance(guild).connect(voiceChannel);
         Status status = getGuildAudioStatus(guildId, userId);
         return new ResponseEntity<>(status, HttpStatus.OK);
     }
 
     public ResponseEntity<Status> disconnect(String guildId, String userId) {
         Guild guild = MainBot.jda.getGuildById(guildId);
-        GuildAudioWrapper guildAudioWrapper = GuildAudioWrapper.getInstance(guild);
-        guildAudioWrapper.disconnect();
+        GuildAudioBotService guildAudioBotService = GuildAudioBotService.getInstance(guild);
+        guildAudioBotService.disconnect();
+        Status status = getGuildAudioStatus(guildId, userId);
+        return new ResponseEntity<>(status, HttpStatus.OK);
+    }
+
+
+    public ResponseEntity<Status> pause(String guildId, String userId){
+        Guild guild = MainBot.jda.getGuildById(guildId);
+        GuildAudioBotService.getInstance(guild).pause();
+        Status status = getGuildAudioStatus(guildId, userId);
+        return new ResponseEntity<>(status, HttpStatus.OK);
+    }
+
+    public ResponseEntity<Status> resume(String guildId, String userId){
+        Guild guild = MainBot.jda.getGuildById(guildId);
+        GuildAudioBotService.getInstance(guild).resume();
+        Status status = getGuildAudioStatus(guildId, userId);
+        return new ResponseEntity<>(status, HttpStatus.OK);
+    }
+
+    public ResponseEntity<Status> skip(String guildId, String userId){
+        Guild guild = MainBot.jda.getGuildById(guildId);
+        GuildAudioBotService.getInstance(guild).skipTrack();
+        Status status = getGuildAudioStatus(guildId, userId);
+        return new ResponseEntity<>(status, HttpStatus.OK);
+    }
+
+    public ResponseEntity<Status> stop(String guildId, String userId){
+        Guild guild = MainBot.jda.getGuildById(guildId);
+        GuildAudioBotService.getInstance(guild).stop();
         Status status = getGuildAudioStatus(guildId, userId);
         return new ResponseEntity<>(status, HttpStatus.OK);
     }

@@ -26,9 +26,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-public class GuildAudioWrapper {
+public class GuildAudioBotService {
 
-    private static final HashMap<Guild, GuildAudioWrapper> INSTANCES = new HashMap<>();
+    private static final HashMap<Guild, GuildAudioBotService> INSTANCES = new HashMap<>();
 
     private final GuildAudioManager guildAudioManager;
 
@@ -44,7 +44,7 @@ public class GuildAudioWrapper {
 
     private Message lastMessageWithButton;
 
-    private GuildAudioWrapper(Guild guild) {
+    private GuildAudioBotService(Guild guild) {
         this.audioPlayerManager = new DefaultAudioPlayerManager();
         AudioSourceManagers.registerRemoteSources(audioPlayerManager);
         AudioSourceManagers.registerLocalSource(audioPlayerManager);
@@ -53,9 +53,9 @@ public class GuildAudioWrapper {
         this.guild = guild;
     }
 
-    public static GuildAudioWrapper getInstance(Guild guild) {
+    public static GuildAudioBotService getInstance(Guild guild) {
         if (!INSTANCES.containsKey(guild)) {
-            INSTANCES.put(guild, new GuildAudioWrapper(guild));
+            INSTANCES.put(guild, new GuildAudioBotService(guild));
         }
         return INSTANCES.get(guild);
     }
@@ -63,16 +63,13 @@ public class GuildAudioWrapper {
     /**
      * Load audio track from url, connect to chanel if not connected
      *
-     * @param event
      * @param voiceChannel  Voice channel to connect if no connected
      * @param trackUrl      Audio track url
      * @param playlistLimit Limit of playlist
      * @param onHead        True for adding audio track on top of playlist
      */
     public void loadAndPlay(SlashCommandEvent event, VoiceChannel voiceChannel, final String trackUrl, int playlistLimit, boolean onHead) {
-        GuildAudioManager guidAudioManager = getGuidAudioManager();
-
-        audioPlayerManager.loadItemOrdered(guidAudioManager, trackUrl, new AudioLoadResultHandler() {
+        audioPlayerManager.loadItemOrdered(guildAudioManager, trackUrl, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack track) {
                 logger.info("[" + guild + "] Single Track detected!");
@@ -82,7 +79,7 @@ public class GuildAudioWrapper {
                         .build();
                 clearLastButton();
                 lastMessageWithButton = event.getHook().sendMessage(message).addActionRow(getActionButton()).complete();
-                play(guild, voiceChannel, guidAudioManager, uat, onHead);
+                play(guild, voiceChannel, guildAudioManager, uat, onHead);
             }
 
             @Override
@@ -173,8 +170,6 @@ public class GuildAudioWrapper {
     }
 
 
-
-
     /**
      * Add single track to playlist, auto-connect if not connected to vocal chanel
      *
@@ -193,32 +188,21 @@ public class GuildAudioWrapper {
             musicManager.scheduler.addNext(track);
     }
 
-    /**
-     * Skip current track
-     *
-     * @param event
-     */
-    public void skipTrack(GenericInteractionCreateEvent event) {
-        GuildAudioManager musicManager = getGuidAudioManager();
-        musicManager.scheduler.nextTrack();
-        Message message = new MessageBuilder().setEmbeds(
-                EmbedMessageUtils.buildStandar(
-                        new EmbedBuilder()
-                                .setTitle(":track_next:  Next Track")
-                                .setColor(Color.green)
-                )).build();
-        clearLastButton();
-        lastMessageWithButton = event.getHook().sendMessage(message).addActionRow(getActionButton()).complete();
+    public void add(SlashCommandEvent event, String url, int playListLimit, boolean onHead) {
+        if (guild.getAudioManager().isConnected()) {
+            loadAndPlay(event, guild.getAudioManager().getConnectedChannel(), url, playListLimit, onHead);
+        } else {
+            Message message = new MessageBuilder().setEmbeds(EmbedMessageUtils.getMusicError("Not connected to vocal chanel !")).build();
+            event.getHook().setEphemeral(true).sendMessage(message).queue();
+        }
     }
 
-    /**
-     * Pause current track
-     *
-     * @param event
-     */
+    public void connect(VoiceChannel voiceChannel) {
+        guild.getAudioManager().openAudioConnection(voiceChannel);
+    }
+
     public void pause(GenericInteractionCreateEvent event) {
-        GuildAudioManager musicManager = getGuidAudioManager();
-        musicManager.scheduler.pause();
+        pause();
         Message message = new MessageBuilder().setEmbeds(
                 EmbedMessageUtils.buildStandar(
                         new EmbedBuilder()
@@ -227,19 +211,15 @@ public class GuildAudioWrapper {
                 )).build();
         clearLastButton();
         lastMessageWithButton = event.getHook().sendMessage(message).addActionRow(getActionButton()).complete();
-
-
     }
 
-    /**
-     * Resume paused track
-     *
-     * @param event
-     */
+    public void pause() {
+        guildAudioManager.scheduler.pause();
+    }
+
     public void resume(GenericInteractionCreateEvent event) {
-        GuildAudioManager musicManager = getGuidAudioManager();
         Message message;
-        if (musicManager.player.getPlayingTrack() == null) {
+        if (guildAudioManager.player.getPlayingTrack() == null) {
             message = new MessageBuilder().setEmbeds(
                     EmbedMessageUtils.buildStandar(
                             new EmbedBuilder()
@@ -247,7 +227,7 @@ public class GuildAudioWrapper {
                                     .setColor(Color.green)
                     )).build();
         } else {
-            musicManager.scheduler.resume();
+            resume();
             message = new MessageBuilder().setEmbeds(
                     EmbedMessageUtils.buildStandar(
                             new EmbedBuilder()
@@ -259,23 +239,73 @@ public class GuildAudioWrapper {
         lastMessageWithButton = event.getHook().sendMessage(message).addActionRow(getActionButton()).complete();
     }
 
-    /**
-     * Print current played track info
-     *
-     * @param event
-     */
+    public void resume() {
+        guildAudioManager.scheduler.resume();
+    }
+
+    public void skipTrack(GenericInteractionCreateEvent event) {
+        skipTrack();
+        Message message = new MessageBuilder().setEmbeds(
+                EmbedMessageUtils.buildStandar(
+                        new EmbedBuilder()
+                                .setTitle(":track_next:  Next Track")
+                                .setColor(Color.green)
+                )).build();
+        clearLastButton();
+        lastMessageWithButton = event.getHook().sendMessage(message).addActionRow(getActionButton()).complete();
+    }
+
+    public void skipTrack() {
+        guildAudioManager.scheduler.nextTrack();
+    }
+
+    public void stop(GenericInteractionCreateEvent event) {
+        stop();
+        Message message = new MessageBuilder().setEmbeds(
+                EmbedMessageUtils.buildStandar(
+                        new EmbedBuilder()
+                                .setTitle(":stop_button:  Playback stopped")
+                                .setColor(Color.green)
+                )).build();
+        clearLastButton();
+        lastMessageWithButton = event.getHook().sendMessage(message).addActionRow(getActionButton()).complete();
+
+    }
+
+    public void stop() {
+        guildAudioManager.scheduler.stop();
+        guildAudioManager.scheduler.flush();
+        clearLastButton();
+    }
+
+    public void disconnect(GenericInteractionCreateEvent event) {
+        disconnect();
+        Message message = new MessageBuilder().setEmbeds(
+                EmbedMessageUtils.buildStandar(
+                        new EmbedBuilder()
+                                .setTitle(":eject:  Disconnected")
+                                .setColor(Color.green)
+                )).build();
+        clearLastButton();
+        event.getHook().sendMessage(message).queue();
+    }
+
+    public void disconnect() {
+        guildAudioManager.scheduler.stop();
+        guildAudioManager.scheduler.flush();
+        guild.getAudioManager().closeAudioConnection();
+        clearLastButton();
+    }
     public void info(GenericInteractionCreateEvent event) {
-        GuildAudioManager musicManager = getGuidAudioManager();
-        AudioTrackInfo info = musicManager.scheduler.getInfo();
-        UserAudioTrack userAudioTrack = musicManager.scheduler.getCurrentPlayingTrack();
+        AudioTrackInfo info = guildAudioManager.scheduler.getInfo();
+        UserAudioTrack userAudioTrack = guildAudioManager.scheduler.getCurrentPlayingTrack();
         Message message = new MessageBuilder().setEmbeds(EmbedMessageUtils.getMusicInfo(info, userAudioTrack)).build();
         clearLastButton();
         lastMessageWithButton = event.getHook().sendMessage(message).addActionRow(getActionButton()).complete();
     }
 
     public void flush(GenericInteractionCreateEvent event) {
-        GuildAudioManager musicManager = getGuidAudioManager();
-        musicManager.scheduler.flush();
+        guildAudioManager.scheduler.flush();
         Message message = new MessageBuilder().setEmbeds(
                 EmbedMessageUtils.buildStandar(
                         new EmbedBuilder()
@@ -292,8 +322,7 @@ public class GuildAudioWrapper {
      * @param event
      */
     public void list(GenericInteractionCreateEvent event) {
-        GuildAudioManager musicManager = getGuidAudioManager();
-        List<UserAudioTrack> list = musicManager.scheduler.getList();
+        List<UserAudioTrack> list = guildAudioManager.scheduler.getList();
 
         if (list.size() == 0) {
             Message message = new MessageBuilder().setEmbeds(
@@ -333,83 +362,13 @@ public class GuildAudioWrapper {
 
     }
 
-    /**
-     * Called by //add, only if already connected
-     *
-     * @param event
-     * @param url           Audio track url
-     * @param playListLimit Limit of playlist
-     * @param onHead        True for adding audio track on top of playlist
-     */
-    public void add(SlashCommandEvent event, String url, int playListLimit, boolean onHead) {
-        if (guild.getAudioManager().isConnected()) {
-            loadAndPlay(event, guild.getAudioManager().getConnectedChannel(), url, playListLimit, onHead);
-        } else {
-            Message message = new MessageBuilder().setEmbeds(EmbedMessageUtils.getMusicError("Not connected to vocal chanel !")).build();
-            event.getHook().setEphemeral(true).sendMessage(message).queue();
-        }
-    }
-
-    /**
-     * Stop current playing track and flush playlist
-     *
-     * @param event
-     */
-    public void stop(GenericInteractionCreateEvent event) {
-        guildAudioManager.scheduler.stop();
-        guildAudioManager.scheduler.flush();
-
-        if (event != null) {
-            Message message = new MessageBuilder().setEmbeds(
-                    EmbedMessageUtils.buildStandar(
-                            new EmbedBuilder()
-                                    .setTitle(":stop_button:  Playback stopped")
-                                    .setColor(Color.green)
-                    )).build();
-            clearLastButton();
-            lastMessageWithButton = event.getHook().sendMessage(message).addActionRow(getActionButton()).complete();
-        }
-    }
-
-    public void stop() {
-
-        GuildAudioManager musicManager = getGuidAudioManager();
-        musicManager.scheduler.stop();
-        musicManager.scheduler.flush();
-        clearLastButton();
-    }
-
-    public void disconnect(GenericInteractionCreateEvent event) {
-        disconnect();
-        Message message = new MessageBuilder().setEmbeds(
-                EmbedMessageUtils.buildStandar(
-                        new EmbedBuilder()
-                                .setTitle(":eject:  Disconnected")
-                                .setColor(Color.green)
-                )).build();
-        clearLastButton();
-        event.getHook().sendMessage(message).queue();
-    }
-
-    public void disconnect() {
-        GuildAudioManager musicManager = getGuidAudioManager();
-        musicManager.scheduler.stop();
-        musicManager.scheduler.flush();
-        guild.getAudioManager().closeAudioConnection();
-        clearLastButton();
-    }
-
     public Guild getGuild() {
         return guild;
     }
 
-    public AudioPlayerManager getAudioPlayerManager() {
-        return audioPlayerManager;
-    }
     public GuildAudioManager getGuidAudioManager() {
         return guildAudioManager;
     }
-
 
 
     public void clearLastButton() {

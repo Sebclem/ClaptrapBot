@@ -2,7 +2,7 @@ package net.Broken.Api.Security.Expression;
 
 import net.Broken.Api.Data.Music.Connect;
 import net.Broken.Api.Security.Data.JwtPrincipal;
-import net.Broken.Audio.GuildAudioWrapper;
+import net.Broken.Audio.GuildAudioBotService;
 import net.Broken.MainBot;
 import net.Broken.Tools.CacheTools;
 import net.dv8tion.jda.api.Permission;
@@ -61,7 +61,7 @@ public class CustomMethodSecurityExpressionRoot
     public boolean canInteractWithVoiceChannel(String guildId) {
         JwtPrincipal jwtPrincipal = (JwtPrincipal) authentication.getPrincipal();
         Guild guild = MainBot.jda.getGuildById(guildId);
-        GuildAudioWrapper guildAudioWrapper = GuildAudioWrapper.getInstance(guild);
+        GuildAudioBotService guildAudioBotService = GuildAudioBotService.getInstance(guild);
         VoiceChannel channel = guild.getAudioManager().getConnectedChannel();
 
         if (channel == null) {

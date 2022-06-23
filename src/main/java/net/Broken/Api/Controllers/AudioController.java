@@ -42,4 +42,32 @@ public class AudioController {
         JwtPrincipal principal = (JwtPrincipal) authentication.getPrincipal();
         return audioService.disconnect(guildId, principal.user().getDiscordId());
     }
+
+    @PostMapping("/{guildId}/resume")
+    @PreAuthorize("isInGuild(#guildId) && canInteractWithVoiceChannel(#guildId)")
+    public ResponseEntity<Status> resume(@PathVariable String guildId, Authentication authentication) {
+        JwtPrincipal principal = (JwtPrincipal) authentication.getPrincipal();
+        return audioService.resume(guildId, principal.user().getDiscordId());
+    }
+
+    @PostMapping("/{guildId}/pause")
+    @PreAuthorize("isInGuild(#guildId) && canInteractWithVoiceChannel(#guildId)")
+    public ResponseEntity<Status> pause(@PathVariable String guildId, Authentication authentication) {
+        JwtPrincipal principal = (JwtPrincipal) authentication.getPrincipal();
+        return audioService.pause(guildId, principal.user().getDiscordId());
+    }
+
+    @PostMapping("/{guildId}/skip")
+    @PreAuthorize("isInGuild(#guildId) && canInteractWithVoiceChannel(#guildId)")
+    public ResponseEntity<Status> skip(@PathVariable String guildId, Authentication authentication) {
+        JwtPrincipal principal = (JwtPrincipal) authentication.getPrincipal();
+        return audioService.skip(guildId, principal.user().getDiscordId());
+    }
+
+    @PostMapping("/{guildId}/stop")
+    @PreAuthorize("isInGuild(#guildId) && canInteractWithVoiceChannel(#guildId)")
+    public ResponseEntity<Status> stop(@PathVariable String guildId, Authentication authentication) {
+        JwtPrincipal principal = (JwtPrincipal) authentication.getPrincipal();
+        return audioService.stop(guildId, principal.user().getDiscordId());
+    }
 }

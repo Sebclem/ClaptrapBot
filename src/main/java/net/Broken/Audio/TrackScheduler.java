@@ -147,7 +147,7 @@ public class TrackScheduler extends AudioEventAdapter {
         if (endReason.mayStartNext) {
             if(queue.isEmpty()){
                 logger.debug("[" + guild.getName() + "] End of track, Playlist empty.");
-                GuildAudioWrapper.getInstance(guild).updateLastButton();
+                GuildAudioBotService.getInstance(guild).updateLastButton();
             }else{
                 logger.debug("[" + guild.getName() + "] End of track, start next.");
                 nextTrack();
@@ -160,30 +160,30 @@ public class TrackScheduler extends AudioEventAdapter {
     @Override
     public void onTrackStart(AudioPlayer player, AudioTrack track) {
         super.onTrackStart(player, track);
-        GuildAudioWrapper.getInstance(guild).updateLastButton();
+        GuildAudioBotService.getInstance(guild).updateLastButton();
     }
 
     @Override
     public void onPlayerPause(AudioPlayer player) {
         super.onPlayerPause(player);
-        GuildAudioWrapper.getInstance(guild).updateLastButton();
+        GuildAudioBotService.getInstance(guild).updateLastButton();
     }
 
     @Override
     public void onPlayerResume(AudioPlayer player) {
         super.onPlayerResume(player);
-        GuildAudioWrapper.getInstance(guild).updateLastButton();
+        GuildAudioBotService.getInstance(guild).updateLastButton();
     }
 
     @Override
     public void onTrackException(AudioPlayer player, AudioTrack track, FriendlyException exception) {
         super.onTrackException(player, track, exception);
-        GuildAudioWrapper.getInstance(guild).updateLastButton();
+        GuildAudioBotService.getInstance(guild).updateLastButton();
     }
 
     @Override
     public void onTrackStuck(AudioPlayer player, AudioTrack track, long thresholdMs) {
         super.onTrackStuck(player, track, thresholdMs);
-        GuildAudioWrapper.getInstance(guild).updateLastButton();
+        GuildAudioBotService.getInstance(guild).updateLastButton();
     }
 }
