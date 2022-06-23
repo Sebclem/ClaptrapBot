@@ -18,7 +18,6 @@ import net.dv8tion.jda.api.events.interaction.GenericInteractionCreateEvent;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.components.ActionRow;
 import net.dv8tion.jda.api.interactions.components.Button;
-import net.dv8tion.jda.api.interactions.components.ComponentLayout;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -391,13 +390,8 @@ public class AudioM {
         }
     }
 
-    public void disconect(GenericInteractionCreateEvent event){
-        GuildMusicManager musicManager = getGuildAudioPlayer();
-        musicManager.scheduler.stop();
-        musicManager.scheduler.flush();
-        playedChanel = null;
-        guild.getAudioManager().closeAudioConnection();
-        clearLastButton();
+    public void disconnect(GenericInteractionCreateEvent event){
+        disconnect();
         Message message = new MessageBuilder().setEmbeds(
                 EmbedMessageUtils.buildStandar(
                         new EmbedBuilder()
@@ -408,6 +402,15 @@ public class AudioM {
         event.getHook().sendMessage(message).queue();
     }
 
+    public void disconnect(){
+        GuildMusicManager musicManager = getGuildAudioPlayer();
+        musicManager.scheduler.stop();
+        musicManager.scheduler.flush();
+        playedChanel = null;
+        guild.getAudioManager().closeAudioConnection();
+        clearLastButton();
+    }
+
     /**
      * Stop current playing track and flush playlist (no confirmation message)
      */
@@ -416,8 +419,6 @@ public class AudioM {
         GuildMusicManager musicManager = getGuildAudioPlayer();
         musicManager.scheduler.stop();
         musicManager.scheduler.flush();
-        playedChanel = null;
-        guild.getAudioManager().closeAudioConnection();
         clearLastButton();
     }
 

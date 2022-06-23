@@ -23,7 +23,7 @@ public class AudioController {
 
     @GetMapping("/{guildId}/status")
     @PreAuthorize("isInGuild(#guildId)")
-    public Status getMusicStatus(@PathVariable String guildId, Authentication authentication){
+    public Status getMusicStatus(@PathVariable String guildId, Authentication authentication) {
         JwtPrincipal principal = (JwtPrincipal) authentication.getPrincipal();
         return audioService.getGuildAudioStatus(guildId, principal.user().getDiscordId());
     }
@@ -31,7 +31,15 @@ public class AudioController {
 
     @PostMapping("/{guildId}/connect")
     @PreAuthorize("isInGuild(#guildId) && canInteractWithVoiceChannel(#guildId, #body)")
-    public ResponseEntity<String> connect(@PathVariable String guildId, @RequestBody Connect body){
-        return audioService.connect(guildId, body);
+    public ResponseEntity<Status> connect(@PathVariable String guildId, @RequestBody Connect body, Authentication authentication) {
+        JwtPrincipal principal = (JwtPrincipal) authentication.getPrincipal();
+        return audioService.connect(guildId, body, principal.user().getDiscordId());
+    }
+
+    @PostMapping("/{guildId}/disconnect")
+    @PreAuthorize("isInGuild(#guildId) && canInteractWithVoiceChannel(#guildId)")
+    public ResponseEntity<Status> disconnect(@PathVariable String guildId, Authentication authentication) {
+        JwtPrincipal principal = (JwtPrincipal) authentication.getPrincipal();
+        return audioService.disconnect(guildId, principal.user().getDiscordId());
     }
 }

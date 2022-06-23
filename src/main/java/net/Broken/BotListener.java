@@ -153,7 +153,7 @@ public class BotListener extends ListenerAdapter {
             case "play" -> audioM.resume(event);
             case "next" -> audioM.skipTrack(event);
             case "stop" -> audioM.stop(event);
-            case "disconnect" -> audioM.disconect(event);
+            case "disconnect" -> audioM.disconnect(event);
         }
     }
 

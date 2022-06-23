@@ -4,6 +4,7 @@ import net.Broken.Api.Data.Music.Connect;
 import net.Broken.Api.Security.Data.JwtPrincipal;
 import net.Broken.MainBot;
 import net.Broken.Tools.CacheTools;
+import net.Broken.audio.AudioM;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
@@ -53,6 +54,23 @@ public class CustomMethodSecurityExpressionRoot
         }
 
        return  (member.hasPermission(channel, Permission.VOICE_CONNECT)
+                || member.getVoiceState() != null
+                && member.getVoiceState().getChannel() == channel)
+                && member.hasPermission(channel, Permission.VOICE_SPEAK);
+    }
+
+    public boolean canInteractWithVoiceChannel(String guildId) {
+        JwtPrincipal jwtPrincipal = (JwtPrincipal) authentication.getPrincipal();
+        Guild guild = MainBot.jda.getGuildById(guildId);
+        AudioM audioM = AudioM.getInstance(guild);
+        VoiceChannel channel = audioM.getPlayedChanel();
+
+        if (channel == null) {
+            return false;
+        }
+
+        Member member = guild.getMemberById(jwtPrincipal.user().getDiscordId());
+        return (member.hasPermission(channel, Permission.VOICE_CONNECT)
                 || member.getVoiceState() != null
                 && member.getVoiceState().getChannel() == channel)
                 && member.hasPermission(channel, Permission.VOICE_SPEAK);
