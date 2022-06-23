@@ -1,4 +1,4 @@
-package net.Broken.audio.Youtube;
+package net.Broken.Audio.Youtube;
 
 import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeAudioTrack;
 import com.sedmelluq.discord.lavaplayer.source.youtube.YoutubeSearchProvider;

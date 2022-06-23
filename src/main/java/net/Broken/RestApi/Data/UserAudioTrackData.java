@@ -1,7 +1,7 @@
 package net.Broken.RestApi.Data;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
-import net.Broken.audio.UserAudioTrack;
+import net.Broken.Audio.UserAudioTrack;
 
 /**
  * Data for JSON Parsing

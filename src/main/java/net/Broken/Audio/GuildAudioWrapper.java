@@ -1,4 +1,4 @@
-package net.Broken.audio;
+package net.Broken.Audio;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
@@ -27,49 +27,37 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-public class AudioM {
+public class GuildAudioWrapper {
 
-    private static HashMap<Guild, AudioM> INSTANCES = new HashMap<>();
-    /**
-     * Music manager for this guild
-     */
-    private GuildMusicManager musicManager;
-    /**
-     * Audio player manager for this guild
-     */
-    private AudioPlayerManager playerManager;
-    /**
-     * Current voice chanel (null if not connected)
-     */
-    private VoiceChannel playedChanel;
-    /**
-     * Time out for list message
-     */
-    private int listTimeOut = 30;
+    private static final HashMap<Guild, GuildAudioWrapper> INSTANCES = new HashMap<>();
+
+    private final GuildAudioManager guildAudioManager;
+
+    private final AudioPlayerManager audioPlayerManager;
+
     /**
      * Extrem limit for playlist
      */
-    private int listExtremLimit = 300;
-    /**
-     * Current guild
-     */
-    private Guild guild;
-    private Logger logger = LogManager.getLogger();
+    private final int listExtremLimit = 300;
+
+    private final Guild guild;
+    private final Logger logger = LogManager.getLogger();
 
     private Message lastMessageWithButton;
 
-    private AudioM(Guild guild) {
-        this.playerManager = new DefaultAudioPlayerManager();
-        AudioSourceManagers.registerRemoteSources(playerManager);
-        AudioSourceManagers.registerLocalSource(playerManager);
+    private GuildAudioWrapper(Guild guild) {
+        this.audioPlayerManager = new DefaultAudioPlayerManager();
+        AudioSourceManagers.registerRemoteSources(audioPlayerManager);
+        AudioSourceManagers.registerLocalSource(audioPlayerManager);
+        this.guildAudioManager = new GuildAudioManager(audioPlayerManager, guild);
+        guild.getAudioManager().setSendingHandler(guildAudioManager.getSendHandler());
         this.guild = guild;
     }
 
-    public static AudioM getInstance(Guild guild) {
+    public static GuildAudioWrapper getInstance(Guild guild) {
         if (!INSTANCES.containsKey(guild)) {
-            INSTANCES.put(guild, new AudioM(guild));
+            INSTANCES.put(guild, new GuildAudioWrapper(guild));
         }
-
         return INSTANCES.get(guild);
     }
 
@@ -83,10 +71,9 @@ public class AudioM {
      * @param onHead        True for adding audio track on top of playlist
      */
     public void loadAndPlay(SlashCommandEvent event, VoiceChannel voiceChannel, final String trackUrl, int playlistLimit, boolean onHead) {
-        GuildMusicManager musicManager = getGuildAudioPlayer();
-        playedChanel = voiceChannel;
+        GuildAudioManager guidAudioManager = getGuidAudioManager();
 
-        playerManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
+        audioPlayerManager.loadItemOrdered(guidAudioManager, trackUrl, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack track) {
                 logger.info("[" + guild + "] Single Track detected!");
@@ -96,7 +83,7 @@ public class AudioM {
                         .build();
                 clearLastButton();
                 lastMessageWithButton = event.getHook().sendMessage(message).addActionRow(getActionButton()).complete();
-                play(guild, voiceChannel, musicManager, uat, onHead);
+                play(guild, voiceChannel, guidAudioManager, uat, onHead);
             }
 
             @Override
@@ -130,12 +117,13 @@ public class AudioM {
     }
 
     public void loadAndPlayAuto(String trackUrl) {
-        playerManager.loadItemOrdered(musicManager, trackUrl, new AudioLoadResultHandler() {
+        VoiceChannel playedChanel = guild.getAudioManager().getConnectedChannel();
+        audioPlayerManager.loadItemOrdered(guildAudioManager, trackUrl, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack track) {
                 logger.info("[" + guild + "] Auto add " + track.getInfo().title + " to playlist.");
                 UserAudioTrack userAudioTrack = new UserAudioTrack(MainBot.jda.getSelfUser(), track);
-                play(guild, playedChanel, musicManager, userAudioTrack, true);
+                play(guild, playedChanel, guildAudioManager, userAudioTrack, true);
             }
 
             @Override
@@ -143,7 +131,7 @@ public class AudioM {
                 AudioTrack track = playlist.getTracks().get(0);
                 logger.info("[" + guild + "] Auto add " + track.getInfo().title + " to playlist.");
                 UserAudioTrack userAudioTrack = new UserAudioTrack(MainBot.jda.getSelfUser(), track);
-                play(guild, playedChanel, musicManager, userAudioTrack, true);
+                play(guild, playedChanel, guildAudioManager, userAudioTrack, true);
             }
 
             @Override
@@ -169,30 +157,24 @@ public class AudioM {
      * @param onHead        True for adding audio track on top of playlist
      */
     public void playListLoader(AudioPlaylist playlist, int playlistLimit, User user, boolean onHead) {
-        int i = 0;
+
+        VoiceChannel playedChanel = guild.getAudioManager().getConnectedChannel();
         List<AudioTrack> tracks = playlist.getTracks();
         if (onHead)
             Collections.reverse(tracks);
 
+        int i = 0;
         for (AudioTrack track : playlist.getTracks()) {
             UserAudioTrack uat = new UserAudioTrack(user, track);
-            play(guild, playedChanel, musicManager, uat, onHead);
-            i++;
-            if ((i >= playlistLimit && i != -1) || i > listExtremLimit)
+            play(guild, playedChanel, guildAudioManager, uat, onHead);
+            if ((playlistLimit != -1 && i >= playlistLimit) || i > listExtremLimit)
                 break;
+            i++;
         }
     }
 
 
-    public GuildMusicManager getGuildAudioPlayer() {
-        if (musicManager == null) {
-            musicManager = new GuildMusicManager(playerManager, guild);
-        }
 
-        guild.getAudioManager().setSendingHandler(musicManager.getSendHandler());
-
-        return musicManager;
-    }
 
     /**
      * Add single track to playlist, auto-connect if not connected to vocal chanel
@@ -203,7 +185,7 @@ public class AudioM {
      * @param track        Track to add to playlist
      * @param onHead       True for adding audio track on top of playlist
      */
-    public void play(Guild guild, VoiceChannel channel, GuildMusicManager musicManager, UserAudioTrack track, boolean onHead) {
+    public void play(Guild guild, VoiceChannel channel, GuildAudioManager musicManager, UserAudioTrack track, boolean onHead) {
         if (!guild.getAudioManager().isConnected())
             guild.getAudioManager().openAudioConnection(channel);
         if (!onHead)
@@ -218,7 +200,7 @@ public class AudioM {
      * @param event
      */
     public void skipTrack(GenericInteractionCreateEvent event) {
-        GuildMusicManager musicManager = getGuildAudioPlayer();
+        GuildAudioManager musicManager = getGuidAudioManager();
         musicManager.scheduler.nextTrack();
         Message message = new MessageBuilder().setEmbeds(
                 EmbedMessageUtils.buildStandar(
@@ -236,7 +218,7 @@ public class AudioM {
      * @param event
      */
     public void pause(GenericInteractionCreateEvent event) {
-        GuildMusicManager musicManager = getGuildAudioPlayer();
+        GuildAudioManager musicManager = getGuidAudioManager();
         musicManager.scheduler.pause();
         Message message = new MessageBuilder().setEmbeds(
                 EmbedMessageUtils.buildStandar(
@@ -256,16 +238,16 @@ public class AudioM {
      * @param event
      */
     public void resume(GenericInteractionCreateEvent event) {
-        GuildMusicManager musicManager = getGuildAudioPlayer();
+        GuildAudioManager musicManager = getGuidAudioManager();
         Message message;
-        if(musicManager.player.getPlayingTrack() == null){
+        if (musicManager.player.getPlayingTrack() == null) {
             message = new MessageBuilder().setEmbeds(
                     EmbedMessageUtils.buildStandar(
                             new EmbedBuilder()
                                     .setTitle(":warning:  Nothing to play, playlist is empty !")
                                     .setColor(Color.green)
                     )).build();
-        }else{
+        } else {
             musicManager.scheduler.resume();
             message = new MessageBuilder().setEmbeds(
                     EmbedMessageUtils.buildStandar(
@@ -284,7 +266,7 @@ public class AudioM {
      * @param event
      */
     public void info(GenericInteractionCreateEvent event) {
-        GuildMusicManager musicManager = getGuildAudioPlayer();
+        GuildAudioManager musicManager = getGuidAudioManager();
         AudioTrackInfo info = musicManager.scheduler.getInfo();
         UserAudioTrack userAudioTrack = musicManager.scheduler.getCurrentPlayingTrack();
         Message message = new MessageBuilder().setEmbeds(EmbedMessageUtils.getMusicInfo(info, userAudioTrack)).build();
@@ -293,7 +275,7 @@ public class AudioM {
     }
 
     public void flush(GenericInteractionCreateEvent event) {
-        GuildMusicManager musicManager = getGuildAudioPlayer();
+        GuildAudioManager musicManager = getGuidAudioManager();
         musicManager.scheduler.flush();
         Message message = new MessageBuilder().setEmbeds(
                 EmbedMessageUtils.buildStandar(
@@ -311,7 +293,7 @@ public class AudioM {
      * @param event
      */
     public void list(GenericInteractionCreateEvent event) {
-        GuildMusicManager musicManager = getGuildAudioPlayer();
+        GuildAudioManager musicManager = getGuidAudioManager();
         List<UserAudioTrackData> list = musicManager.scheduler.getList();
 
         if (list.size() == 0) {
@@ -361,8 +343,8 @@ public class AudioM {
      * @param onHead        True for adding audio track on top of playlist
      */
     public void add(SlashCommandEvent event, String url, int playListLimit, boolean onHead) {
-        if (playedChanel != null) {
-            loadAndPlay(event, playedChanel, url, playListLimit, onHead);
+        if (guild.getAudioManager().isConnected()) {
+            loadAndPlay(event, guild.getAudioManager().getConnectedChannel(), url, playListLimit, onHead);
         } else {
             Message message = new MessageBuilder().setEmbeds(EmbedMessageUtils.getMusicError("Not connected to vocal chanel !")).build();
             event.getHook().setEphemeral(true).sendMessage(message).queue();
@@ -375,8 +357,8 @@ public class AudioM {
      * @param event
      */
     public void stop(GenericInteractionCreateEvent event) {
-        musicManager.scheduler.stop();
-        musicManager.scheduler.flush();
+        guildAudioManager.scheduler.stop();
+        guildAudioManager.scheduler.flush();
 
         if (event != null) {
             Message message = new MessageBuilder().setEmbeds(
@@ -390,7 +372,15 @@ public class AudioM {
         }
     }
 
-    public void disconnect(GenericInteractionCreateEvent event){
+    public void stop() {
+
+        GuildAudioManager musicManager = getGuidAudioManager();
+        musicManager.scheduler.stop();
+        musicManager.scheduler.flush();
+        clearLastButton();
+    }
+
+    public void disconnect(GenericInteractionCreateEvent event) {
         disconnect();
         Message message = new MessageBuilder().setEmbeds(
                 EmbedMessageUtils.buildStandar(
@@ -402,75 +392,53 @@ public class AudioM {
         event.getHook().sendMessage(message).queue();
     }
 
-    public void disconnect(){
-        GuildMusicManager musicManager = getGuildAudioPlayer();
+    public void disconnect() {
+        GuildAudioManager musicManager = getGuidAudioManager();
         musicManager.scheduler.stop();
         musicManager.scheduler.flush();
-        playedChanel = null;
         guild.getAudioManager().closeAudioConnection();
         clearLastButton();
-    }
-
-    /**
-     * Stop current playing track and flush playlist (no confirmation message)
-     */
-    public void stop() {
-
-        GuildMusicManager musicManager = getGuildAudioPlayer();
-        musicManager.scheduler.stop();
-        musicManager.scheduler.flush();
-        clearLastButton();
-    }
-
-    public GuildMusicManager getGuildMusicManager() {
-        if (musicManager == null)
-            musicManager = getGuildAudioPlayer();
-        return musicManager;
-
     }
 
     public Guild getGuild() {
         return guild;
     }
 
-    public AudioPlayerManager getPlayerManager() {
-        return playerManager;
+    public AudioPlayerManager getAudioPlayerManager() {
+        return audioPlayerManager;
+    }
+    public GuildAudioManager getGuidAudioManager() {
+        return guildAudioManager;
     }
 
-    public VoiceChannel getPlayedChanel() {
-        return playedChanel;
-    }
 
-    public void setPlayedChanel(VoiceChannel playedChanel) {
-        this.playedChanel = playedChanel;
-    }
 
     public void clearLastButton() {
-        if (lastMessageWithButton != null){
+        if (lastMessageWithButton != null) {
             this.lastMessageWithButton.editMessageComponents(new ArrayList<>()).queue();
             this.lastMessageWithButton = null;
         }
 
     }
-    public void updateLastButton(){
+
+    public void updateLastButton() {
         if (lastMessageWithButton != null)
             lastMessageWithButton = lastMessageWithButton.editMessageComponents(ActionRow.of(getActionButton())).complete();
     }
 
 
-    private List<Button> getActionButton(){
+    private List<Button> getActionButton() {
         ArrayList<Button> buttonArrayList = new ArrayList<>();
-        if(musicManager.player.getPlayingTrack() == null){
+        if (guildAudioManager.player.getPlayingTrack() == null) {
             buttonArrayList.add(Button.success("play", Emoji.fromUnicode("▶️")).withDisabled(true));
             buttonArrayList.add(Button.primary("next", Emoji.fromUnicode("⏭️")).withDisabled(true));
             buttonArrayList.add(Button.primary("stop", Emoji.fromUnicode("⏹️")).withDisabled(true));
             buttonArrayList.add(Button.danger("disconnect", Emoji.fromUnicode("⏏️")));
             return buttonArrayList;
         }
-        if(musicManager.player.isPaused()){
+        if (guildAudioManager.player.isPaused()) {
             buttonArrayList.add(Button.success("play", Emoji.fromUnicode("▶️")));
-        }
-        else{
+        } else {
             buttonArrayList.add(Button.success("pause", Emoji.fromUnicode("⏸️")));
         }
         buttonArrayList.add(Button.primary("next", Emoji.fromUnicode("⏭️")));

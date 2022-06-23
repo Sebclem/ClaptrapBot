@@ -3,7 +3,7 @@ package net.Broken.SlashCommands;
 
 import net.Broken.SlashCommand;
 import net.Broken.Tools.EmbedMessageUtils;
-import net.Broken.audio.AudioM;
+import net.Broken.Audio.GuildAudioWrapper;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.VoiceChannel;
@@ -27,7 +27,7 @@ public class Music implements SlashCommand {
 
     @Override
     public void action(SlashCommandEvent event) {
-        AudioM audio = AudioM.getInstance(event.getGuild());
+        GuildAudioWrapper audio = GuildAudioWrapper.getInstance(event.getGuild());
         String action = event.getSubcommandName();
         event.deferReply().queue();
         switch (action) {

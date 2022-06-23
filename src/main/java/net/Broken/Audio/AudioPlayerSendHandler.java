@@ -1,4 +1,4 @@
-package net.Broken.audio;
+package net.Broken.Audio;
 
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.track.playback.MutableAudioFrame;

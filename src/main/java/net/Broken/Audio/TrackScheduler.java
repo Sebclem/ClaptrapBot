@@ -1,4 +1,4 @@
-package net.Broken.audio;
+package net.Broken.Audio;
 
 import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
@@ -9,9 +9,9 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import net.Broken.MainBot;
 import net.Broken.RestApi.Data.UserAudioTrackData;
-import net.Broken.audio.Youtube.RelatedIdNotFound;
-import net.Broken.audio.Youtube.YoutubeSearchRework;
-import net.Broken.audio.Youtube.YoutubeTools;
+import net.Broken.Audio.Youtube.RelatedIdNotFound;
+import net.Broken.Audio.Youtube.YoutubeSearchRework;
+import net.Broken.Audio.Youtube.YoutubeTools;
 import net.dv8tion.jda.api.entities.Guild;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -178,7 +178,7 @@ public class TrackScheduler extends AudioEventAdapter {
         if (endReason.mayStartNext) {
             if(queue.isEmpty()){
                 logger.debug("[" + guild.getName() + "] End of track, Playlist empty.");
-                AudioM.getInstance(guild).updateLastButton();
+                GuildAudioWrapper.getInstance(guild).updateLastButton();
             }else{
                 logger.debug("[" + guild.getName() + "] End of track, start next.");
                 nextTrack();
@@ -191,49 +191,49 @@ public class TrackScheduler extends AudioEventAdapter {
     @Override
     public void onTrackStart(AudioPlayer player, AudioTrack track) {
         super.onTrackStart(player, track);
-        AudioM.getInstance(guild).updateLastButton();
+        GuildAudioWrapper.getInstance(guild).updateLastButton();
     }
 
     @Override
     public void onPlayerPause(AudioPlayer player) {
         super.onPlayerPause(player);
-        AudioM.getInstance(guild).updateLastButton();
+        GuildAudioWrapper.getInstance(guild).updateLastButton();
     }
 
     @Override
     public void onPlayerResume(AudioPlayer player) {
         super.onPlayerResume(player);
-        AudioM.getInstance(guild).updateLastButton();
+        GuildAudioWrapper.getInstance(guild).updateLastButton();
     }
 
     @Override
     public void onTrackException(AudioPlayer player, AudioTrack track, FriendlyException exception) {
         super.onTrackException(player, track, exception);
-        AudioM.getInstance(guild).updateLastButton();
+        GuildAudioWrapper.getInstance(guild).updateLastButton();
     }
 
     @Override
     public void onTrackStuck(AudioPlayer player, AudioTrack track, long thresholdMs) {
         super.onTrackStuck(player, track, thresholdMs);
-        AudioM.getInstance(guild).updateLastButton();
+        GuildAudioWrapper.getInstance(guild).updateLastButton();
     }
 
     private void needAutoPlay() {
         if ((queue.size() < 1) && autoFlow && currentPlayingTrack != null) {
             logger.debug("[" + guild.getName() + "] Auto add needed!");
-            AudioM audioM = AudioM.getInstance(guild);
+            GuildAudioWrapper guildAudioWrapper = GuildAudioWrapper.getInstance(guild);
             YoutubeSearchRework youtubeSearchRework = YoutubeSearchRework.getInstance();
             try {
                 String id = youtubeSearchRework.getRelatedVideo(currentPlayingTrack.getAudioTrack().getInfo().identifier);
                 logger.debug("[" + guild.getName() + "] Related id: " + id);
-                audioM.loadAndPlayAuto(id);
+                guildAudioWrapper.loadAndPlayAuto(id);
             } catch (IOException | RelatedIdNotFound ex) {
                 logger.debug("[" + guild.getName() + "] Can't find related id, try API...");
                 YoutubeTools youtubeTools = YoutubeTools.getInstance();
                 try {
                     String id = youtubeTools.getRelatedVideo(currentPlayingTrack.getAudioTrack().getInfo().identifier, history);
                     logger.debug("[" + guild.getName() + "] Related id: " + id);
-                    audioM.loadAndPlayAuto(id);
+                    guildAudioWrapper.loadAndPlayAuto(id);
 
                 } catch (GoogleJsonResponseException e) {
                     logger.error("[" + guild.getName() + "] There was a service error: " + e.getDetails().getCode() + " : " + e.getDetails().getMessage());

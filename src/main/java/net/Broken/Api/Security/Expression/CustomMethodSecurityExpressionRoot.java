@@ -4,12 +4,11 @@ import net.Broken.Api.Data.Music.Connect;
 import net.Broken.Api.Security.Data.JwtPrincipal;
 import net.Broken.MainBot;
 import net.Broken.Tools.CacheTools;
-import net.Broken.audio.AudioM;
+import net.Broken.Audio.GuildAudioWrapper;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.VoiceChannel;
-import okhttp3.Cache;
 import org.springframework.security.access.expression.SecurityExpressionRoot;
 import org.springframework.security.access.expression.method.MethodSecurityExpressionOperations;
 import org.springframework.security.core.Authentication;
@@ -62,8 +61,8 @@ public class CustomMethodSecurityExpressionRoot
     public boolean canInteractWithVoiceChannel(String guildId) {
         JwtPrincipal jwtPrincipal = (JwtPrincipal) authentication.getPrincipal();
         Guild guild = MainBot.jda.getGuildById(guildId);
-        AudioM audioM = AudioM.getInstance(guild);
-        VoiceChannel channel = audioM.getPlayedChanel();
+        GuildAudioWrapper guildAudioWrapper = GuildAudioWrapper.getInstance(guild);
+        VoiceChannel channel = guild.getAudioManager().getConnectedChannel();
 
         if (channel == null) {
             return false;

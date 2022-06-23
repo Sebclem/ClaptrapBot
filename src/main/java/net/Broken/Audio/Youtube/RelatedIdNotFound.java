@@ -1,4 +1,4 @@
-package net.Broken.audio.Youtube;
+package net.Broken.Audio.Youtube;
 
 public class RelatedIdNotFound extends Exception {
 }

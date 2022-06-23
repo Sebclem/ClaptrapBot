@@ -5,7 +5,7 @@ import net.Broken.DB.Repository.GuildPreferenceRepository;
 import net.Broken.Tools.AutoVoiceChannel;
 import net.Broken.Tools.EmbedMessageUtils;
 import net.Broken.Tools.UserManager.Stats.UserStatsUtils;
-import net.Broken.audio.AudioM;
+import net.Broken.Audio.GuildAudioWrapper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.*;
@@ -119,10 +119,10 @@ public class BotListener extends ListenerAdapter {
 
             if (event.getGuild().getAudioManager().getConnectedChannel().getMembers().size() == 1) {
                 logger.debug("I'm alone, close audio connection.");
-                AudioM.getInstance(event.getGuild()).stop();
+                GuildAudioWrapper.getInstance(event.getGuild()).stop();
             }
         } else if (event.getMember().getUser() == MainBot.jda.getSelfUser()) {
-            AudioM.getInstance(event.getGuild()).clearLastButton();
+            GuildAudioWrapper.getInstance(event.getGuild()).clearLastButton();
         }
         AutoVoiceChannel autoVoiceChannel = AutoVoiceChannel.getInstance(event.getGuild());
         autoVoiceChannel.leave(event.getChannelLeft());
@@ -147,13 +147,13 @@ public class BotListener extends ListenerAdapter {
     public void onButtonClick(@NotNull ButtonClickEvent event) {
         super.onButtonClick(event);
         event.deferReply().queue();
-        AudioM audioM = AudioM.getInstance(event.getGuild());
+        GuildAudioWrapper guildAudioWrapper = GuildAudioWrapper.getInstance(event.getGuild());
         switch (event.getComponentId()) {
-            case "pause" -> audioM.pause(event);
-            case "play" -> audioM.resume(event);
-            case "next" -> audioM.skipTrack(event);
-            case "stop" -> audioM.stop(event);
-            case "disconnect" -> audioM.disconnect(event);
+            case "pause" -> guildAudioWrapper.pause(event);
+            case "play" -> guildAudioWrapper.resume(event);
+            case "next" -> guildAudioWrapper.skipTrack(event);
+            case "stop" -> guildAudioWrapper.stop(event);
+            case "disconnect" -> guildAudioWrapper.disconnect(event);
         }
     }
 

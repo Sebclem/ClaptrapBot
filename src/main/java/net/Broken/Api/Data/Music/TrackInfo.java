@@ -2,7 +2,7 @@ package net.Broken.Api.Data.Music;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import net.Broken.Api.Data.UserInfo;
-import net.Broken.audio.UserAudioTrack;
+import net.Broken.Audio.UserAudioTrack;
 
 public record TrackInfo(UserInfo submitter, AudioTrackInfo detail) {
     public TrackInfo(UserInfo submitter, AudioTrackInfo detail) {

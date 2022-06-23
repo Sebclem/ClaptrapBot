@@ -1,4 +1,4 @@
-package net.Broken.audio.Youtube;
+package net.Broken.Audio.Youtube;
 
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
@@ -68,7 +68,7 @@ public class YoutubeTools {
     }
 
 
-    public ArrayList<net.Broken.audio.Youtube.SearchResult> search(String query, long max, boolean playlist) throws IOException {
+    public ArrayList<net.Broken.Audio.Youtube.SearchResult> search(String query, long max, boolean playlist) throws IOException {
         YouTube youTube = getYoutubeService();
         YouTube.Search.List searchList = youTube.search().list(Collections.singletonList("snippet"));
         if (playlist)
@@ -98,10 +98,10 @@ public class YoutubeTools {
             for (Playlist item : playlistResponse.getItems()) {
                 playlistHashMap.put(item.getId(), item);
             }
-            ArrayList<net.Broken.audio.Youtube.SearchResult> finalResult = new ArrayList<>();
+            ArrayList<net.Broken.Audio.Youtube.SearchResult> finalResult = new ArrayList<>();
             for (SearchResult item : response.getItems()) {
                 logger.trace(item.getSnippet().getTitle());
-                finalResult.add(new net.Broken.audio.Youtube.SearchResult(item, playlistHashMap.get(item.getId().getPlaylistId()).getContentDetails().getItemCount().toString() + " Video(s)"));
+                finalResult.add(new net.Broken.Audio.Youtube.SearchResult(item, playlistHashMap.get(item.getId().getPlaylistId()).getContentDetails().getItemCount().toString() + " Video(s)"));
 
             }
             return finalResult;
@@ -117,10 +117,10 @@ public class YoutubeTools {
             for (Video item : videoResponse.getItems()) {
                 videoHashMap.put(item.getId(), item);
             }
-            ArrayList<net.Broken.audio.Youtube.SearchResult> finalResult = new ArrayList<>();
+            ArrayList<net.Broken.Audio.Youtube.SearchResult> finalResult = new ArrayList<>();
             for (SearchResult item : response.getItems()) {
                 logger.trace(item.getSnippet().getTitle());
-                finalResult.add(new net.Broken.audio.Youtube.SearchResult(item, videoHashMap.get(item.getId().getVideoId()).getContentDetails().getDuration()));
+                finalResult.add(new net.Broken.Audio.Youtube.SearchResult(item, videoHashMap.get(item.getId().getVideoId()).getContentDetails().getDuration()));
             }
             return finalResult;
         }

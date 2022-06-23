@@ -4,16 +4,12 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import net.Broken.BotConfigLoader;
 import net.Broken.MainBot;
 import net.Broken.SpringContext;
-import net.Broken.audio.UserAudioTrack;
-import net.Broken.audio.Youtube.SearchResult;
+import net.Broken.Audio.UserAudioTrack;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.entities.User;
-import org.springframework.context.ApplicationContext;
 
 import java.awt.*;
-import java.io.FileNotFoundException;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
