@@ -21,10 +21,10 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
 public class GuildAudioBotService {
 
@@ -41,6 +41,8 @@ public class GuildAudioBotService {
 
     private final Guild guild;
     private final Logger logger = LogManager.getLogger();
+
+    private final Map<String, Boolean> addStatus = new HashMap<>();
 
     private Message lastMessageWithButton;
 
@@ -112,35 +114,43 @@ public class GuildAudioBotService {
         });
     }
 
-    public void loadAndPlayAuto(String trackUrl) {
+    public boolean loadAndPlaySync(String trackUrl, String userId) throws ExecutionException, InterruptedException {
+        Member member = guild.getMemberById(userId);
         VoiceChannel playedChanel = guild.getAudioManager().getConnectedChannel();
-        audioPlayerManager.loadItemOrdered(guildAudioManager, trackUrl, new AudioLoadResultHandler() {
+        final String uuid = UUID.randomUUID().toString();
+        Future<Void> future = audioPlayerManager.loadItemOrdered(guildAudioManager, trackUrl, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack track) {
                 logger.info("[" + guild + "] Auto add " + track.getInfo().title + " to playlist.");
-                UserAudioTrack userAudioTrack = new UserAudioTrack(MainBot.jda.getSelfUser(), track);
+                UserAudioTrack userAudioTrack = new UserAudioTrack(member.getUser(), track);
                 play(guild, playedChanel, guildAudioManager, userAudioTrack, true);
+                addStatus.put(uuid, true);
             }
 
             @Override
             public void playlistLoaded(AudioPlaylist playlist) {
                 AudioTrack track = playlist.getTracks().get(0);
                 logger.info("[" + guild + "] Auto add " + track.getInfo().title + " to playlist.");
-                UserAudioTrack userAudioTrack = new UserAudioTrack(MainBot.jda.getSelfUser(), track);
+                UserAudioTrack userAudioTrack = new UserAudioTrack(member.getUser(), track);
                 play(guild, playedChanel, guildAudioManager, userAudioTrack, true);
+                addStatus.put(uuid, true);
             }
 
             @Override
             public void noMatches() {
                 logger.warn("[" + guild + "] Track not found: " + trackUrl);
+                addStatus.put(uuid, false);
             }
 
             @Override
             public void loadFailed(FriendlyException exception) {
                 logger.error("[" + guild + "] Cant load media!");
                 logger.error(exception.getMessage());
+                addStatus.put(uuid, false);
             }
         });
+        future.get();
+        return addStatus.remove(uuid);
     }
 
 

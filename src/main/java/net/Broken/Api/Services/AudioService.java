@@ -1,10 +1,7 @@
 package net.Broken.Api.Services;
 
 import net.Broken.Api.Data.Guild.Channel;
-import net.Broken.Api.Data.Music.Connect;
-import net.Broken.Api.Data.Music.PlayBackInfo;
-import net.Broken.Api.Data.Music.Status;
-import net.Broken.Api.Data.Music.TrackInfo;
+import net.Broken.Api.Data.Music.*;
 import net.Broken.Audio.GuildAudioBotService;
 import net.Broken.Audio.UserAudioTrack;
 import net.Broken.MainBot;
@@ -18,6 +15,8 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.concurrent.ExecutionException;
 
 @Service
 public class AudioService {
@@ -90,31 +89,43 @@ public class AudioService {
     }
 
 
-    public ResponseEntity<Status> pause(String guildId, String userId){
+    public ResponseEntity<Status> pause(String guildId, String userId) {
         Guild guild = MainBot.jda.getGuildById(guildId);
         GuildAudioBotService.getInstance(guild).pause();
         Status status = getGuildAudioStatus(guildId, userId);
         return new ResponseEntity<>(status, HttpStatus.OK);
     }
 
-    public ResponseEntity<Status> resume(String guildId, String userId){
+    public ResponseEntity<Status> resume(String guildId, String userId) {
         Guild guild = MainBot.jda.getGuildById(guildId);
         GuildAudioBotService.getInstance(guild).resume();
         Status status = getGuildAudioStatus(guildId, userId);
         return new ResponseEntity<>(status, HttpStatus.OK);
     }
 
-    public ResponseEntity<Status> skip(String guildId, String userId){
+    public ResponseEntity<Status> skip(String guildId, String userId) {
         Guild guild = MainBot.jda.getGuildById(guildId);
         GuildAudioBotService.getInstance(guild).skipTrack();
         Status status = getGuildAudioStatus(guildId, userId);
         return new ResponseEntity<>(status, HttpStatus.OK);
     }
 
-    public ResponseEntity<Status> stop(String guildId, String userId){
+    public ResponseEntity<Status> stop(String guildId, String userId) {
         Guild guild = MainBot.jda.getGuildById(guildId);
         GuildAudioBotService.getInstance(guild).stop();
         Status status = getGuildAudioStatus(guildId, userId);
         return new ResponseEntity<>(status, HttpStatus.OK);
+    }
+
+    public ResponseEntity<Status> add(String guildId, String userId, Add body) throws ExecutionException, InterruptedException {
+        Guild guild = MainBot.jda.getGuildById(guildId);
+        boolean success = GuildAudioBotService.getInstance(guild).loadAndPlaySync(body.url(), userId);
+        if (success) {
+            Status status = getGuildAudioStatus(guildId, userId);
+            return new ResponseEntity<>(status, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+
     }
 }

@@ -1,5 +1,6 @@
 package net.Broken.Api.Controllers;
 
+import net.Broken.Api.Data.Music.Add;
 import net.Broken.Api.Data.Music.Connect;
 import net.Broken.Api.Data.Music.Status;
 import net.Broken.Api.Security.Data.JwtPrincipal;
@@ -8,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("/api/v2/audio")
@@ -69,5 +72,12 @@ public class AudioController {
     public ResponseEntity<Status> stop(@PathVariable String guildId, Authentication authentication) {
         JwtPrincipal principal = (JwtPrincipal) authentication.getPrincipal();
         return audioService.stop(guildId, principal.user().getDiscordId());
+    }
+
+    @PostMapping("/{guildId}/add")
+    @PreAuthorize("isInGuild(#guildId) && canInteractWithVoiceChannel(#guildId)")
+    public ResponseEntity<Status> add(@PathVariable String guildId, @RequestBody Add body, Authentication authentication) throws ExecutionException, InterruptedException {
+        JwtPrincipal principal = (JwtPrincipal) authentication.getPrincipal();
+        return audioService.add(guildId, principal.user().getDiscordId(), body);
     }
 }
