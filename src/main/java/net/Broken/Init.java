@@ -4,7 +4,6 @@ import net.Broken.DB.Entity.GuildPreferenceEntity;
 import net.Broken.DB.Entity.UserEntity;
 import net.Broken.DB.Repository.GuildPreferenceRepository;
 import net.Broken.DB.Repository.UserRepository;
-import net.Broken.RestApi.ApiCommandLoader;
 import net.Broken.Tools.Command.SlashCommandLoader;
 import net.Broken.Tools.DayListener.DayListener;
 import net.Broken.Tools.DayListener.Listeners.DailyMadame;
@@ -19,7 +18,6 @@ import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.context.ApplicationContext;
-import org.thymeleaf.spring5.processor.SpringOptionFieldTagProcessor;
 
 import javax.security.auth.login.LoginException;
 import java.util.List;
@@ -68,7 +66,6 @@ public class Init {
         logger.info("Loading commands");
         SlashCommandLoader.load(config);
         SlashCommandLoader.registerSlashCommands(jda.updateCommands());
-        ApiCommandLoader.load();
         DayListener dayListener = DayListener.getInstance();
         dayListener.addListener(new DailyMadame());
         dayListener.start();

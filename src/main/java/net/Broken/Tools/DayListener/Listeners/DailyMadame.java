@@ -25,8 +25,8 @@ import java.util.Optional;
  */
 public class DailyMadame implements NewDayListener {
 
-    private GuildPreferenceRepository guildPreferenceRepository;
-    private Logger logger = LogManager.getLogger();
+    private final GuildPreferenceRepository guildPreferenceRepository;
+    private final Logger logger = LogManager.getLogger();
 
     public DailyMadame() {
         ApplicationContext context = SpringContext.getAppContext();

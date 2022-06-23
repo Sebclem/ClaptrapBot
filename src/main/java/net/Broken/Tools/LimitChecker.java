@@ -10,7 +10,7 @@ import java.net.URL;
  * Find max webPage for web site like baseURL.com/number-2/
  */
 public class LimitChecker {
-    static Logger logger = LogManager.getLogger();
+    static final Logger logger = LogManager.getLogger();
 
 
     /**

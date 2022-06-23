@@ -19,7 +19,7 @@ import java.util.Set;
  * Find and load bot's command
  */
 public class SlashCommandLoader {
-    private static Logger logger = LogManager.getLogger();
+    private static final Logger logger = LogManager.getLogger();
 
     /**
      * Search all implemented Command interface class and add it to MainBot.commands HashMap

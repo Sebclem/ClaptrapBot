@@ -3,7 +3,6 @@ package net.Broken;
 import net.dv8tion.jda.api.JDA;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.boot.ExitCodeGenerator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
@@ -19,7 +18,7 @@ import java.util.HashMap;
 public class MainBot {
 
     public static HashMap<String, Commande> commandes = new HashMap<>();
-    public static HashMap<String, SlashCommand> slashCommands = new HashMap<>();
+    public static final HashMap<String, SlashCommand> slashCommands = new HashMap<>();
     public static HashMap<String, Integer> mutualGuildCount = new HashMap<>();
     public static boolean roleFlag = false;
     public static JDA jda;
@@ -42,7 +41,7 @@ public class MainBot {
 
         jda = Init.initJda(config);
         if (jda == null) {
-            System.exit(SpringApplication.exit(ctx, (ExitCodeGenerator) () -> {
+            System.exit(SpringApplication.exit(ctx, () -> {
                 logger.fatal("Init error! Close application!");
                 return 1;
             }));

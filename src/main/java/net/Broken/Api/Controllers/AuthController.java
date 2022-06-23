@@ -11,8 +11,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import io.swagger.v3.oas.annotations.security.SecurityRequirements;
-
 @RestController
 @RequestMapping("/api/v2/auth")
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -27,7 +25,6 @@ public class AuthController {
     }
 
     @PostMapping("/discord")
-    @SecurityRequirements(value = {})
     public JwtResponse loginDiscord(@Validated @RequestBody Login login) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(login.redirectUri(), login.code())

@@ -1,6 +1,5 @@
 package net.Broken.Tools.Command;
 
-import net.Broken.Commande;
 import net.Broken.SlashCommand;
 import net.Broken.Tools.EmbedMessageUtils;
 import net.Broken.Tools.FindContentOnWebPage;
@@ -8,15 +7,12 @@ import net.Broken.Tools.LimitChecker;
 import net.Broken.Tools.TrueRandom;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -26,13 +22,13 @@ import java.util.concurrent.LinkedBlockingQueue;
  */
 @Ignore
 public abstract class NumberedSlashCommand implements SlashCommand {
-    protected int minNumber = 1;
+    protected final int minNumber = 1;
     protected int maxNumber = -1;
-    protected String baseURL;
-    protected String divClass;
-    protected String htmlType;
-    protected String urlSuffix;
-    protected LinkedBlockingQueue<Integer> randomQueue = new LinkedBlockingQueue<>();
+    protected final String baseURL;
+    protected final String divClass;
+    protected final String htmlType;
+    protected final String urlSuffix;
+    protected final LinkedBlockingQueue<Integer> randomQueue = new LinkedBlockingQueue<>();
     private Logger logger = LogManager.getLogger();
 
     /**

@@ -33,7 +33,7 @@ public class AudioPlayerSendHandler implements AudioSendHandler {
 
     @Override
     public ByteBuffer provide20MsAudio() {
-        return (ByteBuffer) buffer.flip();
+        return buffer.flip();
     }
 
     @Override

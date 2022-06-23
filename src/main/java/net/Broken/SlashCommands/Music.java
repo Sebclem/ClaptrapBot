@@ -1,9 +1,9 @@
 package net.Broken.SlashCommands;
 
 
+import net.Broken.Audio.GuildAudioWrapper;
 import net.Broken.SlashCommand;
 import net.Broken.Tools.EmbedMessageUtils;
-import net.Broken.Audio.GuildAudioWrapper;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.VoiceChannel;
@@ -22,8 +22,7 @@ import java.util.List;
  * Command that return a random picture of cat.
  */
 public class Music implements SlashCommand {
-    private Logger logger = LogManager.getLogger();
-    ;
+    private final Logger logger = LogManager.getLogger();
 
     @Override
     public void action(SlashCommandEvent event) {

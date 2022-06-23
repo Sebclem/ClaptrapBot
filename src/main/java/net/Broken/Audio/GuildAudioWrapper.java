@@ -9,7 +9,6 @@ import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import net.Broken.MainBot;
-import net.Broken.RestApi.Data.UserAudioTrackData;
 import net.Broken.Tools.EmbedMessageUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
@@ -294,7 +293,7 @@ public class GuildAudioWrapper {
      */
     public void list(GenericInteractionCreateEvent event) {
         GuildAudioManager musicManager = getGuidAudioManager();
-        List<UserAudioTrackData> list = musicManager.scheduler.getList();
+        List<UserAudioTrack> list = musicManager.scheduler.getList();
 
         if (list.size() == 0) {
             Message message = new MessageBuilder().setEmbeds(
@@ -308,11 +307,11 @@ public class GuildAudioWrapper {
         } else {
             StringBuilder resp = new StringBuilder();
             int i = 0;
-            for (UserAudioTrackData trackInfo : list) {
+            for (UserAudioTrack trackInfo : list) {
                 resp.append(":arrow_right:  ");
-                resp.append(trackInfo.getAudioTrackInfo().title);
+                resp.append(trackInfo.getAudioTrack().getInfo().title);
                 resp.append(" - ");
-                resp.append(trackInfo.getAudioTrackInfo().author);
+                resp.append(trackInfo.getAudioTrack().getInfo().author);
                 resp.append("\n\n");
                 if (i >= 5) {
                     resp.append(":arrow_forward: And ");

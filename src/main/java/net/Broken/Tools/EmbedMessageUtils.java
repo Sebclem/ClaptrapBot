@@ -1,10 +1,10 @@
 package net.Broken.Tools;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
+import net.Broken.Audio.UserAudioTrack;
 import net.Broken.BotConfigLoader;
 import net.Broken.MainBot;
 import net.Broken.SpringContext;
-import net.Broken.Audio.UserAudioTrack;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageEmbed;
@@ -20,11 +20,10 @@ import java.util.Map;
 public class EmbedMessageUtils {
 
     public static EmbedBuilder getError(String message) {
-        EmbedBuilder temp = new EmbedBuilder()
+        return new EmbedBuilder()
                 .setTitle(":warning: Error!")
                 .setColor(Color.red)
                 .setDescription(message);
-        return temp;
     }
 
 

@@ -733,3 +733,57 @@ databaseChangeLog:
           columnName: anti_spam
           tableName: guild_preference_entity
 
+#  23/06/2022 Sync
+- changeSet:
+    id: 1655987923540-1
+    author: seb65 (generated)
+    changes:
+    - dropDefaultValue:
+        columnDataType: varchar(255)
+        columnName: avatar
+        tableName: user_entity
+- changeSet:
+    id: 1655987923540-2
+    author: seb65 (generated)
+    changes:
+    - dropDefaultValue:
+        columnDataType: varchar(255)
+        columnName: discriminator
+        tableName: user_entity
+- changeSet:
+    id: 1655987923540-3
+    author: seb65 (generated)
+    changes:
+    - dropDefaultValue:
+        columnDataType: varchar(255)
+        columnName: username
+        tableName: user_entity
+
+#  23/06/2022 Drop playlist and tracks
+- changeSet:
+    id: 1655988013822-1
+    author: seb65 (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: playlist_entity
+        constraintName: FKi0pu9fhjbhs223glek7baeuwm
+- changeSet:
+    id: 1655988013822-2
+    author: seb65 (generated)
+    changes:
+    - dropForeignKeyConstraint:
+        baseTableName: track_entity
+        constraintName: FKjrr0flblumxnll3re0apujvr
+- changeSet:
+    id: 1655988013822-3
+    author: seb65 (generated)
+    changes:
+    - dropTable:
+        tableName: playlist_entity
+- changeSet:
+    id: 1655988013822-4
+    author: seb65 (generated)
+    changes:
+    - dropTable:
+        tableName: track_entity
+

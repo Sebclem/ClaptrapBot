@@ -5,10 +5,6 @@ import net.Broken.Api.Data.UserInfo;
 import net.Broken.Audio.UserAudioTrack;
 
 public record TrackInfo(UserInfo submitter, AudioTrackInfo detail) {
-    public TrackInfo(UserInfo submitter, AudioTrackInfo detail) {
-        this.submitter = submitter;
-        this.detail = detail;
-    }
 
     public TrackInfo(UserAudioTrack userAudioTrack) {
         this(new UserInfo(userAudioTrack.getSubmittedUser().getId(), userAudioTrack.getSubmittedUser().getName(), userAudioTrack.getSubmittedUser().getAvatarUrl()),

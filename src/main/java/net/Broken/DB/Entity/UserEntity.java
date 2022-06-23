@@ -5,8 +5,6 @@ import net.Broken.Api.Security.Data.DiscordOauthUserInfo;
 import net.dv8tion.jda.api.entities.User;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -22,7 +20,7 @@ public class UserEntity {
 
     private String discriminator;
 
-    @Column(unique=true)
+    @Column(unique = true)
     private String discordId;
 
     private String avatar;
@@ -32,10 +30,6 @@ public class UserEntity {
     @JsonIgnore
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
     private List<UserStats> userStats;
-
-    @OneToMany(mappedBy = "user")
-    private List<PlaylistEntity> playlists;
-
 
     public UserEntity() {
     }
@@ -50,7 +44,7 @@ public class UserEntity {
         this.discordId = id;
     }
 
-    public UserEntity(DiscordOauthUserInfo discordOauthUserInfo){
+    public UserEntity(DiscordOauthUserInfo discordOauthUserInfo) {
         this.username = discordOauthUserInfo.username();
         this.discriminator = discordOauthUserInfo.discriminator();
         this.discordId = discordOauthUserInfo.id();
@@ -80,21 +74,6 @@ public class UserEntity {
 
     public void setDiscordId(String discordId) {
         this.discordId = discordId;
-    }
-
-    public List<PlaylistEntity> getPlaylists() {
-        return playlists;
-    }
-
-    public void setPlaylists(List<PlaylistEntity> playlists) {
-        this.playlists = playlists;
-    }
-
-    public void addPlaylist(PlaylistEntity... playlists) {
-        if (this.playlists == null)
-            this.playlists = new ArrayList<>();
-
-        this.playlists.addAll(Arrays.asList(playlists));
     }
 
     public List<UserStats> getUserStats() {

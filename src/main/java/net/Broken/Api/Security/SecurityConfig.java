@@ -33,9 +33,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
 
-//        http.exceptionHandling().authenticationEntryPoint((request, response, authException) -> {
-//            response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
-//        });
     }
 
     @Bean

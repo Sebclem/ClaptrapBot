@@ -1,11 +1,6 @@
 package net.Broken.DB.Entity;
 
-import net.Broken.Api.Data.Settings.Value;
-import net.dv8tion.jda.api.entities.Guild;
-
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 public class GuildPreferenceEntity {

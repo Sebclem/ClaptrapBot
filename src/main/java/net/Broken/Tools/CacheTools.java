@@ -10,7 +10,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.List;
 
 public class CacheTools {
-    private static Logger logger = LogManager.getLogger();
+    private static final Logger logger = LogManager.getLogger();
 
     public static void loadAllGuildMembers() {
         List<Guild> guilds = MainBot.jda.getGuilds();

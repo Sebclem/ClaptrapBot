@@ -1,6 +1,5 @@
 package net.Broken.Audio;
 
-import com.google.api.client.googleapis.json.GoogleJsonResponseException;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import com.sedmelluq.discord.lavaplayer.player.event.AudioEventAdapter;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
@@ -8,15 +7,10 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
 import net.Broken.MainBot;
-import net.Broken.RestApi.Data.UserAudioTrackData;
-import net.Broken.Audio.Youtube.RelatedIdNotFound;
-import net.Broken.Audio.Youtube.YoutubeSearchRework;
-import net.Broken.Audio.Youtube.YoutubeTools;
 import net.dv8tion.jda.api.entities.Guild;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingDeque;
@@ -31,9 +25,7 @@ public class TrackScheduler extends AudioEventAdapter {
     private final Guild guild;
 
     private UserAudioTrack currentPlayingTrack;
-    private boolean autoFlow = false;
-    private ArrayList<String> history = new ArrayList<>();
-    private Logger logger = LogManager.getLogger();
+    private final Logger logger = LogManager.getLogger();
 
     /**
      * @param player The audio player this scheduler uses
@@ -57,20 +49,13 @@ public class TrackScheduler extends AudioEventAdapter {
         // track goes to the queue instead.
         if (track.getSubmittedUser() != MainBot.jda.getSelfUser()) {
             logger.debug("[" + guild + "] Flush history");
-            history = new ArrayList<>();
         }
 
-        history.add(track.getAudioTrack().getIdentifier());
         if (!player.startTrack(track.getAudioTrack(), true)) {
             queue.offer(track);
         } else {
             currentPlayingTrack = track;
         }
-        if (track.getSubmittedUser() != MainBot.jda.getSelfUser()) {
-            needAutoPlay();
-        }
-
-
     }
 
     /**
@@ -82,22 +67,11 @@ public class TrackScheduler extends AudioEventAdapter {
         // Calling startTrack with the noInterrupt set to true will start the track only if nothing is currently playing. If
         // something is playing, it returns false and does nothing. In that case the player was already playing so this
         // track goes to the queue instead.
-        if (track.getSubmittedUser() != MainBot.jda.getSelfUser()) {
-            logger.debug("Flush history");
-            history = new ArrayList<>();
-        }
-
-        history.add(track.getAudioTrack().getIdentifier());
         if (!player.startTrack(track.getAudioTrack(), true)) {
             queue.addFirst(track);
         } else {
             currentPlayingTrack = track;
         }
-        if (track.getSubmittedUser() != MainBot.jda.getSelfUser()) {
-
-            needAutoPlay();
-        } else
-            logger.debug("[" + guild + "] Bot add, ignore autoFlow");
     }
 
     public void pause() {
@@ -119,14 +93,12 @@ public class TrackScheduler extends AudioEventAdapter {
         queue.clear();
     }
 
-    public List<UserAudioTrackData> getList() {
-//        AudioTrack[] test = (AudioTrack[]) queue.toArray();
-
-        List<UserAudioTrackData> temp = new ArrayList<>();
+    public List<UserAudioTrack> getList() {
+        List<UserAudioTrack> temp = new ArrayList<>();
         Object[] test = queue.toArray();
         for (Object track : test) {
             UserAudioTrack casted = (UserAudioTrack) track;
-            temp.add(new UserAudioTrackData(casted.getSubmittedUser().getName(), casted.getAudioTrack().getInfo()));
+            temp.add(casted);
         }
         return temp;
     }
@@ -147,7 +119,6 @@ public class TrackScheduler extends AudioEventAdapter {
                     return false;
                 } else {
                     logger.info("[" + guild + "] Delete successful");
-                    needAutoPlay();
                     return true;
                 }
             }
@@ -168,8 +139,6 @@ public class TrackScheduler extends AudioEventAdapter {
             this.currentPlayingTrack = track;
             player.startTrack(track.getAudioTrack(), false);
         }
-
-        needAutoPlay();
     }
 
     @Override
@@ -216,40 +185,5 @@ public class TrackScheduler extends AudioEventAdapter {
     public void onTrackStuck(AudioPlayer player, AudioTrack track, long thresholdMs) {
         super.onTrackStuck(player, track, thresholdMs);
         GuildAudioWrapper.getInstance(guild).updateLastButton();
-    }
-
-    private void needAutoPlay() {
-        if ((queue.size() < 1) && autoFlow && currentPlayingTrack != null) {
-            logger.debug("[" + guild.getName() + "] Auto add needed!");
-            GuildAudioWrapper guildAudioWrapper = GuildAudioWrapper.getInstance(guild);
-            YoutubeSearchRework youtubeSearchRework = YoutubeSearchRework.getInstance();
-            try {
-                String id = youtubeSearchRework.getRelatedVideo(currentPlayingTrack.getAudioTrack().getInfo().identifier);
-                logger.debug("[" + guild.getName() + "] Related id: " + id);
-                guildAudioWrapper.loadAndPlayAuto(id);
-            } catch (IOException | RelatedIdNotFound ex) {
-                logger.debug("[" + guild.getName() + "] Can't find related id, try API...");
-                YoutubeTools youtubeTools = YoutubeTools.getInstance();
-                try {
-                    String id = youtubeTools.getRelatedVideo(currentPlayingTrack.getAudioTrack().getInfo().identifier, history);
-                    logger.debug("[" + guild.getName() + "] Related id: " + id);
-                    guildAudioWrapper.loadAndPlayAuto(id);
-
-                } catch (GoogleJsonResponseException e) {
-                    logger.error("[" + guild.getName() + "] There was a service error: " + e.getDetails().getCode() + " : " + e.getDetails().getMessage());
-                } catch (IOException t) {
-                    logger.catching(t);
-                }
-            }
-        }
-    }
-
-    public boolean isAutoFlow() {
-        return autoFlow;
-    }
-
-    public void setAutoFlow(boolean autoFlow) {
-        this.autoFlow = autoFlow;
-        needAutoPlay();
     }
 }

@@ -15,6 +15,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,7 +55,7 @@ public class TrueRandom {
 
 
         InputStream responseIS = response.getEntity().getContent();
-        String content = IOUtils.toString(responseIS, "UTF-8");
+        String content = IOUtils.toString(responseIS, StandardCharsets.UTF_8);
         logger.trace(content);
 
         JSONObject json = new JSONObject(content);

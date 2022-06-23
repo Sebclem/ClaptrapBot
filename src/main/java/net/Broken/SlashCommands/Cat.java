@@ -16,15 +16,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.ArrayList;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 /**
  * Command that return a random picture of cat.
  */
 public class Cat implements SlashCommand {
-    private Logger logger = LogManager.getLogger();
-    ;
+    private final Logger logger = LogManager.getLogger();
 
     @Override
     public void action(SlashCommandEvent event) {
@@ -32,7 +31,7 @@ public class Cat implements SlashCommand {
             URL urlC = new URL("http://aws.random.cat/meo");
             URLConnection yc = urlC.openConnection();
             BufferedReader in = new BufferedReader(new InputStreamReader(
-                    yc.getInputStream(), "UTF-8"));
+                    yc.getInputStream(), StandardCharsets.UTF_8));
             String inputLine;
             StringBuilder a = new StringBuilder();
             while ((inputLine = in.readLine()) != null)

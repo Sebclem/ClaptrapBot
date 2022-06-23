@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.net.http.HttpClient;
@@ -143,7 +142,7 @@ public class DiscordOauthService {
     }
 
 
-    private String getFormString(HashMap<String, String> params) throws UnsupportedEncodingException {
+    private String getFormString(HashMap<String, String> params) {
         StringBuilder result = new StringBuilder();
         boolean first = true;
         for (Map.Entry<String, String> entry : params.entrySet()) {

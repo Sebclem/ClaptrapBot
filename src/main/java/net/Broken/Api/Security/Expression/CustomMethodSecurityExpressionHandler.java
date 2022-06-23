@@ -1,6 +1,5 @@
 package net.Broken.Api.Security.Expression;
 
-import net.Broken.Api.Security.Expression.CustomMethodSecurityExpressionRoot;
 import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
 import org.springframework.security.access.expression.method.MethodSecurityExpressionOperations;
@@ -10,7 +9,7 @@ import org.springframework.security.core.Authentication;
 
 public class CustomMethodSecurityExpressionHandler
         extends DefaultMethodSecurityExpressionHandler {
-    private AuthenticationTrustResolver trustResolver =
+    private final AuthenticationTrustResolver trustResolver =
             new AuthenticationTrustResolverImpl();
 
     @Override

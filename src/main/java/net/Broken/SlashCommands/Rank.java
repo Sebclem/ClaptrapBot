@@ -1,7 +1,6 @@
 package net.Broken.SlashCommands;
 
 import net.Broken.BotConfigLoader;
-import net.Broken.MainBot;
 import net.Broken.SlashCommand;
 import net.Broken.SpringContext;
 import net.Broken.Tools.UserManager.Stats.UserStatsUtils;

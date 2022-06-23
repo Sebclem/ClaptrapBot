@@ -1,9 +1,9 @@
 package net.Broken.Api.Controllers;
 
+import net.Broken.Api.Data.Guild.Channel;
 import net.Broken.Api.Data.Guild.Guild;
 import net.Broken.Api.Data.Guild.Role;
 import net.Broken.Api.Data.InviteLink;
-import net.Broken.Api.Data.Guild.Channel;
 import net.Broken.Api.Security.Data.JwtPrincipal;
 import net.Broken.Api.Services.GuildService;
 import net.Broken.MainBot;

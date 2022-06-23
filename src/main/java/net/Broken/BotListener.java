@@ -1,11 +1,11 @@
 package net.Broken;
 
+import net.Broken.Audio.GuildAudioWrapper;
 import net.Broken.DB.Entity.GuildPreferenceEntity;
 import net.Broken.DB.Repository.GuildPreferenceRepository;
 import net.Broken.Tools.AutoVoiceChannel;
 import net.Broken.Tools.EmbedMessageUtils;
 import net.Broken.Tools.UserManager.Stats.UserStatsUtils;
-import net.Broken.Audio.GuildAudioWrapper;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.*;
@@ -193,9 +193,7 @@ public class BotListener extends ListenerAdapter {
         logger.info("Join new guild! (" + event.getGuild().getName() + " " + event.getGuild().getMembers().size() + " Members)");
         super.onGuildJoin(event);
         getPreference(event.getGuild());
-        event.getGuild().loadMembers().onSuccess((members -> {
-            logger.debug("[" + event.getGuild().getName() + "] Members loaded");
-        }));
+        event.getGuild().loadMembers().onSuccess((members -> logger.debug("[" + event.getGuild().getName() + "] Members loaded")));
         EmbedBuilder eb = new EmbedBuilder().setColor(Color.GREEN)
                 .setTitle("Hello there !")
                 .setDescription("Allow me to introduce myself -- I am a CL4P-TP the discord bot, but my friends call me Claptrap ! Or they would, if any of them were real...\n" +

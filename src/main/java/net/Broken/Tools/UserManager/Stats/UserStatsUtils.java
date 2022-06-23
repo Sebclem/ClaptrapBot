@@ -8,8 +8,6 @@ import net.Broken.MainBot;
 import net.Broken.SpringContext;
 import net.Broken.Tools.CacheTools;
 import net.Broken.Tools.EmbedMessageUtils;
-import net.Broken.Tools.UserManager.Exceptions.UnknownTokenException;
-import net.Broken.Tools.UserManager.UserUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
@@ -18,7 +16,6 @@ import net.dv8tion.jda.api.entities.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.context.ApplicationContext;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -27,23 +24,22 @@ import java.util.List;
 
 public class UserStatsUtils {
 
-    static double XP_PER_VOICE_TIME = 0.01;
-    static double XP_PER_MESSAGE = 4;
-    static double XP_PER_API_COUNT = 1;
+    static final double XP_PER_VOICE_TIME = 0.01;
+    static final double XP_PER_MESSAGE = 4;
+    static final double XP_PER_API_COUNT = 1;
 
 
     private static UserStatsUtils INSTANCE = new UserStatsUtils();
     private final UserStatsRepository userStatsRepository;
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
     private final Logger logger = LogManager.getLogger();
-    public HashMap<String, VoicePresenceCounter> runningCounters = new HashMap<>();
+    public final HashMap<String, VoicePresenceCounter> runningCounters = new HashMap<>();
 
     private UserStatsUtils() {
         ApplicationContext context = SpringContext.getAppContext();
         userStatsRepository = (UserStatsRepository) context.getBean("userStatsRepository");
         userRepository = (UserRepository) context.getBean("userRepository");
-        passwordEncoder = (PasswordEncoder) context.getBean("passwordEncoder");
+
 
     }
 
@@ -97,11 +93,6 @@ public class UserStatsUtils {
 
         }
         return userEntity.getUserStats();
-    }
-
-    public List<UserStats> getUserStats(String token) throws UnknownTokenException {
-        UserEntity user = UserUtils.getInstance().getUserWithApiToken(userRepository, token);
-        return getUserStats(user);
     }
 
     public List<UserStats> getUserStats(User user) {
@@ -227,7 +218,7 @@ public class UserStatsUtils {
         GuildStatsPack pack = getStatPack(userStats.getUser(), member.getGuild().getId());
         StringBuilder stringBuilder = new StringBuilder();
         int i = 1;
-        for (GuildStats stats : pack.ranking) {
+        for (GuildStats stats : pack.ranking()) {
             if (i >= 6) {
                 break;
             }
@@ -240,24 +231,15 @@ public class UserStatsUtils {
         embedBuilder.setColor(Color.yellow);
         embedBuilder.setTitle(":trophy:  " + member.getGuild().getName() + " Ranking");
         embedBuilder.addField("Top 5:", stringBuilder.toString(), false);
-        String rank;
-        switch (pack.selfStats.rank) {
-            case 1:
-                rank = "1st";
-                break;
-            case 2:
-                rank = "2nd";
-                break;
-            case 3:
-                rank = "3rd";
-                break;
-            default:
-                rank = pack.selfStats.rank + "th";
-                break;
-        }
+        String rank = switch (pack.selfStats().rank) {
+            case 1 -> "1st";
+            case 2 -> "2nd";
+            case 3 -> "3rd";
+            default -> pack.selfStats().rank + "th";
+        };
 
 
-        embedBuilder.addField("Your stats:", rank + " with " + pack.selfStats.total + " points", false);
+        embedBuilder.addField("Your stats:", rank + " with " + pack.selfStats().total + " points", false);
         return EmbedMessageUtils.buildStandar(embedBuilder);
 
     }
