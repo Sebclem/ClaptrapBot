@@ -17,10 +17,8 @@ import java.util.HashMap;
 @ConfigurationPropertiesScan
 public class MainBot {
 
-    public static HashMap<String, Commande> commandes = new HashMap<>();
     public static final HashMap<String, SlashCommand> slashCommands = new HashMap<>();
     public static HashMap<String, Integer> mutualGuildCount = new HashMap<>();
-    public static boolean roleFlag = false;
     public static JDA jda;
     public static boolean ready = false;
 
@@ -46,7 +44,6 @@ public class MainBot {
                 return 1;
             }));
         }
-
         Init.polish(jda, config);
         ready = true;
     }

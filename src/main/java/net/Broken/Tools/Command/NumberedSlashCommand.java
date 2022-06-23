@@ -65,7 +65,7 @@ public abstract class NumberedSlashCommand implements SlashCommand {
         try {
             String result = poll();
             event.getHook().sendMessage(event.getMember().getAsMention() + "\n" + result).queue();
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             logger.catching(e);
             MessageEmbed message = EmbedMessageUtils.getInternalError();
             event.getHook().setEphemeral(true).sendMessageEmbeds(message).queue();
@@ -89,7 +89,7 @@ public abstract class NumberedSlashCommand implements SlashCommand {
         }
     }
 
-    public String poll() throws IOException {
+    public String poll() throws IOException, InterruptedException {
         checkRandom();
         int randomResult = randomQueue.poll();
         return FindContentOnWebPage.doYourJob(baseURL + randomResult + urlSuffix, divClass, htmlType);

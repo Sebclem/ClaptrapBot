@@ -23,7 +23,7 @@ public class Madame extends NumberedSlashCommand {
      * @throws StringIndexOutOfBoundsException
      * @throws IOException
      */
-    private boolean scanPageForTipeee(String url, Logger logger) throws StringIndexOutOfBoundsException, IOException {
+    private boolean scanPageForTipeee(String url, Logger logger) throws StringIndexOutOfBoundsException, IOException, InterruptedException {
         String content = FindContentOnWebPage.getSourceUrl(url);
         String imgClickLink = content.substring(content.indexOf("class=\"post-content"));
         imgClickLink = imgClickLink.substring(imgClickLink.indexOf("<a"));
@@ -48,7 +48,7 @@ public class Madame extends NumberedSlashCommand {
 
 
     @Override
-    public String poll() throws IOException {
+    public String poll() throws IOException, InterruptedException {
         boolean success = false;
         String imgUrl = null;
         while (!success) {

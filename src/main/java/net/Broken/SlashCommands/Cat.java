@@ -15,8 +15,12 @@ import org.apache.logging.log4j.Logger;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
@@ -30,23 +34,25 @@ public class Cat implements SlashCommand {
     @Override
     public void action(SlashCommandEvent event) {
         try {
-            URL urlC = new URL("http://aws.random.cat/meo");
-            URLConnection yc = urlC.openConnection();
-            BufferedReader in = new BufferedReader(new InputStreamReader(
-                    yc.getInputStream(), StandardCharsets.UTF_8));
-            String inputLine;
-            StringBuilder a = new StringBuilder();
-            while ((inputLine = in.readLine()) != null)
-                a.append(inputLine);
-            in.close();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://aws.random.cat/meow"))
+                    .GET()
+                    .build();
+
+
+            HttpClient client = HttpClient.newHttpClient();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            if (response.statusCode() != 200) {
+                logger.warn("[CAT] Fail to fetch cat: Status Code: " + response.statusCode() + " Body:" + response.body());
+                throw new IOException();
+            }
 
             TypeReference<HashMap<String, String>> typeRef = new TypeReference<>() {};
             ObjectMapper mapper = new ObjectMapper();
-            HashMap<String, String> json = mapper.readValue(a.toString(), typeRef);
-
+            HashMap<String, String> json = mapper.readValue(response.body(), typeRef);
             event.reply(json.get("file")).queue();
 
-        } catch (IOException e) {
+        } catch (InterruptedException | IOException e) {
             logger.catching(e);
             event.reply(new MessageBuilder().setEmbeds(EmbedMessageUtils.getInternalError()).build()).setEphemeral(true).queue();
         }

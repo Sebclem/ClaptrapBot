@@ -78,7 +78,7 @@ public class DailyMadame implements NewDayListener {
                     }
                 }
             }
-        } catch (IOException e) {
+        } catch (IOException |InterruptedException e) {
             logger.catching(e);
         }
     }
