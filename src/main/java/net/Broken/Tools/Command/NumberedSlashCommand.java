@@ -4,7 +4,7 @@ import net.Broken.SlashCommand;
 import net.Broken.Tools.EmbedMessageUtils;
 import net.Broken.Tools.FindContentOnWebPage;
 import net.Broken.Tools.LimitChecker;
-import net.Broken.Tools.TrueRandom;
+import net.Broken.Tools.Random.TrueRandom;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
@@ -75,7 +75,7 @@ public abstract class NumberedSlashCommand implements SlashCommand {
 
     private void fillRandomQueue() throws IOException {
         TrueRandom trueRandom = TrueRandom.getINSTANCE();
-        ArrayList<Integer> numbers = trueRandom.getNumbers(minNumber, maxNumber);
+        List<Integer> numbers = trueRandom.getNumbers(minNumber, maxNumber);
 
         randomQueue.addAll(numbers);
 

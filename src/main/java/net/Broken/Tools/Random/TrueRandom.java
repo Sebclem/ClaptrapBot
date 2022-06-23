@@ -1,7 +1,9 @@
-package net.Broken.Tools;
+package net.Broken.Tools.Random;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import net.Broken.BotConfigLoader;
 import net.Broken.SpringContext;
+import net.Broken.Tools.Random.Data.RandomData;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -11,12 +13,10 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.List;
 
 public class TrueRandom {
@@ -32,13 +32,15 @@ public class TrueRandom {
         return INSTANCE;
     }
 
-    public ArrayList<Integer> getNumbers(int min, int max) throws IOException {
+    public List<Integer> getNumbers(int min, int max) throws IOException {
 
 //        TODO Migrate to native http client
         HttpClient httpClient = HttpClientBuilder.create().build();
 
-        String postVal = "{\"jsonrpc\":\"2.0\",\"method\":\"generateIntegers\",\"params\":{\"apiKey\":\"" + apiKey + "\",\"n\":50,\"min\":" + min + ",\"max\":" + max + ",\"replacement\":" + (((max - min) >= 50) ? "false" : "true") + "},\"id\":41}";
-        StringEntity entity = new StringEntity(postVal, ContentType.APPLICATION_JSON);
+        RandomData postData = new RandomData("2.0", "generateIntegers", 41, new RandomData.Params(apiKey, 50, min, max, (max - min) < 50), null, null);
+        ObjectMapper mapper = new ObjectMapper();
+
+        StringEntity entity = new StringEntity(mapper.writeValueAsString(postData), ContentType.APPLICATION_JSON);
         String url = "https://api.random.org/json-rpc/2/invoke";
         HttpPost request = new HttpPost(url);
         request.setEntity(entity);
@@ -56,28 +58,21 @@ public class TrueRandom {
 
         InputStream responseIS = response.getEntity().getContent();
         String content = IOUtils.toString(responseIS, StandardCharsets.UTF_8);
-        logger.trace(content);
 
-        JSONObject json = new JSONObject(content);
-        if (json.keySet().contains("error")) {
+        RandomData responseData = mapper.readValue(content, RandomData.class);
+
+        if (responseData.error() != null) {
             logger.error("Request fail!");
-            logger.error("Request : " + postVal);
-            logger.error("Response : " + content);
+            logger.error("Response : " + responseData.error().message());
             throw new IOException();
 
         }
 
-        logger.debug("Request left: " + json.getJSONObject("result").getInt("requestsLeft"));
-        logger.debug("Bits left: " + json.getJSONObject("result").getInt("bitsLeft"));
-        logger.debug("Numbers: " + json.getJSONObject("result").getJSONObject("random").getJSONArray("data"));
+        logger.debug("Request left: " + responseData.result().requestsLeft());
+        logger.debug("Bits left: " + responseData.result().bitsLeft());
+        logger.debug("Numbers: " + responseData.result().random().data());
 
-        List<Object> numbers = json.getJSONObject("result").getJSONObject("random").getJSONArray("data").toList();
-
-        ArrayList<Integer> converted = new ArrayList<>();
-        for (Object nbr : numbers) {
-            converted.add((Integer) nbr);
-        }
-        return converted;
+        return responseData.result().random().data();
 
     }
 

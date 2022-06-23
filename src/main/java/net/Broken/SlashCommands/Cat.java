@@ -1,6 +1,8 @@
 package net.Broken.SlashCommands;
 
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import net.Broken.SlashCommand;
 import net.Broken.Tools.EmbedMessageUtils;
 import net.dv8tion.jda.api.MessageBuilder;
@@ -9,7 +11,6 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -17,6 +18,7 @@ import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -38,9 +40,11 @@ public class Cat implements SlashCommand {
                 a.append(inputLine);
             in.close();
 
-            JSONObject json = new JSONObject(a.toString());
+            TypeReference<HashMap<String, String>> typeRef = new TypeReference<>() {};
+            ObjectMapper mapper = new ObjectMapper();
+            HashMap<String, String> json = mapper.readValue(a.toString(), typeRef);
 
-            event.reply(json.getString("file")).queue();
+            event.reply(json.get("file")).queue();
 
         } catch (IOException e) {
             logger.catching(e);
