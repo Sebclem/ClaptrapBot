@@ -64,7 +64,7 @@ dependencies {
     liquibaseRuntime 'org.liquibase:liquibase-groovy-dsl:3.0.2'
     liquibaseRuntime 'mysql:mysql-connector-java:8.0.29'
     liquibaseRuntime group: 'javax.xml.bind', name: 'jaxb-api', version: '2.3.1'
-    liquibaseRuntime group: 'org.liquibase.ext', name: 'liquibase-hibernate5', version: '4.10.0'
+    liquibaseRuntime group: 'org.liquibase.ext', name: 'liquibase-hibernate5', version: '4.12.0'
     liquibaseRuntime 'org.springframework.boot:spring-boot-starter-data-jpa'
     liquibaseRuntime 'org.springframework.data:spring-data-jpa'
     liquibaseRuntime 'org.springframework:spring-beans'
