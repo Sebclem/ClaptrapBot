@@ -33,7 +33,7 @@ public class GuildController {
 
     @GetMapping("inviteLink")
     public InviteLink getInviteLink() {
-        String link = MainBot.jda.setRequiredScopes("applications.commands").getInviteUrl(Permission.getPermissions(1636113579328L));
+        String link = MainBot.jda.setRequiredScopes("applications.commands").getInviteUrl(Permission.getPermissions(1099511103319L));
         return new InviteLink(link);
     }
 

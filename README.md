@@ -2,6 +2,7 @@
 
 # ClaptrapBot: A multifunctional Discord Bot !
 
+
 [![GitHub Release][releases-shield]][releases]
 ![Project Stage][project-stage-shield]
 [![License][license-shield]](LICENSE.md)
