@@ -10,12 +10,6 @@ import java.util.List;
  * Interface that define command structure.
  */
 public interface SlashCommand {
-    /**
-     * Main action of command
-     *
-     * @param args  Command args.
-     * @param event Command MessageReceivedEvent
-     */
     void action(SlashCommandEvent event);
 
     String getDescription();

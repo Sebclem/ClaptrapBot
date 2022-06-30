@@ -8,8 +8,6 @@ import net.Broken.MainBot;
 import net.Broken.SpringContext;
 import net.Broken.Tools.CacheTools;
 import net.Broken.Tools.EmbedMessageUtils;
-import net.Broken.Tools.UserManager.Exceptions.UnknownTokenException;
-import net.Broken.Tools.UserManager.UserUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
@@ -18,7 +16,6 @@ import net.dv8tion.jda.api.entities.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.context.ApplicationContext;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -27,23 +24,22 @@ import java.util.List;
 
 public class UserStatsUtils {
 
-    static double XP_PER_VOICE_TIME = 0.01;
-    static double XP_PER_MESSAGE = 4;
-    static double XP_PER_API_COUNT = 1;
+    static final double XP_PER_VOICE_TIME = 0.01;
+    static final double XP_PER_MESSAGE = 4;
+    static final double XP_PER_API_COUNT = 1;
 
 
     private static UserStatsUtils INSTANCE = new UserStatsUtils();
     private final UserStatsRepository userStatsRepository;
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
     private final Logger logger = LogManager.getLogger();
-    public HashMap<String, VoicePresenceCounter> runningCounters = new HashMap<>();
+    public final HashMap<String, VoicePresenceCounter> runningCounters = new HashMap<>();
 
     private UserStatsUtils() {
         ApplicationContext context = SpringContext.getAppContext();
         userStatsRepository = (UserStatsRepository) context.getBean("userStatsRepository");
         userRepository = (UserRepository) context.getBean("userRepository");
-        passwordEncoder = (PasswordEncoder) context.getBean("passwordEncoder");
+
 
     }
 
@@ -65,7 +61,7 @@ public class UserStatsUtils {
         logger.debug(userEntity);
         logger.debug(userEntity.getUserStats());
         if (userEntity.getUserStats() == null || userEntity.getUserStats().size() == 0 || userEntity.getUserStats().size() < jdaUser.getMutualGuilds().size()) {
-            logger.debug("Stats not found for " + userEntity.getName());
+            logger.debug("Stats not found for " + userEntity.getUsername());
 
             List<UserStats> stats;
             if (userEntity.getUserStats() == null || userEntity.getUserStats().size() == 0) {
@@ -99,37 +95,21 @@ public class UserStatsUtils {
         return userEntity.getUserStats();
     }
 
-    public List<UserStats> getUserStats(String token) throws UnknownTokenException {
-        UserEntity user = UserUtils.getInstance().getUserWithApiToken(userRepository, token);
-        return getUserStats(user);
-    }
-
     public List<UserStats> getUserStats(User user) {
-        UserEntity userEntity;
-        List<UserEntity> userList = userRepository.findByJdaId(user.getId());
-        if (userList.size() == 0) {
-            logger.debug("User not registered, generate it. User: " + user.getName() + " " + user.getDiscriminator());
-            userEntity = genUserEntity(user);
-        } else
-            userEntity = userList.get(0);
-
+        UserEntity userEntity = userRepository.findByDiscordId(user.getId())
+                .orElseGet(() -> genUserEntity(user));
         return getUserStats(userEntity);
 
     }
 
 
     public UserStats getGuildUserStats(Member member) {
-        List<UserEntity> userEntityList = userRepository.findByJdaId(member.getUser().getId());
-        UserEntity userEntity;
-        if (userEntityList.size() == 0) {
-            logger.debug("UserEntity not found for user " + member.getNickname());
-            userEntity = genUserEntity(member.getUser());
-        } else
-            userEntity = userEntityList.get(0);
+        UserEntity userEntity = userRepository.findByDiscordId(member.getUser().getId())
+                .orElseGet(() -> genUserEntity(member.getUser()));
 
         List<UserStats> userStatsList = userStatsRepository.findByUserAndGuildId(userEntity, member.getGuild().getId());
         if (userStatsList.size() == 0) {
-            logger.debug("User stats not found for user " + userEntity.getName() + " guild: " + member.getGuild().getId());
+            logger.debug("User stats not found for user " + userEntity.getUsername() + " guild: " + member.getGuild().getId());
             getUserStats(userEntity);
             userStatsList = userStatsRepository.findByUserAndGuildId(userEntity, member.getGuild().getId());
         }
@@ -140,7 +120,7 @@ public class UserStatsUtils {
     public UserStats getGuildUserStats(UserEntity userEntity, String guildId) {
         List<UserStats> userStatsList = userStatsRepository.findByUserAndGuildId(userEntity, guildId);
         if (userStatsRepository.findByUserAndGuildId(userEntity, guildId).size() == 0) {
-            logger.debug("User stats not found for user " + userEntity.getName() + " guild: " + guildId);
+            logger.debug("User stats not found for user " + userEntity.getUsername() + " guild: " + guildId);
             getUserStats(userEntity);
             userStatsList = userStatsRepository.findByUserAndGuildId(userEntity, guildId);
         }
@@ -177,7 +157,7 @@ public class UserStatsUtils {
 
 
     private UserEntity genUserEntity(User user) {
-        UserEntity userEntity = new UserEntity(user, passwordEncoder);
+        UserEntity userEntity = new UserEntity(user);
         return userRepository.save(userEntity);
     }
 
@@ -191,13 +171,13 @@ public class UserStatsUtils {
         List<UserStats> needCache = new ArrayList<>();
         Guild guild = MainBot.jda.getGuildById(guildId);
         for (UserStats stats : allStats) {
-            Member member = guild.getMemberById(stats.getUser().getJdaId());
+            Member member = guild.getMemberById(stats.getUser().getDiscordId());
             if (member == null) {
                 needCache.add(stats);
                 continue;
             }
             String avatar = member.getUser().getAvatarUrl();
-            GuildStats temp = new GuildStats(stats.getUser().getName(), 0, avatar, stats.getVocalTime(), stats.getMessageCount(), stats.getApiCommandCount());
+            GuildStats temp = new GuildStats(stats.getUser().getUsername(), 0, avatar, stats.getVocalTime(), stats.getMessageCount(), stats.getApiCommandCount());
             if (stats.getUser().getId().equals(userEntity.getId())) {
                 selfGuildStats = temp;
             }
@@ -207,13 +187,13 @@ public class UserStatsUtils {
             logger.info("Cache mismatch, loading all guild");
             MainBot.jda.getGuildById(guildId).loadMembers().get();
             for (UserStats stats : needCache) {
-                Member member = guild.getMemberById(stats.getUser().getJdaId());
+                Member member = guild.getMemberById(stats.getUser().getDiscordId());
                 if (member == null) {
-                    logger.warn("Can't find member '" + stats.getUser().getName() + "'after load, User leave the guild ?");
+                    logger.warn("Can't find member '" + stats.getUser().getUsername() + "'after load, User leave the guild ?");
                     continue;
                 }
                 String avatar = member.getUser().getAvatarUrl();
-                GuildStats temp = new GuildStats(stats.getUser().getName(), 0, avatar, stats.getVocalTime(), stats.getMessageCount(), stats.getApiCommandCount());
+                GuildStats temp = new GuildStats(stats.getUser().getUsername(), 0, avatar, stats.getVocalTime(), stats.getMessageCount(), stats.getApiCommandCount());
                 if (stats.getUser().getId().equals(userEntity.getId())) {
                     selfGuildStats = temp;
                 }
@@ -238,7 +218,7 @@ public class UserStatsUtils {
         GuildStatsPack pack = getStatPack(userStats.getUser(), member.getGuild().getId());
         StringBuilder stringBuilder = new StringBuilder();
         int i = 1;
-        for (GuildStats stats : pack.ranking) {
+        for (GuildStats stats : pack.ranking()) {
             if (i >= 6) {
                 break;
             }
@@ -251,24 +231,15 @@ public class UserStatsUtils {
         embedBuilder.setColor(Color.yellow);
         embedBuilder.setTitle(":trophy:  " + member.getGuild().getName() + " Ranking");
         embedBuilder.addField("Top 5:", stringBuilder.toString(), false);
-        String rank;
-        switch (pack.selfStats.rank) {
-            case 1:
-                rank = "1st";
-                break;
-            case 2:
-                rank = "2nd";
-                break;
-            case 3:
-                rank = "3rd";
-                break;
-            default:
-                rank = pack.selfStats.rank + "th";
-                break;
-        }
+        String rank = switch (pack.selfStats().rank) {
+            case 1 -> "1st";
+            case 2 -> "2nd";
+            case 3 -> "3rd";
+            default -> pack.selfStats().rank + "th";
+        };
 
 
-        embedBuilder.addField("Your stats:", rank + " with " + pack.selfStats.total + " points", false);
+        embedBuilder.addField("Your stats:", rank + " with " + pack.selfStats().total + " points", false);
         return EmbedMessageUtils.buildStandar(embedBuilder);
 
     }

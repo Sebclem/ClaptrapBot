@@ -1,21 +1,15 @@
 package net.Broken.DB.Entity;
 
-import net.dv8tion.jda.api.entities.Guild;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class GuildPreferenceEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(unique=true)
     private String guildId;
-
-    private boolean antiSpam;
 
     private boolean welcome;
 
@@ -35,7 +29,6 @@ public class GuildPreferenceEntity {
 
 
     public GuildPreferenceEntity(String guildId,
-                                 boolean antiSpam,
                                  boolean welcome,
                                  String welcomeMessage,
                                  String welcomeChanelID,
@@ -46,7 +39,6 @@ public class GuildPreferenceEntity {
                                  String autoVoiceChannelID,
                                  String autoVoiceChannelTitle) {
         this.guildId = guildId;
-        this.antiSpam = antiSpam;
         this.welcome = welcome;
         this.welcomeMessage = welcomeMessage;
         this.welcomeChanelID = welcomeChanelID;
@@ -62,9 +54,8 @@ public class GuildPreferenceEntity {
     }
 
 
-    public static GuildPreferenceEntity getDefault(Guild guild) {
-
-        return new GuildPreferenceEntity(guild.getId(), false, false, "Welcome to this awesome server @name! ", " ", false, " ", true, false, " ", " ");
+    public static GuildPreferenceEntity getDefault(String guildId) {
+        return new GuildPreferenceEntity(guildId, false, "Welcome to this awesome server @name! ", null, false, null, true, false, null, null);
     }
 
     public Integer getId() {
@@ -81,14 +72,6 @@ public class GuildPreferenceEntity {
 
     public void setGuildId(String guildId) {
         this.guildId = guildId;
-    }
-
-    public boolean isAntiSpam() {
-        return antiSpam;
-    }
-
-    public void setAntiSpam(boolean antiSpam) {
-        this.antiSpam = antiSpam;
     }
 
     public boolean isWelcome() {

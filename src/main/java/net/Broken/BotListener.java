@@ -1,11 +1,11 @@
 package net.Broken;
 
+import net.Broken.Audio.GuildAudioBotService;
 import net.Broken.DB.Entity.GuildPreferenceEntity;
 import net.Broken.DB.Repository.GuildPreferenceRepository;
 import net.Broken.Tools.AutoVoiceChannel;
 import net.Broken.Tools.EmbedMessageUtils;
 import net.Broken.Tools.UserManager.Stats.UserStatsUtils;
-import net.Broken.audio.AudioM;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.*;
@@ -27,7 +27,7 @@ import org.springframework.context.ApplicationContext;
 
 import java.awt.*;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -35,12 +35,14 @@ import java.util.List;
  */
 public class BotListener extends ListenerAdapter {
     private final GuildPreferenceRepository guildPreferenceRepository;
+    private final BotConfigLoader botConfig;
 
     private final Logger logger = LogManager.getLogger();
 
     public BotListener() {
         ApplicationContext context = SpringContext.getAppContext();
-        guildPreferenceRepository = (GuildPreferenceRepository) context.getBean("guildPreferenceRepository");
+        guildPreferenceRepository = context.getBean(GuildPreferenceRepository.class);
+        botConfig = context.getBean(BotConfigLoader.class);
     }
 
     @Override
@@ -117,10 +119,10 @@ public class BotListener extends ListenerAdapter {
 
             if (event.getGuild().getAudioManager().getConnectedChannel().getMembers().size() == 1) {
                 logger.debug("I'm alone, close audio connection.");
-                AudioM.getInstance(event.getGuild()).stop();
+                GuildAudioBotService.getInstance(event.getGuild()).stop();
             }
         } else if (event.getMember().getUser() == MainBot.jda.getSelfUser()) {
-            AudioM.getInstance(event.getGuild()).clearLastButton();
+            GuildAudioBotService.getInstance(event.getGuild()).clearLastButton();
         }
         AutoVoiceChannel autoVoiceChannel = AutoVoiceChannel.getInstance(event.getGuild());
         autoVoiceChannel.leave(event.getChannelLeft());
@@ -145,13 +147,13 @@ public class BotListener extends ListenerAdapter {
     public void onButtonClick(@NotNull ButtonClickEvent event) {
         super.onButtonClick(event);
         event.deferReply().queue();
-        AudioM audioM = AudioM.getInstance(event.getGuild());
+        GuildAudioBotService guildAudioBotService = GuildAudioBotService.getInstance(event.getGuild());
         switch (event.getComponentId()) {
-            case "pause" -> audioM.pause(event);
-            case "play" -> audioM.resume(event);
-            case "next" -> audioM.skipTrack(event);
-            case "stop" -> audioM.stop(event);
-            case "disconnect" -> audioM.disconect(event);
+            case "pause" -> guildAudioBotService.pause(event);
+            case "play" -> guildAudioBotService.resume(event);
+            case "next" -> guildAudioBotService.skipTrack(event);
+            case "stop" -> guildAudioBotService.stop(event);
+            case "disconnect" -> guildAudioBotService.disconnect(event);
         }
     }
 
@@ -191,10 +193,11 @@ public class BotListener extends ListenerAdapter {
         logger.info("Join new guild! (" + event.getGuild().getName() + " " + event.getGuild().getMembers().size() + " Members)");
         super.onGuildJoin(event);
         getPreference(event.getGuild());
+        event.getGuild().loadMembers().onSuccess((members -> logger.debug("[" + event.getGuild().getName() + "] Members loaded")));
         EmbedBuilder eb = new EmbedBuilder().setColor(Color.GREEN)
                 .setTitle("Hello there !")
                 .setDescription("Allow me to introduce myself -- I am a CL4P-TP the discord bot, but my friends call me Claptrap ! Or they would, if any of them were real...\n" +
-                        "\nYou can access to my web UI with: " + MainBot.url)
+                        "\nYou can access to my web UI with: " + botConfig.url())
                 .setImage("https://i.imgur.com/Anf1Srg.gif");
         Message message = new MessageBuilder().setEmbeds(EmbedMessageUtils.buildStandar(eb)).build();
 
@@ -205,21 +208,20 @@ public class BotListener extends ListenerAdapter {
             for (TextChannel chan : event.getGuild().getTextChannels()) {
                 if (chan.canTalk()) {
                     chan.sendMessage(message).queue();
+                    break;
                 }
             }
         }
     }
 
     private GuildPreferenceEntity getPreference(Guild guild) {
-        List<GuildPreferenceEntity> guildPrefList = guildPreferenceRepository.findByGuildId(guild.getId());
-        GuildPreferenceEntity guildPref;
-        if (guildPrefList.isEmpty()) {
+        Optional<GuildPreferenceEntity> guildPref = guildPreferenceRepository.findByGuildId(guild.getId());
+        if (guildPref.isEmpty()) {
             logger.info("[" + guild.getName() + "] : Generate default pref");
-            guildPref = GuildPreferenceEntity.getDefault(guild);
-            guildPref = guildPreferenceRepository.save(guildPref);
-        } else
-            guildPref = guildPrefList.get(0);
-        return guildPref;
+            return guildPreferenceRepository.save(GuildPreferenceEntity.getDefault(guild.getId()));
+        } else{
+            return guildPref.get();
+        }
     }
 
 

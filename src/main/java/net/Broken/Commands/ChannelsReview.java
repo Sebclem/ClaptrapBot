@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Locale;
 
 public class ChannelsReview implements Commande {
-    Logger logger = LogManager.getLogger();
+    final Logger logger = LogManager.getLogger();
 
     @Override
     public void action(String[] args, MessageReceivedEvent event) {
@@ -45,7 +45,7 @@ public class ChannelsReview implements Commande {
                 try {
                     Message lastMessage = textChannel.retrieveMessageById(lastMessageId).complete();
                     if (beforeDate.compareTo(format.parse(lastMessage.getTimeCreated().format(formatter))) > 0) {
-                        logger.debug("Last message in channel " + textChannel.toString() + " is " + lastMessageId);
+                        logger.debug("Last message in channel " + textChannel + " is " + lastMessageId);
                         String date = lastMessage.getTimeCreated().format(formatter);
                         charCtl += textChannel.getName().length() + date.length();
                         result.put(textChannel.getName(), date);
@@ -77,7 +77,7 @@ public class ChannelsReview implements Commande {
         for (TextChannel textChannel : event.getGuild().getTextChannels()) {
             if (textChannel.hasLatestMessage()) {
                 String lastMessageId = textChannel.getLatestMessageId();
-                logger.debug("Last message in channel " + textChannel.toString() + " is " + lastMessageId);
+                logger.debug("Last message in channel " + textChannel + " is " + lastMessageId);
 
                 try {
                     Message lastMessage = textChannel.retrieveMessageById(lastMessageId).complete();

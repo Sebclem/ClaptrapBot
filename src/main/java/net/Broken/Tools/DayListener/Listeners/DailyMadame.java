@@ -18,14 +18,15 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Daily Listener for DailyMadame
  */
 public class DailyMadame implements NewDayListener {
 
-    private GuildPreferenceRepository guildPreferenceRepository;
-    private Logger logger = LogManager.getLogger();
+    private final GuildPreferenceRepository guildPreferenceRepository;
+    private final Logger logger = LogManager.getLogger();
 
     public DailyMadame() {
         ApplicationContext context = SpringContext.getAppContext();
@@ -58,8 +59,8 @@ public class DailyMadame implements NewDayListener {
             for (Guild guild : guilds) {
                 TextChannel chanel = null;
                 logger.debug(guild.getName());
-                List<GuildPreferenceEntity> guildPref = guildPreferenceRepository.findByGuildId(guild.getId());
-                if (guildPref.size() > 0 && guildPref.get(0).isDailyMadame()) {
+                Optional<GuildPreferenceEntity> guildPref = guildPreferenceRepository.findByGuildId(guild.getId());
+                if (guildPref.isPresent() && guildPref.get().isDailyMadame()) {
                     for (TextChannel iterator : guild.getTextChannels()) {
                         if (iterator.isNSFW() && iterator.canTalk()) {
                             chanel = iterator;
@@ -76,10 +77,8 @@ public class DailyMadame implements NewDayListener {
                         logger.info("No NSFW chanel found for " + guild.getName() + ", ignoring it!");
                     }
                 }
-
-
             }
-        } catch (IOException e) {
+        } catch (IOException |InterruptedException e) {
             logger.catching(e);
         }
     }

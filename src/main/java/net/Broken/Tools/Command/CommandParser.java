@@ -12,7 +12,7 @@ import java.util.Arrays;
  */
 
 public class CommandParser {
-    private Logger logger = LogManager.getLogger();
+    private final Logger logger = LogManager.getLogger();
 
     /**
      * Parse raw received string.
@@ -22,9 +22,8 @@ public class CommandParser {
      * @return Readable container that contain all useful data
      */
     public CommandContainer parse(String brt, MessageReceivedEvent e) {
-        ArrayList<String> split = new ArrayList<String>();
-        String brut = brt;
-        String sansTete = brut.replaceFirst("//", "");
+        ArrayList<String> split = new ArrayList<>();
+        String sansTete = brt.replaceFirst("//", "");
         String[] splitSansTete = sansTete.split(" ");
 
         for (String s : splitSansTete) {
@@ -42,14 +41,14 @@ public class CommandParser {
 
         logger.info("Author: " + e.getAuthor().getName() + ", Command: " + commande + ", args: " + Arrays.toString(args));
 
-        return new CommandContainer(brut, sansTete, splitSansTete, commande, args, e);
+        return new CommandContainer(brt, sansTete, splitSansTete, commande, args, e);
 
     }
 
     /**
      * Container
      */
-    public class CommandContainer {
+    public static class CommandContainer {
         public final String brut;
         public final String sansTete;
         public final String[] splitSansTete;

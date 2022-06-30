@@ -2,7 +2,7 @@
     <Appenders>
         <Console name="Console" target="SYSTEM_OUT">
             <!--<PatternLayout pattern="[%d{HH:mm:ss.SSS}][%-5level][%-30.30c{1.}]: %msg%n" />-->
-            <PatternLayout>
+            <PatternLayout disableAnsi="false">
                 <Pattern>[%d{HH:mm:ss.SSS}]%highlight{[%-5level]}{FATAL=red blink, ERROR=red, WARN=bright yellow ,
                     INFO=blue, DEBUG=bright black, TRACE=cyan}[%-30.30c{1.}]: %highlight{%msg%n}{FATAL=red blink,
                     ERROR=red, WARN=bright yellow , INFO=blue, DEBUG=bright black, TRACE=cyan}
@@ -38,6 +38,11 @@
             <AppenderRef ref="current"/>
             <AppenderRef ref="RollingFile"/>
         </Logger>
+<!--        <Logger name="org.springframework.security" level="${env:LOG_LEVEL}" additivity="false">-->
+<!--            <AppenderRef ref="Console"/>-->
+<!--            <AppenderRef ref="current"/>-->
+<!--            <AppenderRef ref="RollingFile"/>-->
+<!--        </Logger>-->
         <Root level="debug">
             <AppenderRef ref="Console" level="info"/>
             <AppenderRef ref="RollingFile" level="info"/>

@@ -1,5 +1,6 @@
 package net.Broken.Tools.Command;
 
+import net.Broken.BotConfigLoader;
 import net.Broken.MainBot;
 import net.Broken.SlashCommand;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
@@ -18,12 +19,12 @@ import java.util.Set;
  * Find and load bot's command
  */
 public class SlashCommandLoader {
-    private static Logger logger = LogManager.getLogger();
+    private static final Logger logger = LogManager.getLogger();
 
     /**
      * Search all implemented Command interface class and add it to MainBot.commands HashMap
      */
-    public static void load() {
+    public static void load(BotConfigLoader config) {
         logger.info("Loading Slash Command...");
         Reflections reflections = new Reflections(new ConfigurationBuilder().setUrls(ClasspathHelper.forPackage(
                 "net.Broken.SlashCommands",
@@ -41,7 +42,7 @@ public class SlashCommandLoader {
             if (!command.isAnnotationPresent(Ignore.class)) {
                 logger.info("..." + name);
 
-                if (command.isAnnotationPresent(NoDev.class) && MainBot.dev) {
+                if (command.isAnnotationPresent(NoDev.class) && config.mode().equals("DEV")) {
                     logger.warn("Command disabled in dev mode");
                 } else {
                     try {

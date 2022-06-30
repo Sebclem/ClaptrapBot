@@ -1,0 +1,69 @@
+package net.Broken.Api.Security.Services;
+
+
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.Keys;
+import net.Broken.DB.Entity.UserEntity;
+import net.Broken.DB.Repository.UserRepository;
+import org.springframework.stereotype.Service;
+
+import java.security.Key;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.NoSuchElementException;
+import java.util.UUID;
+
+@Service
+public class JwtService {
+
+    private final Key jwtKey;
+
+    private final UserRepository userRepository;
+
+    public JwtService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+        this.jwtKey = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    }
+
+    public String buildJwt(UserEntity user){
+        Date iat = new Date();
+        Date nbf = new Date();
+        Calendar expCal = Calendar.getInstance();
+        expCal.add(Calendar.DATE, 7);
+        Date exp = expCal.getTime();
+        UUID uuid = UUID.randomUUID();
+
+
+        return Jwts.builder()
+                .setSubject(user.getUsername())
+                .claim("discord_id", user.getDiscordId())
+                .claim("avatar", user.getAvatar())
+                .claim("discriminator", user.getDiscriminator())
+                .setId(uuid.toString())
+                .setIssuedAt(iat)
+                .setNotBefore(nbf)
+                .setExpiration(exp)
+                .signWith(this.jwtKey)
+                .compact();
+
+
+    }
+
+
+    public Jws<Claims> verifyAndParseJwt(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(this.jwtKey)
+                .build()
+                .parseClaimsJws(token);
+    }
+
+
+    public UserEntity getUserWithJwt(Jws<Claims> jwt) throws NoSuchElementException {
+        String discordId = jwt.getBody().get("discord_id", String.class);
+        return userRepository.findByDiscordId(discordId)
+                .orElseThrow();
+    }
+}

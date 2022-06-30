@@ -10,7 +10,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.List;
 
 public class CacheTools {
-    private static Logger logger = LogManager.getLogger();
+    private static final Logger logger = LogManager.getLogger();
 
     public static void loadAllGuildMembers() {
         List<Guild> guilds = MainBot.jda.getGuilds();
@@ -20,10 +20,10 @@ public class CacheTools {
     }
 
     public static User getJdaUser(UserEntity userEntity) {
-        User user = MainBot.jda.getUserById(userEntity.getJdaId());
+        User user = MainBot.jda.getUserById(userEntity.getDiscordId());
         if (user == null) {
-            logger.debug("User cache not found for " + userEntity.getName() + ", fetching user.");
-            user = MainBot.jda.retrieveUserById(userEntity.getJdaId()).complete();
+            logger.debug("User cache not found for " + userEntity.getUsername() + ", fetching user.");
+            user = MainBot.jda.retrieveUserById(userEntity.getDiscordId()).complete();
         }
         return user;
     }

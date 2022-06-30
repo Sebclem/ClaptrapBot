@@ -6,6 +6,8 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.requests.RestAction;
 
+import java.util.Objects;
+
 
 public class ReportUsers implements Commande {
 
@@ -18,11 +20,8 @@ public class ReportUsers implements Commande {
                 for (Member member : members) {
                     if (member.getRoles().size() == 1) { //check if the member has a role
                         if (member.getRoles().contains(event.getMessage().getMentionedRoles().get(0))) { //check if the mentioned role is the same as the member's role
-                            if (restAction == null) {
-                                restAction = event.getTextChannel().sendMessage("List des membres : ").and(event.getTextChannel().sendMessage(member.getEffectiveName()));
-                            } else {
-                                restAction = restAction.and(event.getTextChannel().sendMessage(member.getEffectiveName()));
-                            }
+                            restAction = Objects.requireNonNullElseGet(restAction, () -> event.getTextChannel().sendMessage("List des membres : "))
+                                    .and(event.getTextChannel().sendMessage(member.getEffectiveName()));
                         }
                     }
                 }

@@ -1,9 +1,9 @@
 package net.Broken;
 
+import net.Broken.DB.Entity.GuildPreferenceEntity;
 import net.Broken.DB.Entity.UserEntity;
+import net.Broken.DB.Repository.GuildPreferenceRepository;
 import net.Broken.DB.Repository.UserRepository;
-import net.Broken.RestApi.ApiCommandLoader;
-import net.Broken.Tools.Command.CommandLoader;
 import net.Broken.Tools.Command.SlashCommandLoader;
 import net.Broken.Tools.DayListener.DayListener;
 import net.Broken.Tools.DayListener.Listeners.DailyMadame;
@@ -25,78 +25,55 @@ import java.util.List;
 
 
 public class Init {
-    static private Logger logger = LogManager.getLogger();
+    static private final Logger logger = LogManager.getLogger();
 
-    /**
-     * Initialize all bot functionality
-     *
-     * @param token bot user token
-     * @return JDA object
-     */
-    static JDA initJda(String token) {
-        JDA jda = null;
+    static JDA initJda(BotConfigLoader config) {
         logger.info("-----------------------INIT-----------------------");
-
-        //Bot démarrer sans token
-        if (token == null) {
+        if (config == null) {
             logger.fatal("Please enter bot token as an argument.");
+            return null;
         } else {
-            //Token présent
             try {
-
                 logger.info("Connecting to Discord api...");
-                //connection au bot
-                JDABuilder jdaB = JDABuilder.createDefault(token).enableIntents(GatewayIntent.GUILD_MEMBERS)
-                        .setMemberCachePolicy(MemberCachePolicy.ALL);
-                jdaB.setBulkDeleteSplittingEnabled(false);
-                jda = jdaB.build();
-                jda = jda.awaitReady();
-                MainBot.jda = jda;
-                jda.setAutoReconnect(true);
 
+                JDA jda = JDABuilder
+                        .createDefault(config.token())
+                        .enableIntents(GatewayIntent.GUILD_MEMBERS)
+                        .setMemberCachePolicy(MemberCachePolicy.ALL)
+                        .setBulkDeleteSplittingEnabled(false)
+                        .build();
 
-                /*************************************
-                 *      Definition des commande      *
-                 *************************************/
+                jda.awaitReady()
+                        .setAutoReconnect(true);
                 jda.getPresence().setPresence(OnlineStatus.DO_NOT_DISTURB, Activity.playing("Loading..."));
 
-
-                //On recupere le l'id serveur
-
                 logger.info("Connected on " + jda.getGuilds().size() + " Guilds:");
-
                 for (Guild server : jda.getGuilds()) {
                     server.loadMembers().get();
-                    //on recupere les utilisateur
                     logger.info("... " + server.getName() + " " + server.getMembers().size() + " Members");
                 }
-
-
+                return jda;
             } catch (LoginException | InterruptedException e) {
                 logger.catching(e);
+                return null;
             }
         }
-
-        return jda;
     }
 
 
-    static void polish(JDA jda) {
+    static void polish(JDA jda, BotConfigLoader config) {
         logger.info("Check database...");
         checkDatabase();
-        CommandLoader.load();
-        SlashCommandLoader.load();
+        logger.info("Loading commands");
+        SlashCommandLoader.load(config);
         SlashCommandLoader.registerSlashCommands(jda.updateCommands());
-        ApiCommandLoader.load();
         DayListener dayListener = DayListener.getInstance();
         dayListener.addListener(new DailyMadame());
         dayListener.start();
         jda.addEventListener(new BotListener());
-        jda.getPresence().setPresence(OnlineStatus.ONLINE, Activity.playing(MainBot.url));
+        jda.getPresence().setPresence(OnlineStatus.ONLINE, Activity.playing(config.url()));
 
         logger.info("-----------------------END INIT-----------------------");
-
-
     }
 
 
@@ -106,66 +83,47 @@ public class Init {
         List<UserEntity> users = (List<UserEntity>) userRepository.findAll();
         UserStatsUtils userStatsUtils = UserStatsUtils.getINSTANCE();
         logger.debug("Stats...");
+
 //        for (UserEntity userEntity : users) {
 //            logger.debug("..." + userEntity.getName());
 //            userStatsUtils.getUserStats(userEntity);
 //
 //        }
 
+        logger.debug("Guild Prefs...");
+        GuildPreferenceRepository guildPreference = context.getBean(GuildPreferenceRepository.class);
+        for(GuildPreferenceEntity pref :guildPreference.findAll()){
+            boolean save = false;
+            if(pref.getWelcomeMessage() != null && pref.getWelcomeMessage().equals(" ")){
+                pref.setWelcomeMessage(null);
+                save = true;
+            }
+            if(pref.getWelcomeChanelID() != null && pref.getWelcomeChanelID().equals(" ")){
+                pref.setWelcomeChanelID(null);
+                save = true;
+            }
+            if(pref.getWelcomeChanelID() != null && pref.getWelcomeChanelID().equals(" ")){
+                pref.setWelcomeChanelID(null);
+                save = true;
+            }
+            if(pref.getDefaultRoleId() != null && pref.getDefaultRoleId().equals(" ")){
+                pref.setDefaultRoleId(null);
+                save = true;
+            }
+            if(pref.getAutoVoiceChannelID() != null && pref.getAutoVoiceChannelID().equals(" ")){
+                pref.setAutoVoiceChannelID(null);
+                save = true;
+            }
+            if(pref.getAutoVoiceChannelTitle() != null && pref.getAutoVoiceChannelTitle().equals(" ")){
+                pref.setAutoVoiceChannelTitle(null);
+                save = true;
+            }
 
-    }
-
-
-    public static boolean checkEnv() {
-        boolean ok = true;
-
-
-        if (System.getenv("PORT") == null) {
-            logger.fatal("Missing PORT ENV variable.");
-            ok = false;
+            if(save){
+                guildPreference.save(pref);
+            }
         }
 
-        if (System.getenv("DB_URL") == null) {
-            logger.fatal("Missing DB_URL ENV variable.");
-            ok = false;
-        }
 
-        if (System.getenv("DB_USER") == null) {
-            logger.fatal("Missing DB_USER ENV variable.");
-            ok = false;
-        }
-
-
-        if (System.getenv("DB_PWD") == null) {
-            logger.fatal("Missing DB_PWD ENV variable.");
-            ok = false;
-        }
-
-        if (System.getenv("OAUTH_URL") == null) {
-            logger.fatal("Missing OAUTH_URL ENV variable.");
-            ok = false;
-        }
-
-        if (System.getenv("DISCORD_TOKEN") == null) {
-            logger.fatal("Missing DISCORD_TOKEN ENV variable.");
-            ok = false;
-        }
-
-        if (System.getenv("GOOGLE_API_KEY") == null) {
-            logger.fatal("Missing GOOGLE_API_KEY ENV variable.");
-            ok = false;
-        }
-
-        if (System.getenv("RANDOM_API_KEY") == null) {
-            logger.fatal("Missing GOOGLE_API_KEY ENV variable.");
-            ok = false;
-        }
-
-        if (System.getenv("LOG_LEVEL") == null) {
-            logger.fatal("Missing LOG_LEVEL ENV variable.");
-            ok = false;
-        }
-
-        return ok;
     }
 }

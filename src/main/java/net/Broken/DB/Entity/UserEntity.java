@@ -1,13 +1,10 @@
 package net.Broken.DB.Entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import net.Broken.Tools.UserManager.UserUtils;
+import net.Broken.Api.Security.Data.DiscordOauthUserInfo;
 import net.dv8tion.jda.api.entities.User;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -16,14 +13,17 @@ import java.util.List;
 @Entity
 public class UserEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String name;
+    private String username;
 
-    private String jdaId;
+    private String discriminator;
 
-    private String apiToken;
+    @Column(unique = true)
+    private String discordId;
+
+    private String avatar;
 
     private boolean isBotAdmin = false;
 
@@ -31,46 +31,26 @@ public class UserEntity {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
     private List<UserStats> userStats;
 
-    @JsonIgnore
-    private String password;
-
-
-    @OneToMany(mappedBy = "user")
-    private List<PlaylistEntity> playlists;
-
-
     public UserEntity() {
     }
 
-    public UserEntity(PendingUserEntity pendingUserEntity, String apiToken) {
-        this.name = pendingUserEntity.getName();
-        this.jdaId = pendingUserEntity.getJdaId();
-        this.password = pendingUserEntity.getPassword();
-        this.apiToken = apiToken;
+    public UserEntity(User user) {
+        this.username = user.getName();
+        this.discordId = user.getId();
     }
 
-    public UserEntity(User user, PasswordEncoder passwordEncoder) {
-        this.name = user.getName();
-        this.jdaId = user.getId();
-        this.apiToken = UserUtils.getInstance().generateApiToken();
-        this.password = passwordEncoder.encode(UserUtils.getInstance().generateCheckToken());
+    public UserEntity(String username, String id) {
+        this.username = username;
+        this.discordId = id;
     }
 
-    public UserEntity(String name, String id, PasswordEncoder passwordEncoder) {
-        this.name = name;
-        this.jdaId = id;
-        this.apiToken = UserUtils.getInstance().generateApiToken();
-        this.password = passwordEncoder.encode(UserUtils.getInstance().generateCheckToken());
+    public UserEntity(DiscordOauthUserInfo discordOauthUserInfo) {
+        this.username = discordOauthUserInfo.username();
+        this.discriminator = discordOauthUserInfo.discriminator();
+        this.discordId = discordOauthUserInfo.id();
+        this.avatar = discordOauthUserInfo.avatar();
     }
 
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 
     public Integer getId() {
         return id;
@@ -80,43 +60,20 @@ public class UserEntity {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getUsername() {
+        return username;
     }
 
-    public String getJdaId() {
-        return jdaId;
+    public String getDiscordId() {
+        return discordId;
     }
 
-    public void setJdaId(String jdaId) {
-        this.jdaId = jdaId;
-    }
-
-    public String getApiToken() {
-        return apiToken;
-    }
-
-    public void setApiToken(String apiToken) {
-        this.apiToken = apiToken;
-    }
-
-    public List<PlaylistEntity> getPlaylists() {
-        return playlists;
-    }
-
-    public void setPlaylists(List<PlaylistEntity> playlists) {
-        this.playlists = playlists;
-    }
-
-    public void addPlaylist(PlaylistEntity... playlists) {
-        if (this.playlists == null)
-            this.playlists = new ArrayList<>();
-
-        this.playlists.addAll(Arrays.asList(playlists));
+    public void setDiscordId(String discordId) {
+        this.discordId = discordId;
     }
 
     public List<UserStats> getUserStats() {
@@ -133,5 +90,21 @@ public class UserEntity {
 
     public void setBotAdmin(boolean botAdmin) {
         isBotAdmin = botAdmin;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public String getDiscriminator() {
+        return discriminator;
+    }
+
+    public void setDiscriminator(String discriminator) {
+        this.discriminator = discriminator;
     }
 }

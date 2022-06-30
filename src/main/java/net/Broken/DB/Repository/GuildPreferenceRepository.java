@@ -3,9 +3,9 @@ package net.Broken.DB.Repository;
 import net.Broken.DB.Entity.GuildPreferenceEntity;
 import org.springframework.data.repository.CrudRepository;
 
-import java.util.List;
+import java.util.Optional;
 
 public interface GuildPreferenceRepository extends CrudRepository<GuildPreferenceEntity, Integer> {
-    List<GuildPreferenceEntity> findByGuildId(String id);
+    Optional<GuildPreferenceEntity> findByGuildId(String id);
 
 }
