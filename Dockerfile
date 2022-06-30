@@ -1,4 +1,4 @@
-FROM openjdk:18.0.1
+FROM openjdk:17.0.2
 WORKDIR /bot_src
 ARG BUILD_NBR
 ARG BRANCH_NAME
