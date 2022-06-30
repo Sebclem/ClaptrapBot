@@ -57,7 +57,7 @@ jobs:
 
       - name: Get branch name
         id: branch-name
-        uses: tj-actions/branch-names@v5.2
+        uses: tj-actions/branch-names@v5.3
 
       - name: Set tag master
         if: steps.branch-name.outputs.current_branch == 'master'
