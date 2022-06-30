@@ -66,4 +66,9 @@ public class GuildService {
         return roles;
     }
 
+
+    public String getInviteLink(){
+        return MainBot.jda.setRequiredScopes("applications.commands").getInviteUrl(Permission.getPermissions(1644971949399L));
+    }
+
 }

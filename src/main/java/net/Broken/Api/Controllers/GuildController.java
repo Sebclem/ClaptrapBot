@@ -33,8 +33,8 @@ public class GuildController {
 
     @GetMapping("inviteLink")
     public InviteLink getInviteLink() {
-        String link = MainBot.jda.setRequiredScopes("applications.commands").getInviteUrl(Permission.getPermissions(1644971949399L));
-        return new InviteLink(link);
+
+        return new InviteLink(guildService.getInviteLink());
     }
 
     @GetMapping("/{guildId}/voiceChannels")

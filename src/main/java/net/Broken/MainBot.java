@@ -7,6 +7,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.core.io.ClassPathResource;
 
 import java.util.HashMap;
 
@@ -32,10 +35,13 @@ public class MainBot {
 
         ConfigurableApplicationContext ctx = SpringApplication.run(MainBot.class, args);
         BotConfigLoader config = ctx.getBean(BotConfigLoader.class);
+        VersionLoader versionLoader = ctx.getBean(VersionLoader.class);
 
         logger.info("=======================================");
         logger.info("--------------Starting Bot-------------");
         logger.info("=======================================");
+
+        logger.info("Version: " + versionLoader.getVersion());
 
         jda = Init.initJda(config);
         if (jda == null) {
@@ -46,5 +52,15 @@ public class MainBot {
         }
         Init.polish(jda, config);
         ready = true;
+    }
+
+    @Bean
+    public static PropertySourcesPlaceholderConfigurer placeholderConfigurer() {
+        PropertySourcesPlaceholderConfigurer propsConfig
+                = new PropertySourcesPlaceholderConfigurer();
+        propsConfig.setLocation(new ClassPathResource("git.properties"));
+        propsConfig.setIgnoreResourceNotFound(true);
+        propsConfig.setIgnoreUnresolvablePlaceholders(true);
+        return propsConfig;
     }
 }

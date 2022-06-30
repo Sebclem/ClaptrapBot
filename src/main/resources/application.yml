@@ -28,3 +28,18 @@ discord:
 
 springdoc:
   paths-to-match: /api/v2/**
+  show-actuator: true
+
+management:
+  info:
+    git:
+      mode: full
+      enabled: true
+  endpoints:
+    enabled-by-default: true
+    web:
+      exposure:
+        include: health, info, prometheus
+  endpoint:
+    prometheus:
+      enabled: true

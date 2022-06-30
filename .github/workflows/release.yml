@@ -1,13 +1,11 @@
 # This workflow will build a Java project with Gradle
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-gradle
 
-name: Build
+name: Build Release
 
 on:
   push:
-    branches-ignore:
-      - "renovate/**"
-    tags-ignore:
+    tags:
       - "**"
 
 jobs:
@@ -67,12 +65,14 @@ jobs:
 
       - name: Set tag
         run: |
-          echo "tag=${{ steps.branch-name.outputs.current_branch }}" >> $GITHUB_ENV
+          echo "tag=${{ steps.branch-name.outputs.tag }}" >> $GITHUB_ENV
 
       - name: Build and push Docker
         uses: docker/build-push-action@v3
         with:
           push: true
           context: .
-          tags: "ghcr.io/sebclem/claptrapbot:${{ env.tag }}"
+          tags: | 
+            ghcr.io/sebclem/claptrapbot:${{ env.tag }}
+            ghcr.io/sebclem/claptrapbot:latest
           file: ./Dockerfile
