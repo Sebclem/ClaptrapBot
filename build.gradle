@@ -48,7 +48,7 @@ dependencies {
     implementation('net.dv8tion:JDA:4.4.0_352')
 
     implementation(platform("org.apache.logging.log4j:log4j-bom:2.18.0"))
-    implementation group: 'org.hibernate', name: 'hibernate-validator', version: '7.0.4.Final'
+    implementation group: 'org.hibernate', name: 'hibernate-validator', version: '7.0.5.Final'
 
 //     Use MySQL Connector-J
     implementation('mysql:mysql-connector-java:8.0.30')
