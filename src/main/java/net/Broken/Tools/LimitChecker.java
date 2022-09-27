@@ -1,10 +1,9 @@
 package net.Broken.Tools;
 
+import java.io.IOException;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.io.IOException;
-import java.net.URL;
 
 /**
  * Find max webPage for web site like baseURL.com/number-2/
@@ -23,7 +22,6 @@ public class LimitChecker {
      */
     public static int doYourJob(String baseURL, int minNumber, String suffix) throws IOException {
         int number = minNumber;
-        URL u = null;
         boolean redirected = false;
         Redirection redirection = new Redirection();
 

@@ -1,18 +1,21 @@
 package net.Broken.Api.Controllers;
 
+import java.util.List;
+
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import net.Broken.Api.Data.InviteLink;
 import net.Broken.Api.Data.Guild.Channel;
 import net.Broken.Api.Data.Guild.Guild;
 import net.Broken.Api.Data.Guild.Role;
-import net.Broken.Api.Data.InviteLink;
 import net.Broken.Api.Security.Data.JwtPrincipal;
 import net.Broken.Api.Services.GuildService;
-import net.Broken.MainBot;
-import net.dv8tion.jda.api.Permission;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v2/guild")
