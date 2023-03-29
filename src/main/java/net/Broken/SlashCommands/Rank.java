@@ -5,16 +5,17 @@ import net.Broken.SlashCommand;
 import net.Broken.SpringContext;
 import net.Broken.Tools.UserManager.Stats.UserStatsUtils;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
-import net.dv8tion.jda.api.interactions.components.Button;
+import net.dv8tion.jda.api.interactions.components.buttons.Button;
 
+import java.util.Collections;
 import java.util.List;
 
 public class Rank implements SlashCommand {
     @Override
-    public void action(SlashCommandEvent event) {
+    public void action(SlashCommandInteractionEvent event) {
         String url = SpringContext.getAppContext().getBean(BotConfigLoader.class).url();
         event.deferReply().queue();
         UserStatsUtils userStats = UserStatsUtils.getINSTANCE();
@@ -31,12 +32,12 @@ public class Rank implements SlashCommand {
 
     @Override
     public List<OptionData> getOptions() {
-        return null;
+        return Collections.emptyList();
     }
 
     @Override
     public List<SubcommandData> getSubcommands() {
-        return null;
+        return Collections.emptyList();
     }
 
     @Override

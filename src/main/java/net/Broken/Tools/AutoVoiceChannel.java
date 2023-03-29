@@ -4,7 +4,7 @@ package net.Broken.Tools;
 import net.Broken.DB.Entity.GuildPreferenceEntity;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.VoiceChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
 import net.dv8tion.jda.api.requests.RestAction;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -40,7 +40,7 @@ public class AutoVoiceChannel {
             return;
         GuildPreferenceEntity pref = SettingsUtils.getInstance().getPreference(guild);
         if (pref.isAutoVoice() && voiceChannel.getId().equals(pref.getAutoVoiceChannelID())) {
-            logger.info("Creating new voice channel for Guild : " + guild.getName());
+            logger.info("Creating new voice channel for Guild : {}", guild.getName());
             VoiceChannel newChannel = voiceChannel.createCopy().complete();
             int next = getNextNumber();
             String title = pref.getAutoVoiceChannelTitle();

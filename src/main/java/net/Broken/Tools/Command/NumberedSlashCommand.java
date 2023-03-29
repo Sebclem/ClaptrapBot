@@ -1,6 +1,7 @@
 package net.Broken.Tools.Command;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -13,7 +14,7 @@ import net.Broken.Tools.FindContentOnWebPage;
 import net.Broken.Tools.LimitChecker;
 import net.Broken.Tools.Random.TrueRandom;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 
@@ -39,7 +40,7 @@ public abstract class NumberedSlashCommand implements SlashCommand {
      * @param divClass DivClass to search to extract image
      * @param htmlType HTML tag to extract image (img)
      */
-    public NumberedSlashCommand(Logger logger, String baseURL, String urlSuffix, String divClass, String htmlType) {
+    protected NumberedSlashCommand(Logger logger, String baseURL, String urlSuffix, String divClass, String htmlType) {
         this.logger = logger;
         this.baseURL = baseURL;
         this.divClass = divClass;
@@ -48,19 +49,19 @@ public abstract class NumberedSlashCommand implements SlashCommand {
         try {
             logger.debug("Checking max...");
             maxNumber = LimitChecker.doYourJob(baseURL, 2, urlSuffix);
-            logger.info("Limit is " + maxNumber);
+            logger.info("Limit is {}",maxNumber);
         } catch (IOException e) {
             logger.catching(e);
         }
     }
 
-    public NumberedSlashCommand(Logger logger, String baseURL, String urlSuffix) {
+    protected NumberedSlashCommand(Logger logger, String baseURL, String urlSuffix) {
         this(logger, baseURL, urlSuffix, null, null);
 
     }
 
     @Override
-    public void action(SlashCommandEvent event) {
+    public void action(SlashCommandInteractionEvent event) {
         event.deferReply().queue();
         try {
             String result = poll();
@@ -82,7 +83,7 @@ public abstract class NumberedSlashCommand implements SlashCommand {
     }
 
     protected void checkRandom() throws IOException {
-        logger.trace("Queue size: " + randomQueue.size());
+        logger.trace("Queue size: {}", randomQueue.size());
         if (randomQueue.isEmpty()) {
             logger.debug("Queue empty, update it.");
             fillRandomQueue();
@@ -97,12 +98,12 @@ public abstract class NumberedSlashCommand implements SlashCommand {
 
     @Override
     public List<OptionData> getOptions() {
-        return null;
+        return Collections.emptyList();
     }
 
     @Override
     public List<SubcommandData> getSubcommands() {
-        return null;
+        return Collections.emptyList();
     }
 
 }

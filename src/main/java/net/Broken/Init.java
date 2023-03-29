@@ -1,13 +1,10 @@
 package net.Broken;
 
 import net.Broken.DB.Entity.GuildPreferenceEntity;
-import net.Broken.DB.Entity.UserEntity;
 import net.Broken.DB.Repository.GuildPreferenceRepository;
-import net.Broken.DB.Repository.UserRepository;
 import net.Broken.Tools.Command.SlashCommandLoader;
 import net.Broken.Tools.DayListener.DayListener;
 import net.Broken.Tools.DayListener.Listeners.DailyMadame;
-import net.Broken.Tools.UserManager.Stats.UserStatsUtils;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.OnlineStatus;
@@ -19,13 +16,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 
-import javax.security.auth.login.LoginException;
-import java.util.List;
-
 
 
 public class Init {
     static private final Logger logger = LogManager.getLogger();
+
+    private Init() {}
 
     static JDA initJda(BotConfigLoader config) {
         logger.info("-----------------------INIT-----------------------");
@@ -47,13 +43,13 @@ public class Init {
                         .setAutoReconnect(true);
                 jda.getPresence().setPresence(OnlineStatus.DO_NOT_DISTURB, Activity.playing("Loading..."));
 
-                logger.info("Connected on " + jda.getGuilds().size() + " Guilds:");
+                logger.info("Connected on {} Guilds:", jda.getGuilds().size());
                 for (Guild server : jda.getGuilds()) {
                     server.loadMembers().get();
-                    logger.info("... " + server.getName() + " " + server.getMembers().size() + " Members");
+                    logger.info("... {} {} Members", server.getName(), server.getMembers().size());
                 }
                 return jda;
-            } catch (LoginException | InterruptedException e) {
+            } catch (InterruptedException e) {
                 logger.catching(e);
                 return null;
             }
@@ -79,16 +75,7 @@ public class Init {
 
     private static void checkDatabase() {
         ApplicationContext context = SpringContext.getAppContext();
-        UserRepository userRepository = (UserRepository) context.getBean("userRepository");
-        List<UserEntity> users = (List<UserEntity>) userRepository.findAll();
-        UserStatsUtils userStatsUtils = UserStatsUtils.getINSTANCE();
         logger.debug("Stats...");
-
-//        for (UserEntity userEntity : users) {
-//            logger.debug("..." + userEntity.getName());
-//            userStatsUtils.getUserStats(userEntity);
-//
-//        }
 
         logger.debug("Guild Prefs...");
         GuildPreferenceRepository guildPreference = context.getBean(GuildPreferenceRepository.class);

@@ -1,6 +1,6 @@
 package net.Broken;
 
-import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 
@@ -10,7 +10,7 @@ import java.util.List;
  * Interface that define command structure.
  */
 public interface SlashCommand {
-    void action(SlashCommandEvent event);
+    void action(SlashCommandInteractionEvent event);
 
     String getDescription();
 
