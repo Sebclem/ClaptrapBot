@@ -11,8 +11,6 @@ import org.apache.logging.log4j.Logger;
 import net.Broken.SlashCommand;
 import net.Broken.Audio.GuildAudioBotService;
 import net.Broken.Tools.EmbedMessageUtils;
-import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
 import net.dv8tion.jda.api.entities.channel.unions.AudioChannelUnion;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
@@ -65,26 +63,26 @@ public class Music implements SlashCommand {
                 }
                 break;
             case "pause":
-                audio.pause(event);
+                audio.pause(event.getHook());
                 break;
             case "resume":
-                audio.resume(event);
+                audio.resume(event.getHook());
                 break;
             case "next":
-                audio.skipTrack(event);
+                audio.skipTrack(event.getHook());
                 break;
             case "stop":
             case "disconnect":
-                audio.stop(event);
+                audio.stop(event.getHook());
                 break;
             case "info":
-                audio.info(event);
+                audio.info(event.getHook());
                 break;
             case "flush":
-                audio.flush(event);
+                audio.flush(event.getHook());
                 break;
             case "list":
-                audio.list(event);
+                audio.list(event.getHook());
                 break;
         }
     }

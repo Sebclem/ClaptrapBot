@@ -1,5 +1,13 @@
 package net.Broken;
 
+import java.awt.Color;
+import java.util.HashMap;
+import java.util.Optional;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.context.ApplicationContext;
+
 import net.Broken.Audio.GuildAudioBotService;
 import net.Broken.DB.Entity.GuildPreferenceEntity;
 import net.Broken.DB.Repository.GuildPreferenceRepository;
@@ -7,12 +15,13 @@ import net.Broken.Tools.AutoVoiceChannel;
 import net.Broken.Tools.EmbedMessageUtils;
 import net.Broken.Tools.UserManager.Stats.UserStatsUtils;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberJoinEvent;
 import net.dv8tion.jda.api.events.guild.member.GuildMemberRoleRemoveEvent;
-import net.dv8tion.jda.api.events.guild.voice.GenericGuildVoiceEvent;
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceUpdateEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
@@ -21,15 +30,6 @@ import net.dv8tion.jda.api.events.session.ReadyEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.utils.messages.MessageCreateBuilder;
 import net.dv8tion.jda.api.utils.messages.MessageCreateData;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.jetbrains.annotations.NotNull;
-import org.springframework.context.ApplicationContext;
-
-import java.awt.*;
-import java.util.HashMap;
-import java.util.Optional;
 
 /**
  * Bot Listener
@@ -57,9 +57,9 @@ public class BotListener extends ListenerAdapter {
         if (guildPref.isDefaultRole()) {
             logger.info("[{}] : {} join the guild, adding default role !", event.getGuild().getName(),
                     event.getUser().getName());
-            Role default_role = event.getGuild().getRoleById(guildPref.getDefaultRoleId());
-            if (default_role != null) {
-                event.getGuild().addRoleToMember(event.getMember(), default_role).queue();
+            Role defaultRole = event.getGuild().getRoleById(guildPref.getDefaultRoleId());
+            if (defaultRole != null) {
+                event.getGuild().addRoleToMember(event.getMember(), defaultRole).queue();
             } else {
                 logger.fatal("[{}] : Default role is null !", event.getGuild().getName());
             }
@@ -144,11 +144,11 @@ public class BotListener extends ListenerAdapter {
         event.deferReply().queue();
         GuildAudioBotService guildAudioBotService = GuildAudioBotService.getInstance(event.getGuild());
         switch (event.getComponentId()) {
-            case "pause" -> guildAudioBotService.pause(event);
-            case "play" -> guildAudioBotService.resume(event);
-            case "next" -> guildAudioBotService.skipTrack(event);
-            case "stop" -> guildAudioBotService.stop(event);
-            case "disconnect" -> guildAudioBotService.disconnect(event);
+            case "pause" -> guildAudioBotService.pause(event.getHook());
+            case "play" -> guildAudioBotService.resume(event.getHook());
+            case "next" -> guildAudioBotService.skipTrack(event.getHook());
+            case "stop" -> guildAudioBotService.stop(event.getHook());
+            case "disconnect" -> guildAudioBotService.disconnect(event.getHook());
         }
     }
 

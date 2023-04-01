@@ -1,20 +1,21 @@
 package net.Broken.Tools;
 
 
-import net.Broken.DB.Entity.GuildPreferenceEntity;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
-import net.dv8tion.jda.api.requests.RestAction;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import static net.Broken.MainBot.jda;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import static net.Broken.MainBot.jda;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import net.Broken.DB.Entity.GuildPreferenceEntity;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel;
+import net.dv8tion.jda.api.requests.RestAction;
 
 public class AutoVoiceChannel {
     private static final HashMap<String, AutoVoiceChannel> INSTANCE_MAP = new HashMap<>();
@@ -34,14 +35,14 @@ public class AutoVoiceChannel {
         return INSTANCE_MAP.get(guild.getId());
     }
 
-    public void join(VoiceChannel voiceChannel) {
+    public void join(AudioChannel voiceChannel) {
         Guild guild = jda.getGuildById(guildID);
         if (guild == null)
             return;
         GuildPreferenceEntity pref = SettingsUtils.getInstance().getPreference(guild);
         if (pref.isAutoVoice() && voiceChannel.getId().equals(pref.getAutoVoiceChannelID())) {
             logger.info("Creating new voice channel for Guild : {}", guild.getName());
-            VoiceChannel newChannel = voiceChannel.createCopy().complete();
+            AudioChannel newChannel = (AudioChannel) voiceChannel.createCopy().complete();
             int next = getNextNumber();
             String title = pref.getAutoVoiceChannelTitle();
             if (title.isEmpty()) {
@@ -56,7 +57,7 @@ public class AutoVoiceChannel {
 
     }
 
-    public void leave(VoiceChannel voiceChannel) {
+    public void leave(AudioChannel voiceChannel) {
         if (voiceChannel.getMembers().isEmpty()) {
             String id = voiceChannel.getId();
             for (Map.Entry<Integer, String> entry : createdChannels.entrySet()) {
@@ -79,7 +80,7 @@ public class AutoVoiceChannel {
         return 999;
     }
 
-    private void moveMembers(List<Member> members, VoiceChannel destination) {
+    private void moveMembers(List<Member> members, AudioChannel destination) {
         logger.debug("Moving Members to new voice channel...");
         RestAction<Void> restAction = null;
         for (Member member : members) {
