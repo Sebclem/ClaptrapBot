@@ -9,6 +9,7 @@ import net.Broken.Tools.EmbedMessageUtils;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
@@ -63,7 +64,9 @@ public class Clear implements SlashCommand {
     }
 
     @Override
-    public boolean isDisableByDefault() {
-        return true;
+    public DefaultMemberPermissions getDefaultPermissions() {
+        return DefaultMemberPermissions.enabledFor(Permission.MESSAGE_MANAGE);
     }
+
+    
 }

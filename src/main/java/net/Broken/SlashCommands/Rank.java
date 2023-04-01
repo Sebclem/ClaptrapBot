@@ -6,6 +6,7 @@ import net.Broken.SpringContext;
 import net.Broken.Tools.UserManager.Stats.UserStatsUtils;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
@@ -56,7 +57,7 @@ public class Rank implements SlashCommand {
     }
 
     @Override
-    public boolean isDisableByDefault() {
-        return false;
+    public DefaultMemberPermissions getDefaultPermissions() {
+        return DefaultMemberPermissions.ENABLED;
     }
 }

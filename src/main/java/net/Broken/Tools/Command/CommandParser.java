@@ -39,7 +39,7 @@ public class CommandParser {
             args[i] = args[i].replace('$', ' ');
 
 
-        logger.info("Author: " + e.getAuthor().getName() + ", Command: " + commande + ", args: " + Arrays.toString(args));
+        logger.info("Author: {}, Command: {}, args: {}", e.getAuthor().getName(), commande,  Arrays.toString(args));
 
         return new CommandContainer(brt, sansTete, splitSansTete, commande, args, e);
 

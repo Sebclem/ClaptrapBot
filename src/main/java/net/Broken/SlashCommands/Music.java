@@ -13,6 +13,7 @@ import net.Broken.Audio.GuildAudioBotService;
 import net.Broken.Tools.EmbedMessageUtils;
 import net.dv8tion.jda.api.entities.channel.unions.AudioChannelUnion;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
@@ -139,7 +140,9 @@ public class Music implements SlashCommand {
     }
 
     @Override
-    public boolean isDisableByDefault() {
-        return false;
+    public DefaultMemberPermissions getDefaultPermissions() {
+        return DefaultMemberPermissions.ENABLED;
     }
+
+    
 }

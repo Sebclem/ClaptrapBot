@@ -1,20 +1,20 @@
 package net.Broken.Tools.Command;
 
-import net.Broken.BotConfigLoader;
-import net.Broken.MainBot;
-import net.Broken.SlashCommand;
-import net.dv8tion.jda.api.interactions.commands.build.CommandData;
-import net.dv8tion.jda.api.interactions.commands.build.Commands;
-import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
-import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Set;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.reflections.Reflections;
 import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.Set;
+import net.Broken.BotConfigLoader;
+import net.Broken.MainBot;
+import net.Broken.SlashCommand;
+import net.dv8tion.jda.api.interactions.commands.build.Commands;
+import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
+import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
 
 
 /**
@@ -70,8 +70,8 @@ public class SlashCommandLoader {
             if (v.getSubcommands() != null) {
                 command.addSubcommands(v.getSubcommands());
             }
-            // TODO Change slash command perm
-            command.setDefaultEnabled(!v.isDisableByDefault());
+            command.setDefaultPermissions(v.getDefaultPermissions());
+            
             commandListUpdateAction.addCommands(command);
         });
         commandListUpdateAction.queue();

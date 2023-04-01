@@ -17,7 +17,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import net.Broken.SlashCommand;
 import net.Broken.Tools.EmbedMessageUtils;
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.dv8tion.jda.api.utils.messages.MessageCreateBuilder;
@@ -94,7 +96,8 @@ public class Cat implements SlashCommand {
     }
 
     @Override
-    public boolean isDisableByDefault() {
-        return false;
-    }
+    public DefaultMemberPermissions getDefaultPermissions(){
+        return DefaultMemberPermissions.enabledFor(Permission.MESSAGE_SEND);
+    } 
+
 }

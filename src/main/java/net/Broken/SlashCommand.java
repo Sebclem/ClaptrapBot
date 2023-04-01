@@ -1,6 +1,7 @@
 package net.Broken;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 
@@ -34,7 +35,5 @@ public interface SlashCommand {
 
     boolean isPrivateUsable();
 
-
-    boolean isDisableByDefault();
-
+    DefaultMemberPermissions getDefaultPermissions();
 }

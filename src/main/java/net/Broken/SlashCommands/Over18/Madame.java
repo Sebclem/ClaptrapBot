@@ -2,6 +2,8 @@ package net.Broken.SlashCommands.Over18;
 
 import net.Broken.Tools.Command.NoDev;
 import net.Broken.Tools.Command.NumberedSlashCommand;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 import net.Broken.Tools.FindContentOnWebPage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -57,11 +59,11 @@ public class Madame extends NumberedSlashCommand {
             int randomResult = randomQueue.poll();
             String url = baseURL + randomResult + urlSuffix;
 
-            logger.debug("URL: " + url);
+            logger.debug("URL: {}",url);
 
 
             if (scanPageForTipeee(url, logger)) {
-                logger.debug("Advertisement detected! Retry! (" + url + ")");
+                logger.debug("Advertisement detected! Retry! ({})", url);
             } else {
                 imgUrl = FindContentOnWebPage.doYourJob(url, "post-content", "img");
 
@@ -94,7 +96,7 @@ public class Madame extends NumberedSlashCommand {
     }
 
     @Override
-    public boolean isDisableByDefault() {
-        return true;
+    public DefaultMemberPermissions getDefaultPermissions() {
+        return DefaultMemberPermissions.enabledFor(Permission.MESSAGE_SEND);
     }
 }
