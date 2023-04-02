@@ -2,5 +2,6 @@
   "extends": [
     "config:base"
   ],
-  "commitMessagePrefix": ":arrow_up:"
+  "commitMessagePrefix": ":arrow_up:",
+  "baseBranches": ["develop"]
 }
