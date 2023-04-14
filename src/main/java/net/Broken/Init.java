@@ -49,8 +49,7 @@ public class Init {
 
                 logger.info("Connected on " + jda.getGuilds().size() + " Guilds:");
                 for (Guild server : jda.getGuilds()) {
-                    server.loadMembers().get();
-                    logger.info("... " + server.getName() + " " + server.getMembers().size() + " Members");
+                    server.loadMembers();
                 }
                 return jda;
             } catch (LoginException | InterruptedException e) {
