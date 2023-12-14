@@ -4,7 +4,7 @@ plugins {
     id 'java'
     id 'groovy'
     id 'org.liquibase.gradle' version '2.2.1'
-    id "nebula.lint" version "17.7.0"
+    id "nebula.lint" version "19.0.1"
     id "com.gorylenko.gradle-git-properties" version "2.4.1"
 }
 
