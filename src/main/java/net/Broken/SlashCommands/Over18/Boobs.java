@@ -3,6 +3,10 @@ package net.Broken.SlashCommands.Over18;
 import net.Broken.Tools.Command.Ignore;
 import net.Broken.Tools.Command.NoDev;
 import net.Broken.Tools.Command.NumberedSlashCommand;
+import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
+
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -37,7 +41,7 @@ public class Boobs extends NumberedSlashCommand {
     }
 
     @Override
-    public boolean isDisableByDefault() {
-        return true;
+    public DefaultMemberPermissions getDefaultPermissions() {
+        return DefaultMemberPermissions.enabledFor(Permission.MESSAGE_SEND);
     }
 }

@@ -58,11 +58,13 @@ public class DiscordOauthService {
         try {
             HttpResponse<String> response = makeFormPost(this.tokenEndpoint, data);
             if (response.statusCode() != 200) {
-                logger.warn("[OAUTH] Invalid response while getting AccessToken: Status Code: " + response.statusCode() + " Body:" + response.body());
+                logger.warn("[OAUTH] Invalid response while getting AccessToken: Status Code: " + response.statusCode()
+                        + " Body:" + response.body());
                 throw new OAuthLoginFail();
             }
             ObjectMapper objectMapper = new ObjectMapper();
-            AccessTokenResponse accessTokenResponse = objectMapper.readValue(response.body(), AccessTokenResponse.class);
+            AccessTokenResponse accessTokenResponse = objectMapper.readValue(response.body(),
+                    AccessTokenResponse.class);
             return accessTokenResponse.access_token();
         } catch (IOException | InterruptedException e) {
             logger.catching(e);
@@ -81,7 +83,8 @@ public class DiscordOauthService {
             HttpClient client = HttpClient.newHttpClient();
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() != 200) {
-                logger.warn("[OAUTH] Invalid response while getting UserInfo: Status Code: " + response.statusCode() + " Body:" + response.body());
+                logger.warn("[OAUTH] Invalid response while getting UserInfo: Status Code: " + response.statusCode()
+                        + " Body:" + response.body());
                 throw new OAuthLoginFail();
             }
             ObjectMapper mapper = new ObjectMapper();
@@ -99,13 +102,13 @@ public class DiscordOauthService {
         try {
             HttpResponse<String> response = makeFormPost(this.tokenRevokeEndpoint, data);
             if (response.statusCode() != 200) {
-                logger.warn("[OAUTH] Invalid response while token revocation: Status Code: " + response.statusCode() + " Body:" + response.body());
+                logger.warn("[OAUTH] Invalid response while token revocation: Status Code: " + response.statusCode()
+                        + " Body:" + response.body());
             }
         } catch (IOException | InterruptedException e) {
             logger.catching(e);
         }
     }
-
 
     public record LoginOrRegisterResponse<T>(T response, boolean created) {
     }
@@ -113,34 +116,34 @@ public class DiscordOauthService {
     public LoginOrRegisterResponse<UserEntity> loginOrRegisterDiscordUser(DiscordOauthUserInfo discordOauthUserInfo) {
         Optional<UserEntity> optionalUserEntity = userRepository.findByDiscordId(discordOauthUserInfo.id());
         return optionalUserEntity.map(
-                        userEntity -> new LoginOrRegisterResponse<>(userEntity, false))
+                userEntity -> new LoginOrRegisterResponse<>(userEntity, false))
                 .orElseGet(() -> {
                     UserEntity created = userRepository.save(new UserEntity(discordOauthUserInfo));
                     return new LoginOrRegisterResponse<>(created, true);
                 });
     }
 
-    public UserEntity updateUserInfo(DiscordOauthUserInfo discordOauthUserInfo, UserEntity userEntity){
+    public UserEntity updateUserInfo(DiscordOauthUserInfo discordOauthUserInfo, UserEntity userEntity) {
         boolean updated = false;
-        if(userEntity.getUsername() == null || !userEntity.getUsername().equals(discordOauthUserInfo.username())){
+        if (userEntity.getUsername() == null || !userEntity.getUsername().equals(discordOauthUserInfo.username())) {
             userEntity.setUsername(discordOauthUserInfo.username());
             updated = true;
         }
-        if(userEntity.getDiscriminator() == null || !userEntity.getDiscriminator().equals(discordOauthUserInfo.discriminator())){
+        if (userEntity.getDiscriminator() == null
+                || !userEntity.getDiscriminator().equals(discordOauthUserInfo.discriminator())) {
             userEntity.setDiscriminator(discordOauthUserInfo.discriminator());
             updated = true;
         }
-        if(userEntity.getAvatar() == null || !userEntity.getAvatar().equals(discordOauthUserInfo.avatar())){
+        if (userEntity.getAvatar() == null || !userEntity.getAvatar().equals(discordOauthUserInfo.avatar())) {
             userEntity.setAvatar(discordOauthUserInfo.avatar());
             updated = true;
         }
 
-        if(updated){
+        if (updated) {
             return userRepository.save(userEntity);
         }
         return userEntity;
     }
-
 
     private String getFormString(HashMap<String, String> params) {
         StringBuilder result = new StringBuilder();
@@ -157,7 +160,8 @@ public class DiscordOauthService {
         return result.toString();
     }
 
-    private HttpResponse<String> makeFormPost(String endpoint, HashMap<String, String> data) throws IOException, InterruptedException {
+    private HttpResponse<String> makeFormPost(String endpoint, HashMap<String, String> data)
+            throws IOException, InterruptedException {
         HttpRequest.BodyPublisher body = HttpRequest.BodyPublishers.ofString(getFormString(data));
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(tokenEndpoint))
@@ -167,6 +171,5 @@ public class DiscordOauthService {
         HttpClient client = HttpClient.newHttpClient();
         return client.send(request, HttpResponse.BodyHandlers.ofString());
     }
-
 
 }

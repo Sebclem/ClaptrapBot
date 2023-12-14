@@ -9,7 +9,9 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.audio.hooks.ConnectionStatus;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.VoiceChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
+import net.dv8tion.jda.api.entities.channel.unions.AudioChannelUnion;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
@@ -28,7 +30,7 @@ public class AudioService {
         Member member = guild.getMemberById(userId);
 
 
-        VoiceChannel channel = guild.getAudioManager().getConnectedChannel();
+        AudioChannelUnion channel = guild.getAudioManager().getConnectedChannel();
         ConnectionStatus status = guild.getAudioManager().getConnectionStatus();
         if (channel != null) {
 //              The user can view the audio status if:
