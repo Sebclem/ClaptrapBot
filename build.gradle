@@ -36,7 +36,7 @@ dependencies {
     implementation('io.micrometer:micrometer-registry-prometheus:1.9.2')
 
     implementation('org.springdoc:springdoc-openapi-ui:1.7.0')
-    implementation('org.springdoc:springdoc-openapi-security:1.6.9')
+    implementation('org.springdoc:springdoc-openapi-security:1.7.0')
 
     implementation('org.liquibase:liquibase-core')
 
