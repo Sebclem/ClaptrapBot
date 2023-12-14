@@ -1,9 +1,9 @@
 package net.Broken.Tools;
 
+import java.util.ArrayList;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.util.ArrayList;
 
 public class TimeConvertor {
     static Logger logger = LogManager.getLogger();

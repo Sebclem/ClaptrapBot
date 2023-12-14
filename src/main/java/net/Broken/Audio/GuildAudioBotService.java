@@ -80,7 +80,8 @@ public class GuildAudioBotService {
      * @param playlistLimit Limit of playlist
      * @param onHead        True for adding audio track on top of playlist
      */
-    public void loadAndPlay(SlashCommandInteractionEvent event, AudioChannel voiceChannel, final String trackUrl, int playlistLimit, boolean onHead) {
+    public void loadAndPlay(SlashCommandInteractionEvent event, AudioChannel voiceChannel, final String trackUrl,
+            int playlistLimit, boolean onHead) {
         audioPlayerManager.loadItemOrdered(guildAudioManager, trackUrl, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack track) {
@@ -110,7 +111,8 @@ public class GuildAudioBotService {
             @Override
             public void noMatches() {
                 logger.warn("[{}] Cant find media!", guild);
-                MessageCreateData message = new MessageCreateBuilder().setEmbeds(EmbedMessageUtils.getMusicError("Video not found !")).build();
+                MessageCreateData message = new MessageCreateBuilder()
+                        .setEmbeds(EmbedMessageUtils.getMusicError("Video not found !")).build();
                 event.getHook().setEphemeral(true).sendMessage(message).queue();
             }
 
@@ -118,7 +120,8 @@ public class GuildAudioBotService {
             public void loadFailed(FriendlyException exception) {
                 logger.error("[{}] Can't load media!", guild);
                 logger.error(exception.getMessage());
-                MessageCreateData message = new MessageCreateBuilder().setEmbeds(EmbedMessageUtils.getMusicError("Playback error !")).build();
+                MessageCreateData message = new MessageCreateBuilder()
+                        .setEmbeds(EmbedMessageUtils.getMusicError("Playback error !")).build();
                 event.getHook().setEphemeral(true).sendMessage(message).queue();
             }
         });
@@ -128,41 +131,41 @@ public class GuildAudioBotService {
         Member member = guild.getMemberById(userId);
         AudioChannelUnion playedChanel = guild.getAudioManager().getConnectedChannel();
         final String uuid = UUID.randomUUID().toString();
-        Future<Void> future = audioPlayerManager.loadItemOrdered(guildAudioManager, trackUrl, new AudioLoadResultHandler() {
-            @Override
-            public void trackLoaded(AudioTrack track) {
-                logger.info("[{}] Auto add {} to playlist.", guild, track.getInfo().title);
-                UserAudioTrack userAudioTrack = new UserAudioTrack(member.getUser(), track);
-                play(guild, playedChanel, guildAudioManager, userAudioTrack, true);
-                addStatus.put(uuid, true);
-            }
+        Future<Void> future = audioPlayerManager.loadItemOrdered(guildAudioManager, trackUrl,
+                new AudioLoadResultHandler() {
+                    @Override
+                    public void trackLoaded(AudioTrack track) {
+                        logger.info("[{}] Auto add {} to playlist.", guild, track.getInfo().title);
+                        UserAudioTrack userAudioTrack = new UserAudioTrack(member.getUser(), track);
+                        play(guild, playedChanel, guildAudioManager, userAudioTrack, true);
+                        addStatus.put(uuid, true);
+                    }
 
-            @Override
-            public void playlistLoaded(AudioPlaylist playlist) {
-                AudioTrack track = playlist.getTracks().get(0);
-                logger.info("[{}] Auto add {} to playlist.", guild, track.getInfo().title);
-                UserAudioTrack userAudioTrack = new UserAudioTrack(member.getUser(), track);
-                play(guild, playedChanel, guildAudioManager, userAudioTrack, true);
-                addStatus.put(uuid, true);
-            }
+                    @Override
+                    public void playlistLoaded(AudioPlaylist playlist) {
+                        AudioTrack track = playlist.getTracks().get(0);
+                        logger.info("[{}] Auto add {} to playlist.", guild, track.getInfo().title);
+                        UserAudioTrack userAudioTrack = new UserAudioTrack(member.getUser(), track);
+                        play(guild, playedChanel, guildAudioManager, userAudioTrack, true);
+                        addStatus.put(uuid, true);
+                    }
 
-            @Override
-            public void noMatches() {
-                logger.warn("[{}] Track not found: {}", guild, trackUrl);
-                addStatus.put(uuid, false);
-            }
+                    @Override
+                    public void noMatches() {
+                        logger.warn("[{}] Track not found: {}", guild, trackUrl);
+                        addStatus.put(uuid, false);
+                    }
 
-            @Override
-            public void loadFailed(FriendlyException exception) {
-                logger.error("[{}] Cant load media!", guild);
-                logger.error(exception.getMessage());
-                addStatus.put(uuid, false);
-            }
-        });
+                    @Override
+                    public void loadFailed(FriendlyException exception) {
+                        logger.error("[{}] Cant load media!", guild);
+                        logger.error(exception.getMessage());
+                        addStatus.put(uuid, false);
+                    }
+                });
         future.get();
         return addStatus.remove(uuid);
     }
-
 
     /**
      * Load playlist to playlist
@@ -189,7 +192,6 @@ public class GuildAudioBotService {
         }
     }
 
-
     /**
      * Add single track to playlist, auto-connect if not connected to vocal chanel
      *
@@ -199,7 +201,8 @@ public class GuildAudioBotService {
      * @param track        Track to add to playlist
      * @param onHead       True for adding audio track on top of playlist
      */
-    public void play(Guild guild, AudioChannel channel, GuildAudioManager musicManager, UserAudioTrack track, boolean onHead) {
+    public void play(Guild guild, AudioChannel channel, GuildAudioManager musicManager, UserAudioTrack track,
+            boolean onHead) {
         if (!guild.getAudioManager().isConnected())
             guild.getAudioManager().openAudioConnection(channel);
         if (!onHead)
@@ -212,7 +215,8 @@ public class GuildAudioBotService {
         if (guild.getAudioManager().isConnected()) {
             loadAndPlay(event, guild.getAudioManager().getConnectedChannel(), url, playListLimit, onHead);
         } else {
-            MessageCreateData message = new MessageCreateBuilder().setEmbeds(EmbedMessageUtils.getMusicError("Not connected to vocal chanel !")).build();
+            MessageCreateData message = new MessageCreateBuilder()
+                    .setEmbeds(EmbedMessageUtils.getMusicError("Not connected to vocal chanel !")).build();
             event.getHook().setEphemeral(true).sendMessage(message).queue();
         }
     }
@@ -227,8 +231,8 @@ public class GuildAudioBotService {
                 EmbedMessageUtils.buildStandar(
                         new EmbedBuilder()
                                 .setTitle(":pause_button:  Playback paused")
-                                .setColor(Color.green)
-                )).build();
+                                .setColor(Color.green)))
+                .build();
         clearLastButton();
         lastMessageWithButton = hook.sendMessage(message).addActionRow(getActionButton()).complete();
     }
@@ -244,16 +248,16 @@ public class GuildAudioBotService {
                     EmbedMessageUtils.buildStandar(
                             new EmbedBuilder()
                                     .setTitle(":warning:  Nothing to play, playlist is empty !")
-                                    .setColor(Color.green)
-                    )).build();
+                                    .setColor(Color.green)))
+                    .build();
         } else {
             resume();
             message = new MessageCreateBuilder().setEmbeds(
                     EmbedMessageUtils.buildStandar(
                             new EmbedBuilder()
                                     .setTitle(":arrow_forward:  Playback resumed")
-                                    .setColor(Color.green)
-                    )).build();
+                                    .setColor(Color.green)))
+                    .build();
         }
         clearLastButton();
         lastMessageWithButton = hook.sendMessage(message).addActionRow(getActionButton()).complete();
@@ -269,8 +273,8 @@ public class GuildAudioBotService {
                 EmbedMessageUtils.buildStandar(
                         new EmbedBuilder()
                                 .setTitle(":track_next:  Next Track")
-                                .setColor(Color.green)
-                )).build();
+                                .setColor(Color.green)))
+                .build();
         clearLastButton();
         lastMessageWithButton = hook.sendMessage(message).addActionRow(getActionButton()).complete();
     }
@@ -285,8 +289,8 @@ public class GuildAudioBotService {
                 EmbedMessageUtils.buildStandar(
                         new EmbedBuilder()
                                 .setTitle(":stop_button:  Playback stopped")
-                                .setColor(Color.green)
-                )).build();
+                                .setColor(Color.green)))
+                .build();
         clearLastButton();
         lastMessageWithButton = hook.sendMessage(message).addActionRow(getActionButton()).complete();
 
@@ -304,8 +308,8 @@ public class GuildAudioBotService {
                 EmbedMessageUtils.buildStandar(
                         new EmbedBuilder()
                                 .setTitle(":eject:  Disconnected")
-                                .setColor(Color.green)
-                )).build();
+                                .setColor(Color.green)))
+                .build();
         clearLastButton();
         hook.sendMessage(message).queue();
     }
@@ -316,10 +320,12 @@ public class GuildAudioBotService {
         guild.getAudioManager().closeAudioConnection();
         clearLastButton();
     }
+
     public void info(InteractionHook hook) {
         AudioTrackInfo info = guildAudioManager.scheduler.getInfo();
         UserAudioTrack userAudioTrack = guildAudioManager.scheduler.getCurrentPlayingTrack();
-        MessageCreateData message = new MessageCreateBuilder().setEmbeds(EmbedMessageUtils.getMusicInfo(info, userAudioTrack)).build();
+        MessageCreateData message = new MessageCreateBuilder()
+                .setEmbeds(EmbedMessageUtils.getMusicInfo(info, userAudioTrack)).build();
         clearLastButton();
         lastMessageWithButton = hook.sendMessage(message).addActionRow(getActionButton()).complete();
     }
@@ -330,8 +336,8 @@ public class GuildAudioBotService {
                 EmbedMessageUtils.buildStandar(
                         new EmbedBuilder()
                                 .setTitle(":wastebasket:  Playlist flushed")
-                                .setColor(Color.green)
-                )).build();
+                                .setColor(Color.green)))
+                .build();
         clearLastButton();
         lastMessageWithButton = hook.sendMessage(message).addActionRow(getActionButton()).complete();
     }
@@ -350,9 +356,9 @@ public class GuildAudioBotService {
                             new EmbedBuilder()
                                     .setTitle(":scroll:  Playlist")
                                     .setColor(Color.green)
-                                    .setDescription("Oh no ! The playlist is empty !")
-                    )).build();
-           hook.sendMessage(message).queue();
+                                    .setDescription("Oh no ! The playlist is empty !")))
+                    .build();
+            hook.sendMessage(message).queue();
         } else {
             StringBuilder resp = new StringBuilder();
             int i = 0;
@@ -375,8 +381,8 @@ public class GuildAudioBotService {
                             new EmbedBuilder()
                                     .setTitle(":scroll:  Playlist")
                                     .setColor(Color.green)
-                                    .setDescription(resp.toString())
-                    )).build();
+                                    .setDescription(resp.toString())))
+                    .build();
             hook.sendMessage(message).queue();
         }
 
@@ -390,7 +396,6 @@ public class GuildAudioBotService {
         return guildAudioManager;
     }
 
-
     public void clearLastButton() {
         if (lastMessageWithButton != null) {
             this.lastMessageWithButton.editMessageComponents(new ArrayList<>()).queue();
@@ -401,9 +406,9 @@ public class GuildAudioBotService {
 
     public void updateLastButton() {
         if (lastMessageWithButton != null)
-            lastMessageWithButton = lastMessageWithButton.editMessageComponents(ActionRow.of(getActionButton())).complete();
+            lastMessageWithButton = lastMessageWithButton.editMessageComponents(ActionRow.of(getActionButton()))
+                    .complete();
     }
-
 
     private List<Button> getActionButton() {
         ArrayList<Button> buttonArrayList = new ArrayList<>();

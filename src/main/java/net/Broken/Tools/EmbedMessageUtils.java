@@ -1,18 +1,19 @@
 package net.Broken.Tools;
 
-import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
-import net.Broken.Audio.UserAudioTrack;
-import net.Broken.BotConfigLoader;
-import net.Broken.MainBot;
-import net.Broken.SpringContext;
-import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.MessageEmbed;
-
-import java.awt.*;
+import java.awt.Color;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
+
+import com.sedmelluq.discord.lavaplayer.track.AudioTrackInfo;
+
+import net.Broken.BotConfigLoader;
+import net.Broken.MainBot;
+import net.Broken.SpringContext;
+import net.Broken.Audio.UserAudioTrack;
+import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 
 /**
  * Pre build Message Embed
@@ -26,7 +27,6 @@ public class EmbedMessageUtils {
                 .setDescription(message);
     }
 
-
     public static MessageEmbed getMusicError(String message) {
         return buildStandar(new EmbedBuilder()
                 .setTitle(":warning: Musique Error")
@@ -35,7 +35,7 @@ public class EmbedMessageUtils {
     }
 
     public static MessageEmbed getMusicOk(String message) {
-// TODO better display for different action (add icon ?)
+        // TODO better display for different action (add icon ?)
         EmbedBuilder temp = new EmbedBuilder()
                 .setTitle(":loud_sound: " + message)
                 .setColor(Color.green);
@@ -53,18 +53,17 @@ public class EmbedMessageUtils {
         return buildStandar(temp);
     }
 
-    public static MessageEmbed getMusicAdded(AudioTrackInfo info, Member member, int playlistSize){
+    public static MessageEmbed getMusicAdded(AudioTrackInfo info, Member member, int playlistSize) {
         EmbedBuilder temp = new EmbedBuilder()
                 .addField("Title", info.title, false)
                 .addField("Author", info.author, false)
                 .addField("Submitted by", member.getEffectiveName(), true)
                 .setThumbnail("https://img.youtube.com/vi/" + info.identifier + "/hqdefault.jpg")
                 .setColor(Color.green);
-        if(playlistSize != -1){
+        if (playlistSize != -1) {
             temp.addField("Loaded tracks", Integer.toString(playlistSize), true)
                     .setTitle(":loud_sound: Playlist added to queue");
-        }
-        else {
+        } else {
             temp.setTitle(":loud_sound: Track added to queue");
         }
         temp.addField("URL", info.uri, false);
@@ -78,10 +77,10 @@ public class EmbedMessageUtils {
                 .setColor(Color.red));
     }
 
-
     public static MessageEmbed getInternalError() {
         return buildStandar(
-                getError("I... I... I don't feel so good ~~mr stark~~...  :thermometer_face: \nPlease contact my developer!")
+                getError(
+                        "I... I... I don't feel so good ~~mr stark~~...  :thermometer_face: \nPlease contact my developer!")
                         .setImage("https://i.imgur.com/anKv8U5.gif"));
     }
 
@@ -94,7 +93,8 @@ public class EmbedMessageUtils {
     }
 
     public static MessageEmbed getUnautorized() {
-        return buildStandar(getError("You're not powerful enough to do that slave !").setImage("https://i.imgur.com/0OSsdvW.gif"));
+        return buildStandar(
+                getError("You're not powerful enough to do that slave !").setImage("https://i.imgur.com/0OSsdvW.gif"));
     }
 
     public static MessageEmbed getLastMessageFromTextChannel(HashMap<String, String> message) {
@@ -117,6 +117,5 @@ public class EmbedMessageUtils {
                 .setTimestamp(Instant.now())
                 .build();
     }
-
 
 }

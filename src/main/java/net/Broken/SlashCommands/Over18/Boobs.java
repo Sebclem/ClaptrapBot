@@ -6,7 +6,6 @@ import net.Broken.Tools.Command.NumberedSlashCommand;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
 
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -18,7 +17,6 @@ public class Boobs extends NumberedSlashCommand {
     public Boobs() {
         super(LogManager.getLogger(), "http://lesaintdesseins.fr/", "-2/", "featured-img", "img");
     }
-
 
     @Override
     public String getDescription() {

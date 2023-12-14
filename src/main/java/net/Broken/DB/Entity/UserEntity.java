@@ -1,11 +1,18 @@
 package net.Broken.DB.Entity;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import net.Broken.Api.Security.Data.DiscordOauthUserInfo;
 import net.dv8tion.jda.api.entities.User;
-
-import javax.persistence.*;
-import java.util.List;
 
 /**
  * Entity for DB. Represent confirmed user account.
@@ -50,7 +57,6 @@ public class UserEntity {
         this.discordId = discordOauthUserInfo.id();
         this.avatar = discordOauthUserInfo.avatar();
     }
-
 
     public Integer getId() {
         return id;

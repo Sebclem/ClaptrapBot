@@ -10,6 +10,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import java.util.HashMap;
 
@@ -27,7 +28,6 @@ public class MainBot {
 
     public static int messageTimeOut = 10;
     public static int gifMessageTimeOut = 30;
-
 
     private static final Logger logger = LogManager.getLogger();
 
@@ -56,8 +56,7 @@ public class MainBot {
 
     @Bean
     public static PropertySourcesPlaceholderConfigurer placeholderConfigurer() {
-        PropertySourcesPlaceholderConfigurer propsConfig
-                = new PropertySourcesPlaceholderConfigurer();
+        PropertySourcesPlaceholderConfigurer propsConfig = new PropertySourcesPlaceholderConfigurer();
         propsConfig.setLocation(new ClassPathResource("git.properties"));
         propsConfig.setIgnoreResourceNotFound(true);
         propsConfig.setIgnoreUnresolvablePlaceholders(true);

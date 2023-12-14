@@ -29,35 +29,35 @@ public class AudioService {
         Guild guild = MainBot.jda.getGuildById(guildId);
         Member member = guild.getMemberById(userId);
 
-
         AudioChannelUnion channel = guild.getAudioManager().getConnectedChannel();
         ConnectionStatus status = guild.getAudioManager().getConnectionStatus();
         if (channel != null) {
-//              The user can view the audio status if:
-//                  -> He can view the voice channel
-//                  -> OR He can *not* view the voice channel, but he is connected to this voice channel
+            // The user can view the audio status if:
+            // -> He can view the voice channel
+            // -> OR He can *not* view the voice channel, but he is connected to this voice
+            // channel
             boolean canView = member.hasPermission(channel, Permission.VIEW_CHANNEL)
                     || (member.getVoiceState() != null
-                    && member.getVoiceState().getChannel() == channel);
+                            && member.getVoiceState().getChannel() == channel);
             GuildAudioBotService guildAudioBotService = GuildAudioBotService.getInstance(guild);
 
             if (canView) {
-//                  The user can interact with the audio if:
-//                      -> He can connect to this voice channel
-//                          -> OR he is connected to this voice channel
-//                      -> AND He can speak in this voice channel
+                // The user can interact with the audio if:
+                // -> He can connect to this voice channel
+                // -> OR he is connected to this voice channel
+                // -> AND He can speak in this voice channel
                 boolean canInteract = (member.hasPermission(channel, Permission.VOICE_CONNECT)
                         || member.getVoiceState() != null
-                        && member.getVoiceState().getChannel() == channel)
+                                && member.getVoiceState().getChannel() == channel)
                         && member.hasPermission(channel, Permission.VOICE_SPEAK);
-
 
                 boolean stopped = guildAudioBotService.getGuidAudioManager().player.getPlayingTrack() == null;
                 PlayBackInfo playBackInfo;
                 if (!stopped) {
                     boolean paused = guildAudioBotService.getGuidAudioManager().player.isPaused();
                     long position = guildAudioBotService.getGuidAudioManager().player.getPlayingTrack().getPosition();
-                    UserAudioTrack userAudioTrack = guildAudioBotService.getGuidAudioManager().scheduler.getCurrentPlayingTrack();
+                    UserAudioTrack userAudioTrack = guildAudioBotService.getGuidAudioManager().scheduler
+                            .getCurrentPlayingTrack();
 
                     playBackInfo = new PlayBackInfo(paused, false, position, new TrackInfo(userAudioTrack));
 
@@ -90,7 +90,6 @@ public class AudioService {
         return new ResponseEntity<>(status, HttpStatus.OK);
     }
 
-
     public ResponseEntity<Status> pause(String guildId, String userId) {
         Guild guild = MainBot.jda.getGuildById(guildId);
         GuildAudioBotService.getInstance(guild).pause();
@@ -119,7 +118,8 @@ public class AudioService {
         return new ResponseEntity<>(status, HttpStatus.OK);
     }
 
-    public ResponseEntity<Status> add(String guildId, String userId, Add body) throws ExecutionException, InterruptedException {
+    public ResponseEntity<Status> add(String guildId, String userId, Add body)
+            throws ExecutionException, InterruptedException {
         Guild guild = MainBot.jda.getGuildById(guildId);
         boolean success = GuildAudioBotService.getInstance(guild).loadAndPlaySync(body.url(), userId);
         if (success) {

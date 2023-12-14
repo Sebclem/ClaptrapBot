@@ -11,7 +11,6 @@ import org.apache.logging.log4j.Logger;
 public class LimitChecker {
     static final Logger logger = LogManager.getLogger();
 
-
     /**
      * Check max page url for web site like baseURL.com/number-2/
      *
@@ -73,7 +72,6 @@ public class LimitChecker {
         number -= 1;
         logger.debug("Final pass: " + number);
         return number;
-
 
     }
 }

@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -16,6 +17,7 @@ import net.Broken.Api.Security.Components.UnauthorizedHandler;
 import net.Broken.Api.Security.Filters.JwtFilter;
 
 @EnableWebSecurity
+@EnableMethodSecurity
 @Configuration
 public class SecurityConfig {
     private final UnauthorizedHandler unauthorizedHandler;
@@ -30,12 +32,12 @@ public class SecurityConfig {
                 .exceptionHandling(handling -> handling.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(requests -> requests
-                        .antMatchers("/api/v2/auth/**").permitAll()
-                        .antMatchers("/api/v2/guild/inviteLink").permitAll()
-                        .antMatchers("/swagger-ui/**").permitAll()
-                        .antMatchers("/swagger-ui.html").permitAll()
-                        .antMatchers("/v3/api-docs/**").permitAll()
-                        .antMatchers("/actuator/**").permitAll()
+                        .requestMatchers("/api/v2/auth/**").permitAll()
+                        .requestMatchers("/api/v2/guild/inviteLink").permitAll()
+                        .requestMatchers("/swagger-ui/**").permitAll()
+                        .requestMatchers("/swagger-ui.html").permitAll()
+                        .requestMatchers("/v3/api-docs/**").permitAll()
+                        .requestMatchers("/actuator/**").permitAll()
                         .anyRequest().authenticated());
 
         http.addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);

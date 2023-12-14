@@ -54,7 +54,8 @@ public class Cat implements SlashCommand {
 
         } catch (InterruptedException | IOException e) {
             logger.catching(e);
-            event.reply(new MessageCreateBuilder().setEmbeds(EmbedMessageUtils.getInternalError()).build()).setEphemeral(true)
+            event.reply(new MessageCreateBuilder().setEmbeds(EmbedMessageUtils.getInternalError()).build())
+                    .setEphemeral(true)
                     .queue();
         }
 
@@ -96,8 +97,8 @@ public class Cat implements SlashCommand {
     }
 
     @Override
-    public DefaultMemberPermissions getDefaultPermissions(){
+    public DefaultMemberPermissions getDefaultPermissions() {
         return DefaultMemberPermissions.enabledFor(Permission.MESSAGE_SEND);
-    } 
+    }
 
 }

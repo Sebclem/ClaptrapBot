@@ -27,8 +27,7 @@ public class GuildService {
             boolean canManage = guild.getMember(discordUser).hasPermission(
                     Permission.MANAGE_SERVER,
                     Permission.MANAGE_PERMISSIONS,
-                    Permission.MANAGE_CHANNEL
-            );
+                    Permission.MANAGE_CHANNEL);
             guildList.add(new Guild(guild.getId(), guild.getName(), guild.getIconUrl(), canManage));
         }
         return guildList;
@@ -69,9 +68,9 @@ public class GuildService {
         return roles;
     }
 
-
-    public String getInviteLink(){
-        return MainBot.jda.setRequiredScopes("applications.commands").getInviteUrl(Permission.getPermissions(1644971949399L));
+    public String getInviteLink() {
+        return MainBot.jda.setRequiredScopes("applications.commands")
+                .getInviteUrl(Permission.getPermissions(1644971949399L));
     }
 
 }

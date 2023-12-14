@@ -1,12 +1,13 @@
 package net.Broken.Tools.Settings;
 
-import net.Broken.Api.Data.Settings.Value;
-import net.Broken.DB.Entity.GuildPreferenceEntity;
-import net.Broken.DB.Repository.GuildPreferenceRepository;
+import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.List;
+import net.Broken.Api.Data.Settings.Value;
+import net.Broken.DB.Entity.GuildPreferenceEntity;
+import net.Broken.DB.Repository.GuildPreferenceRepository;
 
 public class SettingSaver {
     private final GuildPreferenceRepository guildPreferenceRepository;
@@ -28,16 +29,16 @@ public class SettingSaver {
 
     private void setValue(Value value) {
         switch (value.id()) {
-//          WELCOME
+            // WELCOME
             case "welcome_enable" -> guildPreference.setWelcome((Boolean) value.value());
             case "welcome_chanel_id" -> guildPreference.setWelcomeChanelID((String) value.value());
             case "welcome_message" -> guildPreference.setWelcomeMessage((String) value.value());
-//          DEFAULT ROLE
+            // DEFAULT ROLE
             case "default_role" -> guildPreference.setDefaultRole((Boolean) value.value());
             case "default_role_id" -> guildPreference.setDefaultRoleId((String) value.value());
-//          DAILY
+            // DAILY
             case "daily_madame" -> guildPreference.setDailyMadame((Boolean) value.value());
-//          AUTO VOICE CHAN
+            // AUTO VOICE CHAN
             case "auto_voice" -> guildPreference.setAutoVoice((Boolean) value.value());
             case "auto_voice_base_channel" -> guildPreference.setAutoVoiceChannelID((String) value.value());
             case "auto_voice_channel_title" -> guildPreference.setAutoVoiceChannelTitle((String) value.value());

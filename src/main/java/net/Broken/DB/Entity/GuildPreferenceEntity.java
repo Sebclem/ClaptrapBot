@@ -1,6 +1,10 @@
 package net.Broken.DB.Entity;
 
-import javax.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 @Entity
 public class GuildPreferenceEntity {
@@ -8,7 +12,7 @@ public class GuildPreferenceEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(unique=true)
+    @Column(unique = true)
     private String guildId;
 
     private boolean welcome;
@@ -27,17 +31,16 @@ public class GuildPreferenceEntity {
     private String autoVoiceChannelID;
     private String autoVoiceChannelTitle;
 
-
     public GuildPreferenceEntity(String guildId,
-                                 boolean welcome,
-                                 String welcomeMessage,
-                                 String welcomeChanelID,
-                                 boolean defaultRole,
-                                 String defaultRoleId,
-                                 boolean dailyMadame,
-                                 boolean autoVoice,
-                                 String autoVoiceChannelID,
-                                 String autoVoiceChannelTitle) {
+            boolean welcome,
+            String welcomeMessage,
+            String welcomeChanelID,
+            boolean defaultRole,
+            String defaultRoleId,
+            boolean dailyMadame,
+            boolean autoVoice,
+            String autoVoiceChannelID,
+            String autoVoiceChannelTitle) {
         this.guildId = guildId;
         this.welcome = welcome;
         this.welcomeMessage = welcomeMessage;
@@ -53,9 +56,9 @@ public class GuildPreferenceEntity {
     public GuildPreferenceEntity() {
     }
 
-
     public static GuildPreferenceEntity getDefault(String guildId) {
-        return new GuildPreferenceEntity(guildId, false, "Welcome to this awesome server @name! ", null, false, null, true, false, null, null);
+        return new GuildPreferenceEntity(guildId, false, "Welcome to this awesome server @name! ", null, false, null,
+                true, false, null, null);
     }
 
     public Integer getId() {

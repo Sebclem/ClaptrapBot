@@ -1,25 +1,25 @@
 package net.Broken.Tools.DayListener.Listeners;
 
-import net.Broken.DB.Entity.GuildPreferenceEntity;
-import net.Broken.DB.Repository.GuildPreferenceRepository;
-import net.Broken.MainBot;
-import net.Broken.SlashCommands.Over18.Madame;
-import net.Broken.SpringContext;
-import net.Broken.Tools.DayListener.NewDayListener;
-import net.Broken.Tools.FindContentOnWebPage;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.springframework.context.ApplicationContext;
-
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.context.ApplicationContext;
+
+import net.Broken.MainBot;
+import net.Broken.SpringContext;
+import net.Broken.DB.Entity.GuildPreferenceEntity;
+import net.Broken.DB.Repository.GuildPreferenceRepository;
+import net.Broken.SlashCommands.Over18.Madame;
+import net.Broken.Tools.FindContentOnWebPage;
+import net.Broken.Tools.DayListener.NewDayListener;
+import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 
 /**
  * Daily Listener for DailyMadame
@@ -51,7 +51,6 @@ public class DailyMadame implements NewDayListener {
                 Madame command = (Madame) MainBot.slashCommands.get("madame");
                 imgUrl = command.poll();
             }
-
 
             for (Guild guild : guilds) {
                 TextChannel chanel = null;

@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-
 @RestController
 @RequestMapping("/api/v2")
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -16,13 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class CrossOptionController {
 
     /**
-     *  For cross preflight request send by axios
+     * For cross preflight request send by axios
      */
-    @RequestMapping(
-            value = "/**",
-            method = RequestMethod.OPTIONS
-    )
+    @RequestMapping(value = "/**", method = RequestMethod.OPTIONS)
     public ResponseEntity<String> handle() {
-        return new ResponseEntity<>("",HttpStatus.OK);
+        return new ResponseEntity<>("", HttpStatus.OK);
     }
 }

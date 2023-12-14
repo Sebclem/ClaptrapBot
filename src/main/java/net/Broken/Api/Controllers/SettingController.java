@@ -21,19 +21,19 @@ public class SettingController {
     }
 
     @GetMapping("description")
-    public List<SettingGroup> getSettingDescription(){
+    public List<SettingGroup> getSettingDescription() {
         return settingService.getSettingDescription();
     }
 
     @GetMapping("/{guildId}/values")
-    @PreAuthorize("isInGuild(#guildId) && canManageGuild(#guildId)")
-    public List<Value> getSettingValues(@PathVariable String guildId){
+    @PreAuthorize("@webSecurity.isInGuild(#guildId) && @webSecurity.canManageGuild(#guildId)")
+    public List<Value> getSettingValues(@PathVariable String guildId) {
         return settingService.getValues(guildId);
     }
 
     @PostMapping("/{guildId}/values")
-    @PreAuthorize("isInGuild(#guildId) && canManageGuild(#guildId)")
-    public List<Value> getSettingValues(@PathVariable String guildId, @RequestBody List<Value> values){
+    @PreAuthorize("@webSecurity.isInGuild(#guildId) && @webSecurity.anManageGuild(#guildId)")
+    public List<Value> getSettingValues(@PathVariable String guildId, @RequestBody List<Value> values) {
         GuildPreferenceEntity pref = settingService.saveValue(guildId, values);
         return new SettingValueBuilder(pref).build();
     }

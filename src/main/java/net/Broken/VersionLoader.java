@@ -12,11 +12,11 @@ public class VersionLoader {
     @Value("${git.commit.id.abbrev}")
     private String commitId;
 
-    public String getVersion(){
+    public String getVersion() {
         String version;
-        if(tags.isEmpty()){
+        if (tags.isEmpty()) {
             version = "DEV-" + branch + "-" + commitId;
-        }else{
+        } else {
             version = tags;
         }
         return version;

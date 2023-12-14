@@ -1,11 +1,11 @@
 package net.Broken.Tools.DayListener;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Day change listener
@@ -41,7 +41,6 @@ public class DayListener extends Thread {
             }
         }
     }
-
 
     /**
      * Thread loop

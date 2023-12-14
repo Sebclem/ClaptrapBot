@@ -16,7 +16,6 @@ import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 import net.dv8tion.jda.api.utils.messages.MessageCreateBuilder;
 import net.dv8tion.jda.api.utils.messages.MessageCreateData;
 
-
 public class Clear implements SlashCommand {
     @Override
     public void action(SlashCommandInteractionEvent event) {
@@ -26,7 +25,9 @@ public class Clear implements SlashCommand {
             MessageChannel chanel = event.getChannel();
             chanel.getIterableHistory().takeAsync((int) n).thenAccept(chanel::purgeMessages);
         } else {
-            MessageCreateData message = new MessageCreateBuilder().setEmbeds(EmbedMessageUtils.getFlushError("You are not a supreme being, you cannot do that !")).build();
+            MessageCreateData message = new MessageCreateBuilder()
+                    .setEmbeds(EmbedMessageUtils.getFlushError("You are not a supreme being, you cannot do that !"))
+                    .build();
             event.reply(message).setEphemeral(true).queue();
         }
     }
@@ -68,5 +69,4 @@ public class Clear implements SlashCommand {
         return DefaultMemberPermissions.enabledFor(Permission.MESSAGE_MANAGE);
     }
 
-    
 }

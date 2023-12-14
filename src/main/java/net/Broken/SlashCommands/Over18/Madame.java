@@ -17,6 +17,7 @@ public class Madame extends NumberedSlashCommand {
     public Madame() {
         super(LogManager.getLogger(), "https://www.bonjourmadame.fr/page/", "/");
     }
+
     /**
      * Detect if picture link go to Tepeee
      *
@@ -25,7 +26,8 @@ public class Madame extends NumberedSlashCommand {
      * @throws StringIndexOutOfBoundsException
      * @throws IOException
      */
-    private boolean scanPageForTipeee(String url, Logger logger) throws StringIndexOutOfBoundsException, IOException, InterruptedException {
+    private boolean scanPageForTipeee(String url, Logger logger)
+            throws StringIndexOutOfBoundsException, IOException, InterruptedException {
         String content = FindContentOnWebPage.getSourceUrl(url);
         String imgClickLink = content.substring(content.indexOf("class=\"post-content"));
         imgClickLink = imgClickLink.substring(imgClickLink.indexOf("<a"));
@@ -48,7 +50,6 @@ public class Madame extends NumberedSlashCommand {
         return url;
     }
 
-
     @Override
     public String poll() throws IOException, InterruptedException {
         boolean success = false;
@@ -59,8 +60,7 @@ public class Madame extends NumberedSlashCommand {
             int randomResult = randomQueue.poll();
             String url = baseURL + randomResult + urlSuffix;
 
-            logger.debug("URL: {}",url);
-
+            logger.debug("URL: {}", url);
 
             if (scanPageForTipeee(url, logger)) {
                 logger.debug("Advertisement detected! Retry! ({})", url);

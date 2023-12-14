@@ -28,8 +28,8 @@ public class OpenApiConfig {
                                 new SecurityScheme().name(securitySchemeName)
                                         .type(SecurityScheme.Type.HTTP)
                                         .scheme("bearer")
-                                        .bearerFormat("JWT"))
-                ).addServersItem(new Server().url("/").description("Default"))
+                                        .bearerFormat("JWT")))
+                .addServersItem(new Server().url("/").description("Default"))
                 .info(new Info().title("ClaptrapBot API").version(versionLoader.getVersion()));
     }
 }

@@ -1,12 +1,12 @@
 package net.Broken.SlashCommands.Over18;
 
+import org.apache.logging.log4j.LogManager;
+
 import net.Broken.Tools.Command.Ignore;
 import net.Broken.Tools.Command.NoDev;
 import net.Broken.Tools.Command.NumberedSlashCommand;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.interactions.commands.DefaultMemberPermissions;
-
-import org.apache.logging.log4j.LogManager;
 
 @NoDev
 @Ignore
@@ -15,7 +15,6 @@ public class Ass extends NumberedSlashCommand {
     public Ass() {
         super(LogManager.getLogger(), "http://les400culs.com/", "-2/", "featured-img", "img");
     }
-
 
     @Override
     public String getDescription() {

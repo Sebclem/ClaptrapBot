@@ -7,7 +7,8 @@ import net.Broken.Audio.UserAudioTrack;
 public record TrackInfo(UserInfo submitter, AudioTrackInfo detail) {
 
     public TrackInfo(UserAudioTrack userAudioTrack) {
-        this(new UserInfo(userAudioTrack.getSubmittedUser().getId(), userAudioTrack.getSubmittedUser().getName(), userAudioTrack.getSubmittedUser().getAvatarUrl()),
+        this(new UserInfo(userAudioTrack.getSubmittedUser().getId(), userAudioTrack.getSubmittedUser().getName(),
+                userAudioTrack.getSubmittedUser().getAvatarUrl()),
                 userAudioTrack.getAudioTrack().getInfo());
     }
 }

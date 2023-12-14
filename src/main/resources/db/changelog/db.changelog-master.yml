@@ -244,37 +244,6 @@ databaseChangeLog:
             name: playlist_entity_id
             type: INT
         tableName: track_entity
-- changeSet:
-    id: 1653065037086-8
-    author: seb65 (generated)
-    changes:
-    - createTable:
-        columns:
-        - column:
-            autoIncrement: true
-            constraints:
-              nullable: false
-              primaryKey: true
-            name: id
-            type: INT
-        - column:
-            name: api_token
-            type: VARCHAR(255)
-        - column:
-            name: jda_id
-            type: VARCHAR(255)
-        - column:
-            name: name
-            type: VARCHAR(255)
-        - column:
-            name: password
-            type: VARCHAR(255)
-        - column:
-            constraints:
-              nullable: false
-            name: is_bot_admin
-            type: BIT
-        tableName: user_entity
 
 - changeSet:
     id: 1653065037086-10

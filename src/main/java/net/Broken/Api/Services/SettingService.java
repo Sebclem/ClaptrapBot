@@ -19,7 +19,6 @@ public class SettingService {
     public final GuildPreferenceRepository preferenceRepository;
     private final Logger logger = LogManager.getLogger();
 
-
     public SettingService(GuildPreferenceRepository preferenceRepository) {
         this.preferenceRepository = preferenceRepository;
     }
@@ -27,7 +26,6 @@ public class SettingService {
     public List<SettingGroup> getSettingDescription() {
         return new SettingDescriptionBuilder().build();
     }
-
 
     public List<Value> getValues(String guildId) {
         GuildPreferenceEntity pref = preferenceRepository.findByGuildId(guildId).orElseGet(() -> {
@@ -37,7 +35,7 @@ public class SettingService {
         return new SettingValueBuilder(pref).build();
     }
 
-    public GuildPreferenceEntity saveValue(String guildId, List<Value> values){
+    public GuildPreferenceEntity saveValue(String guildId, List<Value> values) {
         GuildPreferenceEntity pref = preferenceRepository.findByGuildId(guildId).orElseGet(() -> {
             logger.info("[API] : Generate default guild pref");
             return preferenceRepository.save(GuildPreferenceEntity.getDefault(guildId));

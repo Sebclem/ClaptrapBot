@@ -16,12 +16,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 
-
-
 public class Init {
     static private final Logger logger = LogManager.getLogger();
 
-    private Init() {}
+    private Init() {
+    }
 
     static JDA initJda(BotConfigLoader config) {
         logger.info("-----------------------INIT-----------------------");
@@ -55,7 +54,6 @@ public class Init {
         }
     }
 
-
     static void polish(JDA jda, BotConfigLoader config) {
         logger.info("Check database...");
         checkDatabase();
@@ -71,45 +69,43 @@ public class Init {
         logger.info("-----------------------END INIT-----------------------");
     }
 
-
     private static void checkDatabase() {
         ApplicationContext context = SpringContext.getAppContext();
         logger.debug("Stats...");
 
         logger.debug("Guild Prefs...");
         GuildPreferenceRepository guildPreference = context.getBean(GuildPreferenceRepository.class);
-        for(GuildPreferenceEntity pref :guildPreference.findAll()){
+        for (GuildPreferenceEntity pref : guildPreference.findAll()) {
             boolean save = false;
-            if(pref.getWelcomeMessage() != null && pref.getWelcomeMessage().equals(" ")){
+            if (pref.getWelcomeMessage() != null && pref.getWelcomeMessage().equals(" ")) {
                 pref.setWelcomeMessage(null);
                 save = true;
             }
-            if(pref.getWelcomeChanelID() != null && pref.getWelcomeChanelID().equals(" ")){
+            if (pref.getWelcomeChanelID() != null && pref.getWelcomeChanelID().equals(" ")) {
                 pref.setWelcomeChanelID(null);
                 save = true;
             }
-            if(pref.getWelcomeChanelID() != null && pref.getWelcomeChanelID().equals(" ")){
+            if (pref.getWelcomeChanelID() != null && pref.getWelcomeChanelID().equals(" ")) {
                 pref.setWelcomeChanelID(null);
                 save = true;
             }
-            if(pref.getDefaultRoleId() != null && pref.getDefaultRoleId().equals(" ")){
+            if (pref.getDefaultRoleId() != null && pref.getDefaultRoleId().equals(" ")) {
                 pref.setDefaultRoleId(null);
                 save = true;
             }
-            if(pref.getAutoVoiceChannelID() != null && pref.getAutoVoiceChannelID().equals(" ")){
+            if (pref.getAutoVoiceChannelID() != null && pref.getAutoVoiceChannelID().equals(" ")) {
                 pref.setAutoVoiceChannelID(null);
                 save = true;
             }
-            if(pref.getAutoVoiceChannelTitle() != null && pref.getAutoVoiceChannelTitle().equals(" ")){
+            if (pref.getAutoVoiceChannelTitle() != null && pref.getAutoVoiceChannelTitle().equals(" ")) {
                 pref.setAutoVoiceChannelTitle(null);
                 save = true;
             }
 
-            if(save){
+            if (save) {
                 guildPreference.save(pref);
             }
         }
-
 
     }
 }

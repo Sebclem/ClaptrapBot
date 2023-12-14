@@ -1,6 +1,5 @@
 package net.Broken.Tools;
 
-
 import static net.Broken.MainBot.jda;
 
 import java.util.HashMap;

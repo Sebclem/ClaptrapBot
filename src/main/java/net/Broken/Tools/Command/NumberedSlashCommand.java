@@ -19,7 +19,8 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
 
 /**
- * Abstact class used for all command that need to find the max number of page on a web site.
+ * Abstact class used for all command that need to find the max number of page
+ * on a web site.
  */
 @Ignore
 public abstract class NumberedSlashCommand implements SlashCommand {
@@ -49,7 +50,7 @@ public abstract class NumberedSlashCommand implements SlashCommand {
         try {
             logger.debug("Checking max...");
             maxNumber = LimitChecker.doYourJob(baseURL, 2, urlSuffix);
-            logger.info("Limit is {}",maxNumber);
+            logger.info("Limit is {}", maxNumber);
         } catch (IOException e) {
             logger.catching(e);
         }
@@ -72,7 +73,6 @@ public abstract class NumberedSlashCommand implements SlashCommand {
             event.getHook().setEphemeral(true).sendMessageEmbeds(message).queue();
         }
     }
-
 
     private void fillRandomQueue() throws IOException {
         TrueRandom trueRandom = TrueRandom.getINSTANCE();

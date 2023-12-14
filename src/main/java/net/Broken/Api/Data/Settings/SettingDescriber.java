@@ -7,8 +7,7 @@ public record SettingDescriber(
         String id,
         String name,
         String description,
-        TYPE type
-) {
+        TYPE type) {
 
     public enum TYPE {
         BOOL, LIST, STRING, ROLE, TEXT_CHANNEL, VOICE_CHANNEL

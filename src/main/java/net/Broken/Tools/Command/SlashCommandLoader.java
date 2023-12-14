@@ -16,25 +16,25 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.requests.restaction.CommandListUpdateAction;
 
-
 /**
  * Find and load bot's command
  */
 public class SlashCommandLoader {
     private static final Logger logger = LogManager.getLogger();
 
-    private SlashCommandLoader() {}
+    private SlashCommandLoader() {
+    }
 
     /**
-     * Search all implemented Command interface class and add it to MainBot.commands HashMap
+     * Search all implemented Command interface class and add it to MainBot.commands
+     * HashMap
      */
     public static void load(BotConfigLoader config) {
         logger.info("Loading Slash Command...");
         Reflections reflections = new Reflections(new ConfigurationBuilder().setUrls(ClasspathHelper.forPackage(
                 "net.Broken.SlashCommands",
                 ClasspathHelper.contextClassLoader(),
-                ClasspathHelper.staticClassLoader()))
-        );
+                ClasspathHelper.staticClassLoader())));
         Set<Class<? extends SlashCommand>> modules = reflections.getSubTypesOf(SlashCommand.class);
 
         logger.info("Find {} Command:", modules.size());
@@ -51,13 +51,13 @@ public class SlashCommandLoader {
                 } else {
                     try {
                         MainBot.slashCommands.put(name, command.getDeclaredConstructor().newInstance());
-                    } catch (InstantiationException | IllegalAccessException | InvocationTargetException |
-                             NoSuchMethodException e) {
+                    } catch (InstantiationException | IllegalAccessException | InvocationTargetException
+                            | NoSuchMethodException e) {
                         logger.error("Failed to load {} !", name);
                     }
                 }
             } else {
-                logger.trace("Ignored command: {}",  name);
+                logger.trace("Ignored command: {}", name);
             }
         }
     }
@@ -71,7 +71,7 @@ public class SlashCommandLoader {
                 command.addSubcommands(v.getSubcommands());
             }
             command.setDefaultPermissions(v.getDefaultPermissions());
-            
+
             commandListUpdateAction.addCommands(command);
         });
         commandListUpdateAction.queue();

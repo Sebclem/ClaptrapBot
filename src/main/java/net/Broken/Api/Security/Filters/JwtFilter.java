@@ -2,6 +2,10 @@ package net.Broken.Api.Security.Filters;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import net.Broken.Api.Security.Data.JwtPrincipal;
 import net.Broken.Api.Security.Services.JwtService;
 import net.Broken.BotConfigLoader;
@@ -15,10 +19,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -32,23 +32,24 @@ public class JwtFilter extends OncePerRequestFilter {
     private final Logger logger = LogManager.getLogger();
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
         String authHeader = request.getHeader("Authorization");
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String token = authHeader.replace("Bearer ", "");
             try {
                 UserEntity user;
                 JwtPrincipal principal;
-                if(config.mode().equals("DEV")){
+                if (config.mode().equals("DEV")) {
                     user = userRepository.findByDiscordId(token).orElseThrow();
                     principal = new JwtPrincipal("DEV", user);
-                }
-                else {
+                } else {
                     Jws<Claims> jwt = jwtService.verifyAndParseJwt(token);
                     user = jwtService.getUserWithJwt(jwt);
-                    principal = new JwtPrincipal(jwt.getBody().getId(), user);
+                    principal = new JwtPrincipal(jwt.getPayload().getId(), user);
                 }
-                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(principal, null, new ArrayList<>());
+                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                        principal, null, new ArrayList<>());
                 authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             } catch (Exception e) {

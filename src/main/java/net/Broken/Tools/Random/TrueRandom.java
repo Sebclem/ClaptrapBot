@@ -1,9 +1,10 @@
 package net.Broken.Tools.Random;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import net.Broken.BotConfigLoader;
-import net.Broken.SpringContext;
-import net.Broken.Tools.Random.Data.RandomData;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -14,16 +15,18 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import net.Broken.BotConfigLoader;
+import net.Broken.SpringContext;
+import net.Broken.Tools.Random.Data.RandomData;
 
 public class TrueRandom {
 
     private static final TrueRandom INSTANCE = new TrueRandom();
     private final Logger logger = LogManager.getLogger();
     private final String apiKey;
+
     private TrueRandom() {
         apiKey = SpringContext.getAppContext().getBean(BotConfigLoader.class).randomApiKey();
     }
@@ -34,10 +37,11 @@ public class TrueRandom {
 
     public List<Integer> getNumbers(int min, int max) throws IOException {
 
-//        TODO Migrate to native http client
+        // TODO Migrate to native http client
         HttpClient httpClient = HttpClientBuilder.create().build();
 
-        RandomData postData = new RandomData("2.0", "generateIntegers", 41, new RandomData.Params(apiKey, 50, min, max, (max - min) < 50), null, null);
+        RandomData postData = new RandomData("2.0", "generateIntegers", 41,
+                new RandomData.Params(apiKey, 50, min, max, (max - min) < 50), null, null);
         ObjectMapper mapper = new ObjectMapper();
 
         StringEntity entity = new StringEntity(mapper.writeValueAsString(postData), ContentType.APPLICATION_JSON);
@@ -54,7 +58,6 @@ public class TrueRandom {
             logger.error("Request fail! Status: " + status);
             throw new IOException();
         }
-
 
         InputStream responseIS = response.getEntity().getContent();
         String content = IOUtils.toString(responseIS, StandardCharsets.UTF_8);

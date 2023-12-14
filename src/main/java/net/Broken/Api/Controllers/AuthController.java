@@ -19,7 +19,8 @@ public class AuthController {
 
     private final JwtService jwtService;
 
-    public AuthController(AuthenticationManager authenticationManager, UserRepository userRepository, JwtService jwtService) {
+    public AuthController(AuthenticationManager authenticationManager, UserRepository userRepository,
+            JwtService jwtService) {
         this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
     }
@@ -27,13 +28,11 @@ public class AuthController {
     @PostMapping("/discord")
     public JwtResponse loginDiscord(@Validated @RequestBody Login login) {
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(login.redirectUri(), login.code())
-        );
+                new UsernamePasswordAuthenticationToken(login.redirectUri(), login.code()));
 
         UserEntity user = (UserEntity) authentication.getPrincipal();
 
         String jwt = jwtService.buildJwt(user);
-
 
         return new JwtResponse(jwt);
     }

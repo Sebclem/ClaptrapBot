@@ -1,11 +1,12 @@
 package net.Broken.Tools.Command;
 
-import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 /**
  *
@@ -38,8 +39,7 @@ public class CommandParser {
         for (int i = 0; i < args.length; i++)
             args[i] = args[i].replace('$', ' ');
 
-
-        logger.info("Author: {}, Command: {}, args: {}", e.getAuthor().getName(), commande,  Arrays.toString(args));
+        logger.info("Author: {}, Command: {}, args: {}", e.getAuthor().getName(), commande, Arrays.toString(args));
 
         return new CommandContainer(brt, sansTete, splitSansTete, commande, args, e);
 
@@ -56,7 +56,8 @@ public class CommandParser {
         public final String[] args;
         public final MessageReceivedEvent event;
 
-        public CommandContainer(String brut, String sansTete, String[] splitSansTete, String commande, String[] args, MessageReceivedEvent e) {
+        public CommandContainer(String brut, String sansTete, String[] splitSansTete, String commande, String[] args,
+                MessageReceivedEvent e) {
             this.brut = brut;
             this.sansTete = sansTete;
             this.splitSansTete = splitSansTete;

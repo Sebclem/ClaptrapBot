@@ -24,7 +24,7 @@ public class SettingsUtils {
     }
 
     public GuildPreferenceEntity getPreference(Guild guild) {
-        return guildPreferenceRepository.findByGuildId(guild.getId()).orElseGet(()->{
+        return guildPreferenceRepository.findByGuildId(guild.getId()).orElseGet(() -> {
             logger.info("Generate default pref for {}", guild.getName());
             return guildPreferenceRepository.save(GuildPreferenceEntity.getDefault(guild.getId()));
         });
