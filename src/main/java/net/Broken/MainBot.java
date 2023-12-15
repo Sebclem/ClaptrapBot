@@ -1,6 +1,7 @@
 package net.Broken;
 
-import net.dv8tion.jda.api.JDA;
+import java.util.HashMap;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.boot.SpringApplication;
@@ -10,9 +11,8 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-import java.util.HashMap;
+import net.dv8tion.jda.api.JDA;
 
 /**
  * Main Class
