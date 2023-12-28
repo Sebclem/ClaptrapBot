@@ -1,14 +1,21 @@
 package net.Broken.Api.Controllers;
 
+import java.util.List;
+
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import net.Broken.Api.Data.Settings.SettingGroup;
 import net.Broken.Api.Data.Settings.Value;
 import net.Broken.Api.Services.SettingService;
 import net.Broken.DB.Entity.GuildPreferenceEntity;
 import net.Broken.Tools.Settings.SettingValueBuilder;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v2/setting")
@@ -32,7 +39,7 @@ public class SettingController {
     }
 
     @PostMapping("/{guildId}/values")
-    @PreAuthorize("@webSecurity.isInGuild(#guildId) && @webSecurity.anManageGuild(#guildId)")
+    @PreAuthorize("@webSecurity.isInGuild(#guildId) && @webSecurity.canManageGuild(#guildId)")
     public List<Value> getSettingValues(@PathVariable String guildId, @RequestBody List<Value> values) {
         GuildPreferenceEntity pref = settingService.saveValue(guildId, values);
         return new SettingValueBuilder(pref).build();
