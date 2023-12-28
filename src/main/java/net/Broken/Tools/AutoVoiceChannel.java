@@ -47,7 +47,9 @@ public class AutoVoiceChannel {
                 title = "Voice @count";
             }
             title = title.replace("@count", Integer.toString(next));
-            voiceChannel.createCopy().setName(title).setPosition(voiceChannel.getPosition()).queue(newChannel -> {
+            voiceChannel.createCopy().setName(title).queue(newChannel -> {
+                voiceChannel.getGuild().modifyVoiceChannelPositions().selectPosition(voiceChannel)
+                        .moveBelow(voiceChannel).queue();
                 moveMembers(voiceChannel.getMembers(), (AudioChannel) newChannel);
                 createdChannels.put(next, newChannel.getId());
             });
