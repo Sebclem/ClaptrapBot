@@ -41,20 +41,20 @@ public class AutoVoiceChannel {
         GuildPreferenceEntity pref = SettingsUtils.getInstance().getPreference(guild);
         if (pref.isAutoVoice() && voiceChannel.getId().equals(pref.getAutoVoiceChannelID())) {
             logger.info("Creating new voice channel for Guild : {}", guild.getName());
-            AudioChannel newChannel = (AudioChannel) voiceChannel.createCopy().complete();
-            int next = getNextNumber();
-            String title = pref.getAutoVoiceChannelTitle();
-            if (title.isEmpty()) {
-                title = "Voice @count";
-            }
+            voiceChannel.createCopy().queue(newChannel -> {
+                int next = getNextNumber();
+                String title = pref.getAutoVoiceChannelTitle();
+                if (title.isEmpty()) {
+                    title = "Voice @count";
+                }
 
-            title = title.replace("@count", Integer.toString(next));
-            newChannel.getManager().setName(title).setPosition(voiceChannel.getPosition()).complete();
-            moveMembers(voiceChannel.getMembers(), newChannel);
-            createdChannels.put(next, newChannel.getId());
-
+                title = title.replace("@count", Integer.toString(next));
+                newChannel.getManager().setName(title).setPosition(voiceChannel.getPosition()).queue(t -> {
+                    moveMembers(voiceChannel.getMembers(), (AudioChannel) newChannel);
+                    createdChannels.put(next, newChannel.getId());
+                });
+            });
         }
-
     }
 
     public void leave(AudioChannel voiceChannel) {
@@ -89,7 +89,7 @@ public class AutoVoiceChannel {
             restAction = restAction.and(destination.getGuild().moveVoiceMember(member, destination));
         }
         if (restAction != null) {
-            restAction.complete();
+            restAction.queue();
         }
     }
 
