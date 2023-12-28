@@ -50,7 +50,7 @@ public class AutoVoiceChannel {
 
                 title = title.replace("@count", Integer.toString(next));
                 newChannel.getManager().setName(title).queue(t -> {
-                    moveMembers(voiceChannel.getMembers(), (AudioChannel) newChannel);
+                    // moveMembers(voiceChannel.getMembers(), (AudioChannel) newChannel);
                     createdChannels.put(next, newChannel.getId());
                 });
             });
