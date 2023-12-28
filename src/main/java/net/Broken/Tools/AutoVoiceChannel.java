@@ -47,11 +47,12 @@ public class AutoVoiceChannel {
             if (title.isEmpty()) {
                 title = "Voice @count";
             }
-            title = title.replace("@count", Integer.toString(next));
-            newChannel.getManager().setName(title).setPosition(voiceChannel.getPosition()).queue();
 
-            createdChannels.put(next, newChannel.getId());
+            title = title.replace("@count", Integer.toString(next));
+            newChannel.getManager().setName(title).setPosition(voiceChannel.getPosition()).complete();
             moveMembers(voiceChannel.getMembers(), newChannel);
+            createdChannels.put(next, newChannel.getId());
+
         }
 
     }
@@ -88,7 +89,7 @@ public class AutoVoiceChannel {
             restAction = restAction.and(destination.getGuild().moveVoiceMember(member, destination));
         }
         if (restAction != null) {
-            restAction.queue();
+            restAction.complete();
         }
     }
 
