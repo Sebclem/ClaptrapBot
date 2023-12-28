@@ -41,20 +41,18 @@ public class AutoVoiceChannel {
         GuildPreferenceEntity pref = SettingsUtils.getInstance().getPreference(guild);
         if (pref.isAutoVoice() && voiceChannel.getId().equals(pref.getAutoVoiceChannelID())) {
             logger.info("Creating new voice channel for Guild : {}", guild.getName());
-            voiceChannel.createCopy().queue(newChannel -> {
-                int next = getNextNumber();
-                String title = pref.getAutoVoiceChannelTitle();
-                if (title.isEmpty()) {
-                    title = "Voice @count";
-                }
-
-                title = title.replace("@count", Integer.toString(next));
-                newChannel.getManager().setName(title).queue(t -> {
-                    // moveMembers(voiceChannel.getMembers(), (AudioChannel) newChannel);
-                    createdChannels.put(next, newChannel.getId());
-                });
+            int next = getNextNumber();
+            String title = pref.getAutoVoiceChannelTitle();
+            if (title.isEmpty()) {
+                title = "Voice @count";
+            }
+            title = title.replace("@count", Integer.toString(next));
+            voiceChannel.createCopy().setName(title).setPosition(voiceChannel.getPosition()).queue(newChannel -> {
+                moveMembers(voiceChannel.getMembers(), (AudioChannel) newChannel);
+                createdChannels.put(next, newChannel.getId());
             });
         }
+
     }
 
     public void leave(AudioChannel voiceChannel) {
